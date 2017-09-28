@@ -10,16 +10,20 @@
 #' @param admin2 Character of admin unit
 #' @importFrom ggplot2 aes scale_colour_manual scale_x_continuous xlab ylab geom_line
 #' @importFrom reshape2 melt
+#'
+#'
 #' @export
 
 
 Run_Model <- function(age,EIR,ft,admin2,time){
-  mpl <- Model_Param_List_Create()
+  mpl <- model_param_list_create()
   # generate initial state variables from equilibrium solution
-  state <- Equilibrium_Init_Create(age=age,EIR=EIR,ft=ft,model.param.list = mpl,het.brackets=5,admin.unit = admin2)
+  state <- equilibrium_init_create(age_vector=age,EIR=EIR,ft=ft,
+                                   model_param_list = mpl,het_brackets=5,
+                                   admin_unit = admin2)
   # create odin generator
   odin_model_path <- system.file("extdata/odin_model.R",package="hanojoel")
-  gen <- odin::odin(odin_model_path,verbose=FALSE,build = TRUE)
+  gen <- odin(odin_model_path,verbose=FALSE,build = TRUE)
 
 
   #create model with initial values

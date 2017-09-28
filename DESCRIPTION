@@ -1,14 +1,23 @@
 Package: hanojoel
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Deterministic malaria odin model
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-Depends: ggplot2,
-  reshape2
-License: What license is it under?
+Author: Joel Hellewell <j.hellewell14@imperial.ac.uk>, Hannah Slater <hannah.slater08@imperial.ac.uk>, OJ Watson <o.watson15@imperial.ac.uk>
+Maintainer: OJ Watson <o.watson@imperial.ac.uk>
+Description: Deterministic implementations of the Imperial College
+    malaria transmission model using the pacakge odin.
+License: MIT
+Imports:
+    ggplot2,
+    reshape2,
+    magrittr,
+    statmod,
+    stringi
+Remotes: 
+    richfitz/odin,
+    richfitz/dde
+Depends:
+    R (>= 2.10)
 Encoding: UTF-8
-LazyData: true
+LazyData: TRUE
 RoxygenNote: 6.0.1

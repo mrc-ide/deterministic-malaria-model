@@ -1,40 +1,42 @@
 #------------------------------------------------
 #' Equilibrium initialisation list creation
 #'
-#' \code{Equilibrium_Init_Create} creates an equilibrium initialisation state to be
-#' used as a parameter within \code{Equilibrium_SS_Create}
-#' @param age.vector Vector of age brackets.
-#' @param het.brackets Integer number of biting heteogenity compartments.
+#' \code{equilibrium_init_create} creates an equilibrium initialisation state to be
+#' used within later model runs
+#' @param age_vector Vector of age brackets.
+#' @param het_brackets Integer number of biting heteogenity compartments.
 #' @param country String for country of interest. If NULL the seasonal parameters
 #' will attempt to be loaded using just the admin unit, however if there is ambiguity
 #' in the admin unit an error will be thrown. If both NULL then no seasonality is
 #' assumed. Default = NULL.
-#' @param admin.unit String for admin unit with country for loading seasonal
+#' @param admin_unit String for admin unit with country for loading seasonal
 #' parameters. If country is NULL, the admin unit will attempt to be located,however
 #' if there is ambiguity in the admin unit an error will be thrown. If both country
-#' and admin.unit are NULL then no seasonality is assumed. Default = NULL.
+#' and admin_unit are NULL then no seasonality is assumed. Default = NULL.
 #' @param ft Numeric for the frequency of people seeking treatment.
 #' @param EIR Numeric for desired annual EIR.
-#' @param model.param.list List of epidemiological parameters created by
+#' @param model_param_list List of epidemiological parameters created by
 #'
-#' \code{Model_Param_List_Create}
+#' @importFrom stringi stri_trans_general
+#' @importFrom statmod gauss.quad.prob
+#'
 #'
 #' @export
 
-Equilibrium_Init_Create <- function(age.vector, het.brackets,
-                                    country = NULL, admin.unit = NULL, ft,
-                                    EIR, model.param.list)
+equilibrium_init_create <- function(age_vector, het_brackets,
+                                    country = NULL, admin_unit = NULL, ft,
+                                    EIR, model_param_list)
 {
 
   # mpl is shorter :)
-  mpl <- model.param.list
+  mpl <- model_param_list
 
   ## Check Parameters
-  if(!is.numeric(age.vector)) stop("age.vector provided is not numeric")
-  if(sum(diff(age.vector)>0) != (length(age.vector)-1)) stop("age.vector is not sequentially increasing brackets of age")
-  if(!is.numeric(het.brackets)) stop("het.brackets provided is not numeric")
+  if(!is.numeric(age_vector)) stop("age_vector provided is not numeric")
+  if(sum(diff(age_vector)>0) != (length(age_vector)-1)) stop("age_vector is not sequentially increasing brackets of age")
+  if(!is.numeric(het_brackets)) stop("het_brackets provided is not numeric")
   if(!(is.null(country) | is.character(country))) stop("country specified is not character string")
-  if(!(is.null(admin.unit) | is.character(admin.unit))) stop("admin.unit specified is not character string")
+  if(!(is.null(admin_unit) | is.character(admin_unit))) stop("admin_unit specified is not character string")
   if(!is.numeric(ft)) stop("ft provided is not numeric")
   if(!is.numeric(EIR)) stop("EIR provided is not numeric")
   if(!identical(names(mpl),c("DY","eta","rho","a0","sigma2","max_age","rA","rT",
@@ -55,11 +57,11 @@ Equilibrium_Init_Create <- function(age.vector, het.brackets,
   # database for admin units is all in Latin-ASCII for CRAN reasons so must
   # encode parameters accordingly
   if(!is.null(country)) country <- stringi::stri_trans_general(country,"Latin-ASCII")
-  if(!is.null(admin.unit)) admin.unit <- stringi::stri_trans_general(admin.unit, "Latin-ASCII")
+  if(!is.null(admin_unit)) admin_unit <- stringi::stri_trans_general(admin_unit, "Latin-ASCII")
 
-  age <- age.vector * mpl$DY
+  age <- age_vector * mpl$DY
   na <- as.integer(length(age))  # number of age groups
-  nh <- as.integer(het.brackets)  # number of heterogeneity groups
+  nh <- as.integer(het_brackets)  # number of heterogeneity groups
   h <- statmod::gauss.quad.prob(nh, dist = "normal")
   age0 <- 2
   age1 <- 10
@@ -79,11 +81,11 @@ Equilibrium_Init_Create <- function(age.vector, het.brackets,
   den <- 1/(1 + age_rate[1]/mpl$eta)
   for (i in 2:na)
   {
-    den[i] <- age_rate[i - 1] * den[i - 1]/(age_rate[i] + mpl$eta)  # proportion in each age.vector group
+    den[i] <- age_rate[i - 1] * den[i - 1]/(age_rate[i] + mpl$eta)  # proportion in each age_vector group
   }
 
-  age59 <- which(age.vector * 12 > 59)[1] - 1  # index of age vector before age is >59 months
-  age05 <- which(age.vector > 5)[1] - 1  # index of age vector before age is 5 years
+  age59 <- which(age_vector * 12 > 59)[1] - 1  # index of age vector before age is >59 months
+  age05 <- which(age_vector > 5)[1] - 1  # index of age vector before age is 5 years
 
   ## force of infection
   foi_age <- c()
@@ -272,6 +274,8 @@ Equilibrium_Init_Create <- function(age.vector, het.brackets,
   EL_eq <- (LL_eq/mpl$dLL + mpl$muLL* LL_eq * (1 + mpl$gammaL * LL_eq/K0))/(1/mpl$dEL - mpl$muLL * mpl$gammaL * LL_eq/K0)
 
 
+  ## TODO: Add catch here for the dimensions given the odin_model path
+
   # add in final dimension - interventions
   num_int <- mpl$num_int
   itn_cov <- mpl$itn_cov
@@ -314,60 +318,60 @@ Equilibrium_Init_Create <- function(age.vector, het.brackets,
   # find database seasonal parameters
 
   # intiialise admin match as no match
-  admin.matches <- 0
+  admin_matches <- 0
 
-  if(!is.null(admin.unit)){
+  if(!is.null(admin_unit)){
 
     # if there is no country given then search for the admin unit
     if(is.null(country)){
 
       # find exact match
-      admin.matches <- grep(paste("^",admin.unit,"\\b",sep=""),admin_units_seasonal$admin1)
+      admin_matches <- grep(paste("^",admin_unit,"\\b",sep=""),admin_units_seasonal$admin1)
       # if exact does not match try fuzzy match up to dist of 4 which should catch having nop spaces or separators etc
-      if(length(admin.matches)==0){
-        admin.matches <- which(adist(admin_units_seasonal$admin1,admin.unit)<=4)
+      if(length(admin_matches)==0){
+        admin_matches <- which(adist(admin_units_seasonal$admin1,admin_unit)<=4)
       }
-      if(length(admin.matches)>1) stop("Admin unit string specified is ambiguous without country")
+      if(length(admin_matches)>1) stop("Admin unit string specified is ambiguous without country")
 
       # if we do have a country though find that match first and then find admin
     } else {
 
       # first find an exact match
-      country.matches <- grep(paste("^",country,"\\b",sep=""), admin_units_seasonal$country)
-      if(length(unique(admin_units_seasonal$country[country.matches]))==1){
-        chosen.country <- unique(admin_units_seasonal$country[country.matches])
-      } else if(length(unique(admin_units_seasonal$country[country.matches]))==0){
+      country_matches <- grep(paste("^",country,"\\b",sep=""), admin_units_seasonal$country)
+      if(length(unique(admin_units_seasonal$country[country_matches]))==1){
+        chosen_country <- unique(admin_units_seasonal$country[country_matches])
+      } else if(length(unique(admin_units_seasonal$country[country_matches]))==0){
         # if exact does not match try fuzzy match up to dist of 2 which should catch having no spaces or separators etc
-        country.matches <- which(adist(admin_units_seasonal$country,y = country)<=2)
-        if(length(unique(admin_units_seasonal$country[country.matches]))==1){
-          chosen.country <- unique(admin_units_seasonal$country[country.matches])
-        } else if(length(unique(admin_units_seasonal$country[country.matches]))==0) stop ("Country string specified not close enough to those in database")
+        country_matches <- which(adist(admin_units_seasonal$country,y = country)<=2)
+        if(length(unique(admin_units_seasonal$country[country_matches]))==1){
+          chosen_country <- unique(admin_units_seasonal$country[country_matches])
+        } else if(length(unique(admin_units_seasonal$country[country_matches]))==0) stop ("Country string specified not close enough to those in database")
       }
 
       # find exact match
-      admin.sub.matches <- grep(paste("^",admin.unit,"\\b",sep=""),admin_units_seasonal$admin1[country.matches])
+      admin_sub_matches <- grep(paste("^",admin_unit,"\\b",sep=""),admin_units_seasonal$admin1[country_matches])
       # if exact does not match try fuzzy match up to dist of 4 which should catch having nop spaces or separators etc
-      if(length(admin.sub.matches)==0){
-        admin.sub.matches <- which(adist(admin_units_seasonal$admin1[country.matches],admin.unit)<=1)
+      if(length(admin_sub_matches)==0){
+        admin_sub_matches <- which(adist(admin_units_seasonal$admin1[country_matches],admin_unit)<=1)
       }
-      if(length(admin.sub.matches)>1) stop("Admin unit string specified is not close enougth to those in the database")
+      if(length(admin_sub_matches)>1) stop("Admin unit string specified is not close enougth to those in the database")
 
-      admin.matches <- which(admin_units_seasonal$admin1 == admin_units_seasonal$admin1[country.matches][admin.sub.matches])
+      admin_matches <- which(admin_units_seasonal$admin1 == admin_units_seasonal$admin1[country_matches][admin_sub_matches])
     }
 
   }
 
 
 
-  if(admin.matches!=0){
-    ssa0 <- admin_units_seasonal$a0[admin.matches]
-    ssa1 <- admin_units_seasonal$a1[admin.matches]
-    ssa2 <- admin_units_seasonal$a2[admin.matches]
-    ssa3 <- admin_units_seasonal$a3[admin.matches]
-    ssb1 <- admin_units_seasonal$b1[admin.matches]
-    ssb2 <- admin_units_seasonal$b2[admin.matches]
-    ssb3 <- admin_units_seasonal$b3[admin.matches]
-    theta_c <- admin_units_seasonal$theta_c[admin.matches]
+  if(admin_matches!=0){
+    ssa0 <- admin_units_seasonal$a0[admin_matches]
+    ssa1 <- admin_units_seasonal$a1[admin_matches]
+    ssa2 <- admin_units_seasonal$a2[admin_matches]
+    ssa3 <- admin_units_seasonal$a3[admin_matches]
+    ssb1 <- admin_units_seasonal$b1[admin_matches]
+    ssb2 <- admin_units_seasonal$b2[admin_matches]
+    ssb3 <- admin_units_seasonal$b3[admin_matches]
+    theta_c <- admin_units_seasonal$theta_c[admin_matches]
   } else {
     ssa0 <- ssa1 <- ssa2 <- ssa3 <- ssb1 <- ssb2 <- ssb3 <- theta_c <- 0
   }
@@ -377,6 +381,7 @@ Equilibrium_Init_Create <- function(age.vector, het.brackets,
   while(sum(zetas>100)>0){
     zetas[zetas>100] <- rlnorm(n = sum(zetas>100),meanlog = -mpl$sigma2/2, sdlog = sqrt(mpl$sigma2))
   }
+
   wt_cuts <- round(cumsum(het_wt)*1e5)
   zeros <- which(wt_cuts==0)
   wt_cuts[zeros] <- 1:length(zeros)
@@ -396,7 +401,7 @@ Equilibrium_Init_Create <- function(age.vector, het.brackets,
               age_rate = age_rate, FOI = FOI_eq, EIR = EIR_eq, cA_eq = cA_eq,
               den = den, age59 = age59, age05 = age05, ssa0 = ssa0, ssa1 = ssa1,
               ssa2 = ssa2, ssa3 = ssa3, ssb1 = ssb1, ssb2 = ssb2, ssb3 = ssb3,
-              theta_c = theta_c, age_brackets = age.vector, ft = ft, FOIv_eq = FOIv_eq, U_eq=U_eq, S_eq=S_eq,
+              theta_c = theta_c, age_brackets = age_vector, ft = ft, FOIv_eq = FOIv_eq, U_eq=U_eq, S_eq=S_eq,
               T_eq=T_eq, A_eq=A_eq, D_eq = D_eq, betaS = betaS, betaA = betaA, betaU = betaU, FOIvij_eq=FOIvij_eq,
               age2 = age2, het_bounds = het_bounds)
 

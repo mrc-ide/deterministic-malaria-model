@@ -24,7 +24,7 @@ Below is some code that shows how you might go about performing simple runs of t
   library(hanojoel)
 
   # create a vector of age categories
-  init_age <- c(0,0.25,0.5,0.75,1,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80)
+  init_age <- c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80)
   
   # provide a value of the annual EIR for this model run
   init_EIR <- 10
@@ -45,4 +45,4 @@ Below is some code that shows how you might go about performing simple runs of t
   # over time (summed over all age, biting & intervention categories). model_run$dat is a list containing 
   # the estimated values for all of the compartments in the model. For example, model_run$dat$S will 
   # be a big 3-dimensional array with the indices relating to age, biting heterogeneity and intervention categories.
-  ```
+```

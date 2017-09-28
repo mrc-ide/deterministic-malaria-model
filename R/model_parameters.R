@@ -1,8 +1,8 @@
 #------------------------------------------------
 #' Model Parameter List Creation
 #'
-#' \code{Model_Param_List_Create} creates list of model parameters to be used
-#' within \code{Equilibrium_Init_Create}
+#' \code{model_param_list_create} creates list of model parameters to be used
+#' within \code{equilibrium_init_create}
 #'
 #' @param eta Death rate for expoential population distribtuion, i.e. 1/Mean Population Age. Default = 0.0001305
 #' @param rho Age-dependent biting parameter. Default = 0.85
@@ -76,12 +76,16 @@
 #' @param itn_half_life ITN half life. Default =   2.64 * DY
 #' @param IRS_interval How long before IRS is repeated, i.e. when IRS decay = 1. Default =   1 * DY
 #' @param ITN_interval How long before ITN is repeated, i.e. when IRS decay = 1.  Default =   3 * DY
-#'
+#' @param ... Any other parameters needed for non-standard model. If they share the same name
+#' as any of the defined parameters \code{model_param_list_create} will stop. You can either write
+#' any extra parameters you like individually, e.g. model_param_list_create(extra1 = 1, extra2 = 2)
+#' and these parameteres will appear appended to the returned list, or you can pass explicitly
+#' the ellipsis argument as a list created before, e.g. model_param_list_create(...=list(extra1 = 1, extra2 = 2))
 #'
 #' @export
 
 
-Model_Param_List_Create <- function(
+model_param_list_create <- function(
   # age, heterogeneity in exposure,
   eta = 0.0001305,
   rho = 0.85,
@@ -163,125 +167,143 @@ Model_Param_List_Create <- function(
   irs_half_life =   0.5 * DY,
   itn_half_life =   2.64 * DY,
   IRS_interval =   1 * DY,
-  ITN_interval =   3 * DY
+  ITN_interval =   3 * DY,
+  ...
 
 ){
 
-  mp.list <- list()
+  # set up param list
+  mp_list <- list()
+
+  # catach extra params and place in list
+  extra_param_list <- list(...)
+  if(is.list(extra_param_list[[1]])){
+  extra_param_list <- extra_param_list[[1]]
+  }
+
+  ## DEFAULT PARAMS
 
   # duration of year
-  mp.list$DY <- DY
+  mp_list$DY <- DY
 
   # age, heterogeneity in exposure
-  mp.list$eta <- eta
-  mp.list$rho <- rho
-  mp.list$a0 <- a0
-  mp.list$sigma2 <- sigma2
-  mp.list$max_age <- max_age
+  mp_list$eta <- eta
+  mp_list$rho <- rho
+  mp_list$a0 <- a0
+  mp_list$sigma2 <- sigma2
+  mp_list$max_age <- max_age
 
   # rate of leaving infection states
-  mp.list$rA <- rA
-  mp.list$rT <- rT
-  mp.list$rD <- rD
-  mp.list$rU <- rU
-  mp.list$rP <- rP
+  mp_list$rA <- rA
+  mp_list$rT <- rT
+  mp_list$rD <- rD
+  mp_list$rU <- rU
+  mp_list$rP <- rP
 
   # human latent period and time lag from asexual parasites to
   # infectiousness
-  mp.list$dE <- dE
-  mp.list$delayGam <- delayGam
+  mp_list$dE <- dE
+  mp_list$delayGam <- delayGam
 
   # infectiousness to mosquitoes
-  mp.list$cD <- cD
-  mp.list$cT <- cT
-  mp.list$cU <- cU
-  mp.list$gamma1 <- gamma1
+  mp_list$cD <- cD
+  mp_list$cT <- cT
+  mp_list$cU <- cU
+  mp_list$gamma1 <- gamma1
 
   # Immunity reducing probability of detection
-  mp.list$d1 <- d1
-  mp.list$dID <- dID
-  mp.list$ID0 <- ID0
-  mp.list$kD <- kD
-  mp.list$uD <- uD
-  mp.list$aD <- aD
-  mp.list$fD0 <- fD0
-  mp.list$gammaD <- gammaD
+  mp_list$d1 <- d1
+  mp_list$dID <- dID
+  mp_list$ID0 <- ID0
+  mp_list$kD <- kD
+  mp_list$uD <- uD
+  mp_list$aD <- aD
+  mp_list$fD0 <- fD0
+  mp_list$gammaD <- gammaD
 
   # PCR prevalence parameters
-  mp.list$alphaA <- alphaA
-  mp.list$alphaU <- alphaU
+  mp_list$alphaA <- alphaA
+  mp_list$alphaU <- alphaU
 
   # anti-infection immunity
-  mp.list$b0 <- b0
-  mp.list$b1 <- b1
-  mp.list$dB <- dB
-  mp.list$IB0 <- IB0
-  mp.list$kB <- kB
-  mp.list$uB <- uB
+  mp_list$b0 <- b0
+  mp_list$b1 <- b1
+  mp_list$dB <- dB
+  mp_list$IB0 <- IB0
+  mp_list$kB <- kB
+  mp_list$uB <- uB
 
   # clinical immunity
-  mp.list$phi0 <- phi0
-  mp.list$phi1 <- phi1
-  mp.list$dCA <- dCA
-  mp.list$IC0 <- IC0
-  mp.list$kC <- kC
-  mp.list$uCA <- uCA
-  mp.list$PM <- PM
-  mp.list$dCM <- dCM
+  mp_list$phi0 <- phi0
+  mp_list$phi1 <- phi1
+  mp_list$dCA <- dCA
+  mp_list$IC0 <- IC0
+  mp_list$kC <- kC
+  mp_list$uCA <- uCA
+  mp_list$PM <- PM
+  mp_list$dCM <- dCM
 
   # entomological parameters
-  mp.list$delayM <- delayM
-  mp.list$tau1 <- tau1
-  mp.list$tau2 <- tau2
-  mp.list$mu0 <- mu0
-  mp.list$Q0 <- Q0
-  mp.list$chi <- chi
-  mp.list$bites_Bed <- bites_Bed
-  mp.list$bites_Indoors <- bites_Indoors
-  mp.list$fv0 <- 1 / (tau1 + tau2)
-  mp.list$av0 <- Q0 * mp.list$fv0 # daily feeeding rate on humans
-  mp.list$Surv0 <- exp(-mu0 * delayM) # probability of surviving incubation period
-  mp.list$p10 <- exp(-mu0 * tau1)  # probability of surviving one feeding cycle
-  mp.list$p2 <- exp(-mu0 * tau2)  # probability of surviving one resting cycle
+  mp_list$delayM <- delayM
+  mp_list$tau1 <- tau1
+  mp_list$tau2 <- tau2
+  mp_list$mu0 <- mu0
+  mp_list$Q0 <- Q0
+  mp_list$chi <- chi
+  mp_list$bites_Bed <- bites_Bed
+  mp_list$bites_Indoors <- bites_Indoors
+  mp_list$fv0 <- 1 / (tau1 + tau2)
+  mp_list$av0 <- Q0 * mp_list$fv0 # daily feeeding rate on humans
+  mp_list$Surv0 <- exp(-mu0 * delayM) # probability of surviving incubation period
+  mp_list$p10 <- exp(-mu0 * tau1)  # probability of surviving one feeding cycle
+  mp_list$p2 <- exp(-mu0 * tau2)  # probability of surviving one resting cycle
 
   # larval parameters
-  mp.list$muEL <- muEL
-  mp.list$muLL <- muLL
-  mp.list$muPL <- muPL
-  mp.list$dEL <- dEL
-  mp.list$dLL <- dLL
-  mp.list$dPL <- dPL
-  mp.list$gammaL <- gammaL
-  mp.list$km <- km
-  mp.list$cm <- cm
-  mp.list$betaL <- betaL
+  mp_list$muEL <- muEL
+  mp_list$muLL <- muLL
+  mp_list$muPL <- muPL
+  mp_list$dEL <- dEL
+  mp_list$dLL <- dLL
+  mp_list$dPL <- dPL
+  mp_list$gammaL <- gammaL
+  mp_list$km <- km
+  mp_list$cm <- cm
+  mp_list$betaL <- betaL
   # {White et al. 2011 Parasites and Vectors}
-  mp.list$eov <- betaL/mu0 * (exp(mu0/mp.list$fv0) - 1)
-  mp.list$b_lambda <- (gammaL * muLL/muEL - dEL/dLL + (gammaL - 1) * muLL * dEL)
-  mp.list$lambda <- -0.5 * mp.list$b_lambda + sqrt(0.25 * mp.list$b_lambda^2 + gammaL * betaL * muLL * dEL/(2 * muEL * mu0 * dLL * (1 + dPL * muPL)))
+  mp_list$eov <- betaL/mu0 * (exp(mu0/mp_list$fv0) - 1)
+  mp_list$b_lambda <- (gammaL * muLL/muEL - dEL/dLL + (gammaL - 1) * muLL * dEL)
+  mp_list$lambda <- -0.5 * mp_list$b_lambda + sqrt(0.25 * mp_list$b_lambda^2 + gammaL * betaL * muLL * dEL/(2 * muEL * mu0 * dLL * (1 + dPL * muPL)))
 
   # ITN/IRS parameters
-  mp.list$num_int <- num_int
-  mp.list$itn_cov <- itn_cov
-  mp.list$irs_cov <- irs_cov
-  mp.list$ITN_IRS_on <- ITN_IRS_on
+  mp_list$num_int <- num_int
+  mp_list$itn_cov <- itn_cov
+  mp_list$irs_cov <- irs_cov
+  mp_list$ITN_IRS_on <- ITN_IRS_on
 
   # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
-  mp.list$cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
-  mp.list$d_ITN0 <- d_ITN0
-  mp.list$r_ITN0 <- r_ITN0
-  mp.list$r_ITN1 <- r_ITN1
-  mp.list$r_IRS0 <- r_IRS0
-  mp.list$d_IRS0 <- d_IRS0
-  mp.list$irs_half_life <- irs_half_life
-  mp.list$itn_half_life <- itn_half_life
-  mp.list$IRS_interval <- IRS_interval
-  mp.list$ITN_interval <- ITN_interval
-  mp.list$irs_half_life <- 0.5 * mp.list$DY
-  mp.list$itn_half_life <- 2.64 * mp.list$DY
-  mp.list$irs_loss <- log(2)/mp.list$irs_half_life
-  mp.list$itn_loss <- log(2)/mp.list$itn_half_life
+  mp_list$cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
+  mp_list$d_ITN0 <- d_ITN0
+  mp_list$r_ITN0 <- r_ITN0
+  mp_list$r_ITN1 <- r_ITN1
+  mp_list$r_IRS0 <- r_IRS0
+  mp_list$d_IRS0 <- d_IRS0
+  mp_list$irs_half_life <- irs_half_life
+  mp_list$itn_half_life <- itn_half_life
+  mp_list$IRS_interval <- IRS_interval
+  mp_list$ITN_interval <- ITN_interval
+  mp_list$irs_half_life <- 0.5 * mp_list$DY
+  mp_list$itn_half_life <- 2.64 * mp_list$DY
+  mp_list$irs_loss <- log(2)/mp_list$irs_half_life
+  mp_list$itn_loss <- log(2)/mp_list$itn_half_life
 
+  # check that none of the spare parameters in the extra
+  if(sum(!is.na(match(names(extra_param_list),names(mp_list))))!=0){
 
-  return(mp.list)
+   stop (message(cat("Extra params in ... share names with default param names. Please check:\n",
+              names(extra_param_list)[!is.na(match(names(extra_param_list),names(mp_list)))]
+             )
+         ))
+  }
+
+  return(append(mp_list,extra_param_list))
 }

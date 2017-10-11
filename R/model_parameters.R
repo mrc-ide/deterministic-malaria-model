@@ -44,7 +44,7 @@
 #' @param uCA Duration in which immunity is not boosted. Default = 6.06349
 #' @param PM New-born immunity relative to mother’s. Default = 0.774368
 #' @param dCM Inverse of decay rate of maternal immunity. Default = 67.6952
-#' @param delayM Extrinsic incubation period. Default = 10
+#' @param delayMos Extrinsic incubation period. Default = 10
 #' @param tau1 Duration of host seeking, assumed to be constant between species. Default = 0.69
 #' @param tau2 Duration of mosquito resting after feed. Default = 2.31
 #' @param mu0 Daily mortality of adult mosquitos. Default = 0.132
@@ -134,7 +134,7 @@ model_param_list_create <- function(
   PM = 0.774368,
   dCM = 67.6952,
   # entomological parameters
-  delayM = 10,
+  delayMos = 10,
   tau1 = 0.69,
   tau2 = 2.31,
   mu0 = 0.132,
@@ -177,8 +177,10 @@ model_param_list_create <- function(
 
   # catach extra params and place in list
   extra_param_list <- list(...)
-  if(is.list(extra_param_list[[1]])){
+  if(length(extra_param_list)>0){
+    if(is.list(extra_param_list[[1]])){
   extra_param_list <- extra_param_list[[1]]
+    }
   }
 
   ## DEFAULT PARAMS
@@ -244,7 +246,7 @@ model_param_list_create <- function(
   mp_list$dCM <- dCM
 
   # entomological parameters
-  mp_list$delayM <- delayM
+  mp_list$delayMos <- delayMos
   mp_list$tau1 <- tau1
   mp_list$tau2 <- tau2
   mp_list$mu0 <- mu0
@@ -254,7 +256,7 @@ model_param_list_create <- function(
   mp_list$bites_Indoors <- bites_Indoors
   mp_list$fv0 <- 1 / (tau1 + tau2)
   mp_list$av0 <- Q0 * mp_list$fv0 # daily feeeding rate on humans
-  mp_list$Surv0 <- exp(-mu0 * delayM) # probability of surviving incubation period
+  mp_list$Surv0 <- exp(-mu0 * delayMos) # probability of surviving incubation period
   mp_list$p10 <- exp(-mu0 * tau1)  # probability of surviving one feeding cycle
   mp_list$p2 <- exp(-mu0 * tau2)  # probability of surviving one resting cycle
 

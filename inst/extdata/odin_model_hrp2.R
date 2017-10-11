@@ -4,7 +4,7 @@
 na <- user() # number of age categories
 nh <- user() # number of biting heterogeneity categories
 ft <- user() # proportion of cases treated
-
+hrp2_prop <- user() # assumed proportion of strains that possess hrp2
 ##------------------------------------------------------------------------------
 ##################
 ## HUMAN STATES ##
@@ -44,9 +44,9 @@ dim(init_T) <- c(na,nh,num_int)
 initial(T[,,]) <- init_T[i,j,k]
 dim(T) <- c(na,nh,num_int)
 
-deriv(T[1, 1:nh, 1:num_int]) <- ft*clin_inc[i,j,k] - rT*T[i,j,k] -
+deriv(T[1, 1:nh, 1:num_int]) <- hrp2_prop*ft*clin_inc[i,j,k] - rT*T[i,j,k] -
   (eta+age_rate[i])*T[i,j,k]
-deriv(T[2:na, 1:nh, 1:num_int]) <- ft*clin_inc[i,j,k] - rT*T[i,j,k] -
+deriv(T[2:na, 1:nh, 1:num_int]) <- hrp2_prop*ft*clin_inc[i,j,k] - rT*T[i,j,k] -
   (eta+age_rate[i])*T[i,j,k] + age_rate[i-1]*T[i-1,j,k]
 
 # D - CLEAR DISEASE
@@ -55,9 +55,9 @@ dim(init_D) <- c(na,nh,num_int)
 initial(D[,,]) <- init_D[i,j,k]
 dim(D) <- c(na,nh,num_int)
 
-deriv(D[1, 1:nh, 1:num_int]) <- (1-ft)*clin_inc[i,j,k] - rD*D[i,j,k] -
+deriv(D[1, 1:nh, 1:num_int]) <- (1-(hrp2_prop*ft))*clin_inc[i,j,k] - rD*D[i,j,k] -
   (eta+age_rate[i])*D[i,j,k]
-deriv(D[2:na, 1:nh, 1:num_int]) <- (1-ft)*clin_inc[i,j,k] - rD*D[i,j,k] -
+deriv(D[2:na, 1:nh, 1:num_int]) <- (1-(hrp2_prop*ft))*clin_inc[i,j,k] - rD*D[i,j,k] -
   (eta+age_rate[i])*D[i,j,k] + age_rate[i-1]*D[i-1,j,k]
 
 # A - ASYMPTOMATIC DISEASE

@@ -14,7 +14,7 @@ model_param_list_create(eta = 0.0001305, rho = 0.85, a0 = 2920,
   dB = 3650, IB0 = 43.8787, kB = 2.15506, uB = 7.19919,
   phi0 = 0.791666, phi1 = 0.000737, dCA = 10950, IC0 = 18.02366,
   kC = 2.36949, uCA = 6.06349, PM = 0.774368, dCM = 67.6952,
-  delayM = 10, tau1 = 0.69, tau2 = 2.31, mu0 = 0.132, Q0 = 0.92,
+  delayMos = 10, tau1 = 0.69, tau2 = 2.31, mu0 = 0.132, Q0 = 0.92,
   chi = 0.86, bites_Bed = 0.89, bites_Indoors = 0.97, muEL = 0.0338,
   muLL = 0.0348, muPL = 0.249, dEL = 6.64, dLL = 3.72, dPL = 0.643,
   gammaL = 13.25, km = 11, cm = 0.05, betaL = 21.2, num_int = 4,
@@ -104,7 +104,7 @@ model_param_list_create(eta = 0.0001305, rho = 0.85, a0 = 2920,
 
 \item{dCM}{Inverse of decay rate of maternal immunity. Default = 67.6952}
 
-\item{delayM}{Extrinsic incubation period. Default = 10}
+\item{delayMos}{Extrinsic incubation period. Default = 10}
 
 \item{tau1}{Duration of host seeking, assumed to be constant between species. Default = 0.69}
 

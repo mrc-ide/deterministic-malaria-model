@@ -33,25 +33,11 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
   ## Check Parameters
   if(!is.numeric(age_vector)) stop("age_vector provided is not numeric")
-  if(sum(diff(age_vector)>0) != (length(age_vector)-1)) stop("age_vector is not sequentially increasing brackets of age")
   if(!is.numeric(het_brackets)) stop("het_brackets provided is not numeric")
   if(!(is.null(country) | is.character(country))) stop("country specified is not character string")
   if(!(is.null(admin_unit) | is.character(admin_unit))) stop("admin_unit specified is not character string")
   if(!is.numeric(ft)) stop("ft provided is not numeric")
   if(!is.numeric(EIR)) stop("EIR provided is not numeric")
-  if(!identical(names(mpl),c("DY","eta","rho","a0","sigma2","max_age","rA","rT",
-                             "rD","rU","rP","dE","delayGam","cD","cT","cU",
-                             "gamma1","d1","dID","ID0","kD","uD","aD","fD0",
-                             "gammaD","alphaA","alphaU","b0","b1","dB","IB0",
-                             "kB","uB","phi0","phi1","dCA","IC0","kC","uCA","PM",
-                             "dCM","delayM","tau1","tau2","mu0","Q0","chi","bites_Bed",
-                             "bites_Indoors","fv0","av0","Surv0","p10","p2","muEL","muLL",
-                             "muPL","dEL","dLL","dPL","gammaL","km","cm","betaL","eov",
-                             "b_lambda","lambda","num_int","itn_cov","irs_cov","ITN_IRS_on",
-                             "cov","d_ITN0","r_ITN0","r_ITN1","r_IRS0","d_IRS0","irs_half_life",
-                             "itn_half_life","IRS_interval","ITN_interval","irs_loss",
-                             "itn_loss"))) stop("Incorrect variable names within model.param.list")
-
 
   ## Handle parameters
   # database for admin units is all in Latin-ASCII for CRAN reasons so must
@@ -313,6 +299,24 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   ICA_eq = array(ICA_eq, c(na, nh, num_int))
   ICM_eq = array(ICM_eq, c(na, nh, num_int))
 
+  if(!is.null(mpl$ncc)){
+    IB_eq = array(IB_eq, c(na, nh, num_int, mpl$ncc))
+    ID_eq = array(ID_eq, c(na, nh, num_int, mpl$ncc))
+    ICA_eq = array(ICA_eq, c(na, nh, num_int, mpl$ncc))
+    ICM_eq = array(ICM_eq, c(na, nh, num_int, mpl$ncc))
+
+    # add in final dimension - interventions
+    all_rounds = mpl$MDA_grp_prop*mpl$MDA_cov
+    ccov = c(all_rounds, 1-all_rounds)
+
+    mat2 <- array(0, c(na,nh, num_int))
+    S_eq <- vapply(ccov,FUN = function(x){x * S_eq},mat2)
+    T_eq <- vapply(ccov,FUN = function(x){x * T_eq},mat2)
+    D_eq <- vapply(ccov,FUN = function(x){x * D_eq},mat2)
+    A_eq <- vapply(ccov,FUN = function(x){x * A_eq},mat2)
+    U_eq <- vapply(ccov,FUN = function(x){x * U_eq},mat2)
+    P_eq <- vapply(ccov,FUN = function(x){x * P_eq},mat2)
+  }
 
 
   # find database seasonal parameters
@@ -395,17 +399,20 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   ## collate init
   res <- list(S = S_eq, T = T_eq, D = D_eq, A = A_eq, U = U_eq, P = P_eq, Y = Y_eq,
               IB = IB_eq, ID = ID_eq, ICA = ICA_eq, ICM = ICM_eq, ICM_init_eq = ICM_init_eq, Iv = Iv_eq,
-              Sv = Sv_eq, Ev = Ev_eq, PL = PL_eq, LL = LL_eq, EL = EL_eq, age_rate = age_rate,
-              het_wt = het_wt, het_x = het_x, omega = omega, foi_age = foi_age, rel_foi = rel_foi,
+              Sv = Sv_eq, Ev = Ev_eq, PL = PL_eq, LL = LL_eq, EL = EL_eq, pi = pi,
+              init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq, init_P = P_eq, init_Y = Y_eq,
+              init_IB = IB_eq, init_ID = ID_eq, init_ICA = ICA_eq, init_ICM = ICM_eq, ICM_init_eq = ICM_init_eq, init_Iv = Iv_eq,
+              init_Sv = Sv_eq, init_Ev = Ev_eq, init_PL = PL_eq, init_LL = LL_eq, init_EL = EL_eq,
+              age_rate = age_rate,het_wt = het_wt, het_x = het_x, omega = omega, foi_age = foi_age, rel_foi = rel_foi,
               K0 = K0, mv0 = mv0, na = na, nh = nh, ni = num_int, x_I = x_I,
               age_rate = age_rate, FOI = FOI_eq, EIR = EIR_eq, cA_eq = cA_eq,
               den = den, age59 = age59, age05 = age05, ssa0 = ssa0, ssa1 = ssa1,
               ssa2 = ssa2, ssa3 = ssa3, ssb1 = ssb1, ssb2 = ssb2, ssb3 = ssb3,
-              theta_c = theta_c, age_brackets = age_vector, ft = ft, FOIv_eq = FOIv_eq, U_eq=U_eq, S_eq=S_eq,
+              theta_c = theta_c, age = age_vector, ft = ft, FOIv_eq = FOIv_eq, U_eq=U_eq, S_eq=S_eq,
               T_eq=T_eq, A_eq=A_eq, D_eq = D_eq, betaS = betaS, betaA = betaA, betaU = betaU, FOIvij_eq=FOIvij_eq,
-              age2 = age2, het_bounds = het_bounds)
+              age02 = age2, het_bounds = het_bounds)
 
-  res <- append(res,unlist(mpl))
+  res <- append(res,mpl)
 
   return(res)
 }

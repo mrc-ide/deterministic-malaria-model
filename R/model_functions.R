@@ -8,9 +8,9 @@
 #' @param ft Numeric of proportion of symptomatic cases recieving treatment
 #' @param time Numeric of length of time that the model will run for in days
 #' @param admin2 Character of admin unit
-#' @importFrom ggplot2 aes scale_colour_manual scale_x_continuous xlab ylab geom_line
+#' @importFrom ggplot2 aes scale_colour_manual scale_x_continuous xlab ylab geom_line ggplot
 #' @importFrom reshape2 melt
-#'
+#' @importFrom odin odin
 #'
 #' @export
 
@@ -23,7 +23,7 @@ Run_Model <- function(age,EIR,ft,admin2,time){
                                    admin_unit = admin2)
   # create odin generator
   odin_model_path <- system.file("extdata/odin_model.R",package="hanojoel")
-  gen <- odin(odin_model_path,verbose=FALSE,build = TRUE)
+  gen <- odin::odin(odin_model_path,verbose=FALSE,build = TRUE)
 
 
   #create model with initial values
@@ -139,7 +139,7 @@ generate_default_model <- function(ft,age,dat,generator,dde = TRUE){
                    dLL = dat$dLL,
                    dPL = dat$dPL,
                    gammaL = dat$gammaL,
-                   beta_larval0 = dat$betaL,
+                   betaL = dat$betaL,
                    num_int = dat$num_int,
                    itn_cov = dat$itn_cov,
                    irs_cov = dat$irs_cov,

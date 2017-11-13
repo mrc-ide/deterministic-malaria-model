@@ -430,15 +430,17 @@ s_EM <- 1
 dim(w) <- num_int
 w[1] <- 1
 w[2] <- 1 - bites_Bed1 + bites_Bed1*s_ITN
-w[3] <- 1 - bites_within5 + bites_within5*(1-r_EM5)*s_EM - bites_within1 + bites_within1*(1-r_EM1)*s_EM
-w[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN*s_EM + (bites_within5 - bites_Bed1)*(1-r_EM5)*s_EM - bites_within1 + bites_within1*(1-r_EM1)*s_EM
+#w[3] <- 1 - bites_within5 + bites_within5*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
+w[3] <- 1 - r_EM5*bites_within5 - r_EM1*bites_within1
+w[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
 
 # probability that mosq feeds during a single attempt for each int. cat.
 dim(yy) <- num_int
 yy[1] <- 1
 yy[2] <- w[2]
 # essentially yy[3] <- w[3]
-yy[3] <- 1 - bites_within5 - bites_within1 + bites_within5*(1-r_EM5) + bites_within1*(1-r_EM1)
+#yy[3] <- 1 - bites_within5 - bites_within1 + bites_within5*(1-r_EM5) + bites_within1*(1-r_EM1)
+yy[3] <- w[3]
 yy[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
@@ -465,9 +467,13 @@ p1 <- wbar*p10/(1-zbar*p10)
 Q <- 1-(1-Q0)/wbar # updated anthropophagy given interventions
 av <- fv*Q # biting rate on humans
 dim(av_mosq) <- num_int
-av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
+#av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
+# ALTERED DUE TO PAGE 6 SUPP MAT 2, the biting rate was previously inflated to account for the fact that some mosquitoes would bite due to IRS and then die
+# This essentially meant that as the biting rate on humans covered by emanators dropped, this increased the biting rate on people with no interventions
+# av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
+av_mosq[1:num_int] <- av*w[i]
 dim(av_human) <- num_int
-av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
+av_human[1:num_int] <- av*yy[i]
 
 ##------------------------------------------------------------------------------
 ###################
@@ -501,6 +507,7 @@ dim(clin_inc0to5) <- c(age05,nh,num_int)
 clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
+dim(zz) <- num_int
 
 # Param checking outputs
 output(Y[,,]) <- Y
@@ -509,6 +516,14 @@ output(KL) <- KL
 output(mv) <- mv
 output(Q) <- Q
 output(wh) <- wh
+output(wbar) <- wbar
+output(av) <- av
+output(av_mosq[]) <- av_mosq[i]
+output(av_human[]) <- av_human[i]
+output(w[]) <- w[i]
+output(yy[]) <- yy[i]
+output(zz[]) <- z[i]
+output(zbar) <- zbar
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN
 output(s_ITN) <- s_ITN

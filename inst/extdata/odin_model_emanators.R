@@ -393,7 +393,7 @@ EM_interval <- user() # how long EM lasts
 ITN_interval <- user() # how long ITN lasts
 chi <- user() # proportion of vector endophily
 Q0 <- user() # proportion of anthropophagy
-bites_Bed <- user() # endophagy in bed
+bites_Bed1 <- user() # endophagy in bed
 bites_within5 <- user() # endophagy whilst within 5m of emanator, could be very similar to bites_Indoors
 bites_within1 <- user() # endophagy whilst within 1m of emanator
 
@@ -429,9 +429,9 @@ s_EM <- 1
 # probability that mosquito bites and survives for each intervention category
 dim(w) <- num_int
 w[1] <- 1
-w[2] <- 1 - bites_Bed + bites_Bed*s_ITN
+w[2] <- 1 - bites_Bed1 + bites_Bed1*s_ITN
 w[3] <- 1 - bites_within5 + bites_within5*(1-r_EM5)*s_EM - bites_within1 + bites_within1*(1-r_EM1)*s_EM
-w[4] <- 1 - bites_within5 + bites_Bed*(1-r_EM5)*s_ITN*s_EM + (bites_within5 - bites_Bed)*(1-r_EM5)*s_EM - bites_within1 + bites_within1*(1-r_EM1)*s_EM
+w[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN*s_EM + (bites_within5 - bites_Bed1)*(1-r_EM5)*s_EM - bites_within1 + bites_within1*(1-r_EM1)*s_EM
 
 # probability that mosq feeds during a single attempt for each int. cat.
 dim(yy) <- num_int
@@ -439,14 +439,14 @@ yy[1] <- 1
 yy[2] <- w[2]
 # essentially yy[3] <- w[3]
 yy[3] <- 1 - bites_within5 - bites_within1 + bites_within5*(1-r_EM5) + bites_within1*(1-r_EM1)
-yy[4] <- 1 - bites_within5 + bites_Bed*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed)*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
+yy[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
 dim(z) <- num_int
 z[1] <- 0
-z[2] <- bites_Bed*r_ITN
+z[2] <- bites_Bed1*r_ITN
 z[3] <- bites_within5*r_EM5 + bites_within1*r_EM1
-z[4] <- bites_Bed*(r_EM5+ (1-r_EM5)*r_ITN) + (bites_within5 - bites_Bed)*r_EM5 + bites_within1*r_EM1
+z[4] <- bites_Bed1*(r_EM5+ (1-r_EM5)*r_ITN) + (bites_within5 - bites_Bed1)*r_EM5 + bites_within1*r_EM1
 
 # Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details
 dim(zhi) <- num_int

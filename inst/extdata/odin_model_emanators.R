@@ -406,7 +406,9 @@ bites_within1 <- user() # endophagy whilst within 1m of emanator
 r_ITN0 <- user()
 d_ITN0 <- user()
 r_EM50 <- user()
+r_EM51 <- user()
 r_EM10 <- user()
+r_EM11 <- user()
 r_ITN1 <- user()
 em_loss <- user()
 itn_loss <- user()
@@ -415,13 +417,19 @@ itn_loss <- user()
 ITN_decay = if(t < ITN_EM_on) 0 else exp(-((t-ITN_EM_on)%%ITN_interval) * itn_loss)
 EM_decay = if(t < ITN_EM_on) 0 else exp(-((t-ITN_EM_on)%%EM_interval) * em_loss)
 
+
 # The r,d and s values turn on after ITN_EM_on and decay accordingly
 d_ITN <- if(t < ITN_EM_on) 0 else d_ITN0*ITN_decay
 r_ITN <- if(t < ITN_EM_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
 s_ITN <- if(t < ITN_EM_on) 1 else 1 - d_ITN - r_ITN
 
-r_EM5 <- if(t < ITN_EM_on) 0 else r_EM50*EM_decay
-r_EM1 <- if(t < ITN_EM_on) 0 else r_EM10*EM_decay
+em_temp_on <- user()
+em_modifier <- if(em_temp_on == 1) 1.1 else 1
+em_temp_wint <- if(305 < (t %% 365)) em_modifier else 1
+em_temp_spring <- if((t %% 365) < 30) em_modifier else 1
+r_EM5 <- if(t < ITN_EM_on) 0 else r_EM50*EM_decay*em_temp_wint*em_temp_spring
+r_EM1 <- if(t < ITN_EM_on) 0 else r_EM10*EM_decay*em_temp_wint*em_temp_spring
+
 # new values since emanators don't kill, just repel
 d_EM <- 0
 s_EM <- 1
@@ -510,6 +518,7 @@ output(inc) <- sum(clin_inc[,,])
 dim(zz) <- num_int
 
 # Param checking outputs
+output(em_temp_wint) <- em_temp_wint
 output(Y[,,]) <- Y
 output(phi[,,]) <- phi
 output(KL) <- KL
@@ -531,3 +540,4 @@ output(r_EM5) <- r_EM5
 output(r_EM1) <- r_EM1
 output(cov[]) <- cov[i]
 output(K0) <- K0
+output(theta2) <- theta2

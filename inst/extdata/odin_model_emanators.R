@@ -423,33 +423,35 @@ d_ITN <- if(t < ITN_EM_on) 0 else d_ITN0*ITN_decay
 r_ITN <- if(t < ITN_EM_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
 s_ITN <- if(t < ITN_EM_on) 1 else 1 - d_ITN - r_ITN
 
-em_temp_on <- user()
-em_modifier <- if(em_temp_on == 1) 1.1 else 1
-em_temp_wint <- if(305 < (t %% 365)) em_modifier else 1
-em_temp_spring <- if((t %% 365) < 30) em_modifier else 1
-r_EM5 <- if(t < ITN_EM_on) 0 else r_EM50*EM_decay*em_temp_wint*em_temp_spring
-r_EM1 <- if(t < ITN_EM_on) 0 else r_EM10*EM_decay*em_temp_wint*em_temp_spring
+#em_modifier <- if(em_temp_on == 1) 1.1 else 1
+#em_temp_wint <- if(305 < (t %% 365)) em_modifier else 1
+#em_temp_spring <- if((t %% 365) < 30) em_modifier else 1
+r_EM5 <- if(t < ITN_EM_on) 0 else r_EM50*EM_decay#*em_temp_wint*em_temp_spring
+r_EM1 <- if(t < ITN_EM_on) 0 else r_EM10*EM_decay#*em_temp_wint*em_temp_spring
+#r_EM1 < if(t < ITN_EM_on) 0 else r_EM11 + (r_EM10 - r_EM11)*EM_decay
+
 
 # new values since emanators don't kill, just repel
 d_EM <- 0
-s_EM <- 1
+s_EM <- 1 - d_EM
 
 # probability that mosquito bites and survives for each intervention category
 dim(w) <- num_int
 w[1] <- 1
 w[2] <- 1 - bites_Bed1 + bites_Bed1*s_ITN
 #w[3] <- 1 - bites_within5 + bites_within5*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
-w[3] <- 1 - r_EM5*bites_within5 - r_EM1*bites_within1
-w[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
+w[3] <- (1 - bites_within5 - bites_within1) + (1-r_EM5)*bites_within5 + (1-r_EM1)*bites_within1
+#w[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
+w[4] <- (1 - bites_within5 - bites_within1) + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) + bites_within1*(1-r_EM1)
 
 # probability that mosq feeds during a single attempt for each int. cat.
 dim(yy) <- num_int
 yy[1] <- 1
 yy[2] <- w[2]
-# essentially yy[3] <- w[3]
-#yy[3] <- 1 - bites_within5 - bites_within1 + bites_within5*(1-r_EM5) + bites_within1*(1-r_EM1)
+# essentially yy[3] <- w[3] since s_EM=1
 yy[3] <- w[3]
-yy[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
+#yy[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
+yy[4] <- (1 - bites_within5 - bites_within1) + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) + bites_within1*(1-r_EM1)
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
 dim(z) <- num_int
@@ -518,7 +520,6 @@ output(inc) <- sum(clin_inc[,,])
 dim(zz) <- num_int
 
 # Param checking outputs
-output(em_temp_wint) <- em_temp_wint
 output(Y[,,]) <- Y
 output(phi[,,]) <- phi
 output(KL) <- KL
@@ -541,3 +542,6 @@ output(r_EM1) <- r_EM1
 output(cov[]) <- cov[i]
 output(K0) <- K0
 output(theta2) <- theta2
+output(ITN_EM_on) <- ITN_EM_on
+output(EM_decay) <- EM_decay
+output(ITN_decay) <- ITN_decay

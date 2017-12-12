@@ -377,7 +377,8 @@ deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 # See supplementary materials S2 from http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000324#s6
 
 # general parameters
-ITN_EM_on <- user() # days after which interventions begin
+ITN_on <- user() # day when ITNs are first introduced
+EM_on <- user() # day when emanators are first introduced
 num_int <- user() # number of intervention categorys, ITN only, emanator only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
 em_cov <- user() # proportion of population covered by emanator
@@ -414,20 +415,20 @@ em_loss <- user()
 itn_loss <- user()
 
 # Calculates decay for ITN/EM
-ITN_decay = if(t < ITN_EM_on) 0 else exp(-((t-ITN_EM_on)%%ITN_interval) * itn_loss)
-EM_decay = if(t < ITN_EM_on) 0 else exp(-((t-ITN_EM_on)%%EM_interval) * em_loss)
+ITN_decay = if(t < ITN_on) 0 else exp(-((t-ITN_on)%%ITN_interval) * itn_loss)
+EM_decay = if(t < EM_on) 0 else exp(-((t-EM_on)%%EM_interval) * em_loss)
 
 
 # The r,d and s values turn on after ITN_EM_on and decay accordingly
-d_ITN <- if(t < ITN_EM_on) 0 else d_ITN0*ITN_decay
-r_ITN <- if(t < ITN_EM_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
-s_ITN <- if(t < ITN_EM_on) 1 else 1 - d_ITN - r_ITN
+d_ITN <- if(t < ITN_on) 0 else d_ITN0*ITN_decay
+r_ITN <- if(t < ITN_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
+s_ITN <- if(t < ITN_on) 1 else 1 - d_ITN - r_ITN
 
 #em_modifier <- if(em_temp_on == 1) 1.1 else 1
 #em_temp_wint <- if(305 < (t %% 365)) em_modifier else 1
 #em_temp_spring <- if((t %% 365) < 30) em_modifier else 1
-r_EM5 <- if(t < ITN_EM_on) 0 else r_EM50*EM_decay#*em_temp_wint*em_temp_spring
-r_EM1 <- if(t < ITN_EM_on) 0 else r_EM10*EM_decay#*em_temp_wint*em_temp_spring
+r_EM5 <- if(t < EM_on) 0 else r_EM50*EM_decay#*em_temp_wint*em_temp_spring
+r_EM1 <- if(t < EM_on) 0 else r_EM10*EM_decay#*em_temp_wint*em_temp_spring
 #r_EM1 < if(t < ITN_EM_on) 0 else r_EM11 + (r_EM10 - r_EM11)*EM_decay
 
 
@@ -443,6 +444,7 @@ w[2] <- 1 - bites_Bed1 + bites_Bed1*s_ITN
 w[3] <- (1 - bites_within5 - bites_within1) + (1-r_EM5)*bites_within5 + (1-r_EM1)*bites_within1
 #w[4] <- 1 - bites_within5 + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) - bites_within1 + bites_within1*(1-r_EM1)
 w[4] <- (1 - bites_within5 - bites_within1) + bites_Bed1*(1-r_EM5)*s_ITN + (bites_within5 - bites_Bed1)*(1-r_EM5) + bites_within1*(1-r_EM1)
+
 
 # probability that mosq feeds during a single attempt for each int. cat.
 dim(yy) <- num_int
@@ -465,8 +467,9 @@ dim(zhi) <- num_int
 dim(whi) <- num_int
 zhi[1:num_int] <- cov[i]*z[i]
 whi[1:num_int] <- cov[i]*w[i]
-zh <- if(t < ITN_EM_on) 0 else sum(zhi)
-wh <- if(t < ITN_EM_on) 1 else sum(whi)
+
+zh <- if(t < min(ITN_on,EM_on)) 0 else sum(zhi)
+wh <- if(t < min(ITN_on,EM_on)) 1 else sum(whi)
 # Z (zbar) - average probability of mosquito trying again during single feeding attempt
 zbar <- Q0*zh
 # W (wbar) - average probability of mosquito successfully feeding during single attempt
@@ -519,6 +522,11 @@ output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
 dim(zz) <- num_int
 
+output(Yout) <- sum(Y[,,])
+output(phiout) <- sum(phi[,,])
+output(FOIout) <- sum(FOI[,,])
+output(clin_inc[,,]) <- clin_inc
+output(cov[]) <- cov[i]
 # Param checking outputs
 output(Y[,,]) <- Y
 output(phi[,,]) <- phi
@@ -542,6 +550,6 @@ output(r_EM1) <- r_EM1
 output(cov[]) <- cov[i]
 output(K0) <- K0
 output(theta2) <- theta2
-output(ITN_EM_on) <- ITN_EM_on
 output(EM_decay) <- EM_decay
 output(ITN_decay) <- ITN_decay
+output(FOI[,,]) <- FOI

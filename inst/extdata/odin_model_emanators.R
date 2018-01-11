@@ -385,10 +385,11 @@ em_cov <- user() # proportion of population covered by emanator
 
 # cov is a vector of coverages for each intervention category:
 dim(cov) <- num_int
-cov[1] <- (1-itn_cov)*(1-em_cov)  # {No intervention}
-cov[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
-cov[3] <- (1-itn_cov)*em_cov	#      {EM only}
-cov[4] <- itn_cov*em_cov #	   {Both ITN and EM}
+# cov[1] <- (1-itn_cov)*(1-em_cov)  # {No intervention}
+# cov[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
+# cov[3] <- (1-itn_cov)*em_cov	#      {EM only}
+# cov[4] <- itn_cov*em_cov #	   {Both ITN and EM}
+cov[] <- user()
 
 EM_interval <- user() # how long EM lasts
 ITN_interval <- user() # how long ITN lasts
@@ -435,13 +436,18 @@ d_len <- user()
 dim(p_EM_vec) <- d_len
 p_EM_vec[1:d_len] <- em_human_dist[i]*(1-r_EM[i])
 p_EM <- sum(p_EM_vec)
+r_EM_in0 <- user()
+em_in <- user()
+r_EM_in <- if(t < EM_on) 0 else r_EM_in0*EM_decay
 
 # probability that mosquito bites and survives for each intervention category
 dim(w) <- num_int
 w[1] <- 1
 w[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-w[3] <- 1 - bites_Emanator + p_EM*bites_Emanator
-w[4] <- 1 - bites_Indoors - bites_Emanator + bites_Bed*s_ITN + p_EM*bites_Emanator
+w[3] <- if(em_in == 0) 1 - bites_Emanator + p_EM*bites_Emanator else 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
+#w[3] <- 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
+w[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + p_EM*bites_Emanator else 1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator
+#w[4] <- 1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator
 
 # probability that mosq feeds during a single attempt for each int. cat.
 dim(yy) <- num_int
@@ -455,8 +461,10 @@ yy[4] <- w[4]
 dim(z) <- num_int
 z[1] <- 0
 z[2] <- bites_Bed*r_ITN
-z[3] <- (1-p_EM)*bites_Emanator
-z[4] <- bites_Bed*r_ITN + (1-p_EM)*bites_Emanator
+z[3] <- if(em_in == 0) (1-p_EM)*bites_Emanator else (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in
+#z[3] <- (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in
+z[4] <- if(em_in == 0) bites_Bed*r_ITN + (1-p_EM)*bites_Emanator else bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-p_EM)*bites_Emanator
+#z[4] <- bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-p_EM)*bites_Emanator
 
 # Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details
 dim(zhi) <- num_int

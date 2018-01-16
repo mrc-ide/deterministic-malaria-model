@@ -404,17 +404,60 @@ dim(em_prod_profile) <- d_len
 em_prod_profile[] <- user() # proportion of bites averted by emanator at each distance from emanator
 
 
+## ELLIE'S WORK ##
+
+# ITN parameters with pyrethroid resistance
+
+# Linking cone assay and hut trial work on resistance to d_ITN and r_ITN, done by Ellie
+surv_bioassay <- user() # measure of % survival in discriminating dose bioassay
+mort_assay <- 1 - surv_bioassay
+
+# Relationship between mortality in bioassay to hut trial, logit scale
+mort_hut_a <- 0.6338 + 3.9970 * (mort_assay-0.5)
+mort_hut <- exp(mort_hut_a)/(1+exp(mort_hut_a))
+
+# Relationship between hut trial mortality and deterrence
+det_hut_a <- 0.07117+1.257*(mort_hut-0.5)-1.517*(mort_hut-0.5)^2
+det_hut <- if(det_hut_a < 0) 0 else det_hut_a # censored to stop becoming negative
+# Relationship between hut trial mortality and successful (feed)
+suc_hut <- 0.02491*exp(3.317*(1-mort_hut))
+rep_hut <- 1-suc_hut-mort_hut
+
+n1n0 <- 1-det_hut
+kp1 <- n1n0*suc_hut
+jp1 <- n1n0*rep_hut+(n1n0)
+lp1 <- n1n0*mort_hut
+
+# New values given resistance
+r_ITN0 <- (1-kp1/0.699)*(jp1/(lp1+jp1))
+d_ITN0 <- (1-kp1/0.699)*(lp1/(lp1+jp1))
+
+# Insecticide halflife
+hut_max_a <- 0.6338 + 3.9970*(1-0.5) # maximum mortality seen in huts
+hut_max <- exp(hut_max_a)/(1+exp(hut_max_a))
+
+my_max_washes_a <- -2.360 - 3.048*(hut_max-0.5)
+my_max_washes <- log(2)/(exp(my_max_washes_a)/(1+exp(my_max_washes_a)))
+
+wash_decay_rate_a <- -2.360+-3.048*(mort_hut-0.5)
+wash_decay_rate   <- exp(wash_decay_rate_a)/(1+exp(wash_decay_rate_a))
+itn_half_life     <- (log(2)/wash_decay_rate)/my_max_washes*2.64*365
+
+itn_loss <- log(2)/itn_half_life
+r_ITN_min <- 0.24
+## END OF ELLIE'S WORK ##
+
 # General intervention model terminology:
 # r - probability of trying to repeat feed after hitting ITN/EM
 # d - probability of dying after hitting ITN/EM
 # s - probability of successful feed after hitting ITN/EM
 
 # The maximum (and then minimum) r and d values for ITN/EM on day 0 before they decay
-r_ITN0 <- user()
-d_ITN0 <- user()
+# r_ITN0 <- user()
+# d_ITN0 <- user()
 r_ITN1 <- user()
 em_loss <- user()
-itn_loss <- user()
+# itn_loss <- user()
 
 # Calculates decay for ITN/EM
 ITN_decay = if(t < ITN_on) 0 else exp(-((t-ITN_on)%%ITN_interval) * itn_loss)
@@ -423,7 +466,9 @@ EM_decay = if(t < EM_on) 0 else exp(-((t-EM_on)%%EM_interval) * em_loss)
 
 # The r,d and s values turn on after ITN_EM_on and decay accordingly
 d_ITN <- if(t < ITN_on) 0 else d_ITN0*ITN_decay
-r_ITN <- if(t < ITN_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
+# r_ITN <- if(t < ITN_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
+r_ITN <- if(t < ITN_on) 0 else r_ITN_min + (r_ITN0- r_ITN_min)*ITN_decay
+# Ellie's edit
 s_ITN <- if(t < ITN_on) 1 else 1 - d_ITN - r_ITN
 
 dim(r_EM) <- d_len
@@ -526,9 +571,11 @@ output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
 dim(zz) <- num_int
 
+output(p_EM) <- p_EM
 output(Yout) <- sum(Y[,,])
 output(phiout) <- sum(phi[,,])
 output(FOIout) <- sum(FOI[,,])
+output(EIRout) <- sum(EIR[,,])
 output(clin_inc[,,]) <- clin_inc
 output(cov[]) <- cov[i]
 # Param checking outputs

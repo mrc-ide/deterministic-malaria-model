@@ -609,31 +609,47 @@ w[1] <- 1 # no intervention
 w[2] <- 1 - bites_Bed + bites_Bed*s_ITN # ITN only
 w[3] <- 1 - bites_Indoors + bites_Indoors*s_IRS # IRS only
 w[4] <- if(em_in == 0) 1 - bites_Emanator + p_EM*bites_Emanator else # EM only outdoors
-  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors # EM indoors
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors*s_EM # EM indoors
 w[5] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors-bites_Bed)*s_IRS # ITN and IRS
 w[6] <- if(em_in == 0) 1- bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Indoors*s_IRS else # IRS and EM outdoors only
   1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Indoors*(1-r_EM_in)*s_IRS*s_EM # IRS and EM indoors
 w[7] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM*bites_Emanator else # EM only outdoors and ITN
-  1 - bites_Indoors + bites_Bed*(1-r_EM_in)*p_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator # EM indoors and ITN
+  1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator # EM indoors and ITN
 w[8] <- if(em_in == 0) 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors-bites_Bed)*s_IRS else # All 3, em outside only
   1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Bed*(1-r_EM_in)*(1-r_IRS)*s_ITN*s_IRS*s_EM + (bites_Indoors-bites_Bed)*(1-r_EM_in)*s_IRS*s_EM # All 3, em inside
 
 # probability that mosq feeds during a single attempt for each int. cat.
 dim(yy) <- num_int
-yy[1] <- 1
-yy[2] <- w[2]
-# essentially yy[3] <- w[3] since s_EM=1
-yy[3] <- w[3]
-yy[4] <- w[4]
+yy[1] <- 1 # no intervention
+yy[2] <- w[2] # ITN only
+yy[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS) # IRS only
+yy[4] <- if(em_in == 0) w[4] else # EM only outdoors
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors # EM indoors
+yy[5] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_IRS) # ITN and IRS
+yy[6] <- if(em_in == 0) 1- bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Indoors*(1-r_IRS) else # IRS and EM outdoors only
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Indoors*(1-r_EM_in)*(1-r_IRS) # IRS and EM indoors
+yy[7] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + p_EM*bites_Emanator else # EM only outdoors and ITN
+  1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator # EM indoors and ITN
+yy[8] <-  if(em_in == 0) 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_IRS) else # All 3, em outside only
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Bed*(1-r_EM_in)*(1-r_IRS)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in)*(1-r_IRS) # All 3, em inside
+
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
 dim(z) <- num_int
-z[1] <- 0
-z[2] <- bites_Bed*r_ITN
-z[3] <- if(em_in == 0) (1-p_EM)*bites_Emanator else (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in
-#z[3] <- (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in
-z[4] <- if(em_in == 0) bites_Bed*r_ITN + (1-p_EM)*bites_Emanator else bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-p_EM)*bites_Emanator
-#z[4] <- bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-p_EM)*bites_Emanator
+z[1] <- 0 # no intervention
+z[2] <- bites_Bed*r_ITN # ITN only
+z[3] <- bites_Indoors*r_IRS # IRS only
+z[4] <- if(em_in == 0) (1-p_EM)*bites_Emanator else # EM only outdoors
+  (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in # EM only indoors
+z[5] <- bites_Bed*(r_IRS+ (1-r_IRS)*r_ITN) + (bites_Indoors - bites_Bed)*r_IRS # ITN and IRS
+z[6] <- if(em_in == 0) (1-p_EM)*bites_Emanator + bites_Indoors*r_IRS else # IRS and EM outdoors
+  (1-p_EM)*bites_Emanator + bites_Indoors*(r_EM_in+r_IRS*(1-r_EM_in)) # IRS and EM indoors
+z[7] <- if(em_in == 0) (1-p_EM)*bites_Emanator + bites_Bed*r_ITN else # ITN and EM outdoors
+  (1-p_EM)*bites_Emanator + bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in # ITN and EM indoors
+z[8] <- if(em_in == 0) (1-p_EM)*bites_Emanator + bites_Bed*(r_IRS+ (1-r_IRS)*r_ITN) + (bites_Indoors - bites_Bed)*r_IRS else # All 3, em outdoors
+  (1-p_EM)*bites_Emanator + bites_Bed*(r_EM_in + (1-r_EM_in)*r_IRS + (1-r_EM_in)*(1-r_IRS)*r_ITN) + bites_Indoors*(r_EM_in + (1-r_EM_in)*r_IRS) # All 3, em indoors
+
+
 
 # Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details
 dim(zhi) <- num_int

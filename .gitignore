@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 ^scripts$
+.o
+.c
+.dll

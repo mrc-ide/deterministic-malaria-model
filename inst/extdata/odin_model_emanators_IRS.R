@@ -387,14 +387,14 @@ irs_cov <- user() # proportion of population covered by IRS
 
 # cov is a vector of coverages for each intervention category:
 dim(cov) <- num_int
-cov[1] <- (1-irscov)*(1-itncov)*(1-emcov) # no intervention
-cov[2] <- itncov*(1-irscov)*(1-emcov) # itn only
-cov[3] <- irscov*(1-itncov)*(1-emcov) # irs only
-cov[4] <- emcov*(1-itncov)*(1-irscov) # em only
-cov[5] <- itncov*irscov*(1-emcov) # irs and itn
-cov[6] <- irscov*(1-itncov)*emcov # irs and em
-cov[7] <- itncov*(1-irscov)*emcov # em and itn
-cov[8] <- itncov*irscov*emcov # all 3
+cov[1] <- (1-irs_cov)*(1-itn_cov)*(1-em_cov) # no intervention
+cov[2] <- itn_cov*(1-irs_cov)*(1-em_cov) # itn only
+cov[3] <- irs_cov*(1-itn_cov)*(1-em_cov) # irs only
+cov[4] <- em_cov*(1-itn_cov)*(1-irs_cov) # em only
+cov[5] <- itn_cov*irs_cov*(1-em_cov) # irs and itn
+cov[6] <- irs_cov*(1-itn_cov)*em_cov # irs and em
+cov[7] <- itn_cov*(1-irs_cov)*em_cov # em and itn
+cov[8] <- itn_cov*irs_cov*em_cov # all 3
 
 
 EM_interval <- user() # how long until emanators are refreshed
@@ -455,6 +455,7 @@ r_ITN_min <- 0.24
 
 # IRS parameters
 sprayChemical <- user()
+sc <- if(sprayChemical == 1) 1 else if(sprayChemical == 2) 2 else if(sprayChemical == 3) 3 else if(sprayChemical == 4) 4 else 1
 # 1 = pyrethroid and mort_assay has an impact on efficacy, else
 # 2 = Actellic
 # 3 = Bendiocarb
@@ -485,6 +486,8 @@ thet2 <-  0.02004906
 dim(rhovec2) <- 4
 dim(rhovec1) <- 4
 
+
+
 rhovec2[1] <- grad1 * (1 / (1 + exp(-alpha1 - alpha2 * 100 * mort_assay))) + int1
 rhovec1[1] <- grad2 * (1 / (1 + exp(-alpha1 - alpha2 * 100 * mort_assay))) + int2
 
@@ -497,8 +500,8 @@ rhovec1[3] <- 1.491 # Bendiocarb
 rhovec2[4] <- -0.009
 rhovec1[4] <- 0.951 # Sumishield
 
-rho_IRS2 <- rhovec2[sprayChemical]
-rho_IRS1 <- rhovec1[sprayChemical]
+rho_IRS2 <- rhovec2[sc]
+rho_IRS1 <- rhovec1[sc]
 
 dim(tauvec1) <- 4
 dim(tauvec2) <- 4
@@ -515,8 +518,8 @@ tauvec1[3] <- -0.760 # Bendiocarb
 tauvec2[4] <- 0.007
 tauvec1[4] <- -1.672 # Sumishield
 
-tau_IRS2 <- tauvec2[sprayChemical]
-tau_IRS1 <- tauvec1[sprayChemical]
+tau_IRS2 <- tauvec2[sc]
+tau_IRS1 <- tauvec1[sc]
 
 dim(boovec1) <- 4
 dim(boovec2) <- 4
@@ -533,12 +536,12 @@ boovec1[3] <- -0.765 # Bendiocarb
 boovec2[4] <- -0.008
 boovec1[4] <- -0.280 # Sumishield
 
-boo_IRS1 <- boovec1[sprayChemical]
-boo_IRS2 <- boovec2[sprayChemical]
+boo_IRS1 <- boovec1[sc]
+boo_IRS2 <- boovec2[sc]
 
-mort_hut_IRS <- 1/(1 + exp(-rho_IRS1 - rho_IRS2 * mod(t-IRS_on, IRS_interval)))
-suc_hut_IRS <- 1/(1 + exp(-tau_IRS1 - tau_IRS2 * mod(t-IRS_on, IRS_interval)))
-det_hut_IRS <- 1/(1 + exp(-boo_IRS1 - boo_IRS2 * mod(t-ITN_IRS_on, IRS_interval)))
+mort_hut_IRS <- 1/(1 + exp(-rho_IRS1 - rho_IRS2 * (t-IRS_on)%%IRS_interval))
+suc_hut_IRS <- 1/(1 + exp(-tau_IRS1 - tau_IRS2 * (t-IRS_on)%%IRS_interval))
+det_hut_IRS <- 1/(1 + exp(-boo_IRS1 - boo_IRS2 * (t-IRS_on)%%IRS_interval))
 
 rep_hut_IRS   <- 1 - suc_hut_IRS - mort_hut_IRS
 
@@ -594,14 +597,14 @@ r_EM_in <- if(t < EM_on) 0 else r_EM_in0*EM_decay
 d_EM <- 0
 s_EM <- 1 - d_EM
 
-cov[1] <- (1-irscov)*(1-itncov)*(1-emcov) # no intervention
-cov[2] <- itncov*(1-irscov)*(1-emcov) # itn only
-cov[3] <- irscov*(1-itncov)*(1-emcov) # irs only
-cov[4] <- emcov*(1-itncov)*(1-irscov) # em only
-cov[5] <- itncov*irscov*(1-emcov) # irs and itn
-cov[6] <- irscov*(1-itncov)*emcov # irs and em
-cov[7] <- itncov*(1-irscov)*emcov # em and itn
-cov[8] <- itncov*irscov*emcov # all 3
+#cov[1] <- (1-irs_cov)*(1-itn_cov)*(1-em_cov) # no intervention
+#cov[2] <- itn_cov*(1-irs_cov)*(1-em_cov) # itn only
+#cov[3] <- irs_cov*(1-itn_cov)*(1-em_cov) # irs only
+#cov[4] <- em_cov*(1-itn_cov)*(1-irs_cov) # em only
+#cov[5] <- itn_cov*irs_cov*(1-em_cov) # irs and itn
+#cov[6] <- irs_cov*(1-itn_cov)*em_cov # irs and em
+#cov[7] <- itn_cov*(1-irs_cov)*em_cov # em and itn
+#cov[8] <- itn_cov*irs_cov*em_cov # all 3
 
 # probability that mosquito bites and survives for each intervention category
 dim(w) <- num_int

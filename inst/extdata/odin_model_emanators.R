@@ -485,7 +485,7 @@ dim(p_EM_vec) <- d_len
 p_EM_vec[1:d_len] <- em_human_dist[i]*(1-rep_EM[i])
 
 # Values over all distances
-r_EM_out0 <- sum(p_EM_vec)
+r_EM_out0 <- 1-sum(p_EM_vec)
 d_EM_out0 <- user()
 
 r_EM_out <- if(t < EM_on) 0 else r_EM_out0*EM_decay
@@ -529,9 +529,9 @@ yy[4] <- w[4]
 dim(z) <- num_int
 z[1] <- 0
 z[2] <- bites_Bed*r_ITN
-z[3] <- if(em_in == 0) (1-r_EM_out)*bites_Emanator else (1-r_EM_out)*bites_Emanator + bites_Indoors*r_EM_in
+z[3] <- if(em_in == 0) r_EM_out*bites_Emanator else r_EM_out*bites_Emanator + bites_Indoors*r_EM_in
 #z[3] <- (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in
-z[4] <- if(em_in == 0) bites_Bed*r_ITN + (1-r_EM_out)*bites_Emanator else bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-r_EM_out)*bites_Emanator
+z[4] <- if(em_in == 0) bites_Bed*r_ITN + r_EM_out*bites_Emanator else bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + r_EM_out*bites_Emanator
 #z[4] <- bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-p_EM)*bites_Emanator
 
 # Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details

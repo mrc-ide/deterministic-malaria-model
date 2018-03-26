@@ -379,6 +379,7 @@ deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 # general parameters
 ITN_on <- user() # day when ITNs are first introduced
 EM_on <- user() # day when emanators are first introduced
+IRS_on <- user() # day when IRS begins
 num_int <- user() # number of intervention categorys, ITN only, emanator only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
 em_cov <- user() # proportion of population covered by emanator
@@ -386,11 +387,15 @@ irs_cov <- user() # proportion of population covered by IRS
 
 # cov is a vector of coverages for each intervention category:
 dim(cov) <- num_int
-# cov[1] <- (1-itn_cov)*(1-em_cov)  # {No intervention}
-# cov[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
-# cov[3] <- (1-itn_cov)*em_cov	#      {EM only}
-# cov[4] <- itn_cov*em_cov #	   {Both ITN and EM}
-cov[] <- user()
+cov[1] <- (1-irs_cov)*(1-itn_cov)*(1-em_cov) # no intervention
+cov[2] <- itn_cov*(1-irs_cov)*(1-em_cov) # itn only
+cov[3] <- irs_cov*(1-itn_cov)*(1-em_cov) # irs only
+cov[4] <- em_cov*(1-itn_cov)*(1-irs_cov) # em only
+cov[5] <- itn_cov*irs_cov*(1-em_cov) # irs and itn
+cov[6] <- irs_cov*(1-itn_cov)*em_cov # irs and em
+cov[7] <- itn_cov*(1-irs_cov)*em_cov # em and itn
+cov[8] <- itn_cov*irs_cov*em_cov # all 3
+
 
 EM_interval <- user() # how long until emanators are refreshed
 ITN_interval <- user() # how long until ITNs are repeated
@@ -448,6 +453,107 @@ itn_half_life     <- (log(2)/wash_decay_rate)/my_max_washes*2.64*365
 itn_loss <- log(2)/itn_half_life
 r_ITN_min <- 0.24
 
+# IRS parameters
+sprayChemical <- user()
+sc <- if(sprayChemical == 1) 1 else if(sprayChemical == 2) 2 else if(sprayChemical == 3) 3 else if(sprayChemical == 4) 4 else 1
+# 1 = pyrethroid and mort_assay has an impact on efficacy, else
+# 2 = Actellic
+# 3 = Bendiocarb
+# 4 = Sumishield IRS
+
+# Adjusting pyrethroids for resistance
+int1 <-  -1.416835
+int2 <-  -0.009357982
+int3 <- -2.076946
+int4 <-  0.002047915
+int5 <-  -2.960124
+int6 <-  0.0003173997
+
+grad1 <- 2.972465
+grad2 <- 0.001040958
+grad3 <- 2.352004
+grad4 <- 0.009000071
+grad5 <- 4.771978
+grad6 <- -0.0077501779
+
+alpha1 <-  -1.942755
+alpha2 <-  0.03361892
+beta1 <-   1.849397
+beta2 <-   -0.04921294
+thet1 <-  -2.071873
+thet2 <-  0.02004906
+
+dim(rhovec2) <- 4
+dim(rhovec1) <- 4
+
+
+
+rhovec2[1] <- grad1 * (1 / (1 + exp(-alpha1 - alpha2 * 100 * mort_assay))) + int1
+rhovec1[1] <- grad2 * (1 / (1 + exp(-alpha1 - alpha2 * 100 * mort_assay))) + int2
+
+rhovec2[2] <-  -0.011
+rhovec1[2] <- 2.324 # Actellic
+
+rhovec2[3] <-  -0.036
+rhovec1[3] <- 1.491 # Bendiocarb
+
+rhovec2[4] <- -0.009
+rhovec1[4] <- 0.951 # Sumishield
+
+rho_IRS2 <- rhovec2[sc]
+rho_IRS1 <- rhovec1[sc]
+
+dim(tauvec1) <- 4
+dim(tauvec2) <- 4
+
+tauvec2[1] <- grad4 * (1 / (1 + exp(-beta1 - beta2 * 100 * mort_assay))) + int4
+tauvec1[1] <- grad3 * (1 / (1 + exp(-beta1 - beta2 * 100 * mort_assay))) + int3
+
+tauvec2[2] <- 0.009
+tauvec1[2] <- -2.686 # Actellic
+
+tauvec2[3] <- 0.007
+tauvec1[3] <- -0.760 # Bendiocarb
+
+tauvec2[4] <- 0.007
+tauvec1[4] <- -1.672 # Sumishield
+
+tau_IRS2 <- tauvec2[sc]
+tau_IRS1 <- tauvec1[sc]
+
+dim(boovec1) <- 4
+dim(boovec2) <- 4
+
+boovec2[1] <- grad6 * (1 / (1 + exp(-thet1 - thet2 * 100 * mort_assay))) + int6
+boovec1[1] <- grad5 * (1 / (1 + exp(-thet1 - thet2 * 100 *  mort_assay))) + int5
+
+boovec2[2] <- -0.002
+boovec1[2] <- -1.266 # Actellic
+
+boovec2[3] <- 0.004
+boovec1[3] <- -0.765 # Bendiocarb
+
+boovec2[4] <- -0.008
+boovec1[4] <- -0.280 # Sumishield
+
+boo_IRS1 <- boovec1[sc]
+boo_IRS2 <- boovec2[sc]
+
+mort_hut_IRS <- 1/(1 + exp(-rho_IRS1 - rho_IRS2 * (t-IRS_on)%%IRS_interval))
+suc_hut_IRS <- 1/(1 + exp(-tau_IRS1 - tau_IRS2 * (t-IRS_on)%%IRS_interval))
+det_hut_IRS <- 1/(1 + exp(-boo_IRS1 - boo_IRS2 * (t-IRS_on)%%IRS_interval))
+
+rep_hut_IRS   <- 1 - suc_hut_IRS - mort_hut_IRS
+
+kp1_IRS  <- (1 - det_hut_IRS)*suc_hut_IRS
+jp1_IRS  <- (1 - det_hut_IRS)*rep_hut_IRS+det_hut_IRS
+lp1_IRS  <- (1 - det_hut_IRS)*mort_hut_IRS
+
+r_IRS <- if(t < IRS_on) 0 else (1-kp1_IRS/0.699)*(jp1_IRS/(lp1_IRS+jp1_IRS))	#		{probability of repeating with an encounter with ITN (max)}			; cycle repeating rate
+d_IRS = if(t < IRS_on) 0 else (1-kp1_IRS/0.699)*(lp1_IRS/(lp1_IRS+jp1_IRS))	#		{probability of dying behaviour (max)}		; insecticide mortality rate
+s_IRS = if(t< IRS_on) 1 else kp1_IRS/0.699 # 		; successful protected human biting
+
+checker_irs = rep_hut_IRS + mort_hut_IRS + suc_hut_IRS
 
 ## END OF ELLIE'S WORK ##
 
@@ -475,64 +581,78 @@ r_ITN <- if(t < ITN_on) 0 else r_ITN_min + (r_ITN0- r_ITN_min)*ITN_decay
 # Ellie's edit
 s_ITN <- if(t < ITN_on) 1 else 1 - d_ITN - r_ITN
 
-# EMANATOR OUTSIDE PARAMETERS
+dim(r_EM) <- d_len
+r_EM[1:d_len] <- if(t < EM_on) 0 else em_prod_profile[i]*EM_decay
+
+# proportion of bites around the emanator that are successful
 d_len <- user()
-dim(rep_EM) <- d_len
-# repellency of emanators at different distances
-rep_EM[1:d_len] <- if(t < EM_on) 0 else em_prod_profile[i]*EM_decay
 dim(p_EM_vec) <- d_len
-# time that humans spend at different distances away from emanator
-p_EM_vec[1:d_len] <- em_human_dist[i]*(1-rep_EM[i])
-
-# Values over all distances
-r_EM_out0 <- 1-sum(p_EM_vec)
-d_EM_out0 <- user()
-
-r_EM_out <- if(t < EM_on) 0 else r_EM_out0*EM_decay
-
-d_EM_out <- if(t < EM_on) 0 else d_EM_out0*EM_decay
-
-s_EM_out <- 1 - d_EM_out - r_EM_out
-
-# EMANATOR INSIDE parameters
-
-em_in <- user() # Inside effect toggle
-
+p_EM_vec[1:d_len] <- em_human_dist[i]*(1-r_EM[i])
+p_EM <- sum(p_EM_vec)
 r_EM_in0 <- user()
-d_EM_in0 <- user()
-
+em_in <- user()
 r_EM_in <- if(t < EM_on) 0 else r_EM_in0*EM_decay
 
-d_EM_in <- if(t < EM_on) 0 else d_EM_in0*EM_decay
+# new values since emanators don't kill, just repel
+d_EM <- 0
+s_EM <- 1 - d_EM
 
-s_EM_in <- 1 - d_EM_in - r_EM_in
-
+#cov[1] <- (1-irs_cov)*(1-itn_cov)*(1-em_cov) # no intervention
+#cov[2] <- itn_cov*(1-irs_cov)*(1-em_cov) # itn only
+#cov[3] <- irs_cov*(1-itn_cov)*(1-em_cov) # irs only
+#cov[4] <- em_cov*(1-itn_cov)*(1-irs_cov) # em only
+#cov[5] <- itn_cov*irs_cov*(1-em_cov) # irs and itn
+#cov[6] <- irs_cov*(1-itn_cov)*em_cov # irs and em
+#cov[7] <- itn_cov*(1-irs_cov)*em_cov # em and itn
+#cov[8] <- itn_cov*irs_cov*em_cov # all 3
 
 # probability that mosquito bites and survives for each intervention category
 dim(w) <- num_int
-w[1] <- 1
-w[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-w[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Emanator + s_EM_out*bites_Emanator - bites_Indoors + (1-s_EM_in)*bites_Indoors
-#w[3] <- 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
-w[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator else 1 - bites_Indoors + bites_Bed*(1-s_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-s_EM_in) - bites_Emanator + s_EM_out*bites_Emanator
-#w[4] <- 1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator
+w[1] <- 1 # no intervention
+w[2] <- 1 - bites_Bed + bites_Bed*s_ITN # ITN only
+w[3] <- 1 - bites_Indoors + bites_Indoors*s_IRS # IRS only
+w[4] <- if(em_in == 0) 1 - bites_Emanator + p_EM*bites_Emanator else # EM only outdoors
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors*s_EM # EM indoors
+w[5] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors-bites_Bed)*s_IRS # ITN and IRS
+w[6] <- if(em_in == 0) 1- bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Indoors*s_IRS else # IRS and EM outdoors only
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Indoors*(1-r_EM_in)*s_IRS*s_EM # IRS and EM indoors
+w[7] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM*bites_Emanator else # EM only outdoors and ITN
+  1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator # EM indoors and ITN
+w[8] <- if(em_in == 0) 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors-bites_Bed)*s_IRS else # All 3, em outside only
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Bed*(1-r_EM_in)*(1-r_IRS)*s_ITN*s_IRS*s_EM + (bites_Indoors-bites_Bed)*(1-r_EM_in)*s_IRS*s_EM # All 3, em inside
 
 # probability that mosq feeds during a single attempt for each int. cat.
 dim(yy) <- num_int
-yy[1] <- 1
-yy[2] <- w[2]
-# essentially yy[3] <- w[3] since s_EM=1
-yy[3] <- w[3]
-yy[4] <- w[4]
+yy[1] <- 1 # no intervention
+yy[2] <- w[2] # ITN only
+yy[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS) # IRS only
+yy[4] <- if(em_in == 0) w[4] else # EM only outdoors
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors # EM indoors
+yy[5] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_IRS) # ITN and IRS
+yy[6] <- if(em_in == 0) 1- bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Indoors*(1-r_IRS) else # IRS and EM outdoors only
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Indoors*(1-r_EM_in)*(1-r_IRS) # IRS and EM indoors
+yy[7] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + p_EM*bites_Emanator else # EM only outdoors and ITN
+  1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator # EM indoors and ITN
+yy[8] <-  if(em_in == 0) 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_IRS) else # All 3, em outside only
+  1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + bites_Bed*(1-r_EM_in)*(1-r_IRS)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in)*(1-r_IRS) # All 3, em inside
+
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
 dim(z) <- num_int
-z[1] <- 0
-z[2] <- bites_Bed*r_ITN
-z[3] <- if(em_in == 0) r_EM_out*bites_Emanator else r_EM_out*bites_Emanator + bites_Indoors*r_EM_in
-#z[3] <- (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in
-z[4] <- if(em_in == 0) bites_Bed*r_ITN + r_EM_out*bites_Emanator else bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + r_EM_out*bites_Emanator
-#z[4] <- bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-p_EM)*bites_Emanator
+z[1] <- 0 # no intervention
+z[2] <- bites_Bed*r_ITN # ITN only
+z[3] <- bites_Indoors*r_IRS # IRS only
+z[4] <- if(em_in == 0) (1-p_EM)*bites_Emanator else # EM only outdoors
+  (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in # EM only indoors
+z[5] <- bites_Bed*(r_IRS+ (1-r_IRS)*r_ITN) + (bites_Indoors - bites_Bed)*r_IRS # ITN and IRS
+z[6] <- if(em_in == 0) (1-p_EM)*bites_Emanator + bites_Indoors*r_IRS else # IRS and EM outdoors
+  (1-p_EM)*bites_Emanator + bites_Indoors*(r_EM_in+r_IRS*(1-r_EM_in)) # IRS and EM indoors
+z[7] <- if(em_in == 0) (1-p_EM)*bites_Emanator + bites_Bed*r_ITN else # ITN and EM outdoors
+  (1-p_EM)*bites_Emanator + bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in # ITN and EM indoors
+z[8] <- if(em_in == 0) (1-p_EM)*bites_Emanator + bites_Bed*(r_IRS+ (1-r_IRS)*r_ITN) + (bites_Indoors - bites_Bed)*r_IRS else # All 3, em outdoors
+  (1-p_EM)*bites_Emanator + bites_Bed*(r_EM_in + (1-r_EM_in)*r_IRS + (1-r_EM_in)*(1-r_IRS)*r_ITN) + bites_Indoors*(r_EM_in + (1-r_EM_in)*r_IRS) # All 3, em indoors
+
+
 
 # Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details
 dim(zhi) <- num_int
@@ -552,11 +672,12 @@ p1 <- wbar*p10/(1-zbar*p10)
 Q <- 1-(1-Q0)/wbar # updated anthropophagy given interventions
 av <- fv*Q # biting rate on humans
 dim(av_mosq) <- num_int
-#av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
-# ALTERED DUE TO PAGE 6 SUPP MAT 2, the biting rate was previously inflated to account for the fact that some mosquitoes would bite due to IRS and then die
+av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
+# note: this is no longer altereted in IRS model
+# ALTERED DUE TO PAGE 6 SUPP MAT 2, the biting rate was previously inflated to account for the fact that some mosquitoes would bite due and then die due to IRS
 # This essentially meant that as the biting rate on humans covered by emanators dropped, this increased the biting rate on people with no interventions
 # av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
-av_mosq[1:num_int] <- av*w[i]
+#av_mosq[1:num_int] <- av*w[i]
 dim(av_human) <- num_int
 av_human[1:num_int] <- av*yy[i]
 
@@ -594,6 +715,7 @@ output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
 dim(zz) <- num_int
 
+output(p_EM) <- p_EM
 output(Yout) <- sum(Y[,,])
 output(phiout) <- sum(phi[,,])
 output(FOIout) <- sum(FOI[,,])

@@ -14,7 +14,7 @@ Imports:
     statmod,
     stringi,
     odin
-Remotes: 
+Remotes:
     richfitz/odin,
     richfitz/dde
 Depends:
@@ -22,3 +22,4 @@ Depends:
 Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 6.0.1
+Additional_repositories: https://mrc-ide.github.io/drat

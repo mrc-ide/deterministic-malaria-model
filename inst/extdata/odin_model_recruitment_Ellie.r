@@ -298,7 +298,9 @@ incv <- delay(lag_incv, delayMos)
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
 #betaa <- 0.5*PL/dPL
-betaa <- mv0 * mu * theta2
+betaa <- larvicide_treatment * mv0 * mu * theta2
+
+larvicide_treatment <- 1
 
 deriv(Sv) <- -ince - mu*Sv + betaa
 #deriv(Ev) <- ince - incv - mu*Ev
@@ -377,171 +379,80 @@ deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 # See supplementary materials S2 from http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000324#s6
 
 # general parameters
-ITN_on <- user() # day when ITNs are first introduced
-EM_on <- user() # day when emanators are first introduced
-num_int <- user() # number of intervention categorys, ITN only, emanator only, neither, both
+ITN_IRS_on <- user() # days after which interventions begin
+num_int <- user() # number of intervention categorys, ITN only, IRS only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
-em_cov <- user() # proportion of population covered by emanator
 irs_cov <- user() # proportion of population covered by IRS
 
 # cov is a vector of coverages for each intervention category:
 dim(cov) <- num_int
-# cov[1] <- (1-itn_cov)*(1-em_cov)  # {No intervention}
-# cov[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
-# cov[3] <- (1-itn_cov)*em_cov	#      {EM only}
-# cov[4] <- itn_cov*em_cov #	   {Both ITN and EM}
-cov[] <- user()
+cov[1] <- (1-itn_cov)*(1-irs_cov)  # {No intervention}
+cov[2] <- itn_cov*(1-irs_cov) # 	   {ITN only}
+cov[3] <- (1-itn_cov)*irs_cov	#      {IRS only}
+cov[4] <- itn_cov*irs_cov #	   {Both ITN and IRS}
 
-EM_interval <- user() # how long until emanators are refreshed
-ITN_interval <- user() # how long until ITNs are repeated
-IRS_interval <- user() # how long until IRS is repeated
+IRS_interval <- user() # how long IRS lasts
+ITN_interval <- user() # how long ITN lasts
 chi <- user() # proportion of vector endophily
 Q0 <- user() # proportion of anthropophagy
 bites_Bed <- user() # endophagy in bed
 bites_Indoors <- user() # endophagy indoors
-bites_Emanator <- user() # endophagy whilst outside, near an emanator
-dim(em_human_dist) <- d_len
-em_human_dist[] <- user() # distribution of population time spent at each distance from emanator
-dim(em_prod_profile) <- d_len
-em_prod_profile[] <- user() # proportion of bites averted by emanator at each distance from emanator
-
-
-## ELLIE'S WORK ##
-
-# ITN parameters with pyrethroid resistance
-
-# Linking cone assay and hut trial work on resistance to d_ITN and r_ITN, done by Ellie
-surv_bioassay <- user() # measure of % survival in discriminating dose bioassay
-mort_assay <- 1 - surv_bioassay
-
-# Relationship between mortality in bioassay to hut trial, logit scale
-mort_hut_a <- 0.6338 + 3.9970 * (mort_assay-0.5)
-mort_hut <- exp(mort_hut_a)/(1+exp(mort_hut_a))
-
-# Relationship between hut trial mortality and deterrence
-det_hut_a <- 0.07117+1.257*(mort_hut-0.5)-1.517*(mort_hut-0.5)^2
-det_hut <- if(det_hut_a < 0) 0 else det_hut_a # censored to stop becoming negative
-# Relationship between hut trial mortality and successful (feed)
-suc_hut <- 0.02491*exp(3.317*(1-mort_hut))
-rep_hut <- 1-suc_hut-mort_hut
-
-n1n0 <- 1-det_hut
-kp1 <- n1n0*suc_hut
-jp1 <- n1n0*rep_hut+(n1n0)
-lp1 <- n1n0*mort_hut
-
-# New values given resistance
-r_ITN0 <- (1-kp1/0.699)*(jp1/(lp1+jp1))
-d_ITN0 <- (1-kp1/0.699)*(lp1/(lp1+jp1))
-
-# Insecticide halflife
-hut_max_a <- 0.6338 + 3.9970*(1-0.5) # maximum mortality seen in huts
-hut_max <- exp(hut_max_a)/(1+exp(hut_max_a))
-
-my_max_washes_a <- -2.360 - 3.048*(hut_max-0.5)
-my_max_washes <- log(2)/(exp(my_max_washes_a)/(1+exp(my_max_washes_a)))
-
-wash_decay_rate_a <- -2.360+-3.048*(mort_hut-0.5)
-wash_decay_rate   <- exp(wash_decay_rate_a)/(1+exp(wash_decay_rate_a))
-itn_half_life     <- (log(2)/wash_decay_rate)/my_max_washes*2.64*365
-
-itn_loss <- log(2)/itn_half_life
-r_ITN_min <- 0.24
-
-
-## END OF ELLIE'S WORK ##
 
 # General intervention model terminology:
-# r - probability of trying to repeat feed after hitting ITN/EM
-# d - probability of dying after hitting ITN/EM
-# s - probability of successful feed after hitting ITN/EM
+# r - probability of trying to repeat feed after hitting ITN/IRS
+# d - probability of dying after hitting ITN/IRS
+# s - probability of successful feed after hitting ITN/IRS
 
-# The maximum (and then minimum) r and d values for ITN/EM on day 0 before they decay
-# r_ITN0 <- user()
-# d_ITN0 <- user()
-# r_ITN1 <- user()
-em_loss <- user()
-# itn_loss <- user()
+# The maximum (and then minimum) r and d values for ITN/IRS on day 0 before they decay
+r_ITN0 <- user()
+d_ITN0 <- user()
+d_IRS0 <- user()
+r_IRS0 <- user()
+r_ITN1 <- user()
+irs_loss <- user()
+itn_loss <- user()
 
-# Calculates decay for ITN/EM
-ITN_decay = if(t < ITN_on) 0 else exp(-((t-ITN_on)%%ITN_interval) * itn_loss)
-EM_decay = if(t < EM_on) 0 else exp(-((t-EM_on)%%EM_interval) * em_loss)
+# Calculates decay for ITN/IRS
+ITN_decay = if(t < ITN_IRS_on) 0 else exp(-((t-ITN_IRS_on)%%ITN_interval) * itn_loss)
+IRS_decay = if(t < ITN_IRS_on) 0 else exp(-((t-ITN_IRS_on)%%IRS_interval) * irs_loss)
 
+# The r,d and s values turn on after ITN_IRS_on and decay accordingly
+d_ITN <- if(t < ITN_IRS_on) 0 else d_ITN0*ITN_decay
+r_ITN <- if(t < ITN_IRS_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
+s_ITN <- if(t < ITN_IRS_on) 1 else 1 - d_ITN - r_ITN
 
-# The r,d and s values turn on after ITN_EM_on and decay accordingly
-d_ITN <- if(t < ITN_on) 0 else d_ITN0*ITN_decay
-# r_ITN <- if(t < ITN_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
-r_ITN <- if(t < ITN_on) 0 else r_ITN_min + (r_ITN0- r_ITN_min)*ITN_decay
-# Ellie's edit
-s_ITN <- if(t < ITN_on) 1 else 1 - d_ITN - r_ITN
-
-# EMANATOR OUTSIDE PARAMETERS
-d_len <- user()
-dim(rep_EM) <- d_len
-# repellency of emanators at different distances
-rep_EM[1:d_len] <- if(t < EM_on) 0 else em_prod_profile[i]*EM_decay
-dim(p_EM_vec) <- d_len
-# time that humans spend at different distances away from emanator
-p_EM_vec[1:d_len] <- em_human_dist[i]*(1-rep_EM[i])
-
-# Values over all distances
-r_EM_out0 <- 1-sum(p_EM_vec)
-d_EM_out0 <- user()
-
-r_EM_out <- if(t < EM_on) 0 else r_EM_out0*EM_decay
-
-d_EM_out <- if(t < EM_on) 0 else d_EM_out0*EM_decay
-
-s_EM_out <- 1 - d_EM_out - r_EM_out
-
-# EMANATOR INSIDE parameters
-
-em_in <- user() # Inside effect toggle
-
-r_EM_in0 <- user()
-d_EM_in0 <- user()
-
-r_EM_in <- if(t < EM_on) 0 else r_EM_in0*EM_decay
-
-d_EM_in <- if(t < EM_on) 0 else d_EM_in0*EM_decay
-
-s_EM_in <- 1 - d_EM_in - r_EM_in
-
+r_IRS <- if(t < ITN_IRS_on) 0 else r_IRS0*IRS_decay
+d_IRS <- if(t < ITN_IRS_on) 0 else chi*d_IRS0*IRS_decay
+s_IRS <- if(t < ITN_IRS_on) 1 else 1 - d_IRS
 
 # probability that mosquito bites and survives for each intervention category
 dim(w) <- num_int
 w[1] <- 1
 w[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-w[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Emanator + s_EM_out*bites_Emanator - bites_Indoors + (1-s_EM_in)*bites_Indoors
-#w[3] <- 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
-w[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator else 1 - bites_Indoors + bites_Bed*(1-s_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-s_EM_in) - bites_Emanator + s_EM_out*bites_Emanator
-#w[4] <- 1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator
+w[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)*s_IRS
+w[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors - bites_Bed)*(1-r_IRS)*s_IRS
 
 # probability that mosq feeds during a single attempt for each int. cat.
 dim(yy) <- num_int
 yy[1] <- 1
 yy[2] <- w[2]
-# essentially yy[3] <- w[3] since s_EM=1
-yy[3] <- w[3]
-yy[4] <- w[4]
+yy[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)
+yy[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN + (bites_Indoors - bites_Bed)*(1-r_IRS)
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
 dim(z) <- num_int
 z[1] <- 0
 z[2] <- bites_Bed*r_ITN
-z[3] <- if(em_in == 0) r_EM_out*bites_Emanator else r_EM_out*bites_Emanator + bites_Indoors*r_EM_in
-#z[3] <- (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in
-z[4] <- if(em_in == 0) bites_Bed*r_ITN + r_EM_out*bites_Emanator else bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + r_EM_out*bites_Emanator
-#z[4] <- bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-p_EM)*bites_Emanator
+z[3] <- bites_Indoors*r_IRS
+z[4] <- bites_Bed*(r_IRS+ (1-r_IRS)*r_ITN) + (bites_Indoors - bites_Bed)*r_IRS
 
 # Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details
 dim(zhi) <- num_int
 dim(whi) <- num_int
 zhi[1:num_int] <- cov[i]*z[i]
 whi[1:num_int] <- cov[i]*w[i]
-
-zh <- if(t < min(ITN_on,EM_on)) 0 else sum(zhi)
-wh <- if(t < min(ITN_on,EM_on)) 1 else sum(whi)
+zh <- if(t < ITN_IRS_on) 0 else sum(zhi)
+wh <- if(t < ITN_IRS_on) 1 else sum(whi)
 # Z (zbar) - average probability of mosquito trying again during single feeding attempt
 zbar <- Q0*zh
 # W (wbar) - average probability of mosquito successfully feeding during single attempt
@@ -552,13 +463,9 @@ p1 <- wbar*p10/(1-zbar*p10)
 Q <- 1-(1-Q0)/wbar # updated anthropophagy given interventions
 av <- fv*Q # biting rate on humans
 dim(av_mosq) <- num_int
-#av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
-# ALTERED DUE TO PAGE 6 SUPP MAT 2, the biting rate was previously inflated to account for the fact that some mosquitoes would bite due to IRS and then die
-# This essentially meant that as the biting rate on humans covered by emanators dropped, this increased the biting rate on people with no interventions
-# av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
-av_mosq[1:num_int] <- av*w[i]
+av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
 dim(av_human) <- num_int
-av_human[1:num_int] <- av*yy[i]
+av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
 
 ##------------------------------------------------------------------------------
 ###################
@@ -592,40 +499,19 @@ dim(clin_inc0to5) <- c(age05,nh,num_int)
 clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
-dim(zz) <- num_int
 
-output(Yout) <- sum(Y[,,])
-output(phiout) <- sum(phi[,,])
-output(FOIout) <- sum(FOI[,,])
-output(EIRout) <- sum(EIR[,,])
-output(clin_inc[,,]) <- clin_inc
-output(cov[]) <- cov[i]
 # Param checking outputs
-output(Y[,,]) <- Y
-output(phi[,,]) <- phi
+output(mu) <- mu
+output(beta_larval) <- beta_larval
 output(KL) <- KL
 output(mv) <- mv
 output(Q) <- Q
 output(wh) <- wh
-output(wbar) <- wbar
-output(av) <- av
-output(av_mosq[]) <- av_mosq[i]
-output(av_human[]) <- av_human[i]
-output(w[]) <- w[i]
-output(yy[]) <- yy[i]
-output(zz[]) <- z[i]
-output(zbar) <- zbar
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN
 output(s_ITN) <- s_ITN
+output(d_IRS) <- d_IRS
+output(r_IRS) <- r_IRS
+output(s_IRS) <- s_IRS
 output(cov[]) <- cov[i]
 output(K0) <- K0
-output(theta2) <- theta2
-output(EM_decay) <- EM_decay
-output(ITN_decay) <- ITN_decay
-output(FOI[,,]) <- FOI
-output(p1) <- p1
-output(p2) <- p2
-output(mu) <- mu
-output(em_in) <- em_in
-output(r_em_in) <- r_EM_in0

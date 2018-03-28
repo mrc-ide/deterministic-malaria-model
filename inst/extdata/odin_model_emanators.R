@@ -297,8 +297,8 @@ lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
-#betaa <- 0.5*PL/dPL
-betaa <- mv0 * mu * theta2
+betaa <- 0.5*PL/dPL
+#betaa <- mv0 * mu * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
 #deriv(Ev) <- ince - incv - mu*Ev
@@ -335,6 +335,7 @@ gammaL <- user() # eff. of den. dep. on late stage relative to early stage
 
 # fitted entomological parameters:
 mv0 <- user() # initial mosquito density
+mu0 <- user() # baseline mosquito death rate
 tau1 <- user() # duration of host-seeking behaviour
 tau2 <- user() # duration of resting behaviour
 p10 <- user() # prob of surviving 1 feeding cycle
@@ -346,12 +347,14 @@ eov <- betaL/mu*(exp(mu/fv)-1)
 beta_larval <- eov*mu*exp(-mu/fv)/(1-exp(-mu/fv)) # Number of eggs laid per day
 b_lambda <- (gammaL*muLL/muEL-dEL/dLL+(gammaL-1)*muLL*dEL)
 lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu*dLL*(1+dPL*muPL)))
-K0 <- 2*mv0*dLL*mu*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
+K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
 
 # Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
 KL <- K0*theta2
 fv <- 1/( tau1/(1-zbar) + tau2 ) # mosquito feeding rate (zbar from intervention param.)
-mu <- -fv*log(p1*p2) # mosquito death rate
+# My change below, p2 is probability of surviving through resting period - now affected by indoor spatial repellents
+#mu <- -fv*log(p1*p2) # mosquito death rate
+mu <- -fv*log(p1*p2tox)
 
 # finding equilibrium and initial values for EL, LL & PL
 init_PL <- user()
@@ -362,9 +365,9 @@ init_EL <- user()
 initial(EL) <- init_EL
 
 # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
-deriv(EL) <- beta_larval*mv-muEL*(1+(EL+LL)/KL)*EL - EL/dEL
+deriv(EL) <- beta_larval*(1-f_red)*mv-muEL*(1+(EL+LL)/KL*(1-f_red))*EL - EL/dEL
 # egg hatching - den. dep. mortality - maturing larvae
-deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL)*LL - LL/dLL
+deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL *(1-f_red))*LL - LL/dLL
 # pupae - mortality - fully developed pupae
 deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 
@@ -492,7 +495,7 @@ r_EM_out <- if(t < EM_on) 0 else r_EM_out0*EM_decay
 
 d_EM_out <- if(t < EM_on) 0 else d_EM_out0*EM_decay
 
-s_EM_out <- 1 - d_EM_out - r_EM_out
+s_EM_out <- if(t < EM_on) 1 else 1 - d_EM_out - r_EM_out
 
 # EMANATOR INSIDE parameters
 
@@ -505,25 +508,41 @@ r_EM_in <- if(t < EM_on) 0 else r_EM_in0*EM_decay
 
 d_EM_in <- if(t < EM_on) 0 else d_EM_in0*EM_decay
 
-s_EM_in <- 1 - d_EM_in - r_EM_in
+s_EM_in <- if(t < EM_on) 1 else 1 - d_EM_in
+
+## experimental fecundity/mortality stuff
+f_EM_in0 <- user()
+f_EM_in <- if(t < EM_on) 0 else f_EM_in0*EM_decay
+
+# fecundity
+# amount to reduce betaa by -> 1 - (% of mosquitoes surviving a feeding attempt in a home with an emanator in * proportion of mosquitoes prevented from laying eggs)
+f_red <- if(em_in == 0) 0 else ((cov[3]*w[3]) + (cov[4] * w[4]))*f_EM_in
+output(f_red) <- f_red # this is what betaa, the number of new mosquitoes produced is modified by
+
+# toxicity
+# affects the probability that the mosquito will survive the subsequent resting period
+t_EM_in0 <- user()
+t_EM_in <- if(t < EM_on) 0 else t_EM_in0*EM_decay
+tox <- cov[1]+cov[2]+(cov[3]*(1-t_EM_in))+(cov[4]*(1-t_EM_in))
+p2tox <- p2*tox
+
 
 
 # probability that mosquito bites and survives for each intervention category
 dim(w) <- num_int
 w[1] <- 1
 w[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-w[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Emanator + s_EM_out*bites_Emanator - bites_Indoors + (1-s_EM_in)*bites_Indoors
+w[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Emanator + s_EM_out*bites_Emanator - bites_Indoors + s_EM_in*(1-r_EM_in)*bites_Indoors
 #w[3] <- 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
-w[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator else 1 - bites_Indoors + bites_Bed*(1-s_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-s_EM_in) - bites_Emanator + s_EM_out*bites_Emanator
+w[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator else (1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_EM_in*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in)*s_EM_in - bites_Emanator + s_EM_out*bites_Emanator)
 #w[4] <- 1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator
 
 # probability that mosq feeds during a single attempt for each int. cat.
 dim(yy) <- num_int
 yy[1] <- 1
 yy[2] <- w[2]
-# essentially yy[3] <- w[3] since s_EM=1
-yy[3] <- w[3]
-yy[4] <- w[4]
+yy[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Emanator + s_EM_out*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
+yy[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator else (1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + s_EM_out*bites_Emanator)
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
 dim(z) <- num_int
@@ -556,9 +575,9 @@ dim(av_mosq) <- num_int
 # ALTERED DUE TO PAGE 6 SUPP MAT 2, the biting rate was previously inflated to account for the fact that some mosquitoes would bite due to IRS and then die
 # This essentially meant that as the biting rate on humans covered by emanators dropped, this increased the biting rate on people with no interventions
 # av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
-av_mosq[1:num_int] <- av*w[i]
+av_mosq[1:num_int] <- av*w[i]/wh
 dim(av_human) <- num_int
-av_human[1:num_int] <- av*yy[i]
+av_human[1:num_int] <- av*yy[i]/wh
 
 ##------------------------------------------------------------------------------
 ###################
@@ -628,4 +647,12 @@ output(p1) <- p1
 output(p2) <- p2
 output(mu) <- mu
 output(em_in) <- em_in
-output(r_em_in) <- r_EM_in0
+output(r_em_in) <- r_EM_in
+output(d_em_in) <- d_EM_in
+output(s_em_in) <- s_EM_in
+output(r_em_out) <- r_EM_out
+output(d_em_out) <- d_EM_out
+output(s_em_out) <- s_EM_out
+output(p2tox) <- p2tox
+output(betaa) <- betaa
+output(beta_larval) <- beta_larval

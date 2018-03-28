@@ -157,6 +157,7 @@ model_param_list_create <- function(
   num_int = 4,
   itn_cov = 0,
   irs_cov = 0,
+  em_cov = 0,
   ITN_IRS_on = -1,
   DY = 365,
   d_ITN0 = 0.41,
@@ -280,10 +281,10 @@ model_param_list_create <- function(
   mp_list$num_int <- num_int
   mp_list$itn_cov <- itn_cov
   mp_list$irs_cov <- irs_cov
+  mp_list$em_cov <- em_cov
   mp_list$ITN_IRS_on <- ITN_IRS_on
 
   # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
-  em_cov <- extra_param_list$em_cov
   mp_list$cov <- c((1 - itn_cov) * (1 - em_cov), itn_cov * (1 - em_cov), (1 - itn_cov) * em_cov, itn_cov * em_cov)
   #mp_list$cov <- extra_param_list$cov1
   mp_list$d_ITN0 <- d_ITN0

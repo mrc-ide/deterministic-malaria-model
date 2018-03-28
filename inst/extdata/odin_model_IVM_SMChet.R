@@ -73,7 +73,7 @@ MDA_U[2:SMCyrs, 1:nh, 1:num_int, 2] = if (t >= MDA_sr && t < (MDA_sr + 1)) log(1
 MDA_S[2:SMCyrs, 1:nh, 1:num_int, 2] = if (t >= MDA_sr && t < (MDA_sr + 1)) log(1/(1-MDA_eff2))*S[i,j,k,l] else 0
 
 
-# 
+#
 # deriv(Sv) =               if (t >= (IVRM_sr)   && t < (IVRM_sr + eff_len  )) betaa - mu*Sv - avB2*Sv*ivm_cov - FOIv*Sv*(1-ivm_cov)                      else betaa - FOIv*Sv - mu*Sv
 
 
@@ -313,8 +313,8 @@ ccov[] <- user() # proportion of population in each of the correlation coverage 
 
 
 dim(EIR) <- c(na,nh,num_int,ncc)
-EIR[,,,1] <- av_human[k] * rel_foi[j] * foi_age[i]/omega*Ivtot 
-EIR[,,,2] <- av_human[k] * rel_foi[j] * foi_age[i]/omega*Ivtot 
+EIR[,,,1] <- av_human[k] * rel_foi[j] * foi_age[i]/omega*Ivtot
+EIR[,,,2] <- av_human[k] * rel_foi[j] * foi_age[i]/omega*Ivtot
 
 
 
@@ -386,7 +386,7 @@ FOIv <- delay(lag_FOIv, delayGam)
 
 # # Number of mosquitoes that become infected at each time point
 # ince <- FOIv * Sv
-# 
+#
 # # Number of mosquitoes born (depends on PL, number of larvae)
 betaa <- 0.5*PL/dPL
 # deriv(Sv) <- -ince - mu*Sv + betaa
@@ -516,7 +516,7 @@ eov <- betaL/mu*(exp(mu/fv)-1)
 beta_larval <- eov*mu*exp(-mu/fv)/(1-exp(-mu/fv)) # Number of eggs laid per day
 b_lambda <- (gammaL*muLL/muEL-dEL/dLL+(gammaL-1)*muLL*dEL)
 lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu*dLL*(1+dPL*muPL)))
-K0 <- 2*mv0*dLL*mu*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
+K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
 
 # Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
 KL <- K0*theta2
@@ -690,7 +690,7 @@ age10 <- user()
 dim(prev0to59) <- c(age59,nh,num_int,ncc)
 prev0to59[1:age59,,,] <- T[i,j,k,l] + D[i,j,k,l] + A[i,j,k,l] * p_det[i,j,k,l]
 output(prev) <- sum(prev0to59[,,,])/sum(den[1:age59])
- 
+
 age2to10 = age10 - age02 + 1
 
 dim(prev2to10) <- c(age10,nh,num_int,ncc)
@@ -737,11 +737,11 @@ prev0to10_slide[1:age10,,,] <- T[i,j,k,l] + D[i,j,k,l] + A[i,j,k,l]*p_det[i,j,k,
 output(prev_slide_0to10) <- sum(prev0to10_slide[,,,])/sum(den[1:age10])
 
 
-# 
+#
 # dim(pcr_prev_cc1) <- c(na, nh, num_int, 1)
 # pcr_prev_cc1[,,,1] <- T[i,j,k,1] + D[i,j,k,1] + A[i,j,k,1] + U[i,j,k,1]
 # output(pcrprev_cc1) <- sum(pcr_prev_cc1[,,,])/ccov[1]
-# 
+#
 # dim(pcr_prev_cc2) <- c(na, nh, num_int, 1)
 # pcr_prev_cc2[,,,1] <- T[i,j,k,2] + D[i,j,k,2] + A[i,j,k,2] + U[i,j,k,2]
 # output(pcrprev_cc2) <- sum(pcr_prev_cc2[,,,])/ccov[2]

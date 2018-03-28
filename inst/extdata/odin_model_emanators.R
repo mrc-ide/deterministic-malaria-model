@@ -297,8 +297,8 @@ lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
-betaa <- 0.5*PL/dPL
-#betaa <- mv0 * mu0 * theta2
+#betaa <- 0.5*PL/dPL
+betaa <- mv0 * mu0 * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
 #deriv(Ev) <- ince - incv - mu*Ev

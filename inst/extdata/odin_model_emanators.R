@@ -298,7 +298,7 @@ incv <- delay(lag_incv, delayMos)
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
 betaa <- 0.5*PL/dPL
-#betaa <- mv0 * mu * theta2
+#betaa <- mv0 * mu0 * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
 #deriv(Ev) <- ince - incv - mu*Ev
@@ -343,7 +343,7 @@ p2 <- user() #prob of surviving one resting cycle
 betaL <- user() # maximum number of eggs per oviposition per mosq
 
 # Entomological variables:
-eov <- betaL/mu*(exp(mu/fv)-1)
+eov <- betaL/mu*(exp(mu/fv)-1) # eggs of
 beta_larval <- eov*mu*exp(-mu/fv)/(1-exp(-mu/fv)) # Number of eggs laid per day
 b_lambda <- (gammaL*muLL/muEL-dEL/dLL+(gammaL-1)*muLL*dEL)
 lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu*dLL*(1+dPL*muPL)))

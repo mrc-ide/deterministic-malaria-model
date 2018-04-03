@@ -300,17 +300,36 @@ incv <- delay(lag_incv, delayMos)
 #betaa <- 0.5*PL/dPL
 betaa <- mv0 * mu0 * theta2
 
-deriv(Sv) <- -ince - mu*Sv + betaa
+deriv(Sv) <- -ince - mu*Sv + betaa - feb*Sv + inhib_rate*SvI
 #deriv(Ev) <- ince - incv - mu*Ev
-deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
-deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
-deriv(Iv) <- incv - mu*Iv
+deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1] - feb*Ev[1] + inhib_rate*EvI[1]
+deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i] - feb*Ev[i] + inhib_rate*EvI[i]
+deriv(Iv) <- incv - mu*Iv - feb*Iv + inhib_rate*IvI
+
+
+# A proportion of what we would consider standard repellency is in fact full feeding inhibition
+feb <- if(t < EM_on) 0 else (cov[3]+cov[4])*bites_Emanator*r_EM_out*inhibition_effect
+inhibition_effect <- user()
+inhib_length <- user()
+inhib_rate <- 1/inhib_length
+output(feb) <- feb
+output(inhib_rate) <- inhib_rate
+dim(EvI) <- 10
+initial(SvI) <- 0
+initial(EvI[1:10]) <- 0
+initial(IvI) <- 0
+
+deriv(SvI) <- feb*Sv - inhib_rate*SvI - mu*SvI
+deriv(EvI[1]) <- feb*Ev[1] - EvI[1] - mu*EvI[1] - inhib_rate*EvI[1]
+deriv(EvI[2:10]) <- feb*Ev[i] + EvI[i-1] - EvI[i] - mu*EvI[i] - inhib_rate*EvI[i]
+deriv(IvI) <- feb*Iv - inhib_rate*IvI - mu*IvI
+
 
 # Total mosquito population
 #mv = Sv+Ev+Iv
 mv = Sv+sum(Ev)+Iv
-
-
+mvI = Sv+sum(Ev)+Iv + SvI + sum(EvI) + IvI
+output(mvI) <- mvI
 ##------------------------------------------------------------------------------
 ###################
 ## LARVAL STATES ##
@@ -365,7 +384,7 @@ init_EL <- user()
 initial(EL) <- init_EL
 
 # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
-deriv(EL) <- beta_larval*(1-f_red)*mv-muEL*(1+(EL+LL)/KL*(1-f_red))*EL - EL/dEL
+deriv(EL) <- beta_larval*(1-f_red)*mvI-muEL*(1+(EL+LL)/KL*(1-f_red))*EL - EL/dEL
 # egg hatching - den. dep. mortality - maturing larvae
 deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL *(1-f_red))*LL - LL/dLL
 # pupae - mortality - fully developed pupae

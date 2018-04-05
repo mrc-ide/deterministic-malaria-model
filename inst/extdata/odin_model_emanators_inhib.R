@@ -297,8 +297,8 @@ lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
-#betaa <- 0.5*PL/dPL
-betaa <- mv0 * mu0 * theta2
+betaa <- 0.5*PL/dPL
+#betaa <- mv0 * mu0 * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa - feb*Sv + inhib_rate*SvI
 #deriv(Ev) <- ince - incv - mu*Ev
@@ -365,7 +365,7 @@ betaL <- user() # maximum number of eggs per oviposition per mosq
 eov <- betaL/mu*(exp(mu/fv)-1) # eggs of
 beta_larval <- eov*mu*exp(-mu/fv)/(1-exp(-mu/fv)) # Number of eggs laid per day
 b_lambda <- (gammaL*muLL/muEL-dEL/dLL+(gammaL-1)*muLL*dEL)
-lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu*dLL*(1+dPL*muPL)))
+lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu0*dLL*(1+dPL*muPL)))
 K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
 
 # Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
@@ -488,7 +488,7 @@ em_loss <- user()
 # Calculates decay for ITN/EM
 ITN_decay = if(t < ITN_on) 0 else exp(-((t-ITN_on)%%ITN_interval) * itn_loss)
 EM_decay = if(t < EM_on) 0 else exp(-((t-EM_on)%%EM_interval) * em_loss)
-
+output(em_loss) <- em_loss
 
 # The r,d and s values turn on after ITN_EM_on and decay accordingly
 d_ITN <- if(t < ITN_on) 0 else d_ITN0*ITN_decay

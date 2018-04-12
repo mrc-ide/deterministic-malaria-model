@@ -152,6 +152,8 @@ generate_default_model <- function(ft,age,dat,generator,dde = TRUE){
                    IRS_interval = dat$IRS_interval,
                    ITN_interval = dat$ITN_interval,
                    irs_loss = dat$irs_loss,
-                   itn_loss = dat$itn_loss
+                   itn_loss = dat$itn_loss,
+                   mu0 = dat$mu0
+
   )
 }

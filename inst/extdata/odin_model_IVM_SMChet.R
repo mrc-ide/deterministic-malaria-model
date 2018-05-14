@@ -224,7 +224,7 @@ initial(ICM[,,,]) <- init_ICM[i,j,k,l]
 dim(ICM) <- c(na,nh,num_int,ncc)
 
 deriv(ICM[1, 1:nh, 1:num_int, 1:ncc]) <- -1/dCM*ICM[i,j,k,l] + (init_ICM[i,j,k,l]-ICM[i,j,k,l])/x_I[i]
-deriv(ICM[2:na, 1:nh, 1:num_int, 1:ncc]) <- -1/dCM*ICM[i,j,k,l] - (ICM[i,j,k,l]-ICM[i,j,k,l])/x_I[i]
+deriv(ICM[2:na, 1:nh, 1:num_int, 1:ncc]) <- -1/dCM*ICM[i,j,k,l] - (ICM[i,j,k,l]-ICM[i-1,j,k,l])/x_I[i]
 
 # ICA - exposure driven immunity
 init_ICA[,,,] <- user()

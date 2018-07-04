@@ -246,7 +246,14 @@ ssb3 <- user()
 theta_c <- user()
 # Recreation of the rainfall function
 theta2 <- if(ssa0 == 0 && ssa1  == 0 && ssa2  == 0 && ssb1  == 0 && ssb2  == 0 && ssb3  == 0 && theta_c  == 0)
-  1 else max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001)
+   1 else if(t < (14*365)) max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001) else
+    theta2_scaled
+
+theta2_raw <- 6.4148 + 3.017*cos(2*pi*t/365) -3.9303*cos(4*pi*t/365) + 0.8912*cos(6*pi*t/365) + 4.209*sin(2*pi*t/365) - 1.2505*sin(4*pi*t/365) - 2.0129*sin(6*pi*t/365)
+th_min <- -1.432255
+th_max <- 20.67784
+theta2_scaled <- max(2*(theta2_raw-th_min)/(th_max-th_min),0.001)
+# theta2 <- if(theta2_scaled<0.001) 0.001 else theta2_scaled
 
 ##------------------------------------------------------------------------------
 #####################
@@ -314,16 +321,15 @@ feb <- if(t < ITN_on) 0 else (cov[2])*bites_Bed*(1-d_ITN-r_ITN)*inhib*inhibition
 output(f_ITN) <- f_ITN
 
 
-# PBO <- -0.371 # PBO on
-PBO <- 0 # PBO off
-PBO_int <- 0 # PBO off
-# PBO_int <- 1.089 # PBO on
+# PBO
+PBO_p <- if(PBO==0) 0 else -0.371
+PBO_int <- if(PBO==0) 0 else 1.089
 # Washes
 Washes <- 0 # 0 washes
 # Washes <- 1.31 # 3 washes
 # Washes <- -0.379 # 20 washes
 
-p <- 2.363 - 2.57*surv_bioassay + PBO + PBO_int*surv_bioassay
+p <- 2.363 - 2.57*surv_bioassay + PBO_p + PBO_int*surv_bioassay
 inhib <- if(t < ITN_on) 0 else exp(p)/(exp(p)+1)
 
 inhibition_effect <- user()
@@ -429,7 +435,16 @@ dim(cov) <- num_int
 # cov[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
 # cov[3] <- (1-itn_cov)*em_cov	#      {EM only}
 # cov[4] <- itn_cov*em_cov #	   {Both ITN and EM}
-cov[] <- user()
+# cov[] <- user()
+cov[3] <- 0
+cov[4] <- 0
+cov[2] <- if(t < (365*13)) itn_cov_start else if(t < ((365*13)+60)) itn_cov_start + itn_cov_grad_up*(t-(365*13)) else if(t < (365*14)) itn_cov_max else max(itn_cov_max - (t-(365*14))*itn_cov_grad_down,0.001)
+cov[1] <- 1 - cov[2]
+
+itn_cov_start <- if(PBO) 0.32 else 0.39
+itn_cov_grad_up <- if(PBO) 0.52/60 else 0.45/60
+itn_cov_max <- if(PBO) 0.78 else 0.75
+itn_cov_grad_down <- if(PBO) 0.13/365 else 0.24/365
 
 EM_interval <- user() # how long until emanators are refreshed
 ITN_interval <- user() # how long until ITNs are repeated
@@ -451,7 +466,17 @@ em_prod_profile[] <- user() # proportion of bites averted by emanator at each di
 
 # Linking cone assay and hut trial work on resistance to d_ITN and r_ITN, done by Ellie
 surv_bioassay <- user() # measure of % survival in discriminating dose bioassay
-mort_assay <- 1 - surv_bioassay
+# surv_bioassay <- if(t < 365*19) 0 else 0.5
+# surv_bioassay <- if(t < (365*13)) 0 else if(t < ((365*14))) 0.001*(t-(365*13)) else 0.41
+# surv_bioassay <- 0.92
+output(surv_bioassay) <- surv_bioassay
+PBO <- user()
+output(PBO) <- PBO
+pbo_benefit_a <- 3.407+5.88*((1-surv_bioassay)-0.5)/(1+0.783*((1-surv_bioassay)-0.5))
+pbo_benefit <- exp(pbo_benefit_a)/(1+exp(pbo_benefit_a))
+mort_assay <- if(PBO==0) 1 - surv_bioassay else pbo_benefit
+output(mort_assay) <- mort_assay
+output(pbo_benefit) <- pbo_benefit
 
 # Relationship between mortality in bioassay to hut trial, logit scale
 mort_hut_a <- 0.6338 + 3.9970 * (mort_assay-0.5)
@@ -460,6 +485,11 @@ mort_hut <- exp(mort_hut_a)/(1+exp(mort_hut_a))
 # Relationship between hut trial mortality and deterrence
 det_hut_a <- 0.07117+1.257*(mort_hut-0.5)-1.517*(mort_hut-0.5)^2
 det_hut <- if(det_hut_a < 0) 0 else det_hut_a # censored to stop becoming negative
+my_death <- mort_assay*(1-det_hut)
+my_kill_det <- 1 - my_death - det_hut
+output(my_kill_det) <- my_kill_det
+output(my_death) <- my_death
+output(det_hut) <- det_hut
 # Relationship between hut trial mortality and successful (feed)
 suc_hut <- 0.02491*exp(3.317*(1-mort_hut))
 rep_hut <- 1-suc_hut-mort_hut
@@ -486,7 +516,8 @@ itn_half_life     <- (log(2)/wash_decay_rate)/my_max_washes*2.64*365
 
 itn_loss <- log(2)/itn_half_life
 r_ITN_min <- 0.24
-
+output(itn_loss) <- itn_loss
+output(itn_half_life) <- itn_half_life
 
 ## END OF ELLIE'S WORK ##
 
@@ -512,7 +543,9 @@ d_ITN <- if(t < ITN_on) 0 else d_ITN0*ITN_decay
 # r_ITN <- if(t < ITN_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
 r_ITN <- if(t < ITN_on) 0 else r_ITN_min + (r_ITN0- r_ITN_min)*ITN_decay
 # Feeding inhibition
-f_ITN <- if(t < ITN_on) 0 else (1-d_ITN-r_ITN)*inhib*inhibition_effect*surv_bioassay*ITN_decay
+# f_ITN <- if(t < ITN_on) 0 else (1-d_ITN-r_ITN)*inhib*inhibition_effect*surv_bioassay*ITN_decay
+f_ITN <- if(t < ITN_on) 0 else f_ITN_min + (my_kill_det-f_ITN_min)*inhib*inhibition_effect*surv_bioassay*ITN_decay
+f_ITN_min <- if(PBO) 0 else 0
 output(inhib) <- inhib
 # Ellie's + my edit
 s_ITN <- if(t < ITN_on) 1 else 1 - d_ITN - r_ITN - f_ITN
@@ -641,6 +674,25 @@ age59 <- user()
 # index of the age vector above 5 years
 age05 <- user()
 
+# 2-10 year old outputs
+# age2 <- 9
+# age10 <- 17
+# gap <- age10-age2
+age15 <- 18
+dim(prev0to15) <- c(age15,nh,num_int)
+prev0to15[1:age15,,] <- T[i,j,k] + D[i,j,k] + A[i,j,k] * p_det[i,j,k]
+output(prev15) <- sum(prev0to15[,,])/sum(den[1:age15])
+# prev2to10[1:gap,,] <- T[age2+i,j,k] + D[age2+i,j,k] + A[age2+i,j,k] + p_det[age2+i,j,k]
+# output(prev210) <- sum(prev2to10[,,])/sum(den[age2:age10])
+
+dim(prevITN) <- c(age59,nh)
+prevITN[1:age59,] <- T[i,j,2] + D[i,j,2] + A[i,j,2] * p_det[i,j,2]
+output(previ) <- sum(prevITN[,])/sum(den[1:age59])
+
+dim(prevnull) <- c(age59,nh)
+prevnull[1:age59,] <- T[i,j,1] + D[i,j,1] + A[i,j,1] * p_det[i,j,1]
+output(prevn) <- sum(prevnull[,])/sum(den[1:age59])
+
 dim(prev0to59) <- c(age59,nh,num_int)
 prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k] + A[i,j,k] * p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
@@ -651,9 +703,15 @@ output(allprev) <- sum(prevall[,,])/sum(den[])
 
 # slide positivity in 0 -5 year age bracket
 dim(clin_inc0to5) <- c(age05,nh,num_int)
+dim(clin_inc_null) <- c(age05,nh)
+dim(clin_inc_net) <- c(age05,nh)
 clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
+clin_inc_null[1:age05,] <- clin_inc[i,j,1]
+clin_inc_net[1:age05,] <- clin_inc[i,j,2]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
+output(inc05i) <- sum(clin_inc_net)/sum(den[1:age05])
+output(inc05n) <- sum(clin_inc_null)/sum(den[1:age05])
 dim(zz) <- num_int
 
 output(Yout) <- sum(Y[,,])

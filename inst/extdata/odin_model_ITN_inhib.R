@@ -442,7 +442,7 @@ cov[2] <- if(t < (365*13)) itn_cov_start else if(t < ((365*13)+60)) itn_cov_star
 cov[1] <- 1 - cov[2]
 
 itn_cov_start <- if(PBO) 0.32 else 0.39
-itn_cov_grad_up <- if(PBO) 0.52/60 else 0.45/60
+itn_cov_grad_up <- if(PBO) 0.46/60 else 0.36/60
 itn_cov_max <- if(PBO) 0.78 else 0.75
 itn_cov_grad_down <- if(PBO) 0.13/365 else 0.24/365
 
@@ -479,7 +479,7 @@ output(mort_assay) <- mort_assay
 output(pbo_benefit) <- pbo_benefit
 
 # Relationship between mortality in bioassay to hut trial, logit scale
-mort_hut_a <- 0.6338 + 3.9970 * (mort_assay-0.5)
+mort_hut_a <- 0.63445 + 3.9970 * (mort_assay-0.5)
 mort_hut <- exp(mort_hut_a)/(1+exp(mort_hut_a))
 
 # Relationship between hut trial mortality and deterrence
@@ -490,18 +490,29 @@ my_kill_det <- 1 - my_death - det_hut
 output(my_kill_det) <- my_kill_det
 output(my_death) <- my_death
 output(det_hut) <- det_hut
+output(suc_hut) <- suc_hut
 # Relationship between hut trial mortality and successful (feed)
 suc_hut <- 0.02491*exp(3.317*(1-mort_hut))
 rep_hut <- 1-suc_hut-mort_hut
 
 n1n0 <- 1-det_hut
 kp1 <- n1n0*suc_hut
-jp1 <- n1n0*rep_hut+(n1n0)
+jp1 <- n1n0*rep_hut+(1-n1n0)
 lp1 <- n1n0*mort_hut
 
 # New values given resistance
-r_ITN0 <- (1-kp1/0.699)*(jp1/(lp1+jp1))
-d_ITN0 <- (1-kp1/0.699)*(lp1/(lp1+jp1))
+r_ITN0_raw <- (1-kp1/0.699)*(jp1/(lp1+jp1))
+d_ITN0_raw <- (1-kp1/0.699)*(lp1/(lp1+jp1))
+s_ITN0_raw <- 1 - r_ITN0_raw - d_ITN0_raw
+
+# Scale to Griffin et al 2015 Nat Comms
+Griff_d_ITN0<-0.51
+Griff_r_ITN0<-0.31
+Griff_s_ITN0<-1-Griff_d_ITN0-Griff_r_ITN0
+
+d_ITN0 <- d_ITN0_raw/0.6184016*Griff_d_ITN0
+s_ITN0 <- (Griff_s_ITN0)+(s_ITN0_raw-0.02989261)/(0.5020481 - 0.02989261)*(0.5020481 - Griff_s_ITN0)
+r_ITN0 <- 1-d_ITN0-s_ITN0
 
 # Insecticide halflife
 hut_max_a <- 0.6338 + 3.9970*(1-0.5) # maximum mortality seen in huts

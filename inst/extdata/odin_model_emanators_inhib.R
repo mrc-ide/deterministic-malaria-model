@@ -308,10 +308,12 @@ deriv(Iv) <- incv - mu*Iv - feb*Iv + inhib_rate*IvI
 
 
 # A proportion of what we would consider standard repellency is in fact full feeding inhibition
-feb <- if(t < EM_on) 0 else (cov[3]+cov[4])*(bites_Emanator*r_EM_out*inhibition_effect + bites_Indoors*r_EM_in*inhibition_effect)
+# feb <- if(t < EM_on) 0 else (cov[3]+cov[4])*(bites_Emanator*r_EM_out*inhibition_effect + bites_Indoors*r_EM_in*inhibition_effect)
+# feb <- if(t < EM_on) 0 else (av_mosq[3]+av_mosq[4])*bites_Emanator*r_EM_out*inhibition_effect
+feb <- if(t < EM_on)0 else av_mosq[4]*bites_Emanator*r_EM_out*inhibition_effect
 inhibition_effect <- user()
 inhib_length <- user()
-inhib_rate <- 1/inhib_length
+inhib_rate <- 1/(inhib_length)
 output(feb) <- feb
 output(inhib_rate) <- inhib_rate
 dim(EvI) <- 10
@@ -508,7 +510,7 @@ p_EM_vec[1:d_len] <- em_human_dist[i]*(1-rep_EM[i])
 
 # Values over all distances
 r_EM_out0 <- 1-sum(p_EM_vec)
-d_EM_out0 <- user()
+d_EM_out0 <- 0
 
 r_EM_out <- if(t < EM_on) 0 else r_EM_out0*EM_decay
 
@@ -530,7 +532,7 @@ d_EM_in <- if(t < EM_on) 0 else d_EM_in0*EM_decay
 s_EM_in <- if(t < EM_on) 1 else 1 - d_EM_in
 
 ## experimental fecundity/mortality stuff
-f_EM_in0 <- user()
+f_EM_in0 <- 0
 f_EM_in <- if(t < EM_on) 0 else f_EM_in0*EM_decay
 
 # fecundity
@@ -540,7 +542,7 @@ output(f_red) <- f_red # this is what betaa, the number of new mosquitoes produc
 
 # toxicity
 # affects the probability that the mosquito will survive the subsequent resting period
-t_EM_in0 <- user()
+t_EM_in0 <- 0
 t_EM_in <- if(t < EM_on) 0 else t_EM_in0*EM_decay
 tox <- cov[1]+cov[2]+(cov[3]*(1-t_EM_in))+(cov[4]*(1-t_EM_in))
 p2tox <- p2*tox
@@ -551,7 +553,7 @@ p2tox <- p2*tox
 dim(w) <- num_int
 w[1] <- 1
 w[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-w[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Emanator + s_EM_out*bites_Emanator - bites_Indoors + s_EM_in*(1-r_EM_in)*bites_Indoors
+w[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Indoors + s_EM_out*bites_Indoors
 #w[3] <- 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
 w[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator else (1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_EM_in*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in)*s_EM_in - bites_Emanator + s_EM_out*bites_Emanator)
 #w[4] <- 1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator
@@ -560,14 +562,14 @@ w[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_o
 dim(yy) <- num_int
 yy[1] <- 1
 yy[2] <- w[2]
-yy[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Emanator + s_EM_out*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
+yy[3] <- w[3]
 yy[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator else (1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + s_EM_out*bites_Emanator)
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
 dim(z) <- num_int
 z[1] <- 0
 z[2] <- bites_Bed*r_ITN
-z[3] <- if(em_in == 0) r_EM_out*bites_Emanator else r_EM_out*bites_Emanator + bites_Indoors*r_EM_in
+z[3] <- if(em_in == 0) r_EM_out*bites_Emanator else bites_Indoors*r_EM_out
 #z[3] <- (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in
 z[4] <- if(em_in == 0) bites_Bed*r_ITN + r_EM_out*bites_Emanator else bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + r_EM_out*bites_Emanator
 #z[4] <- bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-p_EM)*bites_Emanator

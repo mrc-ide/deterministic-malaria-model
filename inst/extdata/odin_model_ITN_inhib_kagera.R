@@ -245,16 +245,16 @@ ssb2 <- user()
 ssb3 <- user()
 theta_c <- user()
 # Recreation of the rainfall function
-theta2 <- if(ssa0 == 0 && ssa1  == 0 && ssa2  == 0 && ssb1  == 0 && ssb2  == 0 && ssb3  == 0 && theta_c  == 0)
-   1 else max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001)
+# theta2 <- if(ssa0 == 0 && ssa1  == 0 && ssa2  == 0 && ssb1  == 0 && ssb2  == 0 && ssb3  == 0 && theta_c  == 0)
+#    1 else if(t < (14*365)) max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001) else
+#     theta2_scaled
 
+theta2 <- max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001)
 
-# theta2 <- max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001)
-#
-# theta2_raw <- 6.4148 + 3.017*cos(2*pi*t/365) -3.9303*cos(4*pi*t/365) + 0.8912*cos(6*pi*t/365) + 4.209*sin(2*pi*t/365) - 1.2505*sin(4*pi*t/365) - 2.0129*sin(6*pi*t/365)
-# th_min <- -1.432255
-# th_max <- 20.67784
-# theta2_scaled <- max(2*(theta2_raw-th_min)/(th_max-th_min),0.001)
+theta2_raw <- 6.4148 + 3.017*cos(2*pi*t/365) -3.9303*cos(4*pi*t/365) + 0.8912*cos(6*pi*t/365) + 4.209*sin(2*pi*t/365) - 1.2505*sin(4*pi*t/365) - 2.0129*sin(6*pi*t/365)
+th_min <- -1.432255
+th_max <- 20.67784
+theta2_scaled <- max(2*(theta2_raw-th_min)/(th_max-th_min),0.001)
 # theta2 <- if(theta2_scaled<0.001) 0.001 else theta2_scaled
 
 ##------------------------------------------------------------------------------
@@ -446,8 +446,13 @@ dim(cov) <- num_int
 # cov[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
 # cov[3] <- (1-itn_cov)*em_cov	#      {EM only}
 # cov[4] <- itn_cov*em_cov #	   {Both ITN and EM}
-cov[] <- user()
+# cov[] <- user()
+cov[3] <- 0
+cov[4] <- 0
+cov[2] <- if(t < (365*13)) 0 else itn_cov_max  # if(t < ((365*13))) itn_cov_max  else if(t < (365*14))
+cov[1] <- 1 - cov[2]
 
+itn_cov_max <- if(PBO) 0.78 else 0.75
 
 
 EM_interval <- user() # how long until emanators are refreshed
@@ -515,14 +520,14 @@ Griff_d_ITN0<-0.51
 Griff_r_ITN0<-0.31
 Griff_s_ITN0<-1-Griff_d_ITN0-Griff_r_ITN0
 
-d_ITN0 <- d_ITN0_raw/0.6184016*Griff_d_ITN0
-s_ITN0 <- (Griff_s_ITN0)+(s_ITN0_raw-0.02989261)/(0.5020481 - 0.02989261)*(0.5020481 - Griff_s_ITN0)
-r_ITN0 <- 1-d_ITN0-s_ITN0
+# d_ITN0 <- d_ITN0_raw/0.6184016*Griff_d_ITN0
+# s_ITN0 <- (Griff_s_ITN0)+(s_ITN0_raw-0.02989261)/(0.5020481 - 0.02989261)*(0.5020481 - Griff_s_ITN0)
+# r_ITN0 <- 1-d_ITN0-s_ITN0
 # d_ITN0 <- my_death
 # r_ITN0 <- 1-my_death-my_success_a
 # s_ITN0 <- my_success_a
-# d_ITN0 <- if(PBO) (0.916+0.046)*0.385936 + 0.038*0.506095 else (0.916+0.046)*0.175443 + 0.038*0.414594
-# r_ITN0 <- if(PBO) (0.916+0.046)*0.373473 + 0.038*0.313468 else (0.916+0.046)*0.379807 + 0.038*0.375627
+d_ITN0 <- if(PBO) (0.916+0.046)*0.385936 + 0.038*0.506095 else (0.916+0.046)*0.175443 + 0.038*0.414594
+r_ITN0 <- if(PBO) (0.916+0.046)*0.373473 + 0.038*0.313468 else (0.916+0.046)*0.379807 + 0.038*0.375627
 f_ITN0 <- my_kill_det*inhib*inhibition_effect*surv_bioassay
 
 # Insecticide halflife
@@ -534,8 +539,9 @@ my_max_washes <- log(2)/(exp(my_max_washes_a)/(1+exp(my_max_washes_a)))
 
 wash_decay_rate_a <- -2.360+-3.048*(mort_hut-0.5)
 wash_decay_rate   <- exp(wash_decay_rate_a)/(1+exp(wash_decay_rate_a))
-itn_half_life     <- (log(2)/wash_decay_rate)/my_max_washes*2.64*365
-# itn_half_life <- if(PBO) (1.057461*(0.916+0.046) + 0.038*2.47407)*365 else( 0.3808732*((0.916+0.046))+0.038*1.0457)*365
+# itn_half_life     <- (log(2)/wash_decay_rate)/my_max_washes*2.64*365
+# itn_half_life <-  if(PBO) (0.952438*365) else (0.428924*365)
+itn_half_life <- if(PBO) (1.057461*(0.916+0.046) + 0.038*2.47407)*365 else( 0.3808732*((0.916+0.046))+0.038*1.0457)*365
 
 
 itn_loss <- log(2)/itn_half_life
@@ -567,11 +573,7 @@ d_ITN <- if(t < ITN_on) 0 else d_ITN0*ITN_decay
 # r_ITN <- if(t < ITN_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
 r_ITN <- if(t < ITN_on) 0 else r_ITN_min + (r_ITN0- r_ITN_min)*ITN_decay
 # Feeding inhibition
-# f_ITN <- if(t < ITN_on) 0 else (1-d_ITN-r_ITN)*inhib*inhibition_effect*assay*ITN_decay
-# f_ITN <- if(t < ITN_on) 0 else f_ITN_min + (my_kill_det-f_ITN_min)*inhib*inhibition_effect*surv_bioassay*ITN_decay
 f_ITN <- if(t < ITN_on) 0 else f_ITN0*ITN_decay
-f_ITN_min <- if(PBO) 0 else 0
-output(inhib) <- inhib
 # Ellie's + my edit
 s_ITN <- if(t < ITN_on) 1 else 1 - d_ITN - r_ITN
 
@@ -672,9 +674,9 @@ dim(av_mosq) <- num_int
 # ALTERED DUE TO PAGE 6 SUPP MAT 2, the biting rate was previously inflated to account for the fact that some mosquitoes would bite due to IRS and then die
 # This essentially meant that as the biting rate on humans covered by emanators dropped, this increased the biting rate on people with no interventions
 # av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
-av_mosq[1:num_int] <- (av*w[i])/wh
+av_mosq[1:num_int] <- (av*w[i])
 dim(av_human) <- num_int
-av_human[1:num_int] <- (av*yy[i])/wh
+av_human[1:num_int] <- (av*yy[i])
 
 ##------------------------------------------------------------------------------
 ###################

@@ -16,11 +16,7 @@ time_period <- 365*1
 # provide a value for the proportion of cases that are treated (referred to as ft in the paper)
 prop_treated <- 0.4
 
-# run the model
-model_run <- Run_Model(age=init_age, EIR=init_EIR, ft = prop_treated, admin2 = admin_str, time = time_period)
-
-### alternative
-
+# creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",package = "hanojoel"),
                                 het_brackets = 5,
                                 age = init_age,
@@ -29,33 +25,10 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 country = "Uganda",
                                 admin2 = "Tororo")
 
-mod <- wh$generate_model_function(dat = wh$state,generator = wh$generator,dde = TRUE)
+# generates model functions with initial state data
+mod <- wh$generate_model_function(dat = wh$state, generator = wh$generator, dde = TRUE)
+
+# Runs the model
 mod_run <- mod$run(t = 1:365)
-out <- mod$transform_variables(mod_run)
-plot(out$t,out$prev)
-
-#
-
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R",package = "hanojoel"),
-                                het_brackets = 5,
-                                age = init_age,
-                                init_EIR = init_EIR,
-                                init_ft = 0.4,
-                                country = "Uganda",
-                                admin2 = "Tororo",
-                                ... = list("hrp2"))
-
-mod <- wh$generate_model_function(dat = wh$state,generator = wh$generator,dde = TRUE)
-
-
-
-
-
-
-
-wh$state$hrp2_prop <- 0.1
-
-mod <- wh$generate_model_function(dat = wh$state,generator = wh$generator,dde = TRUE)
-mod_run <- mod$run(t = 1:90)
 out <- mod$transform_variables(mod_run)
 plot(out$t,out$prev)

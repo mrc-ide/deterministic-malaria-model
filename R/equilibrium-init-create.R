@@ -46,23 +46,26 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   if(!is.null(admin_unit)) admin_unit <- stringi::stri_trans_general(admin_unit, "Latin-ASCII")
 
   age <- age_vector * mpl$DY
-  na <- as.integer(length(age))  # number of age groups
+  na <- as.integer(length(age)-1)  # number of age groups
   nh <- as.integer(het_brackets)  # number of heterogeneity groups
   h <- statmod::gauss.quad.prob(nh, dist = "normal")
   age0 <- 2
   age1 <- 10
   num_int <- mpl$num_int
   ## population demographics
-  age_rate <- age_width <- c()
-  age_mid_point <- age
+  age_rate <- age_width <- age_mid_point <- c()
+
   for (i in 1:na)
   {
-    age_rate[i] <- ifelse(i == na, 0, 1/(age[i + 1] - age[i]))  # vector of rates at which people leave each age group (1/age group width)
-    if (i < na)
-      age_mid_point[i] <- 0.5 * (age_mid_point[i] + age_mid_point[i + 1])  # set age group vector to the midpoint of the group
-    age_width[i] <- ifelse(i == na, age_width[i] - age[i - 1], age[i] - age[i - 1])
+    age_width[i] <- age[i+1] - age[i]
+    age_rate[i] <- ifelse(i==na, 0, 1/(age[i + 1] - age[i]))  # vector of rates at which people leave each age group (1/age group width)
+    age_mid_point[i] <- 0.5 * (age[i] + age[i + 1])  # set age group vector to the midpoint of the group
+
   }
-  age_width <- age_width[-1]  # bet this will break at some point
+
+  print(sprintf("Age width: %f", age_width))
+  print(sprintf("Age rate: %f", age_rate))
+  print(sprintf("Age: %f", age))
 
   den <- 1/(1 + age_rate[1]/mpl$eta)
   for (i in 2:na)

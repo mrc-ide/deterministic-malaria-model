@@ -275,7 +275,8 @@ model_param_list_create <- function(
   # {White et al. 2011 Parasites and Vectors}
   mp_list$eov <- betaL/mu0 * (exp(mu0/mp_list$fv0) - 1)
   mp_list$b_lambda <- (gammaL * muLL/muEL - dEL/dLL + (gammaL - 1) * muLL * dEL)
-  mp_list$lambda <- -0.5 * mp_list$b_lambda + sqrt(0.25 * mp_list$b_lambda^2 + gammaL * betaL * muLL * dEL/(2 * muEL * mu0 * dLL * (1 + dPL * muPL)))
+  mp_list$lambda <- -0.5 * mp_list$b_lambda +
+    sqrt(0.25 * mp_list$b_lambda^2 + gammaL * betaL * muLL * dEL/(2 * muEL * mu0 * dLL * (1 + dPL * muPL)))
 
   # ITN/IRS parameters
   mp_list$num_int <- num_int
@@ -285,8 +286,7 @@ model_param_list_create <- function(
   mp_list$ITN_IRS_on <- ITN_IRS_on
 
   # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
-  mp_list$cov <- c((1 - itn_cov) * (1 - em_cov), itn_cov * (1 - em_cov), (1 - itn_cov) * em_cov, itn_cov * em_cov)
-  #mp_list$cov <- extra_param_list$cov1
+  mp_list$cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
   mp_list$d_ITN0 <- d_ITN0
   mp_list$r_ITN0 <- r_ITN0
   mp_list$r_ITN1 <- r_ITN1

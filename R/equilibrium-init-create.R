@@ -54,12 +54,12 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   num_int <- mpl$num_int
   ## population demographics
   age_rate <- age_width <- c()
-  age2 <- age
+  age_mid_point <- age
   for (i in 1:na)
   {
     age_rate[i] <- ifelse(i == na, 0, 1/(age[i + 1] - age[i]))  # vector of rates at which people leave each age group (1/age group width)
     if (i < na)
-      age2[i] <- 0.5 * (age2[i] + age2[i + 1])  # set age group vector to the midpoint of the group
+      age_mid_point[i] <- 0.5 * (age_mid_point[i] + age_mid_point[i + 1])  # set age group vector to the midpoint of the group
     age_width[i] <- ifelse(i == na, age_width[i] - age[i - 1], age[i] - age[i - 1])
   }
   age_width <- age_width[-1]  # bet this will break at some point
@@ -397,20 +397,17 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
 
   ## collate init
-  res <- list(S = S_eq, T = T_eq, D = D_eq, A = A_eq, U = U_eq, P = P_eq, Y = Y_eq,
-              IB = IB_eq, ID = ID_eq, ICA = ICA_eq, ICM = ICM_eq, ICM_init_eq = ICM_init_eq, Iv = Iv_eq,
-              Sv = Sv_eq, Ev = Ev_eq, PL = PL_eq, LL = LL_eq, EL = EL_eq, pi = pi,
-              init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq, init_P = P_eq, init_Y = Y_eq,
+  res <- list(init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq, init_P = P_eq, init_Y = Y_eq,
               init_IB = IB_eq, init_ID = ID_eq, init_ICA = ICA_eq, init_ICM = ICM_eq, ICM_init_eq = ICM_init_eq, init_Iv = Iv_eq,
               init_Sv = Sv_eq, init_Ev = Ev_eq, init_PL = PL_eq, init_LL = LL_eq, init_EL = EL_eq,
-              age_rate = age_rate,het_wt = het_wt, het_x = het_x, omega = omega, foi_age = foi_age, rel_foi = rel_foi,
+              age_rate = age_rate, het_wt = het_wt, het_x = het_x, omega = omega, foi_age = foi_age, rel_foi = rel_foi,
               K0 = K0, mv0 = mv0, na = na, nh = nh, ni = num_int, x_I = x_I,
               age_rate = age_rate, FOI = FOI_eq, EIR = EIR_eq, cA_eq = cA_eq,
               den = den, age59 = age59, age05 = age05, ssa0 = ssa0, ssa1 = ssa1,
               ssa2 = ssa2, ssa3 = ssa3, ssb1 = ssb1, ssb2 = ssb2, ssb3 = ssb3,
-              theta_c = theta_c, age = age_vector, ft = ft, FOIv_eq = FOIv_eq, U_eq=U_eq, S_eq=S_eq,
-              T_eq=T_eq, A_eq=A_eq, D_eq = D_eq, betaS = betaS, betaA = betaA, betaU = betaU, FOIvij_eq=FOIvij_eq,
-              age02 = age2, het_bounds = het_bounds)
+              theta_c = theta_c, age = age_vector, ft = ft, FOIv_eq = FOIv_eq,
+              betaS = betaS, betaA = betaA, betaU = betaU, FOIvij_eq=FOIvij_eq,
+              age_mid_point = age_mid_point, het_bounds = het_bounds, pi = pi)
 
   res <- append(res,mpl)
 

@@ -58,10 +58,11 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   for (i in 1:na)
   {
     age_width[i] <- age[i+1] - age[i]
-    age_rate[i] <- ifelse(i==na, 0, 1/(age[i + 1] - age[i]))  # vector of rates at which people leave each age group (1/age group width)
+    age_rate[i] <- 1/(age[i + 1] - age[i])  # vector of rates at which people leave each age group (1/age group width)
     age_mid_point[i] <- 0.5 * (age[i] + age[i + 1])  # set age group vector to the midpoint of the group
 
   }
+  age_rate[na+1] = 0
 
   print(sprintf("Age width: %f", age_width))
   print(sprintf("Age rate: %f", age_rate))
@@ -400,10 +401,12 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
 
   ## collate init
-  res <- list(init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq, init_P = P_eq, init_Y = Y_eq,
-              init_IB = IB_eq, init_ID = ID_eq, init_ICA = ICA_eq, init_ICM = ICM_eq, ICM_init_eq = ICM_init_eq, init_Iv = Iv_eq,
-              init_Sv = Sv_eq, init_Ev = Ev_eq, init_PL = PL_eq, init_LL = LL_eq, init_EL = EL_eq,
-              age_rate = age_rate, het_wt = het_wt, het_x = het_x, omega = omega, foi_age = foi_age, rel_foi = rel_foi,
+  res <- list(init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq,
+              init_P = P_eq, init_Y = Y_eq, init_IB = IB_eq, init_ID = ID_eq, init_ICA = ICA_eq,
+              init_ICM = ICM_eq, ICM_init_eq = ICM_init_eq, init_Iv = Iv_eq, init_Sv = Sv_eq,
+              init_Ev = Ev_eq, init_PL = PL_eq, init_LL = LL_eq, init_EL = EL_eq,
+              age_width = age_width, age_rate = age_rate, het_wt = het_wt, het_x = het_x,
+              omega = omega, foi_age = foi_age, rel_foi = rel_foi,
               K0 = K0, mv0 = mv0, na = na, nh = nh, ni = num_int, x_I = x_I,
               age_rate = age_rate, FOI = FOI_eq, EIR = EIR_eq, cA_eq = cA_eq,
               den = den, age59 = age59, age05 = age05, ssa0 = ssa0, ssa1 = ssa1,

@@ -45,37 +45,35 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   if(!is.null(country)) country <- stringi::stri_trans_general(country,"Latin-ASCII")
   if(!is.null(admin_unit)) admin_unit <- stringi::stri_trans_general(admin_unit, "Latin-ASCII")
 
+  ## population demographics
   age <- age_vector * mpl$DY
-  na <- as.integer(length(age)-1)  # number of age groups
+  na <- as.integer(length(age))  # number of age groups
   nh <- as.integer(het_brackets)  # number of heterogeneity groups
   h <- statmod::gauss.quad.prob(nh, dist = "normal")
   age0 <- 2
   age1 <- 10
   num_int <- mpl$num_int
-  ## population demographics
-  age_rate <- age_width <- age_mid_point <- c()
 
-  for (i in 1:na)
+  age_rate <- age_width <- age_mid_point <- den <- c()
+  for (i in 1:(na-1))
   {
     age_width[i] <- age[i+1] - age[i]
     age_rate[i] <- 1/(age[i + 1] - age[i])  # vector of rates at which people leave each age group (1/age group width)
     age_mid_point[i] <- 0.5 * (age[i] + age[i + 1])  # set age group vector to the midpoint of the group
 
   }
-  age_rate[na+1] = 0
-
-  print(sprintf("Age width: %f", age_width))
-  print(sprintf("Age rate: %f", age_rate))
-  print(sprintf("Age: %f", age))
+  age_rate[na] = 0
 
   den <- 1/(1 + age_rate[1]/mpl$eta)
-  for (i in 2:na)
+  for (i in 1:(na-1))
   {
-    den[i] <- age_rate[i - 1] * den[i - 1]/(age_rate[i] + mpl$eta)  # proportion in each age_vector group
+    den[i+1] <- age_rate[i] * den[i]/(age_rate[i+1] + mpl$eta)  # proportion in each age_vector group
   }
 
+  print(den)
   age59 <- which(age_vector * 12 > 59)[1] - 1  # index of age vector before age is >59 months
   age05 <- which(age_vector > 5)[1] - 1  # index of age vector before age is 5 years
+  print("here")
 
   ## force of infection
   foi_age <- c()

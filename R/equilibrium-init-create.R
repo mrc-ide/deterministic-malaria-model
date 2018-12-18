@@ -70,10 +70,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
     den[i+1] <- age_rate[i] * den[i]/(age_rate[i+1] + mpl$eta)  # proportion in each age_vector group
   }
 
-  print(den)
   age59 <- which(age_vector * 12 > 59)[1] - 1  # index of age vector before age is >59 months
   age05 <- which(age_vector > 5)[1] - 1  # index of age vector before age is 5 years
-  print("here")
 
   ## force of infection
   foi_age <- c()
@@ -88,9 +86,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   het_x <- h$nodes
   het_wt <- h$weights
   den_het <- outer(den, het_wt)
-
   rel_foi <- exp(-mpl$sigma2/2 + sqrt(mpl$sigma2) * het_x)/sum(het_wt * exp(-mpl$sigma2/2 + sqrt(mpl$sigma2) * het_x))
-
 
   ## EIR
   EIRY_eq <- EIR  # initial annual EIR
@@ -133,32 +129,33 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   {
     for (i in 1:na)
     {
-      IB_eq[i, j] <- (ifelse(i == 1, 0, IB_eq[i - 1, j]) + EIR_eq[i,j]/(EIR_eq[i, j] * mpl$uB + 1) * x_I[i])/(1 + x_I[i]/mpl$dB)
+      IB_eq[i, j] <- (ifelse(i == 1, 0, IB_eq[i - 1, j]) +
+                        EIR_eq[i,j]/(EIR_eq[i, j] * mpl$uB + 1) * x_I[i])/(1 + x_I[i]/mpl$dB)
       FOI_eq[i, j] <- EIR_eq[i, j] * ifelse(IB_eq[i, j] == 0, mpl$b0,
                                             mpl$b0 * ((1 - mpl$b1)/(1 + (IB_eq[i, j]/mpl$IB0)^mpl$kB) + mpl$b1))
-      ID_eq[i, j] <- (ifelse(i == 1, 0, ID_eq[i - 1, j]) + FOI_eq[i,
-                                                                  j]/(FOI_eq[i, j] * mpl$uD + 1) * x_I[i])/(1 + x_I[i]/mpl$dID)
-      ICA_eq[i, j] <- (ifelse(i == 1, 0, ICA_eq[i - 1, j]) + FOI_eq[i,
-                                                                    j]/(FOI_eq[i, j] * mpl$uCA + 1) * x_I[i])/(1 + x_I[i]/mpl$dCA)
+      ID_eq[i, j] <- (ifelse(i == 1, 0, ID_eq[i - 1, j]) +
+                        FOI_eq[i, j]/(FOI_eq[i, j] * mpl$uD + 1) * x_I[i])/(1 + x_I[i]/mpl$dID)
+      ICA_eq[i, j] <- (ifelse(i == 1, 0, ICA_eq[i - 1, j]) +
+                         FOI_eq[i,j]/(FOI_eq[i, j] * mpl$uCA + 1) * x_I[i])/(1 + x_I[i]/mpl$dCA)
       p_det_eq[i, j] <- mpl$d1 + (1 - mpl$d1)/(1 + fd[i] * (ID_eq[i, j]/mpl$ID0)^mpl$kD)
       cA_eq[i, j] <- mpl$cU + (mpl$cD - mpl$cU) * p_det_eq[i, j]^mpl$gamma1
     }
   }
-  # needs to be calculated after because it references weird elements in
-  # ICA
+  # needs to be calculated after because it references ICA
   for (j in 1:nh)
   {
     for (i in 1:na)
     {
       ICM_init_eq[j] <- mpl$PM * (ICA_eq[age20l, j] + age_20_factor *
                                     (ICA_eq[age20u, j] - ICA_eq[age20l, j]))
-      ICM_eq[i, j] <- ifelse(i == 1, ICM_init_eq[j], ICM_eq[i - 1,
-                                                            j])/(1 + x_I[i]/mpl$dCM)
+      ICM_eq[i, j] <- ifelse(i == 1,
+                             ICM_init_eq[j], ICM_eq[i - 1,j])/(1 + x_I[i]/mpl$dCM)
     }
   }
 
   IC_eq <- ICM_eq + ICA_eq
   phi_eq <- mpl$phi0 * ((1 - mpl$phi1)/(1 + (IC_eq/mpl$IC0)^mpl$kC) + mpl$phi1)
+
 
   # human states
   gamma <- mpl$eta + c(age_rate[1:(na - 1)], 0)
@@ -181,22 +178,17 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   for (j in 1:nh)
   {
     for (i in 2:na)
-      #
-      # for (i in 2:na)
-      # {
-      #   for (j in 1:nh)
-      #
       {
       Z_eq[i, j, 1] <- (den_het[i, j] - delta[i] * (Z_eq[i - 1, j, 2]/betaT[i, j] +
                                                       Z_eq[i - 1, j, 3]/betaD[i, j] +
-                                                      (mpl$rT *  Z_eq[i - 1, j, 2]/betaT[i, j] + Z_eq[i - 1, j, 4])/betaP[i, j]))/(1 + aT[i, j] + aD[i, j] + aP[i, j])
+                                                      (mpl$rT *  Z_eq[i - 1, j, 2]/betaT[i, j]
+                                                       + Z_eq[i - 1, j, 4])/betaP[i, j]))/(1 + aT[i, j] + aD[i, j] + aP[i, j])
       Z_eq[i, j, 2] <- aT[i, j] * Z_eq[i, j, 1] + delta[i] * Z_eq[i -
                                                                     1, j, 2]/betaT[i, j]
       Z_eq[i, j, 3] <- aD[i, j] * Z_eq[i, j, 1] + delta[i] * Z_eq[i -
                                                                     1, j, 3]/betaD[i, j]
       Z_eq[i, j, 4] <- aP[i, j] * Z_eq[i, j, 1] + delta[i] * (mpl$rT *
-                                                                Z_eq[i - 1, j, 2]/betaT[i, j] + Z_eq[i - 1, j, 4])/betaP[i,
-                                                                                                                         j]
+                                                                Z_eq[i - 1, j, 2]/betaT[i, j] + Z_eq[i - 1, j, 4])/betaP[i,j]
 
     }
   }
@@ -206,15 +198,11 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   D_eq <- Z_eq[, , 3]
   P_eq <- Z_eq[, , 4]
 
-  ## UP TO HERE ##
-
-
   betaS <- apply(FOI_eq, MARGIN = 2, FUN = function(x, y)
   {
     x + y
   }, y = gamma)
-  betaA <- apply(FOI_eq * phi_eq + mpl$rA, MARGIN = 2, FUN = function(x,
-                                                                      y)
+  betaA <- apply(FOI_eq * phi_eq + mpl$rA, MARGIN = 2, FUN = function(x, y)
   {
     x + y
   }, y = gamma)
@@ -231,18 +219,15 @@ equilibrium_init_create <- function(age_vector, het_brackets,
     for (j in 1:nh)
     {
       A_eq[i, j] <- (delta[i] * ifelse(i == 1, 0, A_eq[i - 1, j]) +
-                       FOI_eq[i, j] * (1 - phi_eq[i, j]) * Y_eq[i, j] + mpl$rD * D_eq[i,
-                                                                                      j])/(betaA[i, j] + FOI_eq[i, j] * (1 - phi_eq[i, j]))
+                       FOI_eq[i, j] * (1 - phi_eq[i, j]) * Y_eq[i, j] +
+                       mpl$rD * D_eq[i,j])/(betaA[i, j] + FOI_eq[i, j] * (1 - phi_eq[i, j]))
       U_eq[i, j] <- (mpl$rA * A_eq[i, j] + delta[i] * ifelse(i == 1,
                                                              0, U_eq[i - 1, j]))/betaU[i, j]
       S_eq[i, j] <- Y_eq[i, j] - A_eq[i, j] - U_eq[i, j]
       FOIvij_eq[i, j] <- foi_age[i] * mpl$av0 * (mpl$cT * T_eq[i, j] + mpl$cD *
-                                                   D_eq[i, j] + cA_eq[i, j] * A_eq[i, j] + mpl$cU * U_eq[i, j]) *
-        rel_foi[j]/omega
+                                                   D_eq[i, j] + cA_eq[i, j] * A_eq[i, j] + mpl$cU * U_eq[i, j]) * rel_foi[j]/omega
     }
   }
-
-
 
   # mosquito states
   FOIv_eq <- sum(FOIvij_eq)
@@ -258,11 +243,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
                                                                                                               mpl$dEL) - 1/(mpl$muLL * mpl$dLL) - 1)
   PL_eq <- 2 * mpl$dPL * mpl$mu0 * mv0
   LL_eq <- mpl$dLL * (mpl$muPL + 1/mpl$dPL) * PL_eq
-  # (LL0/dl + mul*LL0*(1+gammal*LL0/K0))/(1/de-mul*gammal*LL0/K0)
   EL_eq <- (LL_eq/mpl$dLL + mpl$muLL* LL_eq * (1 + mpl$gammaL * LL_eq/K0))/(1/mpl$dEL - mpl$muLL * mpl$gammaL * LL_eq/K0)
-
-
-  ## TODO: Add catch here for the dimensions given the odin_model path
 
   # add in final dimension - interventions
   num_int <- mpl$num_int
@@ -301,6 +282,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   ICA_eq = array(ICA_eq, c(na, nh, num_int))
   ICM_eq = array(ICM_eq, c(na, nh, num_int))
 
+  # TODO: Remove this part and put it as an edit to the equilibrium solution
   if(!is.null(mpl$ncc)){
     IB_eq = array(IB_eq, c(na, nh, num_int, mpl$ncc))
     ID_eq = array(ID_eq, c(na, nh, num_int, mpl$ncc))

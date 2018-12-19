@@ -21,5 +21,5 @@ navbar:
     - text: News
       href: news/index.html
   right:
-    - icon: fa-github
-href: https://github.com/mrc-ide/hanojoel
+    - href: https://github.com/mrc-ide/hanojoel
+      icon: fa-github

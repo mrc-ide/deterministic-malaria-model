@@ -172,7 +172,6 @@ model_param_list_create <- function(
   ...
 
 ){
-
   # set up param list
   mp_list <- list()
 

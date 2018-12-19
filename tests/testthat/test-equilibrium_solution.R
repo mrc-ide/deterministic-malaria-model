@@ -68,10 +68,36 @@ test_that("equilibrium humans", {
 })
 
 test_that("equilibrium mosquito", {
-  # This tolerance is quite high.  All the constants are the same - I think just a lot of rounding errors.
   expect_equal(eqm_soln$FOIv_eq, 0.00701093, tolerance=1e-7)
   expect_equal(eqm_soln$init_Iv, 0.0134728, tolerance=1e-6)
   expect_equal(eqm_soln$init_Sv, 0.949566, tolerance=1e-6)
 })
 
+s <- unlist(read.delim("bm_data/S.txt")[1, 2:40], use.names=FALSE)
+t <- unlist(read.delim("bm_data/T.txt")[1, 2:40], use.names=FALSE)
+d <- unlist(read.delim("bm_data/D.txt")[1, 2:40], use.names=FALSE)
+a <- unlist(read.delim("bm_data/A.txt")[1, 2:40], use.names=FALSE)
+u <- unlist(read.delim("bm_data/U.txt")[1, 2:40], use.names=FALSE)
+p <- unlist(read.delim("bm_data/P.txt")[1, 2:40], use.names=FALSE)
 
+test_that("equilibrium inital compartments no coverage", {
+  expect_equal(as.vector(t(eqm_soln$init_S[,,1])), s, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln$init_T[,,1])), t, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln$init_D[,,1])), d, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln$init_A[,,1])), a, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln$init_U[,,1])), u, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln$init_P[,,1])), p, tolerance=1e-7)
+})
+cov <- 0.5
+mpl_cov <- model_param_list_create(eta=(1/(21*365)), rP=1/20, itn_cov=cov)
+eqm_soln_cov <- equilibrium_init_create(age_vector=age_vector, het_brackets=3, country = NULL, admin_unit = NULL,
+                                        ft=0.4, EIR=10, model_param_list=mpl_cov)
+
+test_that("equilibrium inital compartments no coverage", {
+  expect_equal(as.vector(t(eqm_soln_cov$init_S[,,1])), s*cov, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln_cov$init_T[,,1])), t*cov, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln_cov$init_D[,,1])), d*cov, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln_cov$init_A[,,1])), a*cov, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln_cov$init_U[,,1])), u*cov, tolerance=1e-7)
+  expect_equal(as.vector(t(eqm_soln_cov$init_P[,,1])), p*cov, tolerance=1e-7)
+})

@@ -34,7 +34,7 @@ GitHub username, and links to relevant issue(s)/PR(s).
 
 ### Code of Conduct
 
-Please note that the rdhs project is released with a
+Please note that the deterministic-malaria-model project is released with a
 [Contributor Code of Conduct](CONDUCT.md). By contributing to this
 project you agree to abide by its terms. See rOpenSci [contributing guide](https://ropensci.github.io/dev_guide/contributingguide.html)
 for further details.

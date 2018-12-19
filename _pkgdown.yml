@@ -9,12 +9,15 @@ navbar:
   left:
     - href: index.html
       icon: fa-home
-    - text: -------
-    - text: Run Base Model
-      href: articles/run_model.html
-    - text: -------
-    - text: Contributing
-      href: CONTRIBUTING.html
+    - text: Reference
+      href: reference/index.html
+    - text: Articles
+      menu:
+      - text: Run Base Model
+        href: articles/run_model.html
+      - text: --------
+      - text: Contributing
+        href: CONTRIBUTING.html
     - text: News
       href: news/index.html
   right:

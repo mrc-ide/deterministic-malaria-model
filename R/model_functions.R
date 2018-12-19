@@ -53,7 +53,7 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
   df$t <- tt
   brks <- seq(from=0,to=time,by=365)
   ret <- ggplot(melt(df,id.vars="t"),
-                aes(x=t,y=.data$value,col=.data$variable)) +
+                aes(x=t,y=value,col=variable)) +
     geom_line() +
     scale_colour_manual(
       values=c("#000000","#CC0000","#339900","#3333FF","#CC9933","#CC3399"),

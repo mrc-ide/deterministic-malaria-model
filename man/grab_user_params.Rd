@@ -16,7 +16,3 @@ Vector of characters for required variables
 \code{grab_user_params} returns vector of all user required variables from an odin
 model path
 }
-\examples{
-head(hanojoel:::grab_user_params(system.file("extdata/odin_model.R",package="hanojoel")))
-
-}

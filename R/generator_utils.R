@@ -21,8 +21,6 @@ NULL
 #'
 #' @return Vector of characters for required variables
 #'
-#' @examples
-#' head(hanojoel:::grab_user_params(system.file("extdata/odin_model.R",package="hanojoel")))
 #'
 
 grab_user_params <- function(model_path){

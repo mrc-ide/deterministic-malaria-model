@@ -10,3 +10,13 @@ hanojoel implements the Imperial College malaria transmission model
 using the R package odin. A related suite of tools for setting up
 different regional settings and model types is provided provides a flexible grammar of data manipulation.
 }
+\author{
+\strong{Maintainer}: OJ Watson \email{o.watson15@imperial.ac.uk}
+
+Authors:
+\itemize{
+  \item Joel Hellewell \email{j.hellewell14@imperial.ac.uk}
+  \item Hannah Slater \email{hannah.slater08@imperial.ac.uk}
+}
+
+}

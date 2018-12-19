@@ -2,3 +2,9 @@
 ^\.Rproj\.user$
 ^TODO.md$
 ^scripts$
+^\.github$
+^\.travis\.yml$
+^\.github$
+^_pkgdown\.yml$
+^CONDUCT\.md$
+^docs$

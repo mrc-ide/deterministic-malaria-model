@@ -39,7 +39,7 @@ Below is some code that shows how you might go about performing simple runs of t
   prop_treated <- 0.6
   
   # run the model
-  model_run <- Run_Model(age=init_age, EIR=init_EIR, ft = prop_treated, admin2 = admin_str, time = time_period)
+  model_run <- run_model(age=init_age, EIR=init_EIR, ft = prop_treated, admin2 = admin_str, time = time_period)
   
   # After this has finished, `model_run` will have 2 components. model_run$plot is a ggplot of the main compartments of the model
   # over time (summed over all age, biting & intervention categories). model_run$dat is a list containing 

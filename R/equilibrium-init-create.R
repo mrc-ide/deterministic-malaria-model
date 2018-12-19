@@ -349,8 +349,6 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
   }
 
-
-
   if(admin_matches!=0){
     ssa0 <- admin_units_seasonal$a0[admin_matches]
     ssa1 <- admin_units_seasonal$a1[admin_matches]

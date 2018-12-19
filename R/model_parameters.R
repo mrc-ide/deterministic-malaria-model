@@ -65,6 +65,7 @@
 #' @param num_int Number of possible interventions. Default = 4
 #' @param itn_cov The proportion of people that use an ITN. Default = 0
 #' @param irs_cov The proportion of people living in houses that have been sprayed. Default = 0
+#' @param em_cov The proportion of people covered by emanator. Default = 0
 #' @param ITN_IRS_on Time of ITN and IRS to be activated. Default = -1, i.e. never.
 #' @param DY Duration of year (days). Default = 365
 #' @param d_ITN0 Probability of dying with an encounter with ITN (max). Default = 0.41

@@ -1,0 +1,22 @@
+url: https://mrc-ide.github.io/hanojoel/
+
+template:
+  params:
+    bootswatch: flatly
+
+navbar:
+  type: default
+  left:
+    - href: index.html
+      icon: fa-home
+    - text: -------
+    - text: Run Base Model
+      href: articles/run_model.html
+    - text: -------
+    - text: Contributing
+      href: CONTRIBUTING.html
+    - text: News
+      href: news/index.html
+  right:
+    - icon: fa-github
+href: https://github.com/mrc-ide/hanojoel

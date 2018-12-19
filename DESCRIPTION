@@ -2,8 +2,20 @@ Package: hanojoel
 Type: Package
 Title: Deterministic malaria odin model
 Version: 0.1.0
-Author: Joel Hellewell <j.hellewell14@imperial.ac.uk>, Hannah Slater <hannah.slater08@imperial.ac.uk>, OJ Watson <o.watson15@imperial.ac.uk>
-Maintainer: OJ Watson <o.watson@imperial.ac.uk>
+Authors@R: 
+    c(person(given = "Joel", 
+             family = "Hellewell", 
+             role = c("aut"), 
+             email =  "j.hellewell14@imperial.ac.uk"),
+      person(given = "Hannah",
+             family = "Slater",
+             role = c("aut"),
+             email =  "hannah.slater08@imperial.ac.uk"),
+      person(given = "OJ", 
+             family = "Watson", 
+             role = c("aut", "cre"), 
+             email =  "o.watson15@imperial.ac.uk"))
+Maintainer: OJ Watson <o.watson15@imperial.ac.uk>
 Description: Deterministic implementations of the Imperial College
     malaria transmission model using the pacakge odin.
 License: MIT + file LICENSE
@@ -13,6 +25,7 @@ Imports:
     magrittr,
     statmod,
     stringi,
+    rlang,
     odin
 Remotes:
     richfitz/odin,
@@ -21,7 +34,10 @@ Depends:
     R (>= 2.10)
 Encoding: UTF-8
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Additional_repositories: https://mrc-ide.github.io/drat
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat
+VignetteBuilder: knitr

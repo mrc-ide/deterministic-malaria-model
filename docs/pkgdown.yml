@@ -1,0 +1,9 @@
+pandoc: 2.3.1
+pkgdown: 1.2.0
+pkgdown_sha: ~
+articles:
+  run_model: run_model.html
+urls:
+  reference: https://mrc-ide.github.io/hanojoel//reference
+  article: https://mrc-ide.github.io/hanojoel//articles
+

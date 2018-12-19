@@ -1,0 +1,76 @@
+---
+title: "Run Base Model"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+Within this package there are 2 ways to run the deterministic model:
+
+1. `run_modelb`
+2. `create_r_model`
+
+`run_model` will run the base model, which can be found in 
+`inst/extdata/odin_model.R`. `run_model` is designed to quickly simulate 
+transmission dynamics, and as such there are fewer parameters that you are able 
+to change. Whereas `create_r_model` allows you to specify
+what model you would like to run. For more information please see the other 
+[vignette](https://mrc-ide.github.io/hanojoel/articles/anemia.html)
+
+## Default Use
+
+`run_model` can be used to simulate the base model and will return a list of 
+2 elements.
+
+1. `dat` - the simulation output
+2. `plot` - a plot of the 6 human compartments
+
+Without specifying any function arguments, `create_r_model` will run a 
+simulation for 1 year at an EIR of 10, with a treatment coverage equal to 40% 
+for Tororo, Uganda. 
+
+```{r, fig.show='hold'}
+library(hanojoel)
+out <- run_model()
+names(out)
+out$plot
+
+```
+
+## Passing Variables
+
+To change simulation settings we pass in one of 5 function arguments:
+
+1. age Vector of age brackets.
+2. EIR Numeric of annual EIR. 
+3. ft Numeric of proportion of symptomatic cases recieving treatment.
+4. time Numeric of length of time that the model will run for in days.
+5. admin2 Character of admin unit. 
+
+For example, to simulate Thies, Senegal at an EIR of 1 for 2 years at a 
+treatment coverage of 60%:
+
+```{r, echo=FALSE, results='asis'}
+thies <- run_model(EIR = 1, ft = 0.6, admin2 = "Thies", time = 2*365)
+thies$plot
+```
+
+We can also then plot other model outputs by interacting with the `dat` 
+data frame returned by `run_model`:
+
+```{r, echo=FALSE, results='asis'}
+plot(thies$dat$Sv, ylab = "Susceptible Adult Mosquitoes", xlab = "Time (days)")
+```

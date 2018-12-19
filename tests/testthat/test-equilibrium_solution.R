@@ -88,6 +88,7 @@ test_that("equilibrium inital compartments no coverage", {
   expect_equal(as.vector(t(eqm_soln$init_U[,,1])), u, tolerance=1e-7)
   expect_equal(as.vector(t(eqm_soln$init_P[,,1])), p, tolerance=1e-7)
 })
+
 cov <- 0.5
 mpl_cov <- model_param_list_create(eta=(1/(21*365)), rP=1/20, itn_cov=cov)
 eqm_soln_cov <- equilibrium_init_create(age_vector=age_vector, het_brackets=3, country = NULL, admin_unit = NULL,

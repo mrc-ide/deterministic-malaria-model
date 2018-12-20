@@ -73,6 +73,12 @@ test_that("equilibrium mosquito", {
   expect_equal(eqm_soln$init_Sv, 0.949566, tolerance=1e-6)
 })
 
+test_that("equilibrium lava", {
+  expect_equal(eqm_soln$init_PL, 0.832831, tolerance=1e-4)
+  expect_equal(eqm_soln$init_LL, 5.58968, tolerance=1e-4)
+  expect_equal(eqm_soln$init_EL, 192.078, tolerance=1e-4)
+})
+
 s <- unlist(read.delim("bm_data/S.txt")[1, 2:40], use.names=FALSE)
 t <- unlist(read.delim("bm_data/T.txt")[1, 2:40], use.names=FALSE)
 d <- unlist(read.delim("bm_data/D.txt")[1, 2:40], use.names=FALSE)

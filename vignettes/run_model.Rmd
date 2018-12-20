@@ -1,6 +1,6 @@
 ---
 title: "Run Base Model"
-author: "Vignette Author"
+author: "OJ Watson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

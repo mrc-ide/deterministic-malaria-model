@@ -38,7 +38,7 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
   gen <- odin::odin(odin_model_path,verbose=FALSE,build = TRUE)
 
   # create model with initial values
-  mod <- generate_default_model(ft=ft,age=age,dat=state,generator=gen,dde=TRUE)
+  mod <- generate_default_model(dat=state, generator=gen, dde=TRUE)
   tt <- seq(0,time,1)
 
   # run model
@@ -52,8 +52,8 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
   colnames(df) <- c("S","T","D","A","U","P")
   df$t <- tt
   brks <- seq(from=0,to=time,by=365)
-  ret <- ggplot2::ggplot(melt(df,id.vars="t"),
-                         aes(x=t,y=.data$value,col=.data$variable)) +
+  ret <- ggplot(melt(df,id.vars="t"),
+                aes(x=t,y=value,col=variable)) +
     geom_line() +
     scale_colour_manual(
       values=c("#000000","#CC0000","#339900","#3333FF","#CC9933","#CC3399"),
@@ -68,9 +68,6 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
 
 
 ## Odin generator function
-generate_default_model <- function(ft,age,dat,generator,dde = TRUE){
-  dat$pi <- pi
-  dat$ft <- ft
-  dat$age <- age
+generate_default_model <- function(dat, generator, dde = FALSE){
   mod <- generator(user=dat, use_dde=dde)
 }

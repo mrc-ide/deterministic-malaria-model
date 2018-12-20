@@ -26,7 +26,8 @@ Imports:
     statmod,
     stringi,
     rlang,
-    odin
+    odin, 
+    dde
 Remotes:
     richfitz/odin,
     richfitz/dde

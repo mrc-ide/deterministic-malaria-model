@@ -18,7 +18,7 @@ prop_treated <- 0.4
 
 # run the model
 model_run <- run_model(age=init_age, EIR=init_EIR, ft=prop_treated,
-                       admin2 = admin_str, time=time_period)
+                       admin2=admin_str, time=time_period)
 
 # access model output
 output <- model_run$dat

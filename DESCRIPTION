@@ -26,8 +26,7 @@ Imports:
     statmod,
     stringi,
     rlang,
-    odin, 
-    dde
+    odin
 Remotes:
     richfitz/odin,
     richfitz/dde
@@ -40,5 +39,6 @@ Additional_repositories: https://mrc-ide.github.io/drat
 Suggests: 
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    dde
 VignetteBuilder: knitr

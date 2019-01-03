@@ -101,7 +101,16 @@ odin_model_path = "extdata/odin_model_hrp2.R"
 ## Adding additional optional arguments
 It may be necessary to provide extra optional arguments to the odin model. For example if you
 run the `odin_model_hrp2.R` model without any extra arguments it produces an error:
-```{r}
+```{r, error=TRUE}
 # creates the odin model using the default odin model file
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R", package = "hanojoel"))
+mod <- wh$generate_model_function(dat = wh$state, generator = wh$generator, dde = TRUE)
+```
+
+This is because the required user argument `hrp2_prop` has not been provided. This is done as follows:
+```{r}
+# creates the odin model using the default odin model file
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R", package = "hanojoel"), 
+                                hrp2_prop = 0.5)
+mod <- wh$generate_model_function(dat = wh$state, generator = wh$generator, dde = TRUE)
 ```

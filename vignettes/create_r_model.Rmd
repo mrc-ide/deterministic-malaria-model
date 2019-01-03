@@ -32,8 +32,8 @@ following default arguments:
 2. The vector of age compartments - `age = c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80)`
 3. The initial EIR - `init_EIR = 10`
 4. The percentage of the population that gets treated - `init_ft = 0.4`
-5. The country - country = `NULL`
-6. The admin 2 unit - admin2 = `NULL`
+5. The country - `country = NULL`
+6. The admin 2 unit - `admin2 = NULL`
 
 The simplest example of using the function to plot the malaria prevelance for a country
 with no seasonablity (found by setting both the country and admin2 to NULL) is:
@@ -53,6 +53,7 @@ plot(out$t,out$prev, main= "Prevalance")
 ```
 
 ## Providing alternative arguments
+It is posisble to change the default arguments for the `create_r_model` function as shown below: 
 ```{r}
 # create a vector of age categories
 init_age <- c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80)
@@ -69,8 +70,8 @@ time_period <- 365*1
 # provide a value for the proportion of cases that are treated (referred to as ft in the paper)
 prop_treated <- 0.4
 
-# creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",package = "hanojoel"),
+# creates the odin model using the default odin model file
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R", package = "hanojoel"),
                                 het_brackets = 5,
                                 age = init_age,
                                 init_EIR = init_EIR,
@@ -84,7 +85,23 @@ mod <- wh$generate_model_function(dat = wh$state, generator = wh$generator, dde 
 # Runs the model
 mod_run <- mod$run(t = 1:365)
 out <- mod$transform_variables(mod_run)
-plot(out$t,out$prev)
+plot(out$t,out$prev, main="Prevalance")
+```
+
+It is also possible to change the odin model by editing the `odin_model_path`.  If the model is 
+built within the package, such as `odin_model_hrp2.R`, change the path to:
+```{r}
+odin_model_path = system.file("extdata/odin_model_hrp2.R", package = "hanojoel")
+```
+If the odin model is only held locally, change the model path to:
+```{r}
+odin_model_path = "extdata/odin_model_hrp2.R"
 ```
 
 ## Adding additional optional arguments
+It may be necessary to provide extra optional arguments to the odin model. For example if you
+run the `odin_model_hrp2.R` model without any extra arguments it produces an error:
+```{r}
+# creates the odin model using the default odin model file
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R", package = "hanojoel"))
+```

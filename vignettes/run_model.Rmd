@@ -53,11 +53,11 @@ out$plot
 
 To change simulation settings there are 5 optional function arguments:
 
-1. age - Vector of age brackets.
-2. EIR -  Numeric of annual EIR. 
-3. ft - Numeric of proportion of symptomatic cases recieving treatment.
-4. admin2 - Character of admin unit. 
-5. time - Numeric of length of time that the model will run for in days.
+1. `age` - Vector of age brackets.
+2. `EIR` -  Numeric of annual EIR. 
+3. `ft` - Numeric of proportion of symptomatic cases recieving treatment.
+4. `admin2` - Character of admin unit. 
+5. `time` - Numeric of length of time that the model will run for in days.
 
 For example, to simulate Thies, Senegal for a given vector of ages, at an EIR of 1, for 2 years with 
 60% treatment coverage:

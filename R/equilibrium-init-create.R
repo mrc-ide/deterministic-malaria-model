@@ -236,7 +236,6 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   Ev_eq <- 1 - Sv_eq - Iv_eq
 
   # mosquito density needed to give this EIR
-  mu0 <- mpl$mu0
   mv0 <- omega * EIRd_eq/(Iv_eq * mpl$av0)
 
   # larval states

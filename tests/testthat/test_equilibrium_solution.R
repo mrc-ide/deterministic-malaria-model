@@ -11,9 +11,8 @@ bm_age_width <- unlist(read.delim("bm_data/age_width.txt")[1, 2:13], use.names=F
 bm_age_rate <- unlist(read.delim("bm_data/age_rate.txt")[1, 2:14], use.names=FALSE)
 bm_den <- unlist(read.delim("bm_data/den.txt")[1, 2:14], use.names=FALSE)
 
-#TODO: change this test to reflect how data is spat out at end of equilibrium soltion
 test_that("equilibrium age data", {
-  expect_identical(eqm_soln$age, bm_age/365)
+  expect_identical(eqm_soln$age, bm_age)
   expect_identical(eqm_soln$age_width, bm_age_width)
   expect_equal(eqm_soln$age_rate, bm_age_rate, tolerance=1e-8)
   expect_equal(eqm_soln$den, bm_den, tolerance=1e-6)

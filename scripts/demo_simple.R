@@ -25,6 +25,3 @@ output <- model_run$dat
 
 # print the plot of proportion of population in each compartment
 print(model_run$plot)
-
-plot(output$t, output$inc05)
-

@@ -87,7 +87,7 @@
       <h1>Run Base Model</h1>
                         <h4 class="author">OJ Watson</h4>
             
-            <h4 class="date">2019-01-02</h4>
+            <h4 class="date">2019-01-03</h4>
       
       
       <div class="hidden name"><code>run_model.Rmd</code></div>
@@ -129,11 +129,16 @@ out<span class="op">$</span>plot</code></pre></div>
 <a href="#passing-variables" class="anchor"></a>Passing Variables</h2>
 <p>To change simulation settings there are 5 optional function arguments:</p>
 <ol style="list-style-type: decimal">
-<li>age - Vector of age brackets.</li>
-<li>EIR - Numeric of annual EIR.</li>
-<li>ft - Numeric of proportion of symptomatic cases recieving treatment.</li>
-<li>admin2 - Character of admin unit.</li>
-<li>time - Numeric of length of time that the model will run for in days.</li>
+<li>
+<code>age</code> - Vector of age brackets.</li>
+<li>
+<code>EIR</code> - Numeric of annual EIR.</li>
+<li>
+<code>ft</code> - Numeric of proportion of symptomatic cases recieving treatment.</li>
+<li>
+<code>admin2</code> - Character of admin unit.</li>
+<li>
+<code>time</code> - Numeric of length of time that the model will run for in days.</li>
 </ol>
 <p>For example, to simulate Thies, Senegal for a given vector of ages, at an EIR of 1, for 2 years with 60% treatment coverage:</p>
 <p><img src="run_model_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>

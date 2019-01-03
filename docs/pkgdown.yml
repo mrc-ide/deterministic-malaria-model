@@ -1,8 +1,8 @@
 pandoc: 1.19.2.1
-pkgdown: 1.3.0.9000
-pkgdown_sha: fa9b7502e80401db4b410086b0a8f6ab444f0c66
+pkgdown: 1.3.0
+pkgdown_sha: ~
 articles:
-  run_model: ../../../../../../Q:/model_code/deterministic-malaria-model/vignettes/run_model.html
+  run_model: run_model.html
 urls:
   reference: https://mrc-ide.github.io/hanojoel//reference
   article: https://mrc-ide.github.io/hanojoel//articles

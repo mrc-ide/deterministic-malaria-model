@@ -35,10 +35,10 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
 
   # create odin generator
   odin_model_path <- system.file("extdata/odin_model.R",package="hanojoel")
-  gen <- odin::odin(odin_model_path,verbose=FALSE,build = TRUE)
+  gen <- odin::odin(odin_model_path,verbose=FALSE, build = TRUE)
 
   # create model with initial values
-  mod <- generate_default_model(dat=state, generator=gen, dde=TRUE)
+  mod <- gen(user=state, use_dde=TRUE)
   tt <- seq(0,time,1)
 
   # run model
@@ -64,10 +64,4 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
     xlab("Years") + ylab("Proportion of population")
   return(list("plot"=ret,"dat"=out))
 
-}
-
-
-## Odin generator function
-generate_default_model <- function(dat, generator, dde = FALSE){
-  mod <- generator(user=dat, use_dde=dde)
 }

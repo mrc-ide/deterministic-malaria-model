@@ -31,5 +31,5 @@ test_that("model_run demo runs", {
   expect_equal(length(model_run$dat$t), 31L)
 
   # equilibrium init check indirectly (though this could be risky)
-  expect_equal(0.001678384, model_run$dat$inc05[30] - model_run$dat$inc05[1])
+  expect_equal(-0.0001534032, model_run$dat$inc05[30] - model_run$dat$inc05[1])
 })

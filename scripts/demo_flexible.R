@@ -26,7 +26,7 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 admin2 = "Tororo")
 
 # generates model functions with initial state data
-mod <- wh$generate_model_function(dat = wh$state, generator = wh$generator, dde = TRUE)
+mod <- wh$generator(user= wh$state, use_dde = TRUE)
 
 # Runs the model
 mod_run <- mod$run(t = 1:365)

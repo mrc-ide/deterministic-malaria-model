@@ -87,7 +87,7 @@
       <h1>Run Base Model</h1>
                         <h4 class="author">OJ Watson</h4>
             
-            <h4 class="date">2019-01-03</h4>
+            <h4 class="date">2019-01-11</h4>
       
       
       <div class="hidden name"><code>run_model.Rmd</code></div>
@@ -99,24 +99,24 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>Within this package there are 2 ways to run the deterministic model:</p>
+<p>Within this package there are 2 ways to run the deterministic base model:</p>
 <ol style="list-style-type: decimal">
-<li><code>run_modelb</code></li>
+<li><code>run_model</code></li>
 <li><code>create_r_model</code></li>
 </ol>
-<p><code>run_model</code> will run the base model, which can be found in <code>inst/extdata/odin_model.R</code>. <code>run_model</code> is designed to quickly simulate transmission dynamics, and as such there are fewer parameters that you are able to change. Whereas <code>create_r_model</code> allows you to specify what model you would like to run. For more information please see the other <a href="https://mrc-ide.github.io/hanojoel/articles/anemia.html">vignette</a></p>
+<p>The <code>run_model</code> function solves the base model, which can be found in <code>inst/extdata/odin_model.R</code>. This function is designed to quickly simulate transmission dynamics, and as such there are fewer parameters that you are able to change. Whereas <code>create_r_model</code> allows you to specify what model you would like to run. For more information please see the other <a href="https://mrc-ide.github.io/hanojoel/articles/anemia.html">vignette</a>.</p>
 </div>
 <div id="default-use" class="section level2">
 <h2 class="hasAnchor">
 <a href="#default-use" class="anchor"></a>Default Use</h2>
-<p><code>run_model</code> can be used to simulate the base model and will return a list of 2 elements.</p>
+<p>This vignette focuses on using the <code>run_model</code> function to simulate the base model. It returns the following list with 2 elements:</p>
 <ol style="list-style-type: decimal">
 <li>
-<code>dat</code> - the simulation output</li>
+<code>dat</code> - the simulation output.</li>
 <li>
-<code>plot</code> - a plot of the 6 human compartments</li>
+<code>plot</code> - a plot of the 6 human compartments.</li>
 </ol>
-<p>Without specifying any function arguments, <code>create_r_model</code> will run a simulation for 1 year at an EIR of 10, with a treatment coverage equal to 40% for Tororo, Uganda.</p>
+<p>As illustrated below, without specifying any function arguments, <code>create_r_model</code> will run a simulation for 1 year at an EIR of 10, with a treatment coverage equal to 40% for Tororo, Uganda.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)
 out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_model.html">run_model</a></span>()
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(out)
@@ -127,17 +127,22 @@ out<span class="op">$</span>plot</code></pre></div>
 <div id="passing-variables" class="section level2">
 <h2 class="hasAnchor">
 <a href="#passing-variables" class="anchor"></a>Passing Variables</h2>
-<p>To change simulation settings we pass in one of 5 function arguments:</p>
+<p>To change simulation settings there are 5 optional function arguments:</p>
 <ol style="list-style-type: decimal">
-<li>age Vector of age brackets.</li>
-<li>EIR Numeric of annual EIR.</li>
-<li>ft Numeric of proportion of symptomatic cases recieving treatment.</li>
-<li>time Numeric of length of time that the model will run for in days.</li>
-<li>admin2 Character of admin unit.</li>
+<li>
+<code>age</code> - Vector of age brackets.</li>
+<li>
+<code>EIR</code> - Numeric of annual EIR.</li>
+<li>
+<code>ft</code> - Numeric of proportion of symptomatic cases recieving treatment.</li>
+<li>
+<code>admin2</code> - Character of admin unit.</li>
+<li>
+<code>time</code> - Numeric of length of time that the model will run for in days.</li>
 </ol>
-<p>For example, to simulate Thies, Senegal at an EIR of 1 for 2 years at a treatment coverage of 60%:</p>
+<p>For example, to simulate Thies, Senegal for a given vector of ages, at an EIR of 1, for 2 years with 60% treatment coverage:</p>
 <p><img src="run_model_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-<p>We can also then plot other model outputs by interacting with the <code>dat</code> data frame returned by <code>run_model</code>:</p>
+<p>Other model outputs, such as the number of suceptible adult mosquitoes, can be plotted by interacting with the <code>dat</code> data frame returned by <code>run_model</code>:</p>
 <p><img src="run_model_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
   </div>
@@ -162,7 +167,7 @@ out<span class="op">$</span>plot</code></pre></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>

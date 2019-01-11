@@ -44,7 +44,7 @@ library(hanojoel)
 wh <- hanojoel:::create_r_model()
 
 # generates model functions with initial state data
-mod <- wh$generate_model_function(dat = wh$state, generator = wh$generator, dde = TRUE)
+mod <- wh$generator(user= wh$state, use_dde = TRUE)
 
 # Runs the model
 mod_run <- mod$run(t = 1:365)
@@ -80,7 +80,7 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 admin2 = "Tororo")
 
 # generates model functions with initial state data
-mod <- wh$generate_model_function(dat = wh$state, generator = wh$generator, dde = TRUE)
+mod <- wh$generator(user= wh$state, use_dde = TRUE)
 
 # Runs the model
 mod_run <- mod$run(t = 1:365)
@@ -104,7 +104,7 @@ run the `odin_model_hrp2.R` model without any extra arguments it produces an err
 ```{r, error=TRUE}
 # creates the odin model using the default odin model file
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R", package = "hanojoel"))
-mod <- wh$generate_model_function(dat = wh$state, generator = wh$generator, dde = TRUE)
+mod <- wh$generator(user= wh$state, use_dde = TRUE)
 ```
 
 This is because the required user argument `hrp2_prop` has not been provided. This is done as follows:
@@ -112,5 +112,5 @@ This is because the required user argument `hrp2_prop` has not been provided. Th
 # creates the odin model using the default odin model file
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R", package = "hanojoel"), 
                                 hrp2_prop = 0.5)
-mod <- wh$generate_model_function(dat = wh$state, generator = wh$generator, dde = TRUE)
+mod <- wh$generator(user= wh$state, use_dde = TRUE)
 ```

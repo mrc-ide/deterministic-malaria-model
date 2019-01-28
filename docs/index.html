@@ -54,7 +54,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/run_model.html">Run Base Model</a>
+      <a href="articles/run_model.html">Simplest Model Run</a>
+    </li>
+    <li>
+      <a href="articles/create_r_model.html">More Flexible Model Run</a>
     </li>
     <li class="divider">
     <li>
@@ -118,7 +121,7 @@
 <h2 class="hasAnchor">
 <a href="#running-the-model" class="anchor"></a>Running the model</h2>
 <p>Below is some code that shows how you might go about performing simple runs of the model</p>
-<pre><code>  # load the model package (or have it built and reloaded as described above)
+<pre><code><a href="https://www.rdocumentation.org/packages/base/topics/library">  # load the model package (or have it built and reloaded as described above)
   library(hanojoel)
 
   # create a vector of age categories
@@ -143,7 +146,7 @@
   # over time (summed over all age, biting &amp; intervention categories). model_run$dat is a list containing 
   # the estimated values for all of the compartments in the model. For example, model_run$dat$S will 
   # be a big 3-dimensional array with the indices relating to age, biting heterogeneity and intervention categories.
-  </code></pre>
+  </a></code></pre>
 </div>
 <div id="running-alternative-models" class="section level2">
 <h2 class="hasAnchor">
@@ -247,7 +250,7 @@ plot(out2$t,out2$prev)
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
 </div>

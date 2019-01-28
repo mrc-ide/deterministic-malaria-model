@@ -1,5 +1,5 @@
 ---
-title: "Running Model"
+title: "Running Flexible Model"
 author: "H. Juliette T. Unwin"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

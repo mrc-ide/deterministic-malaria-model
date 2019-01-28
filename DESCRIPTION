@@ -22,7 +22,6 @@ License: MIT + file LICENSE
 Imports:
     ggplot2,
     reshape2,
-    magrittr,
     statmod,
     stringi,
     rlang,

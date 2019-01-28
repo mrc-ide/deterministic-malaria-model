@@ -1,16 +1,3 @@
-#' Pipe operator
-#'
-#' See \code{\link[magrittr]{\%>\%}} for more details.
-#'
-#' @name %>%
-#' @rdname pipe
-#' @keywords internal
-#' @export
-#' @importFrom magrittr %>%
-#' @usage lhs \%>\% rhs
-NULL
-
-#------------------------------------------------
 #' Create generator for model creation
 #'
 #' \code{create_r_model} returns list with generator function automatically created given the odin model

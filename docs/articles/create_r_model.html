@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Running Flexible Model • hanojoel</title>
+<title>More Flexible Model Run • hanojoel</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Running Flexible Model">
+<script src="../pkgdown.js"></script><meta property="og:title" content="More Flexible Model Run">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -53,10 +53,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/run_model.html">Run Base Model</a>
+      <a href="../articles/run_model.html">Simplest Model Run</a>
     </li>
     <li>
-      <a href="../articles/create_r_model.html">Run Flexible Model</a>
+      <a href="../articles/create_r_model.html">More Flexible Model Run</a>
     </li>
     <li class="divider">
     <li>
@@ -87,7 +87,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Running Flexible Model</h1>
+      <h1>More Flexible Model Run</h1>
                         <h4 class="author">H. Juliette T. Unwin</h4>
             
             <h4 class="date">2019-01-28</h4>
@@ -125,73 +125,73 @@
 </li>
 </ol>
 <p>The simplest example of using the function to plot the malaria prevelance for a country with no seasonablity (found by setting both the country and admin2 to NULL) is:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>()</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co"># generates model functions with initial state data</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co"># Runs the model</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">365</span>)</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span> <span class="st">"Prevalance"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)
+
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>()
+
+<span class="co"># generates model functions with initial state data</span>
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Runs the model</span>
+mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">365</span>)
+out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span> <span class="st">"Prevalance"</span>)</code></pre></div>
 <p><img src="create_r_model_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
 <div id="providing-alternative-arguments" class="section level2">
 <h2 class="hasAnchor">
 <a href="#providing-alternative-arguments" class="anchor"></a>Providing alternative arguments</h2>
 <p>It is posisble to change the default arguments for the <code>create_r_model</code> function as shown below:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># create a vector of age categories</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">init_age &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.5</span>,<span class="fl">0.75</span>,<span class="dv">1</span>,<span class="fl">1.25</span>,<span class="fl">1.5</span>,<span class="fl">1.75</span>,<span class="dv">2</span>,<span class="fl">3.5</span>,<span class="dv">5</span>,<span class="fl">7.5</span>,<span class="dv">10</span>,<span class="dv">15</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co"># provide a value of the annual EIR for this model run</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">init_EIR &lt;-<span class="st"> </span><span class="dv">10</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co"># provide a string for the admin 2 unit that you want to use the seasonality profile for</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">admin_str &lt;-<span class="st"> "Tororo"</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co"># provide the length of time (in days) that you want to run the model for</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">time_period &lt;-<span class="st"> </span><span class="dv">365</span><span class="op">*</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co"># provide a value for the proportion of cases that are treated (referred to as ft in the paper)</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">prop_treated &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co"># creates the odin model using the default odin model file</span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>),</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">                                <span class="dt">het_brackets =</span> <span class="dv">5</span>,</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">                                <span class="dt">age =</span> init_age,</a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">                                <span class="dt">init_EIR =</span> init_EIR,</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21">                                <span class="dt">init_ft =</span> <span class="fl">0.4</span>,</a>
-<a class="sourceLine" id="cb2-22" data-line-number="22">                                <span class="dt">country =</span> <span class="st">"Uganda"</span>,</a>
-<a class="sourceLine" id="cb2-23" data-line-number="23">                                <span class="dt">admin2 =</span> <span class="st">"Tororo"</span>)</a>
-<a class="sourceLine" id="cb2-24" data-line-number="24"></a>
-<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co"># generates model functions with initial state data</span></a>
-<a class="sourceLine" id="cb2-26" data-line-number="26">mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-27" data-line-number="27"></a>
-<a class="sourceLine" id="cb2-28" data-line-number="28"><span class="co"># Runs the model</span></a>
-<a class="sourceLine" id="cb2-29" data-line-number="29">mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">365</span>)</a>
-<a class="sourceLine" id="cb2-30" data-line-number="30">out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)</a>
-<a class="sourceLine" id="cb2-31" data-line-number="31"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span><span class="st">"Prevalance"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create a vector of age categories</span>
+init_age &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.5</span>,<span class="fl">0.75</span>,<span class="dv">1</span>,<span class="fl">1.25</span>,<span class="fl">1.5</span>,<span class="fl">1.75</span>,<span class="dv">2</span>,<span class="fl">3.5</span>,<span class="dv">5</span>,<span class="fl">7.5</span>,<span class="dv">10</span>,<span class="dv">15</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>)
+
+<span class="co"># provide a value of the annual EIR for this model run</span>
+init_EIR &lt;-<span class="st"> </span><span class="dv">10</span>
+
+<span class="co"># provide a string for the admin 2 unit that you want to use the seasonality profile for</span>
+admin_str &lt;-<span class="st"> "Tororo"</span>
+
+<span class="co"># provide the length of time (in days) that you want to run the model for</span>
+time_period &lt;-<span class="st"> </span><span class="dv">365</span><span class="op">*</span><span class="dv">1</span>
+
+<span class="co"># provide a value for the proportion of cases that are treated (referred to as ft in the paper)</span>
+prop_treated &lt;-<span class="st"> </span><span class="fl">0.4</span>
+
+<span class="co"># creates the odin model using the default odin model file</span>
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">het_brackets =</span> <span class="dv">5</span>,
+                                <span class="dt">age =</span> init_age,
+                                <span class="dt">init_EIR =</span> init_EIR,
+                                <span class="dt">init_ft =</span> <span class="fl">0.4</span>,
+                                <span class="dt">country =</span> <span class="st">"Uganda"</span>,
+                                <span class="dt">admin2 =</span> <span class="st">"Tororo"</span>)
+
+<span class="co"># generates model functions with initial state data</span>
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Runs the model</span>
+mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">365</span>)
+out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span><span class="st">"Prevalance"</span>)</code></pre></div>
 <p><img src="create_r_model_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>It is also possible to change the odin model by editing the <code>odin_model_path</code>. If the model is built within the package, such as <code>odin_model_hrp2.R</code>, change the path to:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">odin_model_path =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">odin_model_path =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>)</code></pre></div>
 <p>If the odin model is only held locally, change the model path to:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">odin_model_path =<span class="st"> "extdata/odin_model_hrp2.R"</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">odin_model_path =<span class="st"> "extdata/odin_model_hrp2.R"</span></code></pre></div>
 </div>
 <div id="adding-additional-optional-arguments" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-additional-optional-arguments" class="anchor"></a>Adding additional optional arguments</h2>
 <p>It may be necessary to provide extra optional arguments to the odin model. For example if you run the <code>odin_model_hrp2.R</code> model without any extra arguments it produces an error:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># creates the odin model using the default odin model file</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>))</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; Error in .subset2(public_bind_env, "initialize")(...): Expected value for hrp2_prop</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># creates the odin model using the default odin model file</span>
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>))
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
+<span class="co">#&gt; Error in .subset2(public_bind_env, "initialize")(...): Expected value for hrp2_prop</span></code></pre></div>
 <p>This is because the required user argument <code>hrp2_prop</code> has not been provided. This is done as follows:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># creates the odin model using the default odin model file</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>), </a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">                                <span class="dt">hrp2_prop =</span> <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># creates the odin model using the default odin model file</span>
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>), 
+                                <span class="dt">hrp2_prop =</span> <span class="fl">0.5</span>)
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
   </div>
 

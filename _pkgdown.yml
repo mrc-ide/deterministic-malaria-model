@@ -13,9 +13,9 @@ navbar:
       href: reference/index.html
     - text: Articles
       menu:
-      - text: Run Base Model
+      - text: Simplest Model Run
         href: articles/run_model.html
-      - text: Run Flexible Model
+      - text: More Flexible Model Run
         href: articles/create_r_model.html
       - text: --------
       - text: Contributing

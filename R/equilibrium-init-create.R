@@ -249,7 +249,9 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   num_int <- mpl$num_int
   itn_cov <- mpl$itn_cov
   irs_cov <- mpl$irs_cov
-  cov <- mpl$cov
+  cov <- mpl$cov[1:num_int]
+
+  print(sprintf("cov: %f", cov))
 
   mat <- matrix(0, na, nh)
   S_eq <- vapply(cov, FUN = function(x)

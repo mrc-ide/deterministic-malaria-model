@@ -34,7 +34,7 @@ initial(S[,,]) <- init_S[i,j,k]
 dim(S) <- c(na,nh,num_int)
 
 deriv(S[1, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] +
-  cov[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
+  pop_split[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
 deriv(S[2:na, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
   (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
 
@@ -382,6 +382,8 @@ ITN_IRS_on <- user() # days after which interventions begin
 num_int <- user() # number of intervention categorys, ITN only, IRS only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
 irs_cov <- user() # proportion of population covered by IRS
+pop_split[] <- user() # population split for intervention groups
+dim(pop_split) <- num_int
 
 # cov is a vector of coverages for each intervention category:
 dim(cov_) <- 4

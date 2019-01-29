@@ -285,8 +285,16 @@ model_param_list_create <- function(
   mp_list$em_cov <- em_cov
   mp_list$ITN_IRS_on <- ITN_IRS_on
 
-  # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
-  mp_list$cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
+  if (exists('pop_split', where=extra_param_list)){
+    mpl$pop_split <- extra_param_list$pop_split
+    extra_param_list$ pop_split <- NULL
+  } else {
+    # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
+    cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
+    cov <- cov[1:mp_list$num_int]
+    extra_param_list$pop_split <- cov
+  }
+
   mp_list$d_ITN0 <- d_ITN0
   mp_list$r_ITN0 <- r_ITN0
   mp_list$r_ITN1 <- r_ITN1

@@ -21,7 +21,7 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 het_brackets = 5,
                                 age = init_age,
                                 init_EIR = init_EIR,
-                                init_ft = 0.4,
+                                init_ft = prop_treated,
                                 country = "Uganda",
                                 admin2 = "Tororo")
 

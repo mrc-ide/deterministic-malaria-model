@@ -384,11 +384,13 @@ itn_cov <- user() # proportion of population covered by ITN
 irs_cov <- user() # proportion of population covered by IRS
 
 # cov is a vector of coverages for each intervention category:
+dim(cov_) <- 4
+cov_[1] <- (1-itn_cov)*(1-irs_cov)  # {No intervention}
+cov_[2] <- itn_cov*(1-irs_cov) # 	   {ITN only}
+cov_[3] <- (1-itn_cov)*irs_cov	#      {IRS only}
+cov_[4] <- itn_cov*irs_cov #	   {Both ITN and IRS}
+cov[] <- cov_[i]
 dim(cov) <- num_int
-cov[1] <- (1-itn_cov)*(1-irs_cov)  # {No intervention}
-cov[2] <- itn_cov*(1-irs_cov) # 	   {ITN only}
-cov[3] <- (1-itn_cov)*irs_cov	#      {IRS only}
-cov[4] <- itn_cov*irs_cov #	   {Both ITN and IRS}
 
 IRS_interval <- user() # how long IRS lasts
 ITN_interval <- user() # how long ITN lasts
@@ -425,25 +427,31 @@ d_IRS <- if(t < ITN_IRS_on) 0 else chi*d_IRS0*IRS_decay
 s_IRS <- if(t < ITN_IRS_on) 1 else 1 - d_IRS
 
 # probability that mosquito bites and survives for each intervention category
+dim(w_) <- 4
+w_[1] <- 1
+w_[2] <- 1 - bites_Bed + bites_Bed*s_ITN
+w_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)*s_IRS
+w_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors - bites_Bed)*(1-r_IRS)*s_IRS
+w[] <- w_[i]
 dim(w) <- num_int
-w[1] <- 1
-w[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-w[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)*s_IRS
-w[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors - bites_Bed)*(1-r_IRS)*s_IRS
 
 # probability that mosq feeds during a single attempt for each int. cat.
+dim(yy_) <- 4
+yy_[1] <- 1
+yy_[2] <- w_[2]
+yy_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)
+yy_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN + (bites_Indoors - bites_Bed)*(1-r_IRS)
+yy[] <- yy_[i]
 dim(yy) <- num_int
-yy[1] <- 1
-yy[2] <- w[2]
-yy[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)
-yy[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN + (bites_Indoors - bites_Bed)*(1-r_IRS)
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
+dim(z_) <- 4
+z_[1] <- 0
+z_[2] <- bites_Bed*r_ITN
+z_[3] <- bites_Indoors*r_IRS
+z_[4] <- bites_Bed*(r_IRS+ (1-r_IRS)*r_ITN) + (bites_Indoors - bites_Bed)*r_IRS
+z[] <- z_[i]
 dim(z) <- num_int
-z[1] <- 0
-z[2] <- bites_Bed*r_ITN
-z[3] <- bites_Indoors*r_IRS
-z[4] <- bites_Bed*(r_IRS+ (1-r_IRS)*r_ITN) + (bites_Indoors - bites_Bed)*r_IRS
 
 # Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details
 dim(zhi) <- num_int

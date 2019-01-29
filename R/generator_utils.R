@@ -34,7 +34,7 @@ create_r_model <- function(odin_model_path = system.file("extdata/odin_model.R",
 
   # generate initial state variables from equilibrium solution
   state <- equilibrium_init_create(age_vector=age, EIR=init_EIR,ft=init_ft,
-                                   model_param_list = mpl, het_brackets=5,
+                                   model_param_list = mpl, het_brackets=het_brackets,
                                    country = country,
                                    admin_unit = admin2)
   # create odin generator

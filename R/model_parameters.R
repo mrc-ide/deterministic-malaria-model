@@ -279,20 +279,27 @@ model_param_list_create <- function(
     sqrt(0.25 * mp_list$b_lambda^2 + gammaL * betaL * muLL * dEL/(2 * muEL * mu0 * dLL * (1 + dPL * muPL)))
 
   # ITN/IRS parameters
-  mp_list$num_int <- num_int
   mp_list$itn_cov <- itn_cov
   mp_list$irs_cov <- irs_cov
   mp_list$em_cov <- em_cov
   mp_list$ITN_IRS_on <- ITN_IRS_on
 
+  if (irs_cov > 0){
+    mp_list$num_int <- 4
+  } else if (itn_cov > 0 ){
+    mp_list$num_int <- 2
+  } else {
+    mp_list$num_int <- 1
+  }
+
   if (exists('pop_split', where=extra_param_list)){
-    mpl$pop_split <- extra_param_list$pop_split
-    extra_param_list$ pop_split <- NULL
+    mp_list$pop_split <- extra_param_list$pop_split
+    extra_param_list$pop_split <- NULL
   } else {
     # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
     cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
     cov <- cov[1:mp_list$num_int]
-    extra_param_list$pop_split <- cov
+    mp_list$pop_split <- cov
   }
 
   mp_list$d_ITN0 <- d_ITN0

@@ -250,6 +250,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   pop_split <- mpl$pop_split
 
   mat <- matrix(0, na, nh)
+
   S_eq <- vapply(pop_split, FUN = function(x)
   {
     x * S_eq

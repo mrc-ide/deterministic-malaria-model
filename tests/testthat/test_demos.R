@@ -105,3 +105,48 @@ test_that("compare specifying population size and not", {
   expect_identical(wh$state$pop_split, c(0.7, 0.3))
   expect_identical(wh2$state$pop_split, c(0.5, 0.5))
 })
+
+test_that("compare varying itns and not", {
+  # define input parameters
+  init_age <- c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,
+                7.5,10,15,20,30,40,50,60,70,80)
+  init_EIR <- 10
+  time_period <- 30
+
+  # Specify coverage as a coverage after a time
+  wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
+                                                                package = "hanojoel"),
+                                  het_brackets = 5,
+                                  age = init_age,
+                                  init_EIR = init_EIR,
+                                  itn_cov = 0.3,
+                                  ITN_IRS_on = 20,
+                                  country = NULL,
+                                  admin2 = NULL)
+  mod <- wh$generator(user= wh$state, use_dde = TRUE)
+  mod_run <- mod$run(t = 1:(time_period))
+  out <- mod$transform_variables(mod_run)
+
+  # Specify coverage as a vector
+  wh2 <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "hanojoel"),
+                                   het_brackets = 5,
+                                   age = init_age,
+                                   init_EIR = init_EIR,
+                                   t_vector = c(-20, 20),
+                                   itn_vector = c(0, 0.3),
+                                   ITN_IRS_on = 20,
+                                   pop_split = c(0.5, 0.5),
+                                   country = NULL,
+                                   admin2 = NULL)
+  mod2 <- wh2$generator(user= wh2$state, use_dde = TRUE)
+  mod_run2 <- mod2$run(t = 1:(time_period))
+  out2 <- mod2$transform_variables(mod_run2)
+
+  expect_equal(out$prev, out2$prev, tolerance=1e-15)
+
+})
+
+test_that("checks errors", {
+  expect_failure(expect_error(wh <- hanojoel:::create_r_model(itn_cov = 0.3, pop_split = c(1.0, 1.0)), "Population split is invalid.  Please ensure it sums to one."))
+  expect_failure(expect_error(wh <- hanojoel:::create_r_model(itn_cov = 0.3, pop_split = c(1.0)), "Population split is invalid.  Please ensure it has the same number of compartments as coverage."))
+})

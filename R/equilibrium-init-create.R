@@ -247,34 +247,31 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
   # add in final dimension - interventions
   num_int <- mpl$num_int
-  itn_cov <- mpl$itn_cov
-  irs_cov <- mpl$irs_cov
-  cov <- mpl$cov[1:num_int]
-
-  print(sprintf("cov: %f", cov))
+  pop_split <- mpl$pop_split
 
   mat <- matrix(0, na, nh)
-  S_eq <- vapply(cov, FUN = function(x)
+
+  S_eq <- vapply(pop_split, FUN = function(x)
   {
     x * S_eq
   }, mat)
-  T_eq <- vapply(cov, FUN = function(x)
+  T_eq <- vapply(pop_split, FUN = function(x)
   {
     x * T_eq
   }, mat)
-  D_eq <- vapply(cov, FUN = function(x)
+  D_eq <- vapply(pop_split, FUN = function(x)
   {
     x * D_eq
   }, mat)
-  A_eq <- vapply(cov, FUN = function(x)
+  A_eq <- vapply(pop_split, FUN = function(x)
   {
     x * A_eq
   }, mat)
-  U_eq <- vapply(cov, FUN = function(x)
+  U_eq <- vapply(pop_split, FUN = function(x)
   {
     x * U_eq
   }, mat)
-  P_eq <- vapply(cov, FUN = function(x)
+  P_eq <- vapply(pop_split, FUN = function(x)
   {
     x * P_eq
   }, mat)

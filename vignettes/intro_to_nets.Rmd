@@ -1,0 +1,93 @@
+---
+title: "Adding ITNs and IRS"
+author: "H. Juliette T. Unwin"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+Insecticide treated nets (ITNs) and Indoor Residual Spraying (IRS) can be added to the default 
+deterministic Imperial Malaria model easily.  As in the original Berkeley Madonna code, which can be found
+in the wiki [here](https://github.com/mrc-ide/deterministic-malaria-model/wiki/Berkeley-Madonna-Code), 
+the impact of four different interventions can be considered.  This is implemented by splitting the 
+population into a maximum of four different compartments:
+
+1. People with no intervention coverage.
+1. People with only ITNs.
+1. People with only IRS.
+1. People with both ITNs and IRS.
+
+Each of these compartments is then modelled separately, with all contributing to a share force of infection 
+from humans to mosquitoes.
+
+The population can be split in two ways:
+
+1) A vector can be provided to the function `create_r_model`, which specifies the proportion of people in each intervention
+compartment and sums to one.  It is important to maintain the order: people with no intervention coverage, people with only ITNs, 
+people with only IRS and people with both ITNs and IRS.  If there is no IRS in the simulation, only two compartments need to be 
+specified. At present, a percentage of the population has to be assigned to ITNs if IRS is included in the model.
+For example, for a 50% split of no coverage of ITNs and IRS the following vector is provided: `pop_split = c(0.5, 0.5)`.
+1) If no coverage vector is provided, then population is split by default.  If a vector of varying coverages is provided,
+the population is split equally between all the active population groups.  If no vector is provided, the population is split 
+according to the following equation where`itn_cov` is the percentage of the population who use nets and `irs_cov` is the percentage 
+of the population who use spraying
+```{r} 
+itn_cov = 0.5
+irs_cov = 0.5
+cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
+```
+
+## Implementation of interventions
+
+There are two different ways of implementing these intervention.
+
+1) Allow a step change in ITNs and IRS at a prescribed time.
+1) Vary ITNs over the time period being considered and allow a step change in IRS which corresponds to the time nets are first
+introduced.
+
+### Step change in interventions
+These interventions can be switched on in the `odin_model.R` model by providing a start time for the interventions 
+and the percentage of people who are covered. For example, for a non seasonal location with a 50% coverage
+of nets and 50% coverage of IRS that gets turned on after one year:
+
+```{r}
+library(hanojoel)
+# creates the odin model
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",package = "hanojoel"),
+                                itn_cov = 0.5, # ITN coverage
+                                irs_cov = 0.5, # IRS coverage
+                                ITN_IRS_on = 1*365) # Start time for interventions
+# generates model functions with initial state data
+mod <- wh$generator(user= wh$state, use_dde = TRUE)
+# Runs the model
+mod_run <- mod$run(t = 1:(365*3))
+out <- mod$transform_variables(mod_run)
+plot(out$t, out$prev, type='l', col='black', main='Prevalance')
+```
+
+If no start time for interventions is provided, the default is to set `ITN_IRS_on = -1`.  This represents the inteventions
+being implemented from the start of the simulation.
+```{r}
+library(hanojoel)
+# creates the odin model
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",package = "hanojoel"),
+                                itn_cov = 0.5, # ITN coverage
+                                irs_cov = 0.5) # IRS coverage) # Start time for interventions
+# generates model functions with initial state data
+mod <- wh$generator(user= wh$state, use_dde = TRUE)
+# Runs the model
+mod_run <- mod$run(t = 1:(365*3))
+out <- mod$transform_variables(mod_run)
+plot(out$t, out$prev, type='l', col='black', main='Prevalance')
+```

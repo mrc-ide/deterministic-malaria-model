@@ -34,7 +34,7 @@ initial(S[,,]) <- init_S[i,j,k]
 dim(S) <- c(na,nh,num_int)
 
 deriv(S[1, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] +
-  cov[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
+  pop_split[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
 deriv(S[2:na, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
   (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
 
@@ -282,7 +282,7 @@ cA[,,] <- cU + (cD-cU)*p_det[i,j,k]^gamma1
 # Force of infection from humans to mosquitoes
 dim(FOIvijk) <- c(na,nh,num_int)
 omega <- user() #normalising constant for biting rates
-FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i]/omega
+FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i]/omega * cov[k]/pop_split[k]
 lag_FOIv=sum(FOIvijk)
 
 # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)
@@ -382,6 +382,8 @@ ITN_IRS_on <- user() # days after which interventions begin
 num_int <- user() # number of intervention categorys, ITN only, IRS only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
 irs_cov <- user() # proportion of population covered by IRS
+pop_split[] <- user() # population split for intervention groups
+dim(pop_split) <- num_int
 
 # cov is a vector of coverages for each intervention category:
 dim(cov_) <- 4
@@ -498,14 +500,16 @@ age59 <- user()
 age05 <- user()
 
 dim(prev0to59) <- c(age59,nh,num_int)
-prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k] + A[i,j,k] * p_det[i,j,k]
+prev0to59[1:age59,,] <- T[i,j,k]*cov[k]/pop_split[k] + D[i,j,k]*cov[k]/pop_split[k] + A[i,j,k] * p_det[i,j,k]*cov[k]/pop_split[k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
 
 # slide positivity in 0 -5 year age bracket
+dim(weighted_clin_inc) <- c(age05,nh,num_int)
+weighted_clin_inc[,,] <- clin_inc[i,j,k]*cov[k]/pop_split[k]
 dim(clin_inc0to5) <- c(age05,nh,num_int)
-clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
+clin_inc0to5[1:age05,,] <- weighted_clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
-output(inc) <- sum(clin_inc[,,])
+output(inc) <- sum(weighted_clin_inc[,,])
 
 # Param checking outputs
 output(mu) <- mu

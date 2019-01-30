@@ -58,6 +58,9 @@
     <li>
       <a href="../articles/create_r_model.html">More Flexible Model Run</a>
     </li>
+    <li>
+      <a href="../articles/intro_to_nets.html">Added ITNs and IRS</a>
+    </li>
     <li class="divider">
     <li>
       <a href="../CONTRIBUTING.html">Contributing</a>
@@ -90,7 +93,7 @@
       <h1>More Flexible Model Run</h1>
                         <h4 class="author">H. Juliette T. Unwin</h4>
             
-            <h4 class="date">2019-01-29</h4>
+            <h4 class="date">2019-01-30</h4>
       
       
       <div class="hidden name"><code>create_r_model.Rmd</code></div>
@@ -128,7 +131,6 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)
 
 wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>()
-<span class="co">#&gt; [1] "cov: 1.000000" "cov: 0.000000" "cov: 0.000000" "cov: 0.000000"</span>
 
 <span class="co"># generates model functions with initial state data</span>
 mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
@@ -163,10 +165,9 @@ wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class=
                                 <span class="dt">het_brackets =</span> <span class="dv">5</span>,
                                 <span class="dt">age =</span> init_age,
                                 <span class="dt">init_EIR =</span> init_EIR,
-                                <span class="dt">init_ft =</span> <span class="fl">0.4</span>,
+                                <span class="dt">init_ft =</span> prop_treated,
                                 <span class="dt">country =</span> <span class="st">"Uganda"</span>,
                                 <span class="dt">admin2 =</span> <span class="st">"Tororo"</span>)
-<span class="co">#&gt; [1] "cov: 1.000000" "cov: 0.000000" "cov: 0.000000" "cov: 0.000000"</span>
 
 <span class="co"># generates model functions with initial state data</span>
 mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
@@ -186,15 +187,15 @@ out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">t
 <a href="#adding-additional-optional-arguments" class="anchor"></a>Adding additional optional arguments</h2>
 <p>It may be necessary to provide extra optional arguments to the odin model. For example if you run the <code>odin_model_hrp2.R</code> model without any extra arguments it produces an error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># creates the odin model using the default odin model file</span>
-wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>))
-<span class="co">#&gt; [1] "cov: 1.000000" "cov: 0.000000" "cov: 0.000000" "cov: 0.000000"</span>
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, 
+                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>))
 mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
 <span class="co">#&gt; Error in .subset2(public_bind_env, "initialize")(...): Expected value for hrp2_prop</span></code></pre></div>
 <p>This is because the required user argument <code>hrp2_prop</code> has not been provided. This is done as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># creates the odin model using the default odin model file</span>
-wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>), 
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, 
+                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>), 
                                 <span class="dt">hrp2_prop =</span> <span class="fl">0.5</span>)
-<span class="co">#&gt; [1] "cov: 1.000000" "cov: 0.000000" "cov: 0.000000" "cov: 0.000000"</span>
 mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
   </div>

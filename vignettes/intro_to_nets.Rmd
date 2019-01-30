@@ -91,3 +91,53 @@ mod_run <- mod$run(t = 1:(365*3))
 out <- mod$transform_variables(mod_run)
 plot(out$t, out$prev, type='l', col='black', main='Prevalance')
 ```
+
+### Varying interventions
+
+It may be desirable to change the net coverage more than once over a simulation. This is achieved by providing two 
+vectors `itn_vector` and `t_vector` to the `create_r_model` function using the `odin_model_itn.R` version of the model.
+Here the `itn_vector` vector dictates how the coverage changes and `t_vector` is the time in days that the coverages change.
+For example for a non seasonal setting with 50% population split:
+
+```{r}
+library(hanojoel)
+# creates the odin model
+# define the net coverage. Need to define the coverage in the past so can have a coverage using the delay
+itn_vector <- c(0, 0.1, 0.3)
+t_vector <- c(-20, 1*365, 2*365) # number of days at which the itn coverage changes
+# creates the odin model
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "hanojoel"),
+                                itn_vector = itn_vector,
+                                t_vector = t_vector,
+                                pop_split = c(0.5, 0.5))
+# generates model functions with initial state data
+mod <- wh$generator(user= wh$state, use_dde = TRUE)
+# Runs the model
+mod_run <- mod$run(t = 1:(365*3))
+out <- mod$transform_variables(mod_run)
+plot(out$t, out$prev, type='l', col='black', main='Prevalance')
+```
+
+At present varing IRS has not been implemented.  IRS can only be added to the simulation as shown below:
+
+```{r}
+library(hanojoel)
+# creates the odin model
+# define the net coverage. Need to define the coverage in the past so can have a coverage using the delay
+itn_vector <- c(0, 0.1, 0.3)
+t_vector <- c(-20, 1*365, 2*365) # number of days at which the itn coverage changes
+# creates the odin model
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "hanojoel"),
+                                itn_vector = itn_vector,
+                                t_vector = t_vector,
+                                irs_cov = 0.2,
+                                pop_split = c(0.25, 0.25, 0.25, 0.25))
+# generates model functions with initial state data
+mod <- wh$generator(user= wh$state, use_dde = TRUE)
+# Runs the model
+mod_run <- mod$run(t = 1:(365*3))
+out <- mod$transform_variables(mod_run)
+plot(out$t, out$prev, type='l', col='black', main='Prevalance')
+```
+
+This represents 20% of the population recieving IRS beginning at day 365.

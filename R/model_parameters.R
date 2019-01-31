@@ -297,7 +297,7 @@ model_param_list_create <- function(
       mp_list$pop_split <- rep(1/mp_list$num_int, mp_list$num_int)
     }
 
-  } else{
+  } else {
     # Sets start time of coverage
     mp_list$ITN_IRS_on <- ITN_IRS_on
     # Sets number of interventions

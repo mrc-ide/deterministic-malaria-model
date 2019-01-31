@@ -210,9 +210,8 @@ p_det[,,] <- d1 + (1-d1)/(1 + fd[i]*(ID[i,j,k]/ID0)^kD)
 dim(FOI_lag) <- c(na,nh,num_int)
 FOI_lag[1:na, 1:nh, 1:num_int] <- EIR[i,j,k] * (if(IB[i,j,k]==0) b0 else b[i,j,k])
 
-# Current FOI depends on humans that have been through the latent period and are
-# producing gametocytes
-dE <- user() # length of time from infection to gametocytogenesis
+# Current FOI depends on humans that have been through the latent period
+dE <- user() # latent period of human infection.
 dim(FOI) <- c(na,nh,num_int)
 FOI[,,] <- delay(FOI_lag[i,j,k],dE)
 
@@ -286,8 +285,8 @@ FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k
 lag_FOIv=sum(FOIvijk)
 
 # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12.5 day lag)
-delayGam <- user() # latent period in gametocytogenesis
-delayMos <- user() # latent period in humans
+delayGam <- user() # Lag from parasites to infectious gametocytes
+delayMos <- user() # Extrinsic incubation period.
 FOIv <- delay(lag_FOIv, delayGam)
 
 # Number of mosquitoes that become infected at each time point

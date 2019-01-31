@@ -507,9 +507,9 @@ age59 <- user()
 # index of the age vector above 5 years
 age05 <- user()
 
-# The force of infection seen today in the humans is based on how much they were bitten 10 days ago due to
-# liver stage presentation.  Therefore the incidence should reflect the net coverage from 10 days ago.
-lagged_cov[] <- delay(cov[i], delayMos)
+# The force of infection seen today in the humans is based on how much they were bitten 12 days ago due to
+# liver stage presentation.  Therefore the incidence should reflect the net coverage from 12 days ago.
+lagged_cov[] <- delay(cov[i], dE)
 dim(lagged_cov) <- num_int
 
 dim(prev0to59) <- c(age59,nh,num_int)

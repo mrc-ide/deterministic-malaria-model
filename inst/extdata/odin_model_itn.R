@@ -210,9 +210,8 @@ p_det[,,] <- d1 + (1-d1)/(1 + fd[i]*(ID[i,j,k]/ID0)^kD)
 dim(FOI_lag) <- c(na,nh,num_int)
 FOI_lag[1:na, 1:nh, 1:num_int] <- EIR[i,j,k] * (if(IB[i,j,k]==0) b0 else b[i,j,k])
 
-# Current FOI depends on humans that have been through the latent period and are
-# producing gametocytes
-dE <- user() # length of time from infection to gametocytogenesis
+# Current FOI depends on humans that have been through the latent period
+dE <- user() # latent period of human infection.
 dim(FOI) <- c(na,nh,num_int)
 FOI[,,] <- delay(FOI_lag[i,j,k],dE)
 
@@ -285,9 +284,9 @@ omega <- user() #normalising constant for biting rates
 FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i]/omega * cov[k]/pop_split[k]
 lag_FOIv=sum(FOIvijk)
 
-# Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)
-delayGam <- user() # latent period in gametocytogenesis
-delayMos <- user() # latent period in humans
+# Current hum->mos FOI depends on the number of individuals now producing gametocytes (12.5 day lag)
+delayGam <- user() # Lag from parasites to infectious gametocytes
+delayMos <- user() # Extrinsic incubation period.
 FOIv <- delay(lag_FOIv, delayGam)
 
 # Number of mosquitoes that become infected at each time point
@@ -507,15 +506,20 @@ age59 <- user()
 # index of the age vector above 5 years
 age05 <- user()
 
+# The force of infection seen today in the humans is based on how much they were bitten 12 days ago due to
+# liver stage presentation.  Therefore the incidence should reflect the net coverage from 12 days ago.
+lagged_cov[] <- delay(cov[i], dE)
+dim(lagged_cov) <- num_int
+
 dim(prev0to59) <- c(age59,nh,num_int)
-prev0to59[1:age59,,] <- T[i,j,k]*cov[k]/pop_split[k] + D[i,j,k]*cov[k]/pop_split[k]  + A[i,j,k]*cov[k]/pop_split[k]*p_det[i,j,k]
+prev0to59[1:age59,,] <- T[i,j,k]*lagged_cov[k]/pop_split[k] + D[i,j,k]*lagged_cov[k]/pop_split[k]  + A[i,j,k]*lagged_cov[k]/pop_split[k]*p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
-output(prev1) <- sum(prev0to59[,,1])/(sum(den[1:age59])*cov[1])
-output(prev2) <- sum(prev0to59[,,2])/(sum(den[1:age59])*cov[2])
+output(prev1) <- sum(prev0to59[,,1])/(sum(den[1:age59])*lagged_cov[1])
+output(prev2) <- sum(prev0to59[,,2])/(sum(den[1:age59])*lagged_cov[2])
 
 # slide positivity in 0 -5 year age bracket
 dim(weighted_clin_inc) <- c(na,nh,num_int)
-weighted_clin_inc[,,] <- clin_inc[i,j,k] * cov[k]/pop_split[k]
+weighted_clin_inc[,,] <- clin_inc[i,j,k] * lagged_cov[k]/pop_split[k]
 dim(clin_inc0to5) <- c(age05,nh,num_int)
 clin_inc0to5[1:age05,,] <- weighted_clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])

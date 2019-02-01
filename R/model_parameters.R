@@ -314,16 +314,11 @@ model_param_list_create <- function(
     } else {
       mp_list$num_int <- 1
     }
-    # Sets population split
-    if (exists('pop_split', where=extra_param_list)){
-      mp_list$pop_split <- extra_param_list$pop_split
-      extra_param_list$pop_split <- NULL
-    } else {
-      # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
-      cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
-      cov <- cov[1:mp_list$num_int]
-      mp_list$pop_split <- cov
-    }
+    # Sets population split as coverage
+    # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
+    cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
+    cov <- cov[1:mp_list$num_int]
+    mp_list$pop_split <- cov
   }
 
   # Check that number of intervention compartments is the same length as the population split.

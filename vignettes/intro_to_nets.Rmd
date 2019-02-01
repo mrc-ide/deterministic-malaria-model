@@ -31,40 +31,46 @@ population into a maximum of four different compartments:
 Each of these compartments is then modelled separately, with all contributing to a share force of infection 
 from humans to mosquitoes.
 
-The population can be split in two ways:
+The population can be split in the following ways:
 
-1) A vector can be provided to the function `create_r_model`, which specifies the proportion of people in each intervention
-compartment and sums to one.  It is important to maintain the order: people with no intervention coverage, people with only ITNs, 
-people with only IRS and people with both ITNs and IRS.  If there is no IRS in the simulation, only two compartments need to be 
-specified. At present, a percentage of the population has to be assigned to ITNs if IRS is included in the model.
-For example, for a 50% split of no coverage of ITNs and IRS the following vector is provided: `pop_split = c(0.5, 0.5)`.
-1) If no coverage vector is provided, then population is split by default.  If a vector of varying coverages is provided,
-the population is split equally between all the active population groups.  If no vector is provided, the population is split 
-according to the following equation where`itn_cov` is the percentage of the population who use nets and `irs_cov` is the percentage 
-of the population who use spraying
+1. In the `odin_model.R` model, the population is split according to the following equation where`itn_cov` 
+is the percentage of the population who use nets and `irs_cov` is the percentage 
+of the population who use indoor residual spraying.
 ```{r} 
 itn_cov = 0.5
 irs_cov = 0.5
 cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
 ```
+2. In the `odin_model_itn.R` there are two ways to split the population.
+    * A vector can be provided to the function `create_r_model`, which specifies the proportion of people 
+    in each intervention compartment and sums to one.  It is important to maintain the order: people with 
+    no intervention coverage, people with only ITNs, people with only IRS and people with both ITNs and 
+    IRS.  If there is no IRS in the simulation, only two compartments need to be specified. At present, a    
+    percentage of the population has to be assigned to ITNs if IRS is included in the model.
+    For example, for a 50% split of no coverage of ITNs and IRS the following vector is provided: 
+    `pop_split = c(0.5, 0.5)`.
 
+    * If no coverage vector is provided, then population is split by default.  If a vector of varying     
+    coverages is provided, the population is split equally between all the active population groups.
+    
 ## Implementation of interventions
 
 There are two different ways of implementing these intervention.
 
 1) Allow a step change in ITNs and IRS at a prescribed time.
-1) Vary ITNs over the time period being considered and allow a step change in IRS which corresponds to the time nets are first
-introduced.
+1) Vary ITNs over the time period being considered and allow a step change in IRS which corresponds to the 
+time nets are first introduced.
 
 ### Step change in interventions
-These interventions can be switched on in the `odin_model.R` model by providing a start time for the interventions 
-and the percentage of people who are covered. For example, for a non seasonal location with a 50% coverage
-of nets and 50% coverage of IRS that gets turned on after one year:
+These interventions can be switched on in the `odin_model.R` model by providing a start time for the 
+interventions and the percentage of people who are covered. For example, for a non seasonal location with a 
+50% coverage of nets and 50% coverage of IRS that gets turned on after one year:
 
 ```{r}
 library(hanojoel)
 # creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",package = "hanojoel"),
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
+                                                              package = "hanojoel"),
                                 itn_cov = 0.5, # ITN coverage
                                 irs_cov = 0.5, # IRS coverage
                                 ITN_IRS_on = 1*365) # Start time for interventions
@@ -76,12 +82,13 @@ out <- mod$transform_variables(mod_run)
 plot(out$t, out$prev, type='l', col='black', main='Prevalance')
 ```
 
-If no start time for interventions is provided, the default is to set `ITN_IRS_on = -1`.  This represents the inteventions
-being implemented from the start of the simulation.
+If no start time for interventions is provided, the default is to set `ITN_IRS_on = -1`.  This represents 
+the inteventions being implemented from the start of the simulation.
 ```{r}
 library(hanojoel)
 # creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",package = "hanojoel"),
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
+                                                              package = "hanojoel"),
                                 itn_cov = 0.5, # ITN coverage
                                 irs_cov = 0.5) # IRS coverage) # Start time for interventions
 # generates model functions with initial state data
@@ -94,19 +101,21 @@ plot(out$t, out$prev, type='l', col='black', main='Prevalance')
 
 ### Varying interventions
 
-It may be desirable to change the net coverage more than once over a simulation. This is achieved by providing two 
-vectors `itn_vector` and `t_vector` to the `create_r_model` function using the `odin_model_itn.R` version of the model.
-Here the `itn_vector` vector dictates how the coverage changes and `t_vector` is the time in days that the coverages change.
+It may be desirable to change the net coverage more than once over a simulation. This is achieved by 
+providing two vectors `itn_vector` and `t_vector` to the `create_r_model` function using the 
+`odin_model_itn.R` version of the model. Here the `itn_vector` vector dictates how the coverage changes and 
+`t_vector` is the time in days that the coverages change.
 For example for a non seasonal setting with 50% population split:
 
 ```{r}
 library(hanojoel)
-# creates the odin model
-# define the net coverage. Need to define the coverage in the past so can have a coverage using the delay
+# define the net coverage. 
+# Need to define the coverage in the past so can have a coverage using the delay
 itn_vector <- c(0, 0.1, 0.3)
 t_vector <- c(-20, 1*365, 2*365) # number of days at which the itn coverage changes
 # creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "hanojoel"),
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
+                                                              package = "hanojoel"),
                                 itn_vector = itn_vector,
                                 t_vector = t_vector,
                                 pop_split = c(0.5, 0.5))
@@ -122,12 +131,12 @@ At present varing IRS has not been implemented.  IRS can only be added to the si
 
 ```{r}
 library(hanojoel)
-# creates the odin model
-# define the net coverage. Need to define the coverage in the past so can have a coverage using the delay
+# define the net coverage. 
 itn_vector <- c(0, 0.1, 0.3)
 t_vector <- c(-20, 1*365, 2*365) # number of days at which the itn coverage changes
 # creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "hanojoel"),
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
+                                                              package = "hanojoel"),
                                 itn_vector = itn_vector,
                                 t_vector = t_vector,
                                 irs_cov = 0.2,

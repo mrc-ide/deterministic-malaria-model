@@ -17,7 +17,7 @@ navbar:
         href: articles/run_model.html
       - text: More Flexible Model Run
         href: articles/create_r_model.html
-      - text: Added ITNs and IRS
+      - text: Adding ITNs and IRS
         href: articles/intro_to_nets.html
       - text: --------
       - text: Contributing

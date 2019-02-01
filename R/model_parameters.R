@@ -280,24 +280,30 @@ model_param_list_create <- function(
 
   # Deciding if provide a vector of coverages or just a single coverage
   if (exists('itn_vector', where=extra_param_list) & exists('t_vector', where=extra_param_list)){
-    # Sets start of coverage time assuming that once coverage has started it never goes back to zero.
-    mp_list$ITN_IRS_on <- extra_param_list$t_vector[min(which(extra_param_list$itn_vector != 0))]
-    # Sets number of interventions
-    if (irs_cov > 0){
-      mp_list$num_int = 4 # If have irs, have to model 4 intervention compartments
+    if (sum(extra_param_list$itn_vector) > 0 ){
+      # Sets start of coverage time assuming that once coverage has started it never goes back to zero.
+      mp_list$ITN_IRS_on <- extra_param_list$t_vector[min(which(extra_param_list$itn_vector != 0))]
+      # Sets number of interventions
+      if (irs_cov > 0){
+        mp_list$num_int = 4 # If have irs, have to model 4 intervention compartments
+      } else {
+        mp_list$num_int = 2 # If have no irs, only have 2 compartments
+      }
+      # Sets population split
+      if (exists('pop_split', where=extra_param_list)){
+        mp_list$pop_split <- extra_param_list$pop_split
+        extra_param_list$pop_split <- NULL
+      } else {
+        # If population split not defined - just split equally
+        mp_list$pop_split <- rep(1/mp_list$num_int, mp_list$num_int)
+      }
     } else {
-      mp_list$num_int = 2 # If have no irs, only have 2 compartments
-    }
-    # Sets population split
-    if (exists('pop_split', where=extra_param_list)){
-      mp_list$pop_split <- extra_param_list$pop_split
+      mp_list$num_int <- 1
+      mp_list$ITN_IRS_on <- Inf
+      mp_list$pop_split <- c(1.0)
       extra_param_list$pop_split <- NULL
-    } else {
-      # If population split not defined - just split equally
-      mp_list$pop_split <- rep(1/mp_list$num_int, mp_list$num_int)
     }
-
-  } else {
+  } else{
     # Sets start time of coverage
     mp_list$ITN_IRS_on <- ITN_IRS_on
     # Sets number of interventions

@@ -14,7 +14,7 @@ itn_vector <- c(0, 0.1, 0.5, 0.8)
 t_vector <- c(-20, 1*365, 5*365, 8*365) # number of days at which the itn coverage changes
 
 # creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "hanojoel"),,
+wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "hanojoel"),
                                 het_brackets = 3,
                                 age = init_age,
                                 init_EIR = init_EIR,

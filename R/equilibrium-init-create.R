@@ -303,6 +303,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
 
   # find database seasonal parameters
+  admin_units_seasonal <- load_file("admin_units_seasonal.rds")
+  print("loaded data")
 
   # intiialise admin match as no match
   admin_matches <- 0
@@ -348,6 +350,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
   }
 
+  print("admin_matches:")
+  print(admin_matches)
   if(admin_matches!=0){
     ssa0 <- admin_units_seasonal$a0[admin_matches]
     ssa1 <- admin_units_seasonal$a1[admin_matches]
@@ -360,6 +364,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   } else {
     ssa0 <- ssa1 <- ssa2 <- ssa3 <- ssb1 <- ssb2 <- ssb3 <- theta_c <- 0
   }
+
+  print(sprintf("ssa0: %f", ssa0))
 
   # better het bounds for equilbirum initialisation in individual model
   zetas <- rlnorm(n = 1e5,meanlog = -mpl$sigma2/2, sdlog = sqrt(mpl$sigma2))
@@ -375,7 +381,6 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   wt_cuts <- c(0,wt_cuts)
   het_bounds <- sort(zetas)[wt_cuts]
   het_bounds[length(het_bounds)] <- (mpl$max_age/365)+1
-
 
   ## collate init
   res <- list(init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq,

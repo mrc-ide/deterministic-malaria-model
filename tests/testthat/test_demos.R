@@ -15,7 +15,7 @@ test_that("model_run demo runs", {
   expect_true(is.list(model_run$dat))
   expect_true(all(class(model_run$plot) == c("gg", "ggplot")))
   # time handled right
-  expect_equal(length(model_run$dat$t), 31L)
+  expect_equal(length(model_run$dat$t), 31)
   # equilibrium init check indirectly (though this could be risky)
   expect_equal(1.196338e-05, model_run$dat$inc05[30] - model_run$dat$inc05[1])
 })
@@ -36,6 +36,7 @@ test_that("create_r_model demo runs", {
                                   init_ft = prop_treated,
                                   country = NULL,
                                   admin2 = NULL)
+
   # generates model functions with initial state data
   mod <- wh$generator(user= wh$state, use_dde = TRUE)
   # Runs the model
@@ -132,3 +133,4 @@ test_that("checks errors", {
   expect_failure(expect_error(wh <- hanojoel:::create_r_model(itn_vector = c(0.3), t_vector= c(0), pop_split = c(1.0, 1.0)), "Population split is invalid.  Please ensure it sums to one."))
   expect_failure(expect_error(wh <- hanojoel:::create_r_model(itn_vector = c(0.3), t_vector= c(0), pop_split = c(1.0)), "Population split is invalid.  Please ensure it has the same number of compartments as coverage."))
 })
+

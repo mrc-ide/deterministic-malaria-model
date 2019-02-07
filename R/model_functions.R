@@ -65,3 +65,39 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
   return(list("plot"=ret,"dat"=out))
 
 }
+
+#------------------------------------------------
+#' load_file
+#'
+#' \code{load_file} loads package file
+#'
+#' @param age Vector of age brackets.
+#'
+#' @description Load a file from within the inst/extdata folder of the
+#'   hanojoel package. File extension must be one of .csv, .txt, or .rds.
+#'
+#' @param name the name of a file within the inst/extdata folder.
+#'
+#' @export
+
+load_file <- function(name) {
+
+  # check that valid file extension
+  ext <- strsplit(name, "\\.")[[1]]
+  ext <- ext[length(ext)]
+  if(is.element(ext, c("csv", "rds")) == FALSE){
+    stop("file extension not valid")
+  }
+
+  # get full file path
+  name_full <- system.file("extdata/", name, package="hanojoel", mustWork = TRUE)
+
+  # read in file
+  if (ext == "rds") {
+    ret <- readRDS(name_full)
+  } else {
+    ret <-  read.csv(file=name_full, header=TRUE, sep=",")
+  }
+
+  return(ret)
+}

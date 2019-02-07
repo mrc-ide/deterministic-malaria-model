@@ -37,6 +37,7 @@ create_r_model <- function(odin_model_path = system.file("extdata/odin_model.R",
                                    model_param_list = mpl, het_brackets=het_brackets,
                                    country = country,
                                    admin_unit = admin2)
+
   # create odin generator
   gen <- odin::odin(odin_model_path, verbose=FALSE, build = TRUE)
 

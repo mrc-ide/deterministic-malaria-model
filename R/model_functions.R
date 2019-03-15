@@ -35,10 +35,14 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
 
   # create odin generator
   odin_model_path <- system.file("extdata/odin_model.R",package="hanojoel")
-  gen <- odin::odin(odin_model_path,verbose=FALSE, build = TRUE)
+  gen <- odin::odin(odin_model_path,verbose=FALSE)
+
+  # There are many parameters used that should not be passed through
+  # to the model.
+  state_use <- state[names(state) %in% names(formals(gen))]
 
   # create model with initial values
-  mod <- gen(user=state, use_dde=TRUE)
+  mod <- gen(user=state_use, use_dde=TRUE)
   tt <- seq(0,time,1)
 
   # run model

@@ -13,7 +13,7 @@
 #' @param rT Rate of leaving treatment. Default = 0.2
 #' @param rD Rate of leaving clinical disease. Default = 0.2
 #' @param rU Rate of recovering from subpatent infection. Default = 0.00906627
-#' @param rP Rate of leaving prophylaxis. Default = 0.05
+#' @param rP Rate of leaving prophylaxis. Default = 0.06666667
 #' @param dE Latent period of human infection. Default = 12
 #' @param delayGam Lag from parasites to infectious gametocytes. Default = 12.5
 #' @param cD Untreated disease contribution to infectiousness. Default = 0.0676909
@@ -340,8 +340,6 @@ model_param_list_create <- function(
   mp_list$itn_half_life <- itn_half_life
   mp_list$IRS_interval <- IRS_interval
   mp_list$ITN_interval <- ITN_interval
-  mp_list$irs_half_life <- 0.5 * mp_list$DY
-  mp_list$itn_half_life <- 2.64 * mp_list$DY
   mp_list$irs_loss <- log(2)/mp_list$irs_half_life
   mp_list$itn_loss <- log(2)/mp_list$itn_half_life
 

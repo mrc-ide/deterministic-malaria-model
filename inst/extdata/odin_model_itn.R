@@ -538,5 +538,5 @@ output(s_ITN) <- s_ITN
 output(d_IRS) <- d_IRS
 output(r_IRS) <- r_IRS
 output(s_IRS) <- s_IRS
-output(cov[]) <- cov[i]
+output(cov[]) <- TRUE
 output(K0) <- K0

@@ -93,7 +93,7 @@
       <h1>Adding ITNs and IRS</h1>
                         <h4 class="author">H. Juliette T. Unwin</h4>
             
-            <h4 class="date">2019-02-01</h4>
+            <h4 class="date">2019-04-08</h4>
       
       
       <div class="hidden name"><code>intro_to_nets.Rmd</code></div>
@@ -117,9 +117,9 @@
 <ol style="list-style-type: decimal">
 <li>In the <code>odin_model.R</code> model, the population is split according to the following equation where<code>itn_cov</code> is the percentage of the population who use nets and <code>irs_cov</code> is the percentage of the population who use indoor residual spraying.</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">itn_cov =<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">irs_cov =<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">cov &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>itn_cov) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>irs_cov), itn_cov <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>irs_cov), (<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>itn_cov) <span class="op">*</span><span class="st"> </span>irs_cov, itn_cov <span class="op">*</span><span class="st"> </span>irs_cov)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">itn_cov =<span class="st"> </span><span class="fl">0.5</span>
+irs_cov =<span class="st"> </span><span class="fl">0.5</span>
+cov &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>itn_cov) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>irs_cov), itn_cov <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>irs_cov), (<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>itn_cov) <span class="op">*</span><span class="st"> </span>irs_cov, itn_cov <span class="op">*</span><span class="st"> </span>irs_cov)</code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>In the <code>odin_model_itn.R</code> there are two ways to split the population.
 <ul>
@@ -143,75 +143,75 @@ coverages is provided, the population is split equally between all the active po
 <h3 class="hasAnchor">
 <a href="#step-change-in-interventions" class="anchor"></a>Step change in interventions</h3>
 <p>These interventions can be switched on in the <code>odin_model.R</code> model by providing a start time for the interventions and the percentage of people who are covered. For example, for a non seasonal location with a 50% coverage of nets and 50% coverage of IRS that gets turned on after one year:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># creates the odin model</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>,</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>),</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">                                <span class="dt">itn_cov =</span> <span class="fl">0.5</span>, <span class="co"># ITN coverage</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">                                <span class="dt">irs_cov =</span> <span class="fl">0.5</span>, <span class="co"># IRS coverage</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">                                <span class="dt">ITN_IRS_on =</span> <span class="dv">1</span><span class="op">*</span><span class="dv">365</span>) <span class="co"># Start time for interventions</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co"># generates model functions with initial state data</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co"># Runs the model</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">365</span><span class="op">*</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t, out<span class="op">$</span>prev, <span class="dt">type=</span><span class="st">'l'</span>, <span class="dt">col=</span><span class="st">'black'</span>, <span class="dt">main=</span><span class="st">'Prevalance'</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)
+<span class="co"># creates the odin model</span>
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>,
+                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">itn_cov =</span> <span class="fl">0.5</span>, <span class="co"># ITN coverage</span>
+                                <span class="dt">irs_cov =</span> <span class="fl">0.5</span>, <span class="co"># IRS coverage</span>
+                                <span class="dt">ITN_IRS_on =</span> <span class="dv">1</span><span class="op">*</span><span class="dv">365</span>) <span class="co"># Start time for interventions</span>
+<span class="co"># generates model functions with initial state data</span>
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
+<span class="co"># Runs the model</span>
+mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">365</span><span class="op">*</span><span class="dv">3</span>))
+out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t, out<span class="op">$</span>prev, <span class="dt">type=</span><span class="st">'l'</span>, <span class="dt">col=</span><span class="st">'black'</span>, <span class="dt">main=</span><span class="st">'Prevalance'</span>)</code></pre></div>
 <p><img src="intro_to_nets_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>If no start time for interventions is provided, the default is to set <code>ITN_IRS_on = -1</code>. This represents the inteventions being implemented from the start of the simulation.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co"># creates the odin model</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>,</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>),</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">                                <span class="dt">itn_cov =</span> <span class="fl">0.5</span>, <span class="co"># ITN coverage</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">                                <span class="dt">irs_cov =</span> <span class="fl">0.5</span>) <span class="co"># IRS coverage) # Start time for interventions</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co"># generates model functions with initial state data</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co"># Runs the model</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">365</span><span class="op">*</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t, out<span class="op">$</span>prev, <span class="dt">type=</span><span class="st">'l'</span>, <span class="dt">col=</span><span class="st">'black'</span>, <span class="dt">main=</span><span class="st">'Prevalance'</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)
+<span class="co"># creates the odin model</span>
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>,
+                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">itn_cov =</span> <span class="fl">0.5</span>, <span class="co"># ITN coverage</span>
+                                <span class="dt">irs_cov =</span> <span class="fl">0.5</span>) <span class="co"># IRS coverage) # Start time for interventions</span>
+<span class="co"># generates model functions with initial state data</span>
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
+<span class="co"># Runs the model</span>
+mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">365</span><span class="op">*</span><span class="dv">3</span>))
+out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t, out<span class="op">$</span>prev, <span class="dt">type=</span><span class="st">'l'</span>, <span class="dt">col=</span><span class="st">'black'</span>, <span class="dt">main=</span><span class="st">'Prevalance'</span>)</code></pre></div>
 <p><img src="intro_to_nets_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div id="varying-interventions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#varying-interventions" class="anchor"></a>Varying interventions</h3>
 <p>It may be desirable to change the net coverage more than once over a simulation. This is achieved by providing two vectors <code>itn_vector</code> and <code>t_vector</code> to the <code>create_r_model</code> function using the <code>odin_model_itn.R</code> version of the model. Here the <code>itn_vector</code> vector dictates how the coverage changes and <code>t_vector</code> is the time in days that the coverages change. For example for a non seasonal setting with 50% population split:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co"># define the net coverage. </span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co"># Need to define the coverage in the past so can have a coverage using the delay</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">itn_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>)</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">t_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">1</span><span class="op">*</span><span class="dv">365</span>, <span class="dv">2</span><span class="op">*</span><span class="dv">365</span>) <span class="co"># number of days at which the itn coverage changes</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co"># creates the odin model</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_itn.R"</span>,</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>),</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">                                <span class="dt">itn_vector =</span> itn_vector,</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">                                <span class="dt">t_vector =</span> t_vector,</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">                                <span class="dt">pop_split =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co"># generates model functions with initial state data</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co"># Runs the model</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15">mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">365</span><span class="op">*</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)</a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t, out<span class="op">$</span>prev, <span class="dt">type=</span><span class="st">'l'</span>, <span class="dt">col=</span><span class="st">'black'</span>, <span class="dt">main=</span><span class="st">'Prevalance'</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)
+<span class="co"># define the net coverage. </span>
+<span class="co"># Need to define the coverage in the past so can have a coverage using the delay</span>
+itn_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>)
+t_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="dv">25</span>, <span class="dv">1</span><span class="op">*</span><span class="dv">365</span>, <span class="dv">2</span><span class="op">*</span><span class="dv">365</span>) <span class="co"># number of days at which the itn coverage changes</span>
+<span class="co"># creates the odin model</span>
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_itn.R"</span>,
+                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">itn_vector =</span> itn_vector,
+                                <span class="dt">t_vector =</span> t_vector,
+                                <span class="dt">pop_split =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))
+<span class="co"># generates model functions with initial state data</span>
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
+<span class="co"># Runs the model</span>
+mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">365</span><span class="op">*</span><span class="dv">3</span>))
+out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t, out<span class="op">$</span>prev, <span class="dt">type=</span><span class="st">'l'</span>, <span class="dt">col=</span><span class="st">'black'</span>, <span class="dt">main=</span><span class="st">'Prevalance'</span>)</code></pre></div>
 <p><img src="intro_to_nets_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>At present varing IRS has not been implemented. IRS can only be added to the simulation as shown below:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co"># define the net coverage. </span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">itn_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">t_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">1</span><span class="op">*</span><span class="dv">365</span>, <span class="dv">2</span><span class="op">*</span><span class="dv">365</span>) <span class="co"># number of days at which the itn coverage changes</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co"># creates the odin model</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_itn.R"</span>,</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>),</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">                                <span class="dt">itn_vector =</span> itn_vector,</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">                                <span class="dt">t_vector =</span> t_vector,</a>
-<a class="sourceLine" id="cb5-10" data-line-number="10">                                <span class="dt">irs_cov =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb5-11" data-line-number="11">                                <span class="dt">pop_split =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>))</a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co"># generates model functions with initial state data</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13">mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co"># Runs the model</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15">mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">365</span><span class="op">*</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb5-16" data-line-number="16">out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)</a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t, out<span class="op">$</span>prev, <span class="dt">type=</span><span class="st">'l'</span>, <span class="dt">col=</span><span class="st">'black'</span>, <span class="dt">main=</span><span class="st">'Prevalance'</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)
+<span class="co"># define the net coverage. </span>
+itn_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>)
+t_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="dv">25</span>, <span class="dv">1</span><span class="op">*</span><span class="dv">365</span>, <span class="dv">2</span><span class="op">*</span><span class="dv">365</span>) <span class="co"># number of days at which the itn coverage changes</span>
+<span class="co"># creates the odin model</span>
+wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_itn.R"</span>,
+                                                              <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">itn_vector =</span> itn_vector,
+                                <span class="dt">t_vector =</span> t_vector,
+                                <span class="dt">irs_cov =</span> <span class="fl">0.2</span>,
+                                <span class="dt">pop_split =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>))
+<span class="co"># generates model functions with initial state data</span>
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
+<span class="co"># Runs the model</span>
+mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>(<span class="dv">365</span><span class="op">*</span><span class="dv">3</span>))
+out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t, out<span class="op">$</span>prev, <span class="dt">type=</span><span class="st">'l'</span>, <span class="dt">col=</span><span class="st">'black'</span>, <span class="dt">main=</span><span class="st">'Prevalance'</span>)</code></pre></div>
 <p><img src="intro_to_nets_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>This represents 20% of the population recieving IRS beginning at day 365.</p>
 </div>

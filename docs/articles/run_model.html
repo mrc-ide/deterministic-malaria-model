@@ -93,7 +93,7 @@
       <h1>Simplest Model Run</h1>
                         <h4 class="author">OJ Watson</h4>
             
-            <h4 class="date">2019-02-01</h4>
+            <h4 class="date">2019-04-08</h4>
       
       
       <div class="hidden name"><code>run_model.Rmd</code></div>
@@ -123,11 +123,11 @@
 <code>plot</code> - a plot of the 6 human compartments.</li>
 </ol>
 <p>As illustrated below, without specifying any function arguments, <code>create_r_model</code> will run a simulation for 1 year at an EIR of 10, with a treatment coverage equal to 40% for Tororo, Uganda.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_model.html">run_model</a></span>()</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(out)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; [1] "plot" "dat"</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">out<span class="op">$</span>plot</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hanojoel)
+out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_model.html">run_model</a></span>()
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(out)
+<span class="co">#&gt; [1] "plot" "dat"</span>
+out<span class="op">$</span>plot</code></pre></div>
 <p><img src="run_model_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
 <div id="passing-variables" class="section level2">

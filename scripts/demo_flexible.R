@@ -5,7 +5,7 @@ library(hanojoel)
 init_age <- c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80)
 
 # provide a value of the annual EIR for this model run
-init_EIR <- 10
+init_EIR <- 12
 
 # provide the length of time (in days) that you want to run the model for
 time_period <- 365*10
@@ -18,11 +18,11 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 het_brackets = 5,
                                 age = init_age,
                                 init_EIR = init_EIR,
-                                itn_cov = 0.3,
-                                ITN_IRS_on = 5*365,
+                                itn_cov = 0.0,
+                                #ITN_IRS_on = 5*365,
                                 init_ft = prop_treated,
-                                country = "Uganda",
-                                admin2 = "Tororo")
+                                country = NULL,#"Uganda",
+                                admin2 = NULL)#"Tororo")
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)

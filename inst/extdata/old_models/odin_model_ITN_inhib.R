@@ -746,7 +746,7 @@ output(FOIout) <- sum(FOI[,,])
 output(EIR[,,]) <- EIR
 
 output(clin_inc[,,]) <- clin_inc
-output(cov[]) <- cov[i]
+output(cov[]) <- TRUE
 # Param checking outputs
 output(Y[,,]) <- Y
 output(phi[,,]) <- phi
@@ -765,7 +765,6 @@ output(zbar) <- zbar
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN
 output(s_ITN) <- s_ITN
-output(cov[]) <- cov[i]
 output(K0) <- K0
 output(theta2) <- theta2
 output(EM_decay) <- EM_decay

@@ -43,7 +43,7 @@ model_param_list_create(eta = 0.0001305, rho = 0.85, a0 = 2920,
 
 \item{rU}{Rate of recovering from subpatent infection. Default = 0.00906627}
 
-\item{rP}{Rate of leaving prophylaxis. Default = 0.05}
+\item{rP}{Rate of leaving prophylaxis. Default = 0.06666667}
 
 \item{dE}{Latent period of human infection. Default = 12}
 

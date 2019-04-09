@@ -10,15 +10,15 @@ init_EIR <- 10
 time_period <- 365*10
 
 # define the net coverage. Need to define the coverage in the past so can have a coverage using the delay
-itn_vector <- c(0, 0.1, 0.3)
-t_vector <- c(-25, 2*365, 5*365) # number of days at which the itn coverage changes
-ITN_IRS_on <- t_vector[min(which(itn_vector != 0))]
+itn_vector <- c(0, 0.2)
+t_vector <- c(-25, 2*365) # number of days at which the itn coverage changes
+ITN_IRS_on <- 0#t_vector[min(which(itn_vector != 0))] # time at which nets switch on
 
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
                                                               package = "hanojoel"),
                                 num_int = 2,
-                                het_brackets = 3,
+                                het_brackets = 5,
                                 age = init_age,
                                 init_EIR = init_EIR,
                                 country = NULL,
@@ -27,7 +27,24 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 t_vector = t_vector,
                                 ITN_IRS_on = ITN_IRS_on)
 
-# Need to define here ITN_IRS_on and pop split
+# Need to add population split and use to edit initial conditions
+wh$state$pop_split <- c(0.5, 0.5)
+cov <- wh$mpl$cov
+
+# This edit here only works when IRS is turned off
+# Divide the no intervention compartment by cov[1] to get original eqm soln
+tmp_init_S <- wh$state$init_S[,,1] / cov[1]
+wh$state$init_S[,,] <- c(tmp_init_S, tmp_init_S) * wh$state$pop_split
+tmp_init_T <- wh$state$init_T[,,1] / cov[1]
+wh$state$init_T[,,] <- c(tmp_init_T, tmp_init_T) * wh$state$pop_split
+tmp_init_D <- wh$state$init_D[,,1] / cov[1]
+wh$state$init_D[,,] <- c(tmp_init_D, tmp_init_D) * wh$state$pop_split
+tmp_init_A <- wh$state$init_A[,,1] / cov[1]
+wh$state$init_A[,,] <- c(tmp_init_A, tmp_init_A) * wh$state$pop_split
+tmp_init_U <- wh$state$init_U[,,1] / cov[1]
+wh$state$init_U[,,] <- c(tmp_init_U, tmp_init_U) * wh$state$pop_split
+tmp_init_P <- wh$state$init_P[,,1] / cov[1]
+wh$state$init_P[,,] <- c(tmp_init_P, tmp_init_P) * wh$state$pop_split
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)

@@ -298,7 +298,7 @@ model_param_list_create <- function(
   # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
   cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
   cov <- cov[1:mp_list$num_int]
-  mp_list$pop_split <- cov
+  mp_list$cov <- cov
 
   mp_list$d_ITN0 <- d_ITN0
   mp_list$r_ITN0 <- r_ITN0

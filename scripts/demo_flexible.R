@@ -18,11 +18,12 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 het_brackets = 5,
                                 age = init_age,
                                 init_EIR = init_EIR,
-                                itn_cov = 0.0,
-                                #ITN_IRS_on = 5*365,
+                                num_int = 2,
+                                itn_cov = 0.2,
+                                ITN_IRS_on = 5*365,
                                 init_ft = prop_treated,
-                                country = NULL,#"Uganda",
-                                admin2 = NULL)#"Tororo")
+                                country = "Uganda",
+                                admin2 = "Tororo")
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)

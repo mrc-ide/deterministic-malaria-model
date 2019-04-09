@@ -11,11 +11,13 @@ time_period <- 365*10
 
 # define the net coverage. Need to define the coverage in the past so can have a coverage using the delay
 itn_vector <- c(0, 0.1, 0.3)
-t_vector <- c(-20, 2*365, 5*365) # number of days at which the itn coverage changes
+t_vector <- c(-25, 2*365, 5*365) # number of days at which the itn coverage changes
+ITN_IRS_on <- t_vector[min(which(itn_vector != 0))]
 
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
                                                               package = "hanojoel"),
+                                num_int = 2,
                                 het_brackets = 3,
                                 age = init_age,
                                 init_EIR = init_EIR,
@@ -23,7 +25,9 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 admin2 = NULL,
                                 itn_vector = itn_vector,
                                 t_vector = t_vector,
-                                pop_split = c(0.5, 0.5))
+                                ITN_IRS_on = ITN_IRS_on)
+
+# Need to define here ITN_IRS_on and pop split
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)

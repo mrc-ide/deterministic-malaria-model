@@ -64,6 +64,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   }
   age_rate[na] = 0
 
+
   den <- 1/(1 + age_rate[1]/mpl$eta)
   for (i in 1:(na-1))
   {
@@ -81,6 +82,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   }
   fden <- foi_age * den
   omega <- sum(fden)  #normalising constant
+  print(sprintf("omega: %f", omega))
 
   ## heterogeneity
   het_x <- h$nodes
@@ -101,6 +103,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   }
   fd <- 1 - (1 - mpl$fD0)/(1 + (age/mpl$aD)^mpl$gammaD)
 
+  print(sprintf("x_I: %f", x_I))
   # maternal immunity begins at a level proportional to the clinical
   # immunity of a 20 year old, this code finds that level
 
@@ -193,10 +196,10 @@ equilibrium_init_create <- function(age_vector, het_brackets,
     }
   }
 
-  Y_eq <- Z_eq[, , 1]
-  T_eq <- Z_eq[, , 2]
-  D_eq <- Z_eq[, , 3]
-  P_eq <- Z_eq[, , 4]
+  Y_eq <- matrix(Z_eq[, , 1])
+  T_eq <- matrix(Z_eq[, , 2])
+  D_eq <- matrix(Z_eq[, , 3])
+  P_eq <- matrix(Z_eq[, , 4])
 
   betaS <- apply(FOI_eq, MARGIN = 2, FUN = function(x, y)
   {
@@ -214,6 +217,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   A_eq <- matrix(ncol = nh, nrow = na)
   U_eq <- matrix(ncol = nh, nrow = na)
   S_eq <- matrix(ncol = nh, nrow = na)
+
   for (i in 1:na)
   {
     for (j in 1:nh)
@@ -390,7 +394,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
               ssa2 = ssa2, ssa3 = ssa3, ssb1 = ssb1, ssb2 = ssb2, ssb3 = ssb3,
               theta_c = theta_c, age = age_vector*mpl$DY, ft = ft, FOIv_eq = FOIv_eq,
               betaS = betaS, betaA = betaA, betaU = betaU, FOIvij_eq=FOIvij_eq,
-              age_mid_point = age_mid_point, het_bounds = het_bounds, pi = pi)
+              age_mid_point = age_mid_point, het_bounds = het_bounds, pi = pi,
+              age20l = age20l, age20u = age20u, age_20_factor = age_20_factor)
 
   res <- append(res,mpl)
 

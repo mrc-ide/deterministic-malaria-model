@@ -5,7 +5,7 @@ library(hanojoel)
 init_age <- c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80)
 
 # provide a value of the annual EIR for this model run
-init_EIR <- 12
+init_EIR <- 0
 
 # provide the length of time (in days) that you want to run the model for
 time_period <- 365*10

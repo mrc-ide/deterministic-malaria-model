@@ -134,13 +134,20 @@ uD <- user() # scale param for ID immunity
 x_I[] <- user() # intermediate variable for calculating immunity functions
 dim(x_I) <- na
 
+age20l <- user()
+age20u <- user()
+age_20_factor <- user()
+PM <- user()
+dim(init_ICM_pre) <- c(nh,num_int)
+init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[2,i,j] + age_20_factor*(ICA[3,i,j]-ICA[2,i,j]))
+
 # ICM - maternally acquired immunity
 init_ICM[,,] <- user()
 dim(init_ICM) <- c(na,nh,num_int)
 initial(ICM[,,]) <- init_ICM[i,j,k]
 dim(ICM) <- c(na,nh,num_int)
 
-deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM[i,j,k]-ICM[i,j,k])/x_I[i]
+deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM_pre[j,k]-ICM[i,j,k])/x_I[i]
 deriv(ICM[2:na, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] - (ICM[i,j,k]-ICM[i-1,j,k])/x_I[i]
 
 # ICA - exposure driven immunity
@@ -206,6 +213,10 @@ fd[1:na] <- 1-(1-fD0)/(1+(age[i]/aD)^gammaD)
 dim(p_det) <- c(na,nh,num_int)
 p_det[,,] <- d1 + (1-d1)/(1 + fd[i]*(ID[i,j,k]/ID0)^kD)
 
+output(fd) <- TRUE
+output(d1) <- d1
+output(kD) <- kD
+
 # Force of infection, depends on level of infection blocking immunity
 dim(FOI_lag) <- c(na,nh,num_int)
 FOI_lag[1:na, 1:nh, 1:num_int] <- EIR[i,j,k] * (if(IB[i,j,k]==0) b0 else b[i,j,k])
@@ -225,6 +236,8 @@ rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int)
 EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i]/omega*Iv
 
+
+output(omega) <- omega
 ##------------------------------------------------------------------------------
 ##########################
 ## SEASONALITY FUNCTION ##
@@ -264,9 +277,9 @@ init_Sv <- user()
 init_Ev <- user()
 init_Iv <- user()
 initial(Sv) <- init_Sv * mv0
-# initial(Ev) <- init_Ev * mv0
-initial(Ev[1:10]) <- init_Ev/10 * mv0
-dim(Ev) <- 10
+initial(Ev) <- init_Ev * mv0
+#initial(Ev[1:10]) <- init_Ev/10 * mv0
+#dim(Ev) <- 10
 initial(Iv) <- init_Iv * mv0
 
 # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
@@ -295,19 +308,22 @@ ince <- FOIv * Sv
 lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
 
+output(lag_incv) <- lag_incv
+output(incv) <- incv
+
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
 #betaa <- 0.5*PL/dPL
 betaa <- mv0 * mu0 * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
-#deriv(Ev) <- ince - incv - mu*Ev
-deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
-deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
+deriv(Ev) <- ince - incv - mu*Ev
+#deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
+#deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
 deriv(Iv) <- incv - mu*Iv
 
 # Total mosquito population
-#mv = Sv+Ev+Iv
-mv = Sv+sum(Ev)+Iv
+mv = Sv+Ev+Iv
+#mv = Sv+sum(Ev)+Iv
 
 
 ##------------------------------------------------------------------------------

@@ -72,7 +72,7 @@ test_that("equilibrium mosquito", {
   expect_equal(eqm_soln$init_Sv, 0.949566, tolerance=1e-6)
 })
 
-test_that("equilibrium lava", {
+test_that("equilibrium lavae", {
   expect_equal(eqm_soln$init_PL, 0.832831, tolerance=1e-4)
   expect_equal(eqm_soln$init_LL, 5.58968, tolerance=1e-4)
   expect_equal(eqm_soln$init_EL, 192.078, tolerance=1e-4)

@@ -134,12 +134,12 @@ uD <- user() # scale param for ID immunity
 x_I[] <- user() # intermediate variable for calculating immunity functions
 dim(x_I) <- na
 
-age20l <- user()
-age20u <- user()
+age20l <- user(integer=TRUE)
+age20u <- user(integer=TRUE)
 age_20_factor <- user()
 PM <- user()
 dim(init_ICM_pre) <- c(nh,num_int)
-init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[2,i,j] + age_20_factor*(ICA[3,i,j]-ICA[2,i,j]))
+init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[age20l,i,j] + age_20_factor*(ICA[age20u,i,j]-ICA[age20l,i,j]))
 
 # ICM - maternally acquired immunity
 init_ICM[,,] <- user()
@@ -312,8 +312,8 @@ output(lag_incv) <- lag_incv
 output(incv) <- incv
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
-#betaa <- 0.5*PL/dPL
-betaa <- mv0 * mu0 * theta2
+betaa <- 0.5*PL/dPL
+#betaa <- mv0 * mu0 * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
 deriv(Ev) <- ince - incv - mu*Ev

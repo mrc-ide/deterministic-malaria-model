@@ -113,8 +113,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
     age20i[i] <- ifelse(age[i] >= (20 * mpl$DY) & age[i - 1] < (20 * mpl$DY),
                         i, age20i[i - 1])
   }
-  age20u <- age20i[na]
-  age20l <- age20u - 1
+  age20u <- as.integer(age20i[na])
+  age20l <- as.integer(age20u - 1)
   age_20_factor <- (20 * mpl$DY - age[age20l] - 0.5 * age_width[age20l]) *
     2/(age_width[age20l] + age_width[age20u])
 

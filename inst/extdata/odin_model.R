@@ -133,19 +133,18 @@ dID <- user() # decay for detection immunity
 uD <- user() # scale param for ID immunity
 x_I[] <- user() # intermediate variable for calculating immunity functions
 dim(x_I) <- na
-
-age20l <- user(integer=TRUE)
-age20u <- user(integer=TRUE)
-age_20_factor <- user()
-PM <- user()
-dim(init_ICM_pre) <- c(nh,num_int)
-init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[age20l,i,j] + age_20_factor*(ICA[age20u,i,j]-ICA[age20l,i,j]))
+age20l <- user(integer=TRUE) # lower index of age 20 age compartment
+age20u <- user(integer=TRUE) # upper index of age 20 age compartment
+age_20_factor <- user() # factor calculated in equilibrium solution
+PM <- user() # immunity constant
 
 # ICM - maternally acquired immunity
 init_ICM[,,] <- user()
 dim(init_ICM) <- c(na,nh,num_int)
 initial(ICM[,,]) <- init_ICM[i,j,k]
 dim(ICM) <- c(na,nh,num_int)
+dim(init_ICM_pre) <- c(nh,num_int)
+init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[age20l,i,j] + age_20_factor*(ICA[age20u,i,j]-ICA[age20l,i,j]))
 
 deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM_pre[j,k]-ICM[i,j,k])/x_I[i]
 deriv(ICM[2:na, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] - (ICM[i,j,k]-ICM[i-1,j,k])/x_I[i]
@@ -199,9 +198,9 @@ deriv(ID[2:na, 1:nh, 1:num_int]) <- FOI[i,j,k]/(FOI[i,j,k]*uD + 1) - ID[i,j,k]/d
 
 # p_det - probability of detection by microscopy, immunity decreases chances of
 # infection because it pushes parasite density down
-aD <- user() # no idea where these are from
-fD0 <- user() # or who fit them
-gammaD <- user() #
+aD <- user()
+fD0 <- user()
+gammaD <- user()
 d1 <- user()
 ID0 <- user()
 kD <- user()
@@ -212,10 +211,6 @@ dim(fd) <- na
 fd[1:na] <- 1-(1-fD0)/(1+(age[i]/aD)^gammaD)
 dim(p_det) <- c(na,nh,num_int)
 p_det[,,] <- d1 + (1-d1)/(1 + fd[i]*(ID[i,j,k]/ID0)^kD)
-
-output(fd) <- TRUE
-output(d1) <- d1
-output(kD) <- kD
 
 # Force of infection, depends on level of infection blocking immunity
 dim(FOI_lag) <- c(na,nh,num_int)
@@ -278,7 +273,7 @@ init_Ev <- user()
 init_Iv <- user()
 initial(Sv) <- init_Sv * mv0
 initial(Ev) <- init_Ev * mv0
-#initial(Ev[1:10]) <- init_Ev/10 * mv0
+#initial(Ev[1:10]) <- init_Ev/10 * mv0 # Options if not using a delayed delay
 #dim(Ev) <- 10
 initial(Iv) <- init_Iv * mv0
 
@@ -308,21 +303,20 @@ ince <- FOIv * Sv
 lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
 
-output(lag_incv) <- lag_incv
-output(incv) <- incv
-
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
 betaa <- 0.5*PL/dPL
 #betaa <- mv0 * mu0 * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
 deriv(Ev) <- ince - incv - mu*Ev
-#deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
-#deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
 deriv(Iv) <- incv - mu*Iv
 
 # Total mosquito population
 mv = Sv+Ev+Iv
+
+# model options if don't want to use a delayed delay
+#deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
+#deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
 #mv = Sv+sum(Ev)+Iv
 
 
@@ -510,10 +504,9 @@ output(Pout) <- sum(P[,,])
 den[] <- user()
 dim(den) <- na
 # index of the age vector above 59 months
-age59 <- user()
+age59 <- user(integer=TRUE)
 # index of the age vector above 5 years
-age05 <- user()
-
+age05 <- user(integer=TRUE)
 
 dim(prev0to59) <- c(age59,nh,num_int)
 prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]

@@ -237,8 +237,8 @@ foi_age[] <- user()
 dim(rel_foi) <- nh
 rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int)
-EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i]/omega*Iv
-
+EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * 0.07033263/omega
+output(Ivout) <- Iv
 
 output(omega) <- omega
 ##------------------------------------------------------------------------------
@@ -310,6 +310,7 @@ surv <- exp(-mu*delayMos)
 ince <- FOIv * Sv
 lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
+#incv <- lag_incv
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
 betaa <- 0.5*PL/dPL

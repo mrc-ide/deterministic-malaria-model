@@ -27,8 +27,10 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)
 
-# Runs the model
-mod_run <- mod$run(t = 1:time_period)
+
+# Runs the model.  Since we know at IRN_IRS_on there will be a discontinutiy we tell the solver
+t <- sort(unique(c(seq(1, time_period), seq(ITN_IRS_on, ITN_IRS_on+50, by = 0.1))))
+mod_run <- mod$run(t = t, tcrit = c(ITN_IRS_on, ITN_IRS_on+12))
 out <- mod$transform_variables(mod_run)
 plot(out$t, out$prev, type='l')
 plot(out$t, out$inc, type='l')

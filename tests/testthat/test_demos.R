@@ -1,3 +1,5 @@
+context("test-demos_run.R")
+
 test_that("model_run demo runs", {
   set.seed(1234)
   # define input parameters
@@ -16,6 +18,7 @@ test_that("model_run demo runs", {
   expect_true(all(class(model_run$plot) == c("gg", "ggplot")))
   # time handled right
   expect_equal(length(model_run$dat$t), 31L)
+  expect_equal(model_run$dat$prev[10]-model_run$dat$inc[15], 0.2287737)
 })
 
 test_that("compare model outputs", {
@@ -42,6 +45,7 @@ test_that("compare model outputs", {
   model_run <- run_model(age=init_age, EIR=init_EIR, ft = prop_treated,
                          admin2 = NULL, time = time_period)
   expect_equal(model_run$dat$prev, out$prev, tolerance= 1e-8)
+  expect_equal(out$prev[10]-out$inc[15], 0.2287737)
 })
 
 test_that("compare varying itns and not", {

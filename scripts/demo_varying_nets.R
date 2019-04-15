@@ -11,8 +11,9 @@ time_period <- 365*10
 
 # define the net coverage. Need to define the coverage in the past so can have a coverage using the delay
 itn_vector <- c(0, 0.2)
-t_vector <- c(-25, 2*365) # number of days at which the itn coverage changes
-ITN_IRS_on <- 0#t_vector[min(which(itn_vector != 0))] # time at which nets switch on
+t_vector <- c(-22, 2*365) # number of days at which the itn coverage changes
+#t_vector[min(which(itn_vector != 0))] # time at which nets switch on
+ITN_IRS_on <- 2*365
 
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
@@ -28,7 +29,7 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 ITN_IRS_on = ITN_IRS_on)
 
 # Need to add population split and use to edit initial conditions
-wh$state$pop_split <- c(0.5, 0.5)
+wh$state$pop_split <- c(0.1, 0.9) # Pop split needs to sum to 1 - expect total population of 1
 cov <- wh$mpl$cov
 
 # This edit here only works when IRS is turned off

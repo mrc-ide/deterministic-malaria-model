@@ -86,16 +86,16 @@
 
 model_param_list_create <- function(
   # age, heterogeneity in exposure,
-  eta = 0.0001305,
+  eta = 1/(21*365),
   rho = 0.85,
   a0 = 2920,
   sigma2 = 1.67,
   max_age = 100*365,
   #  rate of leaving infection states
-  rA = 0.00512821,
+  rA = 1/195,
   rT = 0.2,
   rD = 0.2,
-  rU = 0.00906627,
+  rU = 1/110.299,
   rP = 1/15,
   #  human latent period and time lag from asexual parasites to
   dE  = 12,

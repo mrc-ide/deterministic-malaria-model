@@ -38,14 +38,6 @@ deriv(S[1, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k]
 deriv(S[2:na, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
   (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
 
-dim(derivS) <- c(na, nh, num_int)
-derivS[1, 1:nh, 1:num_int] <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] +
-  pop_split[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
-derivS[2:na, 1:nh, 1:num_int] <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
-  (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
-
-output(derivS) <- TRUE
-
 # T- SUCCESSFULLY TREATED
 init_T[,,] <- user()
 dim(init_T) <- c(na,nh,num_int)

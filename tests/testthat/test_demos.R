@@ -1,3 +1,5 @@
+context("test-demos_run.R")
+
 test_that("model_run demo runs", {
   set.seed(1234)
   # define input parameters
@@ -16,32 +18,7 @@ test_that("model_run demo runs", {
   expect_true(all(class(model_run$plot) == c("gg", "ggplot")))
   # time handled right
   expect_equal(length(model_run$dat$t), 31L)
-  # equilibrium init check indirectly (though this could be risky)
-  expect_equal(1.196338e-05, model_run$dat$inc05[30] - model_run$dat$inc05[1])
-})
-
-test_that("create_r_model demo runs", {
-  # define input parameters
-  init_age <- c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,
-                7.5,10,15,20,30,40,50,60,70,80)
-  init_EIR <- 10
-  time_period <- 30*1
-  prop_treated <- 0.4
-  # creates the odin model
-  wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
-                                                                package = "hanojoel"),
-                                  het_brackets = 5,
-                                  age = init_age,
-                                  init_EIR = init_EIR,
-                                  init_ft = prop_treated,
-                                  country = NULL,
-                                  admin2 = NULL)
-  # generates model functions with initial state data
-  mod <- wh$generator(user= wh$state, use_dde = TRUE)
-  # Runs the model
-  mod_run <- mod$run(t = 1:time_period)
-  out <- mod$transform_variables(mod_run)
-  expect_equal(1.196338e-05, out$inc05[30] - out$inc05[1])
+  expect_equal(model_run$dat$prev[10]-model_run$dat$inc[15], 0.2287737)
 })
 
 test_that("compare model outputs", {
@@ -67,7 +44,8 @@ test_that("compare model outputs", {
   out <- mod$transform_variables(mod_run)
   model_run <- run_model(age=init_age, EIR=init_EIR, ft = prop_treated,
                          admin2 = NULL, time = time_period)
-  expect_equal(model_run$dat$prev, out$prev, tolerance= 1e-12)
+  expect_equal(model_run$dat$prev, out$prev, tolerance= 1e-8)
+  expect_equal(out$prev[10]-out$inc[15], 0.2287737)
 })
 
 test_that("compare varying itns and not", {
@@ -121,14 +99,10 @@ test_that("compare varying itns and not", {
   mod_run3 <- mod3$run(t = 1:(time_period))
   out3 <- mod3$transform_variables(mod_run3)
 
-  expect_equal(out$prev, out2$prev, tolerance=1e-15)
-  expect_equal(out$prev, out3$prev, tolerance=1e-15)
-  expect_equal(out$inc, out2$inc, tolerance=1e-15)
-  expect_equal(out$inc, out3$inc, tolerance=1e-15)
+  expect_equal(out$prev, out2$prev, tolerance=1e-5)
+  expect_equal(out$prev, out3$prev, tolerance=1e-5)
+  expect_equal(out$inc, out2$inc, tolerance=1e-5)
+  expect_equal(out$inc, out3$inc, tolerance=1e-5)
 
 })
 
-test_that("checks errors", {
-  expect_failure(expect_error(wh <- hanojoel:::create_r_model(itn_vector = c(0.3), t_vector= c(0), pop_split = c(1.0, 1.0)), "Population split is invalid.  Please ensure it sums to one."))
-  expect_failure(expect_error(wh <- hanojoel:::create_r_model(itn_vector = c(0.3), t_vector= c(0), pop_split = c(1.0)), "Population split is invalid.  Please ensure it has the same number of compartments as coverage."))
-})

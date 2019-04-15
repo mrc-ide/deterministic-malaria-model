@@ -11,7 +11,7 @@ time_period <- 365*10
 
 # define the net coverage. Need to define the coverage in the past so can have a coverage using the delay
 itn_vector <- c(0, 0.1, 0.3)
-t_vector <- c(-20, 2*365, 5*365) # number of days at which the itn coverage changes
+t_vector <- c(-25, 2*365, 5*365) # number of days at which the itn coverage changes
 
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",

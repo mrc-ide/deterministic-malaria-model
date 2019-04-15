@@ -13,13 +13,16 @@ time_period <- 365*10
 # provide a value for the proportion of cases that are treated (referred to as ft in the paper)
 prop_treated <- 0.4
 
+# Define time for turning on interventions
+ITN_IRS_on <- 5*365
+
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",package = "hanojoel"),
                                 het_brackets = 5,
                                 age = init_age,
                                 init_EIR = init_EIR,
                                 itn_cov = 0.3,
-                                ITN_IRS_on = 5*365,
+                                ITN_IRS_on = ITN_IRS_on,
                                 init_ft = prop_treated,
                                 country = NULL,#"Uganda",
                                 admin2 = NULL)#"Tororo")

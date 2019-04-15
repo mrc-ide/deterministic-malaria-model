@@ -137,9 +137,9 @@ within <code>equilibrium_init_create</code></p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>model_param_list_create</span>(<span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>0.0001305</span>, <span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>a0</span> <span class='kw'>=</span> <span class='fl'>2920</span>,
-  <span class='kw'>sigma2</span> <span class='kw'>=</span> <span class='fl'>1.67</span>, <span class='kw'>max_age</span> <span class='kw'>=</span> <span class='fl'>100</span> * <span class='fl'>365</span>, <span class='kw'>rA</span> <span class='kw'>=</span> <span class='fl'>0.00512821</span>, <span class='kw'>rT</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-  <span class='kw'>rD</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>rU</span> <span class='kw'>=</span> <span class='fl'>0.00906627</span>, <span class='kw'>rP</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>15</span>, <span class='kw'>dE</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>delayGam</span> <span class='kw'>=</span> <span class='fl'>12.5</span>,
+    <pre class="usage"><span class='fu'>model_param_list_create</span>(<span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>1</span>/(<span class='fl'>21</span> * <span class='fl'>365</span>), <span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>a0</span> <span class='kw'>=</span> <span class='fl'>2920</span>,
+  <span class='kw'>sigma2</span> <span class='kw'>=</span> <span class='fl'>1.67</span>, <span class='kw'>max_age</span> <span class='kw'>=</span> <span class='fl'>100</span> * <span class='fl'>365</span>, <span class='kw'>rA</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>195</span>, <span class='kw'>rT</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
+  <span class='kw'>rD</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>rU</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>110.299</span>, <span class='kw'>rP</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>15</span>, <span class='kw'>dE</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>delayGam</span> <span class='kw'>=</span> <span class='fl'>12.5</span>,
   <span class='kw'>cD</span> <span class='kw'>=</span> <span class='fl'>0.0676909</span>, <span class='kw'>cT</span> <span class='kw'>=</span> <span class='fl'>0.322</span> * <span class='no'>cD</span>, <span class='kw'>cU</span> <span class='kw'>=</span> <span class='fl'>0.006203</span>, <span class='kw'>gamma1</span> <span class='kw'>=</span> <span class='fl'>1.82425</span>,
   <span class='kw'>d1</span> <span class='kw'>=</span> <span class='fl'>0.160527</span>, <span class='kw'>dID</span> <span class='kw'>=</span> <span class='fl'>3650</span>, <span class='kw'>ID0</span> <span class='kw'>=</span> <span class='fl'>1.577533</span>, <span class='kw'>kD</span> <span class='kw'>=</span> <span class='fl'>0.476614</span>,
   <span class='kw'>uD</span> <span class='kw'>=</span> <span class='fl'>9.44512</span>, <span class='kw'>aD</span> <span class='kw'>=</span> <span class='fl'>8001.99</span>, <span class='kw'>fD0</span> <span class='kw'>=</span> <span class='fl'>0.007055</span>, <span class='kw'>gammaD</span> <span class='kw'>=</span> <span class='fl'>4.8183</span>,
@@ -198,7 +198,7 @@ within <code>equilibrium_init_create</code></p>
     </tr>
     <tr>
       <th>rP</th>
-      <td><p>Rate of leaving prophylaxis. Default = 0.05</p></td>
+      <td><p>Rate of leaving prophylaxis. Default = 0.06666667</p></td>
     </tr>
     <tr>
       <th>dE</th>

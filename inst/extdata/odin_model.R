@@ -237,7 +237,7 @@ foi_age[] <- user()
 dim(rel_foi) <- nh
 rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int)
-EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * 0.07033263/omega
+EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega
 output(Ivout) <- Iv
 
 output(omega) <- omega

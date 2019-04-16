@@ -280,7 +280,7 @@ model_param_list_create <- function(
   mp_list$irs_cov <- irs_cov
 
   mp_list$num_int <- num_int
-  # Catch all: Not defined the correct number of ints
+  # Catch all: Not defined the correct number of interventions
   if (itn_cov > 0 & num_int == 1){
     stop(message("Incorrect number of interventions for definied ITN coverage. Please ensure you have correctly
                  specified the number of interventions."))

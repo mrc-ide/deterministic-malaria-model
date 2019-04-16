@@ -95,7 +95,7 @@ test_that("equilibrium inital compartments no coverage", {
 })
 
 cov <- 0.5
-mpl_cov <- model_param_list_create(eta=(1/(21*365)), rP=1/20, itn_cov=cov)
+mpl_cov <- model_param_list_create(eta=(1/(21*365)), rP=1/20, itn_cov=cov, num_int=2)
 eqm_soln_cov <- equilibrium_init_create(age_vector=age_vector, het_brackets=3, country = NULL, admin_unit = NULL,
                                         ft=0.4, EIR=10, model_param_list=mpl_cov)
 

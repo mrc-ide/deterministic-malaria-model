@@ -32,6 +32,7 @@ test_that("compare model outputs", {
   # creates the odin model
   wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
                                                                 package = "hanojoel"),
+                                  num_int = 1,
                                   het_brackets = 5,
                                   age = init_age,
                                   init_EIR = init_EIR,

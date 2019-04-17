@@ -153,7 +153,7 @@ model_param_list_create <- function(
   cm = 0.05,
   betaL = 21.2,
   # intervention parameters
-  num_int = 1,
+  num_int = 4,
   itn_cov = 0,
   irs_cov = 0,
   ITN_IRS_on = -1,

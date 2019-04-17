@@ -9,12 +9,13 @@ test_that("compare_no_ints_bm", {
   init_EIR <- 12
   time_period <- 11
   prop_treated <- 0.4
+  # TODO: Fix IRN_IRS_on problem with numbers of interventions or num_ints
   wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
                                                                 package = "hanojoel"),
+                                  num_int = 1,
                                   het_brackets = 1,
                                   age = init_age,
                                   init_EIR = init_EIR,
-                                  itn_cov = 0.0,
                                   init_ft = prop_treated,
                                   country = NULL,
                                   admin2 = NULL)

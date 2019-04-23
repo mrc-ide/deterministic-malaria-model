@@ -34,9 +34,17 @@ initial(S[,,]) <- init_S[i,j,k]
 dim(S) <- c(na,nh,num_int)
 
 deriv(S[1, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] +
-  cov[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
+  pop_split[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
 deriv(S[2:na, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
   (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
+
+dim(derivS) <- c(na, nh, num_int)
+derivS[1, 1:nh, 1:num_int] <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] +
+  pop_split[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
+derivS[2:na, 1:nh, 1:num_int] <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
+  (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
+
+output(derivS) <- TRUE
 
 # T- SUCCESSFULLY TREATED
 init_T[,,] <- user()
@@ -133,14 +141,20 @@ dID <- user() # decay for detection immunity
 uD <- user() # scale param for ID immunity
 x_I[] <- user() # intermediate variable for calculating immunity functions
 dim(x_I) <- na
+age20l <- user(integer=TRUE) # lower index of age 20 age compartment
+age20u <- user(integer=TRUE) # upper index of age 20 age compartment
+age_20_factor <- user() # factor calculated in equilibrium solution
+PM <- user() # immunity constant
 
 # ICM - maternally acquired immunity
 init_ICM[,,] <- user()
 dim(init_ICM) <- c(na,nh,num_int)
 initial(ICM[,,]) <- init_ICM[i,j,k]
 dim(ICM) <- c(na,nh,num_int)
+dim(init_ICM_pre) <- c(nh,num_int)
+init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[age20l,i,j] + age_20_factor*(ICA[age20u,i,j]-ICA[age20l,i,j]))
 
-deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM[i,j,k]-ICM[i,j,k])/x_I[i]
+deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM_pre[j,k]-ICM[i,j,k])/x_I[i]
 deriv(ICM[2:na, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] - (ICM[i,j,k]-ICM[i-1,j,k])/x_I[i]
 
 # ICA - exposure driven immunity
@@ -192,9 +206,9 @@ deriv(ID[2:na, 1:nh, 1:num_int]) <- FOI[i,j,k]/(FOI[i,j,k]*uD + 1) - ID[i,j,k]/d
 
 # p_det - probability of detection by microscopy, immunity decreases chances of
 # infection because it pushes parasite density down
-aD <- user() # no idea where these are from
-fD0 <- user() # or who fit them
-gammaD <- user() #
+aD <- user()
+fD0 <- user()
+gammaD <- user()
 d1 <- user()
 ID0 <- user()
 kD <- user()
@@ -210,9 +224,8 @@ p_det[,,] <- d1 + (1-d1)/(1 + fd[i]*(ID[i,j,k]/ID0)^kD)
 dim(FOI_lag) <- c(na,nh,num_int)
 FOI_lag[1:na, 1:nh, 1:num_int] <- EIR[i,j,k] * (if(IB[i,j,k]==0) b0 else b[i,j,k])
 
-# Current FOI depends on humans that have been through the latent period and are
-# producing gametocytes
-dE <- user() # length of time from infection to gametocytogenesis
+# Current FOI depends on humans that have been through the latent period
+dE <- user() # latent period of human infection.
 dim(FOI) <- c(na,nh,num_int)
 FOI[,,] <- delay(FOI_lag[i,j,k],dE)
 
@@ -224,8 +237,10 @@ foi_age[] <- user()
 dim(rel_foi) <- nh
 rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int)
-EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i]/omega*Iv
+EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega
+output(Ivout) <- Iv
 
+output(omega) <- omega
 ##------------------------------------------------------------------------------
 ##########################
 ## SEASONALITY FUNCTION ##
@@ -265,9 +280,9 @@ init_Sv <- user()
 init_Ev <- user()
 init_Iv <- user()
 initial(Sv) <- init_Sv * mv0
-# initial(Ev) <- init_Ev * mv0
-initial(Ev[1:10]) <- init_Ev/10 * mv0
-dim(Ev) <- 10
+initial(Ev) <- init_Ev * mv0
+#initial(Ev[1:10]) <- init_Ev/10 * mv0 # Options if not using a delayed delay
+#dim(Ev) <- 10
 initial(Iv) <- init_Iv * mv0
 
 # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
@@ -286,8 +301,8 @@ FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k
 lag_FOIv=sum(FOIvijk)
 
 # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)
-delayGam <- user() # latent period in gametocytogenesis
-delayMos <- user() # latent period in humans
+delayGam <- user() # Lag from parasites to infectious gametocytes
+delayMos <- user() # Extrinsic incubation period.
 FOIv <- delay(lag_FOIv, delayGam)
 
 # Number of mosquitoes that become infected at each time point
@@ -295,21 +310,23 @@ surv <- exp(-mu*delayMos)
 ince <- FOIv * Sv
 lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
+#incv <- lag_incv
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
-#betaa <- 0.5*PL/dPL
-betaa <- mv0 * mu0 * theta2
+betaa <- 0.5*PL/dPL
+#betaa <- mv0 * mu0 * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
-#deriv(Ev) <- ince - incv - mu*Ev
-deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
-deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
+deriv(Ev) <- ince - incv - mu*Ev
 deriv(Iv) <- incv - mu*Iv
 
 # Total mosquito population
-#mv = Sv+Ev+Iv
-mv = Sv+sum(Ev)+Iv
+mv = Sv+Ev+Iv
 
+# model options if don't want to use a delayed delay
+#deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
+#deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
+#mv = Sv+sum(Ev)+Iv
 
 ##------------------------------------------------------------------------------
 ###################
@@ -343,7 +360,7 @@ p2 <- user() #prob of surviving one resting cycle
 betaL <- user() # maximum number of eggs per oviposition per mosq
 
 # Entomological variables:
-eov <- betaL/mu*(exp(mu/fv)-1) # eggs of
+eov <- betaL/mu*(exp(mu/fv)-1)
 beta_larval <- eov*mu*exp(-mu/fv)/(1-exp(-mu/fv)) # Number of eggs laid per day
 b_lambda <- (gammaL*muLL/muEL-dEL/dLL+(gammaL-1)*muLL*dEL)
 lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu0*dLL*(1+dPL*muPL)))
@@ -352,9 +369,7 @@ K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dL
 # Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
 KL <- K0*theta2
 fv <- 1/( tau1/(1-zbar) + tau2 ) # mosquito feeding rate (zbar from intervention param.)
-# My change below, p2 is probability of surviving through resting period - now affected by indoor spatial repellents
-#mu <- -fv*log(p1*p2) # mosquito death rate
-mu <- -fv*log(p1*p2tox)
+mu <- -fv*log(p1*p2) # mosquito death rate
 
 # finding equilibrium and initial values for EL, LL & PL
 init_PL <- user()
@@ -365,9 +380,9 @@ init_EL <- user()
 initial(EL) <- init_EL
 
 # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
-deriv(EL) <- beta_larval*(1-f_red)*mv-muEL*(1+(EL+LL)/KL*(1-f_red))*EL - EL/dEL
+deriv(EL) <- beta_larval*mv-muEL*(1+(EL+LL)/KL)*EL - EL/dEL
 # egg hatching - den. dep. mortality - maturing larvae
-deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL *(1-f_red))*LL - LL/dLL
+deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL)*LL - LL/dLL
 # pupae - mortality - fully developed pupae
 deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 
@@ -385,29 +400,25 @@ EM_on <- user() # day when emanators are first introduced
 num_int <- user() # number of intervention categorys, ITN only, emanator only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
 em_cov <- user() # proportion of population covered by emanator
-irs_cov <- user() # proportion of population covered by IRS
+pop_split[] <- user() # population split for intervention groups
+dim(pop_split) <- num_int
 
 # cov is a vector of coverages for each intervention category:
+dim(cov_) <- 4
+cov_[1] <- (1-itn_cov)*(1-em_cov)  # {No intervention}
+cov_[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
+cov_[3] <- (1-itn_cov)*em_cov	#      {IRS only}
+cov_[4] <- itn_cov*em_cov #	   {Both ITN and IRS}
+cov[] <- cov_[i]
 dim(cov) <- num_int
-# cov[1] <- (1-itn_cov)*(1-em_cov)  # {No intervention}
-# cov[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
-# cov[3] <- (1-itn_cov)*em_cov	#      {EM only}
-# cov[4] <- itn_cov*em_cov #	   {Both ITN and EM}
-cov[] <- user()
 
 EM_interval <- user() # how long until emanators are refreshed
-ITN_interval <- user() # how long until ITNs are repeated
-IRS_interval <- user() # how long until IRS is repeated
-chi <- user() # proportion of vector endophily
+ITN_interval <- user() # how long ITN lasts
+# chi <- user() # proportion of vector endophily
 Q0 <- user() # proportion of anthropophagy
 bites_Bed <- user() # endophagy in bed
-bites_Indoors <- user() # endophagy indoors
+# bites_Indoors <- user() # endophagy indoors
 bites_Emanator <- user() # endophagy whilst outside, near an emanator
-dim(em_human_dist) <- d_len
-em_human_dist[] <- user() # distribution of population time spent at each distance from emanator
-dim(em_prod_profile) <- d_len
-em_prod_profile[] <- user() # proportion of bites averted by emanator at each distance from emanator
-
 
 ## ELLIE'S WORK ##
 
@@ -469,7 +480,7 @@ em_loss <- user()
 # Calculates decay for ITN/EM
 ITN_decay = if(t < ITN_on) 0 else exp(-((t-ITN_on)%%ITN_interval) * itn_loss)
 EM_decay = if(t < EM_on) 0 else exp(-((t-EM_on)%%EM_interval) * em_loss)
-
+output(em_loss) <- em_loss
 
 # The r,d and s values turn on after ITN_EM_on and decay accordingly
 d_ITN <- if(t < ITN_on) 0 else d_ITN0*ITN_decay
@@ -478,17 +489,7 @@ r_ITN <- if(t < ITN_on) 0 else r_ITN_min + (r_ITN0- r_ITN_min)*ITN_decay
 # Ellie's edit
 s_ITN <- if(t < ITN_on) 1 else 1 - d_ITN - r_ITN
 
-# EMANATOR OUTSIDE PARAMETERS
-d_len <- user()
-dim(rep_EM) <- d_len
-# repellency of emanators at different distances
-rep_EM[1:d_len] <- if(t < EM_on) 0 else em_prod_profile[i]#*EM_decay
-dim(p_EM_vec) <- d_len
-# time that humans spend at different distances away from emanator
-p_EM_vec[1:d_len] <- em_human_dist[i]*(1-rep_EM[i])
-
-# Values over all distances
-r_EM_out0 <- 1-sum(p_EM_vec)
+r_EM_out0 <- user()
 d_EM_out0 <- user()
 
 r_EM_out <- if(t < EM_on) 0 else r_EM_out0*EM_decay
@@ -497,68 +498,40 @@ d_EM_out <- if(t < EM_on) 0 else d_EM_out0*EM_decay
 
 s_EM_out <- if(t < EM_on) 1 else 1 - d_EM_out - r_EM_out
 
-# EMANATOR INSIDE parameters
-
-em_in <- user() # Inside effect toggle
-
-r_EM_in0 <- user()
-d_EM_in0 <- user()
-
-r_EM_in <- if(t < EM_on) 0 else r_EM_in0*EM_decay
-
-d_EM_in <- if(t < EM_on) 0 else d_EM_in0*EM_decay
-
-s_EM_in <- if(t < EM_on) 1 else 1 - d_EM_in
-
-## experimental fecundity/mortality stuff
-f_EM_in0 <- user()
-f_EM_in <- if(t < EM_on) 0 else f_EM_in0*EM_decay
-
-# fecundity
-# amount to reduce betaa by -> 1 - (% of mosquitoes surviving a feeding attempt in a home with an emanator in * proportion of mosquitoes prevented from laying eggs)
-f_red <- if(em_in == 0) 0 else ((cov[3]*w[3]) + (cov[4] * w[4]))*f_EM_in
-output(f_red) <- f_red # this is what betaa, the number of new mosquitoes produced is modified by
-
-# toxicity
-# affects the probability that the mosquito will survive the subsequent resting period
-t_EM_in0 <- user()
-t_EM_in <- if(t < EM_on) 0 else t_EM_in0*EM_decay
-tox <- cov[1]+cov[2]+(cov[3]*(1-t_EM_in))+(cov[4]*(1-t_EM_in))
-p2tox <- p2*tox
-
 
 
 # probability that mosquito bites and survives for each intervention category
+dim(w_) <- 4
+w_[1] <- 1
+w_[2] <- 1 - bites_Bed + bites_Bed*s_ITN
+w_[3] <- 1 - bites_Emanator + s_EM_out*bites_Emanator
+w_[4] <- 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator
+w[] <- w_[i]
 dim(w) <- num_int
-w[1] <- 1
-w[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-w[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Emanator + s_EM_out*bites_Emanator - bites_Indoors + s_EM_in*(1-r_EM_in)*bites_Indoors
-#w[3] <- 1 - bites_Emanator + p_EM*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
-w[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator else (1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_EM_in*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in)*s_EM_in - bites_Emanator + s_EM_out*bites_Emanator)
-#w[4] <- 1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + p_EM*bites_Emanator
 
 # probability that mosq feeds during a single attempt for each int. cat.
+dim(yy_) <- 4
+yy_[1] <- 1
+yy_[2] <- w_[2]
+yy_[3] <- w_[3]
+yy_[4] <- 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator
+yy[] <- yy_[i]
 dim(yy) <- num_int
-yy[1] <- 1
-yy[2] <- w[2]
-yy[3] <- if(em_in == 0) 1 - bites_Emanator + s_EM_out*bites_Emanator else 1 - bites_Emanator + s_EM_out*bites_Emanator - bites_Indoors + (1-r_EM_in)*bites_Indoors
-yy[4] <- if(em_in == 0) 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator else (1 - bites_Indoors + bites_Bed*(1-r_EM_in)*s_ITN + (bites_Indoors-bites_Bed)*(1-r_EM_in) - bites_Emanator + s_EM_out*bites_Emanator)
 
 # probability that mosquito is repelled during a single attempt for each int. cat.
+dim(z_) <- 4
+z_[1] <- 0
+z_[2] <- bites_Bed*r_ITN
+z_[3] <- r_EM_out*bites_Emanator
+z_[4] <- bites_Bed*r_ITN + r_EM_out*bites_Emanator
+z[] <- z_[i]
 dim(z) <- num_int
-z[1] <- 0
-z[2] <- bites_Bed*r_ITN
-z[3] <- if(em_in == 0) r_EM_out*bites_Emanator else r_EM_out*bites_Emanator + bites_Indoors*r_EM_in
-#z[3] <- (1-p_EM)*bites_Emanator + bites_Indoors*r_EM_in
-z[4] <- if(em_in == 0) bites_Bed*r_ITN + r_EM_out*bites_Emanator else bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + r_EM_out*bites_Emanator
-#z[4] <- bites_Bed*(r_EM_in + (1-r_EM_in)*r_ITN) + (bites_Indoors-bites_Bed)*r_EM_in + (1-p_EM)*bites_Emanator
 
 # Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details
 dim(zhi) <- num_int
 dim(whi) <- num_int
 zhi[1:num_int] <- cov[i]*z[i]
 whi[1:num_int] <- cov[i]*w[i]
-
 zh <- if(t < min(ITN_on,EM_on)) 0 else sum(zhi)
 wh <- if(t < min(ITN_on,EM_on)) 1 else sum(whi)
 # Z (zbar) - average probability of mosquito trying again during single feeding attempt
@@ -571,13 +544,9 @@ p1 <- wbar*p10/(1-zbar*p10)
 Q <- 1-(1-Q0)/wbar # updated anthropophagy given interventions
 av <- fv*Q # biting rate on humans
 dim(av_mosq) <- num_int
-#av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
-# ALTERED DUE TO PAGE 6 SUPP MAT 2, the biting rate was previously inflated to account for the fact that some mosquitoes would bite due to IRS and then die
-# This essentially meant that as the biting rate on humans covered by emanators dropped, this increased the biting rate on people with no interventions
-# av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
-av_mosq[1:num_int] <- av*w[i]/wh
+av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
 dim(av_human) <- num_int
-av_human[1:num_int] <- av*yy[i]/wh
+av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
 
 ##------------------------------------------------------------------------------
 ###################
@@ -598,12 +567,12 @@ output(Pout) <- sum(P[,,])
 den[] <- user()
 dim(den) <- na
 # index of the age vector above 59 months
-age59 <- user()
+age59 <- user(integer=TRUE)
 # index of the age vector above 5 years
-age05 <- user()
+age05 <- user(integer=TRUE)
 
 dim(prev0to59) <- c(age59,nh,num_int)
-prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k] + A[i,j,k] * p_det[i,j,k]
+prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
 
 # slide positivity in 0 -5 year age bracket
@@ -611,47 +580,16 @@ dim(clin_inc0to5) <- c(age05,nh,num_int)
 clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
-dim(zz) <- num_int
 
-output(Yout) <- sum(Y[,,])
-output(phiout) <- sum(phi[,,])
-output(FOIout) <- sum(FOI[,,])
-output(EIRout) <- sum(EIR[,,])
-output(clin_inc[,,]) <- clin_inc
-output(cov[]) <- TRUE
 # Param checking outputs
-output(Y[,,]) <- Y
-output(phi[,,]) <- phi
+output(mu) <- mu
+output(beta_larval) <- beta_larval
 output(KL) <- KL
 output(mv) <- mv
 output(Q) <- Q
 output(wh) <- wh
-output(wbar) <- wbar
-output(av) <- av
-output(av_mosq[]) <- av_mosq[i]
-output(av_human[]) <- av_human[i]
-output(w[]) <- w[i]
-output(yy[]) <- yy[i]
-output(zz[]) <- z[i]
-output(zbar) <- zbar
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN
 output(s_ITN) <- s_ITN
+output(cov[]) <- TRUE
 output(K0) <- K0
-output(theta2) <- theta2
-output(EM_decay) <- EM_decay
-output(ITN_decay) <- ITN_decay
-output(FOI[,,]) <- FOI
-output(p1) <- p1
-output(p2) <- p2
-output(mu) <- mu
-output(em_in) <- em_in
-output(r_em_in) <- r_EM_in
-output(d_em_in) <- d_EM_in
-output(s_em_in) <- s_EM_in
-output(r_em_out) <- r_EM_out
-output(d_em_out) <- d_EM_out
-output(s_em_out) <- s_EM_out
-output(p2tox) <- p2tox
-output(betaa) <- betaa
-output(beta_larval) <- beta_larval

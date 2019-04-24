@@ -71,6 +71,7 @@ library(hanojoel)
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
                                                               package = "hanojoel"),
+                                num_int = 4,
                                 itn_cov = 0.5, # ITN coverage
                                 irs_cov = 0.5, # IRS coverage
                                 ITN_IRS_on = 1*365) # Start time for interventions
@@ -89,6 +90,7 @@ library(hanojoel)
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
                                                               package = "hanojoel"),
+                                num_int = 4,
                                 itn_cov = 0.5, # ITN coverage
                                 irs_cov = 0.5) # IRS coverage) # Start time for interventions
 # generates model functions with initial state data
@@ -116,6 +118,7 @@ t_vector <- c(-25, 1*365, 2*365) # number of days at which the itn coverage chan
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
                                                               package = "hanojoel"),
+                                num_int = 2, 
                                 itn_vector = itn_vector,
                                 t_vector = t_vector,
                                 pop_split = c(0.5, 0.5))
@@ -137,6 +140,7 @@ t_vector <- c(-25, 1*365, 2*365) # number of days at which the itn coverage chan
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
                                                               package = "hanojoel"),
+                                num_int = 4,
                                 itn_vector = itn_vector,
                                 t_vector = t_vector,
                                 irs_cov = 0.2,

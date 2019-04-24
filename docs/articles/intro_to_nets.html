@@ -93,7 +93,7 @@
       <h1>Adding ITNs and IRS</h1>
                         <h4 class="author">H. Juliette T. Unwin</h4>
             
-            <h4 class="date">2019-04-15</h4>
+            <h4 class="date">2019-04-24</h4>
       
       
       <div class="hidden name"><code>intro_to_nets.Rmd</code></div>
@@ -147,6 +147,7 @@ coverages is provided, the population is split equally between all the active po
 <span class="co"># creates the odin model</span>
 wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>,
                                                               <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">num_int =</span> <span class="dv">4</span>,
                                 <span class="dt">itn_cov =</span> <span class="fl">0.5</span>, <span class="co"># ITN coverage</span>
                                 <span class="dt">irs_cov =</span> <span class="fl">0.5</span>, <span class="co"># IRS coverage</span>
                                 <span class="dt">ITN_IRS_on =</span> <span class="dv">1</span><span class="op">*</span><span class="dv">365</span>) <span class="co"># Start time for interventions</span>
@@ -162,6 +163,7 @@ out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">t
 <span class="co"># creates the odin model</span>
 wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>,
                                                               <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">num_int =</span> <span class="dv">4</span>,
                                 <span class="dt">itn_cov =</span> <span class="fl">0.5</span>, <span class="co"># ITN coverage</span>
                                 <span class="dt">irs_cov =</span> <span class="fl">0.5</span>) <span class="co"># IRS coverage) # Start time for interventions</span>
 <span class="co"># generates model functions with initial state data</span>
@@ -184,6 +186,7 @@ t_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdo
 <span class="co"># creates the odin model</span>
 wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_itn.R"</span>,
                                                               <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">num_int =</span> <span class="dv">2</span>, 
                                 <span class="dt">itn_vector =</span> itn_vector,
                                 <span class="dt">t_vector =</span> t_vector,
                                 <span class="dt">pop_split =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))
@@ -202,6 +205,7 @@ t_vector &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdo
 <span class="co"># creates the odin model</span>
 wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_itn.R"</span>,
                                                               <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">num_int =</span> <span class="dv">4</span>,
                                 <span class="dt">itn_vector =</span> itn_vector,
                                 <span class="dt">t_vector =</span> t_vector,
                                 <span class="dt">irs_cov =</span> <span class="fl">0.2</span>,

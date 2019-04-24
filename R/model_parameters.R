@@ -62,6 +62,7 @@
 #' @param km Seasonal carrying capacity. Default = 11
 #' @param cm Seasonal birth rate. Default = 0.05
 #' @param betaL Number of eggs laid per day per mosquito. Default = 21.2
+#' @param num_int Number of intervention parameters.  Default = 4
 #' @param itn_cov The proportion of people that use an ITN. Default = 0
 #' @param irs_cov The proportion of people living in houses that have been sprayed. Default = 0
 #' @param ITN_IRS_on Time of ITN and IRS to be activated. Default = -1, i.e. never.
@@ -153,7 +154,7 @@ model_param_list_create <- function(
   cm = 0.05,
   betaL = 21.2,
   # intervention parameters
-  num_int = 4,
+  num_int = 1,
   itn_cov = 0,
   irs_cov = 0,
   ITN_IRS_on = -1,

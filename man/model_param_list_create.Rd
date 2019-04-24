@@ -18,11 +18,11 @@ model_param_list_create(eta = 1/(21 * 365), rho = 0.85, a0 = 2920,
   Q0 = 0.92, chi = 0.86, bites_Bed = 0.89, bites_Indoors = 0.97,
   muEL = 0.0338, muLL = 0.0348, muPL = 0.249, dEL = 6.64,
   dLL = 3.72, dPL = 0.643, gammaL = 13.25, km = 11, cm = 0.05,
-  betaL = 21.2, itn_cov = 0, irs_cov = 0, ITN_IRS_on = -1,
-  DY = 365, d_ITN0 = 0.41, r_ITN0 = 0.56, r_ITN1 = 0.24,
-  r_IRS0 = 0.6, d_IRS0 = 1, irs_half_life = 0.5 * DY,
-  itn_half_life = 2.64 * DY, IRS_interval = 1 * DY, ITN_interval = 3
-  * DY, ...)
+  betaL = 21.2, num_int = 1, itn_cov = 0, irs_cov = 0,
+  ITN_IRS_on = -1, DY = 365, d_ITN0 = 0.41, r_ITN0 = 0.56,
+  r_ITN1 = 0.24, r_IRS0 = 0.6, d_IRS0 = 1, irs_half_life = 0.5 *
+  DY, itn_half_life = 2.64 * DY, IRS_interval = 1 * DY,
+  ITN_interval = 3 * DY, ...)
 }
 \arguments{
 \item{eta}{Death rate for expoential population distribtuion, i.e. 1/Mean Population Age. Default = 0.0001305}
@@ -140,6 +140,8 @@ model_param_list_create(eta = 1/(21 * 365), rho = 0.85, a0 = 2920,
 \item{cm}{Seasonal birth rate. Default = 0.05}
 
 \item{betaL}{Number of eggs laid per day per mosquito. Default = 21.2}
+
+\item{num_int}{Number of intervention parameters.  Default = 4}
 
 \item{itn_cov}{The proportion of people that use an ITN. Default = 0}
 

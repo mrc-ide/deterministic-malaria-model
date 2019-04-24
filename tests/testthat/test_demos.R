@@ -1,5 +1,5 @@
 context("test-demos_run.R")
-source("../../scripts/eqm_soln_varying_nets.R")
+source("eqm_soln_varying_nets.R")
 
 test_that("model_run demo runs", {
   set.seed(1234)

@@ -151,11 +151,11 @@ within <code>equilibrium_init_create</code></p>
   <span class='kw'>Q0</span> <span class='kw'>=</span> <span class='fl'>0.92</span>, <span class='kw'>chi</span> <span class='kw'>=</span> <span class='fl'>0.86</span>, <span class='kw'>bites_Bed</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>bites_Indoors</span> <span class='kw'>=</span> <span class='fl'>0.97</span>,
   <span class='kw'>muEL</span> <span class='kw'>=</span> <span class='fl'>0.0338</span>, <span class='kw'>muLL</span> <span class='kw'>=</span> <span class='fl'>0.0348</span>, <span class='kw'>muPL</span> <span class='kw'>=</span> <span class='fl'>0.249</span>, <span class='kw'>dEL</span> <span class='kw'>=</span> <span class='fl'>6.64</span>,
   <span class='kw'>dLL</span> <span class='kw'>=</span> <span class='fl'>3.72</span>, <span class='kw'>dPL</span> <span class='kw'>=</span> <span class='fl'>0.643</span>, <span class='kw'>gammaL</span> <span class='kw'>=</span> <span class='fl'>13.25</span>, <span class='kw'>km</span> <span class='kw'>=</span> <span class='fl'>11</span>, <span class='kw'>cm</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>betaL</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>itn_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>irs_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>ITN_IRS_on</span> <span class='kw'>=</span> -<span class='fl'>1</span>,
-  <span class='kw'>DY</span> <span class='kw'>=</span> <span class='fl'>365</span>, <span class='kw'>d_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.41</span>, <span class='kw'>r_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.56</span>, <span class='kw'>r_ITN1</span> <span class='kw'>=</span> <span class='fl'>0.24</span>,
-  <span class='kw'>r_IRS0</span> <span class='kw'>=</span> <span class='fl'>0.6</span>, <span class='kw'>d_IRS0</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>irs_half_life</span> <span class='kw'>=</span> <span class='fl'>0.5</span> * <span class='no'>DY</span>,
-  <span class='kw'>itn_half_life</span> <span class='kw'>=</span> <span class='fl'>2.64</span> * <span class='no'>DY</span>, <span class='kw'>IRS_interval</span> <span class='kw'>=</span> <span class='fl'>1</span> * <span class='no'>DY</span>, <span class='kw'>ITN_interval</span> <span class='kw'>=</span> <span class='fl'>3</span>
-  * <span class='no'>DY</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>betaL</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>num_int</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>itn_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>irs_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>ITN_IRS_on</span> <span class='kw'>=</span> -<span class='fl'>1</span>, <span class='kw'>DY</span> <span class='kw'>=</span> <span class='fl'>365</span>, <span class='kw'>d_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.41</span>, <span class='kw'>r_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.56</span>,
+  <span class='kw'>r_ITN1</span> <span class='kw'>=</span> <span class='fl'>0.24</span>, <span class='kw'>r_IRS0</span> <span class='kw'>=</span> <span class='fl'>0.6</span>, <span class='kw'>d_IRS0</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>irs_half_life</span> <span class='kw'>=</span> <span class='fl'>0.5</span> *
+  <span class='no'>DY</span>, <span class='kw'>itn_half_life</span> <span class='kw'>=</span> <span class='fl'>2.64</span> * <span class='no'>DY</span>, <span class='kw'>IRS_interval</span> <span class='kw'>=</span> <span class='fl'>1</span> * <span class='no'>DY</span>,
+  <span class='kw'>ITN_interval</span> <span class='kw'>=</span> <span class='fl'>3</span> * <span class='no'>DY</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -391,6 +391,10 @@ within <code>equilibrium_init_create</code></p>
     <tr>
       <th>betaL</th>
       <td><p>Number of eggs laid per day per mosquito. Default = 21.2</p></td>
+    </tr>
+    <tr>
+      <th>num_int</th>
+      <td><p>Number of intervention parameters.  Default = 4</p></td>
     </tr>
     <tr>
       <th>itn_cov</th>

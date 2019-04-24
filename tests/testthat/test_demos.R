@@ -1,4 +1,5 @@
 context("test-demos_run.R")
+source("eqm_soln_varying_nets.R")
 
 test_that("model_run demo runs", {
   set.seed(1234)
@@ -31,6 +32,7 @@ test_that("compare model outputs", {
   # creates the odin model
   wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
                                                                 package = "hanojoel"),
+                                  num_int = 1,
                                   het_brackets = 5,
                                   age = init_age,
                                   init_EIR = init_EIR,
@@ -63,6 +65,7 @@ test_that("compare varying itns and not", {
                                   init_EIR = init_EIR,
                                   itn_cov = 0.3,
                                   ITN_IRS_on = 20,
+                                  num_int = 2,
                                   country = NULL,
                                   admin2 = NULL)
   mod <- wh$generator(user= wh$state, use_dde = TRUE)
@@ -74,12 +77,14 @@ test_that("compare varying itns and not", {
                                    het_brackets = 5,
                                    age = init_age,
                                    init_EIR = init_EIR,
+                                   num_int = 2,
                                    t_vector = c(-25, 20),
                                    itn_vector = c(0, 0.3),
                                    ITN_IRS_on = 20,
                                    pop_split = c(0.5, 0.5),
                                    country = NULL,
                                    admin2 = NULL)
+  wh2 <- edit_equilibrium_varying_nets(wh=wh2)
   mod2 <- wh2$generator(user= wh2$state, use_dde = TRUE)
   mod_run2 <- mod2$run(t = 1:(time_period))
   out2 <- mod2$transform_variables(mod_run2)
@@ -89,12 +94,14 @@ test_that("compare varying itns and not", {
                                    het_brackets = 5,
                                    age = init_age,
                                    init_EIR = init_EIR,
+                                   num_int = 2,
                                    t_vector = c(-25, 20),
                                    itn_vector = c(0, 0.3),
                                    ITN_IRS_on = 20,
                                    pop_split = c(0.7, 0.3),
                                    country = NULL,
                                    admin2 = NULL)
+  wh3 <- edit_equilibrium_varying_nets(wh=wh3)
   mod3 <- wh3$generator(user= wh3$state, use_dde = TRUE)
   mod_run3 <- mod3$run(t = 1:(time_period))
   out3 <- mod3$transform_variables(mod_run3)

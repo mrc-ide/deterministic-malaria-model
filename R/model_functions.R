@@ -26,7 +26,7 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
                       admin2="Tororo",
                       time=365){
 
-  mpl <- model_param_list_create()
+  mpl <- model_param_list_create(num_int = 1)
 
   # generate initial state variables from equilibrium solution
   state <- equilibrium_init_create(age_vector=age,EIR=EIR,ft=ft,

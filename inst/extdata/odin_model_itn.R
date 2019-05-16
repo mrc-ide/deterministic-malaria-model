@@ -133,14 +133,20 @@ dID <- user() # decay for detection immunity
 uD <- user() # scale param for ID immunity
 x_I[] <- user() # intermediate variable for calculating immunity functions
 dim(x_I) <- na
+age20l <- user(integer=TRUE) # lower index of age 20 age compartment
+age20u <- user(integer=TRUE) # upper index of age 20 age compartment
+age_20_factor <- user() # factor calculated in equilibrium solution
+PM <- user() # immunity constant
 
 # ICM - maternally acquired immunity
 init_ICM[,,] <- user()
 dim(init_ICM) <- c(na,nh,num_int)
 initial(ICM[,,]) <- init_ICM[i,j,k]
 dim(ICM) <- c(na,nh,num_int)
+dim(init_ICM_pre) <- c(nh,num_int)
+init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[age20l,i,j] + age_20_factor*(ICA[age20u,i,j]-ICA[age20l,i,j]))
 
-deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM[i,j,k]-ICM[i,j,k])/x_I[i]
+deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM_pre[j,k]-ICM[i,j,k])/x_I[i]
 deriv(ICM[2:na, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] - (ICM[i,j,k]-ICM[i-1,j,k])/x_I[i]
 
 # ICA - exposure driven immunity
@@ -264,9 +270,9 @@ init_Sv <- user()
 init_Ev <- user()
 init_Iv <- user()
 initial(Sv) <- init_Sv * mv0
-# initial(Ev) <- init_Ev * mv0
-initial(Ev[1:10]) <- init_Ev/10 * mv0
-dim(Ev) <- 10
+initial(Ev) <- init_Ev * mv0
+#initial(Ev[1:10]) <- init_Ev/10 * mv0
+#dim(Ev) <- 10
 initial(Iv) <- init_Iv * mv0
 
 # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
@@ -296,18 +302,20 @@ lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
-#betaa <- 0.5*PL/dPL
-betaa <- mv0 * mu0 * theta2
+betaa <- 0.5*PL/dPL
+#betaa <- mv0 * mu0 * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
-#deriv(Ev) <- ince - incv - mu*Ev
-deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
-deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
+deriv(Ev) <- ince - incv - mu*Ev
 deriv(Iv) <- incv - mu*Iv
 
 # Total mosquito population
-#mv = Sv+Ev+Iv
-mv = Sv+sum(Ev)+Iv
+mv = Sv+Ev+Iv
+
+# Code when not delaying a delay
+#deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
+#deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
+#mv = Sv+sum(Ev)+Iv
 
 
 ##------------------------------------------------------------------------------
@@ -538,5 +546,5 @@ output(s_ITN) <- s_ITN
 output(d_IRS) <- d_IRS
 output(r_IRS) <- r_IRS
 output(s_IRS) <- s_IRS
-output(cov[]) <- cov[i]
+output(cov[]) <- TRUE
 output(K0) <- K0

@@ -1,4 +1,5 @@
 library(hanojoel)
+source("scripts/eqm_soln_varying_nets.R")
 
 # create a vector of age categories
 init_age <- c(0, 1, 2, 3.5, 5, 7.5, 10, 15, 20, 30, 40, 50, 60)
@@ -10,20 +11,26 @@ init_EIR <- 10
 time_period <- 365*10
 
 # define the net coverage. Need to define the coverage in the past so can have a coverage using the delay
-itn_vector <- c(0, 0.1, 0.3)
-t_vector <- c(-20, 2*365, 5*365) # number of days at which the itn coverage changes
+itn_vector <- c(0, 0.2)
+t_vector <- c(-22, 2*365) # number of days at which the itn coverage changes
+#t_vector[min(which(itn_vector != 0))] # time at which nets switch on
+ITN_IRS_on <- 2*365
 
 # creates the odin model
 wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
                                                               package = "hanojoel"),
-                                het_brackets = 3,
+                                num_int = 2,
+                                het_brackets = 5,
                                 age = init_age,
                                 init_EIR = init_EIR,
                                 country = NULL,
                                 admin2 = NULL,
                                 itn_vector = itn_vector,
                                 t_vector = t_vector,
-                                pop_split = c(0.5, 0.5))
+                                ITN_IRS_on = ITN_IRS_on)
+
+
+wh <- edit_equilibrium_varying_nets(wh=wh)
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)

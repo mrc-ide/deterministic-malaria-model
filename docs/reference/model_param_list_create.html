@@ -137,9 +137,9 @@ within <code>equilibrium_init_create</code></p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>model_param_list_create</span>(<span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>0.0001305</span>, <span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>a0</span> <span class='kw'>=</span> <span class='fl'>2920</span>,
-  <span class='kw'>sigma2</span> <span class='kw'>=</span> <span class='fl'>1.67</span>, <span class='kw'>max_age</span> <span class='kw'>=</span> <span class='fl'>100</span> * <span class='fl'>365</span>, <span class='kw'>rA</span> <span class='kw'>=</span> <span class='fl'>0.00512821</span>, <span class='kw'>rT</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-  <span class='kw'>rD</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>rU</span> <span class='kw'>=</span> <span class='fl'>0.00906627</span>, <span class='kw'>rP</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>15</span>, <span class='kw'>dE</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>delayGam</span> <span class='kw'>=</span> <span class='fl'>12.5</span>,
+    <pre class="usage"><span class='fu'>model_param_list_create</span>(<span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>1</span>/(<span class='fl'>21</span> * <span class='fl'>365</span>), <span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>a0</span> <span class='kw'>=</span> <span class='fl'>2920</span>,
+  <span class='kw'>sigma2</span> <span class='kw'>=</span> <span class='fl'>1.67</span>, <span class='kw'>max_age</span> <span class='kw'>=</span> <span class='fl'>100</span> * <span class='fl'>365</span>, <span class='kw'>rA</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>195</span>, <span class='kw'>rT</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
+  <span class='kw'>rD</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>rU</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>110.299</span>, <span class='kw'>rP</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>15</span>, <span class='kw'>dE</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>delayGam</span> <span class='kw'>=</span> <span class='fl'>12.5</span>,
   <span class='kw'>cD</span> <span class='kw'>=</span> <span class='fl'>0.0676909</span>, <span class='kw'>cT</span> <span class='kw'>=</span> <span class='fl'>0.322</span> * <span class='no'>cD</span>, <span class='kw'>cU</span> <span class='kw'>=</span> <span class='fl'>0.006203</span>, <span class='kw'>gamma1</span> <span class='kw'>=</span> <span class='fl'>1.82425</span>,
   <span class='kw'>d1</span> <span class='kw'>=</span> <span class='fl'>0.160527</span>, <span class='kw'>dID</span> <span class='kw'>=</span> <span class='fl'>3650</span>, <span class='kw'>ID0</span> <span class='kw'>=</span> <span class='fl'>1.577533</span>, <span class='kw'>kD</span> <span class='kw'>=</span> <span class='fl'>0.476614</span>,
   <span class='kw'>uD</span> <span class='kw'>=</span> <span class='fl'>9.44512</span>, <span class='kw'>aD</span> <span class='kw'>=</span> <span class='fl'>8001.99</span>, <span class='kw'>fD0</span> <span class='kw'>=</span> <span class='fl'>0.007055</span>, <span class='kw'>gammaD</span> <span class='kw'>=</span> <span class='fl'>4.8183</span>,
@@ -151,11 +151,11 @@ within <code>equilibrium_init_create</code></p>
   <span class='kw'>Q0</span> <span class='kw'>=</span> <span class='fl'>0.92</span>, <span class='kw'>chi</span> <span class='kw'>=</span> <span class='fl'>0.86</span>, <span class='kw'>bites_Bed</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>bites_Indoors</span> <span class='kw'>=</span> <span class='fl'>0.97</span>,
   <span class='kw'>muEL</span> <span class='kw'>=</span> <span class='fl'>0.0338</span>, <span class='kw'>muLL</span> <span class='kw'>=</span> <span class='fl'>0.0348</span>, <span class='kw'>muPL</span> <span class='kw'>=</span> <span class='fl'>0.249</span>, <span class='kw'>dEL</span> <span class='kw'>=</span> <span class='fl'>6.64</span>,
   <span class='kw'>dLL</span> <span class='kw'>=</span> <span class='fl'>3.72</span>, <span class='kw'>dPL</span> <span class='kw'>=</span> <span class='fl'>0.643</span>, <span class='kw'>gammaL</span> <span class='kw'>=</span> <span class='fl'>13.25</span>, <span class='kw'>km</span> <span class='kw'>=</span> <span class='fl'>11</span>, <span class='kw'>cm</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>betaL</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>itn_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>irs_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>ITN_IRS_on</span> <span class='kw'>=</span> -<span class='fl'>1</span>,
-  <span class='kw'>DY</span> <span class='kw'>=</span> <span class='fl'>365</span>, <span class='kw'>d_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.41</span>, <span class='kw'>r_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.56</span>, <span class='kw'>r_ITN1</span> <span class='kw'>=</span> <span class='fl'>0.24</span>,
-  <span class='kw'>r_IRS0</span> <span class='kw'>=</span> <span class='fl'>0.6</span>, <span class='kw'>d_IRS0</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>irs_half_life</span> <span class='kw'>=</span> <span class='fl'>0.5</span> * <span class='no'>DY</span>,
-  <span class='kw'>itn_half_life</span> <span class='kw'>=</span> <span class='fl'>2.64</span> * <span class='no'>DY</span>, <span class='kw'>IRS_interval</span> <span class='kw'>=</span> <span class='fl'>1</span> * <span class='no'>DY</span>, <span class='kw'>ITN_interval</span> <span class='kw'>=</span> <span class='fl'>3</span>
-  * <span class='no'>DY</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>betaL</span> <span class='kw'>=</span> <span class='fl'>21.2</span>, <span class='kw'>num_int</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>itn_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>irs_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>ITN_IRS_on</span> <span class='kw'>=</span> -<span class='fl'>1</span>, <span class='kw'>DY</span> <span class='kw'>=</span> <span class='fl'>365</span>, <span class='kw'>d_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.41</span>, <span class='kw'>r_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.56</span>,
+  <span class='kw'>r_ITN1</span> <span class='kw'>=</span> <span class='fl'>0.24</span>, <span class='kw'>r_IRS0</span> <span class='kw'>=</span> <span class='fl'>0.6</span>, <span class='kw'>d_IRS0</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>irs_half_life</span> <span class='kw'>=</span> <span class='fl'>0.5</span> *
+  <span class='no'>DY</span>, <span class='kw'>itn_half_life</span> <span class='kw'>=</span> <span class='fl'>2.64</span> * <span class='no'>DY</span>, <span class='kw'>IRS_interval</span> <span class='kw'>=</span> <span class='fl'>1</span> * <span class='no'>DY</span>,
+  <span class='kw'>ITN_interval</span> <span class='kw'>=</span> <span class='fl'>3</span> * <span class='no'>DY</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,7 +198,7 @@ within <code>equilibrium_init_create</code></p>
     </tr>
     <tr>
       <th>rP</th>
-      <td><p>Rate of leaving prophylaxis. Default = 0.05</p></td>
+      <td><p>Rate of leaving prophylaxis. Default = 0.06666667</p></td>
     </tr>
     <tr>
       <th>dE</th>
@@ -393,6 +393,10 @@ within <code>equilibrium_init_create</code></p>
       <td><p>Number of eggs laid per day per mosquito. Default = 21.2</p></td>
     </tr>
     <tr>
+      <th>num_int</th>
+      <td><p>Number of intervention parameters.  Default = 4</p></td>
+    </tr>
+    <tr>
       <th>itn_cov</th>
       <td><p>The proportion of people that use an ITN. Default = 0</p></td>
     </tr>
@@ -467,7 +471,7 @@ the ellipsis argument as a list created before, e.g. model_param_list_create(...
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joel Hellewell, Hannah Slater, OJ Watson.</p>
+  <p>Developed by Joel Hellewell, Hannah Slater, Juliette Unwin, OJ Watson.</p>
 </div>
 
 <div class="pkgdown">

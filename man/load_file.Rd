@@ -8,8 +8,6 @@ load_file(name)
 }
 \arguments{
 \item{name}{the name of a file within the inst/extdata folder.}
-
-\item{age}{Vector of age brackets.}
 }
 \description{
 Load a file from within the inst/extdata folder of the

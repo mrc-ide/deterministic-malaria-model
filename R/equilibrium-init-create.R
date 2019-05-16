@@ -64,6 +64,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   }
   age_rate[na] = 0
 
+
   den <- 1/(1 + age_rate[1]/mpl$eta)
   for (i in 1:(na-1))
   {
@@ -103,15 +104,14 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
   # maternal immunity begins at a level proportional to the clinical
   # immunity of a 20 year old, this code finds that level
-
   age20i <- rep(0, na)
   for (i in 2:na)
   {
     age20i[i] <- ifelse(age[i] >= (20 * mpl$DY) & age[i - 1] < (20 * mpl$DY),
                         i, age20i[i - 1])
   }
-  age20u <- age20i[na]
-  age20l <- age20u - 1
+  age20u <- as.integer(age20i[na])
+  age20l <- as.integer(age20u - 1)
   age_20_factor <- (20 * mpl$DY - age[age20l] - 0.5 * age_width[age20l]) *
     2/(age_width[age20l] + age_width[age20u])
 
@@ -193,10 +193,10 @@ equilibrium_init_create <- function(age_vector, het_brackets,
     }
   }
 
-  Y_eq <- Z_eq[, , 1]
-  T_eq <- Z_eq[, , 2]
-  D_eq <- Z_eq[, , 3]
-  P_eq <- Z_eq[, , 4]
+  Y_eq <- matrix(Z_eq[, , 1], nrow = na, ncol=nh)
+  T_eq <- matrix(Z_eq[, , 2], nrow = na, ncol=nh)
+  D_eq <- matrix(Z_eq[, , 3], nrow = na, ncol=nh)
+  P_eq <- matrix(Z_eq[, , 4], nrow = na, ncol=nh)
 
   betaS <- apply(FOI_eq, MARGIN = 2, FUN = function(x, y)
   {
@@ -214,6 +214,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   A_eq <- matrix(ncol = nh, nrow = na)
   U_eq <- matrix(ncol = nh, nrow = na)
   S_eq <- matrix(ncol = nh, nrow = na)
+
   for (i in 1:na)
   {
     for (j in 1:nh)
@@ -247,31 +248,31 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
   # add in final dimension - interventions
   num_int <- mpl$num_int
-  pop_split <- mpl$pop_split
+  cov <- mpl$cov
 
   mat <- matrix(0, na, nh)
 
-  S_eq <- vapply(pop_split, FUN = function(x)
+  S_eq <- vapply(cov, FUN = function(x)
   {
     x * S_eq
   }, mat)
-  T_eq <- vapply(pop_split, FUN = function(x)
+  T_eq <- vapply(cov, FUN = function(x)
   {
     x * T_eq
   }, mat)
-  D_eq <- vapply(pop_split, FUN = function(x)
+  D_eq <- vapply(cov, FUN = function(x)
   {
     x * D_eq
   }, mat)
-  A_eq <- vapply(pop_split, FUN = function(x)
+  A_eq <- vapply(cov, FUN = function(x)
   {
     x * A_eq
   }, mat)
-  U_eq <- vapply(pop_split, FUN = function(x)
+  U_eq <- vapply(cov, FUN = function(x)
   {
     x * U_eq
   }, mat)
-  P_eq <- vapply(pop_split, FUN = function(x)
+  P_eq <- vapply(cov, FUN = function(x)
   {
     x * P_eq
   }, mat)
@@ -385,12 +386,13 @@ equilibrium_init_create <- function(age_vector, het_brackets,
               age_width = age_width, age_rate = age_rate, het_wt = het_wt, het_x = het_x,
               omega = omega, foi_age = foi_age, rel_foi = rel_foi,
               K0 = K0, mv0 = mv0, na = na, nh = nh, ni = num_int, x_I = x_I,
-              FOI = FOI_eq, EIR = EIR_eq, cA_eq = cA_eq,
+              FOI = FOI_eq, EIR_eq = EIR_eq, cA_eq = cA_eq,
               den = den, age59 = age59, age05 = age05, ssa0 = ssa0, ssa1 = ssa1,
               ssa2 = ssa2, ssa3 = ssa3, ssb1 = ssb1, ssb2 = ssb2, ssb3 = ssb3,
               theta_c = theta_c, age = age_vector*mpl$DY, ft = ft, FOIv_eq = FOIv_eq,
               betaS = betaS, betaA = betaA, betaU = betaU, FOIvij_eq=FOIvij_eq,
-              age_mid_point = age_mid_point, het_bounds = het_bounds, pi = pi)
+              age_mid_point = age_mid_point, het_bounds = het_bounds, pi = pi,
+              age20l = age20l, age20u = age20u, age_20_factor = age_20_factor)
 
   res <- append(res,mpl)
 

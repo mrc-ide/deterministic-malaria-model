@@ -13,7 +13,7 @@
 #' @param rT Rate of leaving treatment. Default = 0.2
 #' @param rD Rate of leaving clinical disease. Default = 0.2
 #' @param rU Rate of recovering from subpatent infection. Default = 0.00906627
-#' @param rP Rate of leaving prophylaxis. Default = 0.05
+#' @param rP Rate of leaving prophylaxis. Default = 0.06666667
 #' @param dE Latent period of human infection. Default = 12
 #' @param delayGam Lag from parasites to infectious gametocytes. Default = 12.5
 #' @param cD Untreated disease contribution to infectiousness. Default = 0.0676909
@@ -62,6 +62,7 @@
 #' @param km Seasonal carrying capacity. Default = 11
 #' @param cm Seasonal birth rate. Default = 0.05
 #' @param betaL Number of eggs laid per day per mosquito. Default = 21.2
+#' @param num_int Number of intervention parameters.  Default = 4
 #' @param itn_cov The proportion of people that use an ITN. Default = 0
 #' @param irs_cov The proportion of people living in houses that have been sprayed. Default = 0
 #' @param ITN_IRS_on Time of ITN and IRS to be activated. Default = -1, i.e. never.
@@ -86,16 +87,16 @@
 
 model_param_list_create <- function(
   # age, heterogeneity in exposure,
-  eta = 0.0001305,
+  eta = 1/(21*365),
   rho = 0.85,
   a0 = 2920,
   sigma2 = 1.67,
   max_age = 100*365,
   #  rate of leaving infection states
-  rA = 0.00512821,
+  rA = 1/195,
   rT = 0.2,
   rD = 0.2,
-  rU = 0.00906627,
+  rU = 1/110.299,
   rP = 1/15,
   #  human latent period and time lag from asexual parasites to
   dE  = 12,
@@ -153,6 +154,7 @@ model_param_list_create <- function(
   cm = 0.05,
   betaL = 21.2,
   # intervention parameters
+  num_int = 1,
   itn_cov = 0,
   irs_cov = 0,
   ITN_IRS_on = -1,
@@ -278,58 +280,26 @@ model_param_list_create <- function(
   mp_list$itn_cov <- itn_cov
   mp_list$irs_cov <- irs_cov
 
-  # Deciding if provide a vector of coverages or just a single coverage
-  if (exists('itn_vector', where=extra_param_list) & exists('t_vector', where=extra_param_list)){
-    if (sum(extra_param_list$itn_vector) > 0 ){
-      # Sets start of coverage time assuming that once coverage has started it never goes back to zero.
-      mp_list$ITN_IRS_on <- extra_param_list$t_vector[min(which(extra_param_list$itn_vector != 0))]
-      # Sets number of interventions
-      if (irs_cov > 0){
-        mp_list$num_int = 4 # If have irs, have to model 4 intervention compartments
-      } else {
-        mp_list$num_int = 2 # If have no irs, only have 2 compartments
-      }
-      # Sets population split
-      if (exists('pop_split', where=extra_param_list)){
-        mp_list$pop_split <- extra_param_list$pop_split
-        extra_param_list$pop_split <- NULL
-      } else {
-        # If population split not defined - just split equally
-        mp_list$pop_split <- rep(1/mp_list$num_int, mp_list$num_int)
-      }
-    } else {
-      mp_list$num_int <- 1
-      mp_list$ITN_IRS_on <- Inf
-      mp_list$pop_split <- c(1.0)
-      extra_param_list$pop_split <- NULL
-    }
-  } else{
-    # Sets start time of coverage
-    mp_list$ITN_IRS_on <- ITN_IRS_on
-    # Sets number of interventions
-    if (irs_cov > 0){
-      mp_list$num_int <- 4
-    } else if (itn_cov > 0){
-      mp_list$num_int <- 2
-    } else {
-      mp_list$num_int <- 1
-    }
-    # Sets population split as coverage
-    # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
-    cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
-    cov <- cov[1:mp_list$num_int]
-    mp_list$pop_split <- cov
+  mp_list$num_int <- num_int
+  # Catch all: Not defined the correct number of interventions
+  if (itn_cov > 0 & num_int == 1){
+    stop(message("Incorrect number of interventions for definied ITN coverage. Please ensure you have correctly
+                 specified the number of interventions."))
+  }
+  if (irs_cov > 0 & num_int < 3){
+    stop(message("Incorrect number of interventions for definied IRS coverage. Please ensure you have correctly
+                 specified the number of interventions."))
   }
 
-  # Check that number of intervention compartments is the same length as the population split.
-  if (length(mp_list$pop_split) != mp_list$num_int){
-    stop(message("Population split is invalid.  Please ensure it has the same number of compartments as coverage."))
-  }
 
-  # Check that population split sums to one
-  if (sum(mp_list$pop_split) != 1){
-    stop(message("Population split is invalid.  Please ensure it sums to one."))
-  }
+  # Sets start time of coverage
+  mp_list$ITN_IRS_on <- ITN_IRS_on
+
+  # Sets population split as coverage
+  # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
+  cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
+  cov <- cov[1:mp_list$num_int]
+  mp_list$cov <- cov
 
   mp_list$d_ITN0 <- d_ITN0
   mp_list$r_ITN0 <- r_ITN0
@@ -340,8 +310,6 @@ model_param_list_create <- function(
   mp_list$itn_half_life <- itn_half_life
   mp_list$IRS_interval <- IRS_interval
   mp_list$ITN_interval <- ITN_interval
-  mp_list$irs_half_life <- 0.5 * mp_list$DY
-  mp_list$itn_half_life <- 2.64 * mp_list$DY
   mp_list$irs_loss <- log(2)/mp_list$irs_half_life
   mp_list$itn_loss <- log(2)/mp_list$itn_half_life
 

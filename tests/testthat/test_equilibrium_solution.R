@@ -72,7 +72,7 @@ test_that("equilibrium mosquito", {
   expect_equal(eqm_soln$init_Sv, 0.949566, tolerance=1e-6)
 })
 
-test_that("equilibrium lava", {
+test_that("equilibrium lavae", {
   expect_equal(eqm_soln$init_PL, 0.832831, tolerance=1e-4)
   expect_equal(eqm_soln$init_LL, 5.58968, tolerance=1e-4)
   expect_equal(eqm_soln$init_EL, 192.078, tolerance=1e-4)
@@ -95,7 +95,7 @@ test_that("equilibrium inital compartments no coverage", {
 })
 
 cov <- 0.5
-mpl_cov <- model_param_list_create(eta=(1/(21*365)), rP=1/20, itn_cov=cov)
+mpl_cov <- model_param_list_create(eta=(1/(21*365)), rP=1/20, itn_cov=cov, num_int=2)
 eqm_soln_cov <- equilibrium_init_create(age_vector=age_vector, het_brackets=3, country = NULL, admin_unit = NULL,
                                         ft=0.4, EIR=10, model_param_list=mpl_cov)
 

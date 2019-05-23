@@ -36,7 +36,7 @@ seasonality <- function(ss){
 library(readr)
 library(dplyr)
 
-data <- read_csv("admin_units_seasonality_updated.csv", col_types = "dcccddddddd")
+data <- read_csv("data-raw/admin_units_seasonal.csv", col_types = "dcccddddddd")
 
 # Initialises empty vector for theta c
 theta_c <- vector(length=nrow(data))
@@ -52,9 +52,6 @@ for (i in 1:nrow(data)){
 
   # Add theta_c to a vector
   theta_c[i] <- seasonality_list[[2]]
-
-  print ((data$NAME_1)[i])
-  print (seasonality_list[[2]])
 
   # Plots seasonality curve
   #plot(1:365, seasonality_list[[1]])
@@ -74,4 +71,4 @@ b3 <- data$seasonal_b3
 
 # Saves rda file of data.
 admin_units_seasonal <- data.frame(country, admin1, ID_1, a0, a1, b1, a2, b2, a3, b3, theta_c)
-saveRDS(admin_units_seasonal, here::here("inst/extdata","admin_units_seasonal.rds"))
+saveRDS(admin_units_seasonal, file = "inst/extdata/admin_units_seasonal.rds")

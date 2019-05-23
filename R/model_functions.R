@@ -107,63 +107,91 @@ load_file <- function(name) {
 }
 
 #------------------------------------------------
+#' match clean
+#'
+#' @param a First string to compare. Default = NULL
+#' @param b Second string to compare. Default = NULL
+
+match_clean <- function(a, b, quiet = TRUE){
+
+  a <- gsub("[[:punct:][:space:]]", "", tolower(stringi::stri_trans_general(a, "latin-ascii")))
+  b <- gsub("[[:punct:][:space:]]", "", tolower(stringi::stri_trans_general(b, "latin-ascii")))
+  ret <- match(a,b)
+
+  if(sum(is.na(ret) > 0)){
+    dists <- stringdist::seq_distmatrix(lapply(a, utf8ToInt), lapply(b, utf8ToInt))
+    ret[is.na(ret)] <- apply(dists[which(is.na(ret)), , drop=FALSE], 1, which.min)
+    if(!quiet){
+      print(unique(cbind(a,b[ret])))
+    }
+  }
+  return(ret)
+}
+
+#------------------------------------------------
 #' match admin region
 #'
-#' @param country Character for country within which admin2 is in.
+#' \code{admin_match} Matches the user input admin unit and country with data
+#'
+#' @param country Character for country within which admin unit is in.
 #'   Default = NULL
 #' @param admin Character for admin region. Some fuzzy logic will be used to
 #'   match. If not provided then no seasonality is introduced. Default = NULL
 
 admin_match <- function(admin_unit = NULL, country = NULL,
-                        admin_units_seasonal = admin_units_seasonal){
+                        admin_units_seasonal){
 
-  # intiialise admin match as no match
+  # intialise admin match as no match
   admin_matches <- 0
 
-  if(!is.null(admin_unit)){
+  if (!is.null(admin_unit)) {
 
     # if there is no country given then search for the admin unit
-    if(is.null(country)){
+    if (is.null(country)) {
 
       # find exact match
-      admin_matches <- grep(paste("^",admin_unit,"\\b",sep=""),admin_units_seasonal$admin1)
-      # if exact does not match try fuzzy match up to dist of 4 which should catch having nop spaces or separators etc
-      if(length(admin_matches)==0){
-        admin_matches <- which(adist(admin_units_seasonal$admin1,admin_unit)<=4)
+      admin_matches <- grep(paste("^", admin_unit, "$", sep = ""),
+                            admin_units_seasonal$admin1,
+                            ignore.case = TRUE)
+
+      # if exact does not match try closest match
+      if (length(admin_matches) != 1) {
+        admin_matches <- match_clean(admin_unit, admin_units_seasonal$admin1)
       }
-      if(length(admin_matches)>1) stop("Admin unit string specified is ambiguous without country")
 
       # if we do have a country though find that match first and then find admin
     } else {
 
       # first find an exact match
-      country_matches <- grep(paste("^",country,"\\b",sep=""), admin_units_seasonal$country)
-      if(length(unique(admin_units_seasonal$country[country_matches]))==1){
-        chosen_country <- unique(admin_units_seasonal$country[country_matches])
-      } else if(length(unique(admin_units_seasonal$country[country_matches]))==0){
-        # if exact does not match try fuzzy match up to dist of 2 which should catch having no spaces or separators etc
-        country_matches <- which(adist(admin_units_seasonal$country,y = country)<=2)
-        if(length(unique(admin_units_seasonal$country[country_matches]))==1){
-          chosen_country <- unique(admin_units_seasonal$country[country_matches])
-        } else if(length(unique(admin_units_seasonal$country[country_matches]))==0) stop ("Country string specified not close enough to those in database")
+      country_matches <- grep(paste("^", country, "$", sep = ""),
+                              admin_units_seasonal$country,
+                              ignore.case = TRUE)
+
+      if (length(unique(admin_units_seasonal$country[country_matches])) == 1) {
+        chosen.country <- unique(admin_units_seasonal$country[country_matches])
+      } else  {
+        # if exact does not match try closest
+        country_matches <- match_clean(country,admin_units_seasonal$country)
+        chosen.country <- unique(admin_units_seasonal$country[country_matches])
       }
 
       # find exact match
-      admin_sub_matches <- grep(paste("^",admin_unit,"\\b",sep=""),admin_units_seasonal$admin1[country_matches])
-      # if exact does not match try fuzzy match up to dist of 4 which should catch having nop spaces or separators etc
-      if(length(admin_sub_matches)==0){
-        admin_sub_matches <- which(adist(admin_units_seasonal$admin1[country_matches],admin_unit)<=1)
-      }
-      if(length(admin_sub_matches)>1) stop("Admin unit string specified is not close enougth to those in the database")
+      admin_sub_matches <- grep(paste("^", admin_unit, "$", sep = ""),
+                                admin_units_seasonal$admin1[country_matches],
+                                ignore.case = TRUE)
 
-      admin_matches <- which(admin_units_seasonal$admin1 == admin_units_seasonal$admin1[country_matches][admin_sub_matches])
+      # if exact does not match try closest dist
+      if (length(admin_sub_matches) != 1) {
+        admin_sub_matches <- match_clean(admin,
+                                         admin_units_seasonal$admin1[country_matches])
+      }
+      admin_matches <- country_matches[admin_sub_matches]
     }
 
+    message("Requested: ", admin_unit,
+            "\nReturned: ", admin_units_seasonal$admin1[admin_matches], ", ",
+            admin_units_seasonal$country[admin_matches])
   }
 
-  if(admin_matches == 0){
-    admin_matches = NULL
-  }
-
-  return (admin_matches)
+  return(admin_matches)
 }

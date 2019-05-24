@@ -174,12 +174,12 @@ admin_match <- function(admin_unit = NULL, country = NULL,
       sub_admin_units_seasonal <- admin_units_seasonal[country_matches,]
 
       # find exact match
-      admin_sub_matches <- which(tolower(sub_admin_units_seasonal$admin1[country_matches]) %in% tolower(admin_unit))
+      admin_sub_matches <- which(tolower(sub_admin_units_seasonal$admin1) %in% tolower(admin_unit))
 
       # if exact does not match try closest match
       if (length(admin_sub_matches) != 1) {
         admin_sub_matches <- match_clean(admin_unit,
-                                         sub_admin_units_seasonal$admin1[country_matches])
+                                         sub_admin_units_seasonal$admin1)
       } else if (length(admin_sub_matches) > 1){
         stop('There are multiple admins with same name - check the data file!')
       }

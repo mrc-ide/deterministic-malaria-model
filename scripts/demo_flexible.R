@@ -26,8 +26,8 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 itn_cov = 0.5,
                                 ITN_IRS_on = ITN_IRS_on,
                                 init_ft = prop_treated,
-                                country = "Afgnistan",
-                                admin2 = "Balh")
+                                country = "Kenya",
+                                admin2 = "Kisumu")
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)

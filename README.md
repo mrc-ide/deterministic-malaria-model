@@ -12,7 +12,7 @@ To run the model forward in time we need to solve a system of differential equat
 
 * [Install the Odin package](https://github.com/richfitz/odin#installation) and [read the vignettes](https://richfitz.github.io/odin/vignettes/odin.html) to make sure you understand how to use Odin. 
 * Install a couple more R packages that you will need to get the model running:
-`install.packages("statmod","ggplot2","reshape2","dplyr","magrittr")`
+`install.packages("statmod","ggplot2","reshape2","dplyr","magrittr", "RecordLinkage")`
 
 ## Installing the model
 Easiest way to install this model (until we can make it publicly available) is probably to clone this repository to your local machine, open the `hanojoel.Rproj` file in RStudio and then Ctrl+Shift+B to build and reload the package

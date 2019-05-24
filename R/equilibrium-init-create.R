@@ -306,7 +306,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   admin_units_seasonal <- load_file("admin_units_seasonal.rds")
   admin_matches <- admin_match(admin_unit = admin_unit, country = country,
                           admin_units_seasonal = admin_units_seasonal)
-  if(is.null(admin_matches)){
+
+  if(admin_matches == 0){
     ssa0 <- ssa1 <- ssa2 <- ssa3 <- ssb1 <- ssb2 <- ssb3 <- theta_c <- 0
   } else {
     ssa0 <- admin_units_seasonal$a0[admin_matches]

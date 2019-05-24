@@ -111,19 +111,19 @@ load_file <- function(name) {
 #'
 #' @param a First string to compare. Default = NULL
 #' @param b Second string to compare. Default = NULL
+#'
+#' @export
 
 match_clean <- function(a, b, quiet = TRUE){
 
   a <- gsub("[[:punct:][:space:]]", "", tolower(stringi::stri_trans_general(a, "latin-ascii")))
   b <- gsub("[[:punct:][:space:]]", "", tolower(stringi::stri_trans_general(b, "latin-ascii")))
-  ret <- match(a,b)
 
-  if(sum(is.na(ret) > 0)){
-    dists <- stringdist::seq_distmatrix(lapply(a, utf8ToInt), lapply(b, utf8ToInt))
-    ret[is.na(ret)] <- apply(dists[which(is.na(ret)), , drop=FALSE], 1, which.min)
-    if(!quiet){
-      print(unique(cbind(a,b[ret])))
-    }
+  ret <- which(b %in% a)
+
+  if(length(ret) == 0){
+    distance <- levenshteinSim(a, b)
+    ret <- which.max(distance)
   }
   return(ret)
 }
@@ -137,6 +137,7 @@ match_clean <- function(a, b, quiet = TRUE){
 #'   Default = NULL
 #' @param admin Character for admin region. Some fuzzy logic will be used to
 #'   match. If not provided then no seasonality is introduced. Default = NULL
+#' @export
 
 admin_match <- function(admin_unit = NULL, country = NULL,
                         admin_units_seasonal){
@@ -150,41 +151,39 @@ admin_match <- function(admin_unit = NULL, country = NULL,
     if (is.null(country)) {
 
       # find exact match
-      admin_matches <- grep(paste("^", admin_unit, "$", sep = ""),
-                            admin_units_seasonal$admin1,
-                            ignore.case = TRUE)
+      admin_matches <- which(tolower(admin_units_seasonal$admin1) %in% tolower(admin_unit))
 
       # if exact does not match try closest match
-      if (length(admin_matches) != 1) {
+      if (length(admin_matches) < 1) {
         admin_matches <- match_clean(admin_unit, admin_units_seasonal$admin1)
+      } else if (length(admin_matches) > 1){
+        stop('Please specify the country of admin unit.  There are multiple with same name.')
       }
 
       # if we do have a country though find that match first and then find admin
     } else {
 
       # first find an exact match
-      country_matches <- grep(paste("^", country, "$", sep = ""),
-                              admin_units_seasonal$country,
-                              ignore.case = TRUE)
+      country_matches <- which(tolower(admin_units_seasonal$country) %in% tolower(country))
 
-      if (length(unique(admin_units_seasonal$country[country_matches])) == 1) {
-        chosen.country <- unique(admin_units_seasonal$country[country_matches])
-      } else  {
-        # if exact does not match try closest
-        country_matches <- match_clean(country,admin_units_seasonal$country)
-        chosen.country <- unique(admin_units_seasonal$country[country_matches])
+      if (length(country_matches) < 1) {
+        country_name <- admin_units_seasonal$country[match_clean(country, admin_units_seasonal$country)]
+        country_matches <- which(tolower(admin_units_seasonal$country) %in% tolower(country_name))
       }
+
+      sub_admin_units_seasonal <- admin_units_seasonal[country_matches,]
 
       # find exact match
-      admin_sub_matches <- grep(paste("^", admin_unit, "$", sep = ""),
-                                admin_units_seasonal$admin1[country_matches],
-                                ignore.case = TRUE)
+      admin_sub_matches <- which(tolower(sub_admin_units_seasonal$admin1[country_matches]) %in% tolower(admin_unit))
 
-      # if exact does not match try closest dist
+      # if exact does not match try closest match
       if (length(admin_sub_matches) != 1) {
-        admin_sub_matches <- match_clean(admin,
-                                         admin_units_seasonal$admin1[country_matches])
+        admin_sub_matches <- match_clean(admin_unit,
+                                         sub_admin_units_seasonal$admin1[country_matches])
+      } else if (length(admin_sub_matches) > 1){
+        stop('There are multiple admins with same name - check the data file!')
       }
+
       admin_matches <- country_matches[admin_sub_matches]
     }
 

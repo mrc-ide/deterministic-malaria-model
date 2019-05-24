@@ -112,9 +112,11 @@ load_file <- function(name) {
 #' @param a First string to compare. Default = NULL
 #' @param b Second string to compare. Default = NULL
 #'
+#' @importFrom RecordLinkage levenshteinSim
+#'
 #' @export
 
-match_clean <- function(a, b, quiet = TRUE){
+match_clean <- function(a, b){
 
   a <- gsub("[[:punct:][:space:]]", "", tolower(stringi::stri_trans_general(a, "latin-ascii")))
   b <- gsub("[[:punct:][:space:]]", "", tolower(stringi::stri_trans_general(b, "latin-ascii")))
@@ -135,8 +137,10 @@ match_clean <- function(a, b, quiet = TRUE){
 #'
 #' @param country Character for country within which admin unit is in.
 #'   Default = NULL
-#' @param admin Character for admin region. Some fuzzy logic will be used to
+#' @param admin_unit Character for admin region. Some fuzzy logic will be used to
 #'   match. If not provided then no seasonality is introduced. Default = NULL
+#' @param admin_units_seasonal Dataframe of seasonality data for country and admin unit
+#'
 #' @export
 
 admin_match <- function(admin_unit = NULL, country = NULL,

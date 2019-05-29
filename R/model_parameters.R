@@ -291,7 +291,6 @@ model_param_list_create <- function(
                  specified the number of interventions."))
   }
 
-
   # Sets start time of coverage
   mp_list$ITN_IRS_on <- ITN_IRS_on
 

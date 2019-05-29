@@ -17,6 +17,7 @@ Authors:
 \itemize{
   \item Joel Hellewell \email{j.hellewell14@imperial.ac.uk}
   \item Hannah Slater \email{hannah.slater08@imperial.ac.uk}
+  \item Juliette Unwin \email{h.unwin@imperial.ac.uk}
 }
 
 }

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Equilibrium initialisation list creation — equilibrium_init_create • hanojoel</title>
+<title>load_file — load_file • hanojoel</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,10 @@
 
 
 
-<meta property="og:title" content="Equilibrium initialisation list creation — equilibrium_init_create" />
+<meta property="og:title" content="load_file — load_file" />
 
-<meta property="og:description" content="equilibrium_init_create creates an equilibrium initialisation state to be
-used within later model runs" />
+<meta property="og:description" content="Load a file from within the inst/extdata folder of the
+  hanojoel package. File extension must be one of .csv, .txt, or .rds." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -125,59 +125,32 @@ used within later model runs" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Equilibrium initialisation list creation</h1>
+    <h1>load_file</h1>
     
-    <div class="hidden name"><code>equilibrium_init_create.Rd</code></div>
+    <div class="hidden name"><code>load_file.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>equilibrium_init_create</code> creates an equilibrium initialisation state to be
-used within later model runs</p>
+    <p>Load a file from within the inst/extdata folder of the
+  hanojoel package. File extension must be one of .csv, .txt, or .rds.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>equilibrium_init_create</span>(<span class='no'>age_vector</span>, <span class='no'>het_brackets</span>, <span class='kw'>country</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>admin_unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>ft</span>, <span class='no'>EIR</span>, <span class='no'>model_param_list</span>)</pre>
+    <pre class="usage"><span class='fu'>load_file</span>(<span class='no'>name</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>age_vector</th>
-      <td><p>Vector of age brackets.</p></td>
-    </tr>
-    <tr>
-      <th>het_brackets</th>
-      <td><p>Integer number of biting heteogenity compartments.</p></td>
-    </tr>
-    <tr>
-      <th>country</th>
-      <td><p>String for country of interest. If NULL the seasonal parameters
-will attempt to be loaded using just the admin unit, however if there is ambiguity
-in the admin unit an error will be thrown. If both NULL then no seasonality is
-assumed. Default = NULL.</p></td>
-    </tr>
-    <tr>
-      <th>admin_unit</th>
-      <td><p>String for admin unit with country for loading seasonal
-parameters. If country is NULL, the admin unit will attempt to be located,however
-if there is ambiguity in the admin unit an error will be thrown. If both country
-and admin_unit are NULL then no seasonality is assumed. Default = NULL.</p></td>
-    </tr>
-    <tr>
-      <th>ft</th>
-      <td><p>Numeric for the frequency of people seeking treatment.</p></td>
-    </tr>
-    <tr>
-      <th>EIR</th>
-      <td><p>Numeric for desired annual EIR.</p></td>
-    </tr>
-    <tr>
-      <th>model_param_list</th>
-      <td><p>List of epidemiological parameters created by</p></td>
+      <th>name</th>
+      <td><p>the name of a file within the inst/extdata folder.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><code>load_file</code> loads package file</p>
     
 
   </div>
@@ -185,7 +158,9 @@ and admin_unit are NULL then no seasonality is assumed. Default = NULL.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>

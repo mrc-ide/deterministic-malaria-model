@@ -22,19 +22,19 @@ wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_mode
                                 het_brackets = 5,
                                 age = init_age,
                                 init_EIR = init_EIR,
-                                #num_int = 2,
-                                itn_cov = 0.0,
+                                num_int = 2,
+                                itn_cov = 0.5,
                                 ITN_IRS_on = ITN_IRS_on,
                                 init_ft = prop_treated,
-                                country = NULL, #"Uganda",
-                                admin2 = NULL)#"Tororo")
+                                country = "Kenya",
+                                admin2 = "Kisumu")
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)
 
 # Runs the model.  Since we know at IRN_IRS_on there will be a discontinutiy we tell the solver
-t <- sort(unique(c(seq(1, time_period), seq(ITN_IRS_on, ITN_IRS_on+50, by = 0.1))))
-mod_run <- mod$run(t = t, tcrit = c(ITN_IRS_on, ITN_IRS_on+12))
+t <- sort(unique(c(seq(1, time_period), seq(ITN_IRS_on, ITN_IRS_on + 50, by = 0.1))))
+mod_run <- mod$run(t = t, tcrit = c(ITN_IRS_on, ITN_IRS_on + 12))
 out <- mod$transform_variables(mod_run)
 
 plot(out$t, out$prev, type='l', ylim=c(0.21, 0.23))

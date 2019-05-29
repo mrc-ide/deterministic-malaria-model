@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Equilibrium initialisation list creation — equilibrium_init_create • hanojoel</title>
+<title>match admin region — admin_match • hanojoel</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Equilibrium initialisation list creation — equilibrium_init_create" />
+<meta property="og:title" content="match admin region — admin_match" />
 
-<meta property="og:description" content="equilibrium_init_create creates an equilibrium initialisation state to be
-used within later model runs" />
+<meta property="og:description" content="admin_match Matches the user input admin unit and country with data" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -125,57 +124,35 @@ used within later model runs" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Equilibrium initialisation list creation</h1>
+    <h1>match admin region</h1>
     
-    <div class="hidden name"><code>equilibrium_init_create.Rd</code></div>
+    <div class="hidden name"><code>admin_match.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>equilibrium_init_create</code> creates an equilibrium initialisation state to be
-used within later model runs</p>
+    <p><code>admin_match</code> Matches the user input admin unit and country with data</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>equilibrium_init_create</span>(<span class='no'>age_vector</span>, <span class='no'>het_brackets</span>, <span class='kw'>country</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>admin_unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>ft</span>, <span class='no'>EIR</span>, <span class='no'>model_param_list</span>)</pre>
+    <pre class="usage"><span class='fu'>admin_match</span>(<span class='kw'>admin_unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>country</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>admin_units_seasonal</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>age_vector</th>
-      <td><p>Vector of age brackets.</p></td>
-    </tr>
-    <tr>
-      <th>het_brackets</th>
-      <td><p>Integer number of biting heteogenity compartments.</p></td>
+      <th>admin_unit</th>
+      <td><p>Character for admin region. Some fuzzy logic will be used to
+match. If not provided then no seasonality is introduced. Default = NULL</p></td>
     </tr>
     <tr>
       <th>country</th>
-      <td><p>String for country of interest. If NULL the seasonal parameters
-will attempt to be loaded using just the admin unit, however if there is ambiguity
-in the admin unit an error will be thrown. If both NULL then no seasonality is
-assumed. Default = NULL.</p></td>
+      <td><p>Character for country within which admin unit is in.
+Default = NULL</p></td>
     </tr>
     <tr>
-      <th>admin_unit</th>
-      <td><p>String for admin unit with country for loading seasonal
-parameters. If country is NULL, the admin unit will attempt to be located,however
-if there is ambiguity in the admin unit an error will be thrown. If both country
-and admin_unit are NULL then no seasonality is assumed. Default = NULL.</p></td>
-    </tr>
-    <tr>
-      <th>ft</th>
-      <td><p>Numeric for the frequency of people seeking treatment.</p></td>
-    </tr>
-    <tr>
-      <th>EIR</th>
-      <td><p>Numeric for desired annual EIR.</p></td>
-    </tr>
-    <tr>
-      <th>model_param_list</th>
-      <td><p>List of epidemiological parameters created by</p></td>
+      <th>admin_units_seasonal</th>
+      <td><p>Dataframe of seasonality data for country and admin unit</p></td>
     </tr>
     </table>
     

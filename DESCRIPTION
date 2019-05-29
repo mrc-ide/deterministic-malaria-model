@@ -29,7 +29,8 @@ Imports:
     statmod,
     stringi,
     rlang,
-    odin
+    odin, 
+    RecordLinkage
 Remotes:
     richfitz/odin,
     richfitz/dde

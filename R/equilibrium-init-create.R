@@ -303,53 +303,13 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   }
 
 
-  # find database seasonal parameters
+  admin_units_seasonal <- load_file("admin_units_seasonal.rds")
+  admin_matches <- admin_match(admin_unit = admin_unit, country = country,
+                          admin_units_seasonal = admin_units_seasonal)
 
-  # intiialise admin match as no match
-  admin_matches <- 0
-
-  if(!is.null(admin_unit)){
-
-    # if there is no country given then search for the admin unit
-    if(is.null(country)){
-
-      # find exact match
-      admin_matches <- grep(paste("^",admin_unit,"\\b",sep=""),admin_units_seasonal$admin1)
-      # if exact does not match try fuzzy match up to dist of 4 which should catch having nop spaces or separators etc
-      if(length(admin_matches)==0){
-        admin_matches <- which(adist(admin_units_seasonal$admin1,admin_unit)<=4)
-      }
-      if(length(admin_matches)>1) stop("Admin unit string specified is ambiguous without country")
-
-      # if we do have a country though find that match first and then find admin
-    } else {
-
-      # first find an exact match
-      country_matches <- grep(paste("^",country,"\\b",sep=""), admin_units_seasonal$country)
-      if(length(unique(admin_units_seasonal$country[country_matches]))==1){
-        chosen_country <- unique(admin_units_seasonal$country[country_matches])
-      } else if(length(unique(admin_units_seasonal$country[country_matches]))==0){
-        # if exact does not match try fuzzy match up to dist of 2 which should catch having no spaces or separators etc
-        country_matches <- which(adist(admin_units_seasonal$country,y = country)<=2)
-        if(length(unique(admin_units_seasonal$country[country_matches]))==1){
-          chosen_country <- unique(admin_units_seasonal$country[country_matches])
-        } else if(length(unique(admin_units_seasonal$country[country_matches]))==0) stop ("Country string specified not close enough to those in database")
-      }
-
-      # find exact match
-      admin_sub_matches <- grep(paste("^",admin_unit,"\\b",sep=""),admin_units_seasonal$admin1[country_matches])
-      # if exact does not match try fuzzy match up to dist of 4 which should catch having nop spaces or separators etc
-      if(length(admin_sub_matches)==0){
-        admin_sub_matches <- which(adist(admin_units_seasonal$admin1[country_matches],admin_unit)<=1)
-      }
-      if(length(admin_sub_matches)>1) stop("Admin unit string specified is not close enougth to those in the database")
-
-      admin_matches <- which(admin_units_seasonal$admin1 == admin_units_seasonal$admin1[country_matches][admin_sub_matches])
-    }
-
-  }
-
-  if(admin_matches!=0){
+  if(admin_matches == 0){
+    ssa0 <- ssa1 <- ssa2 <- ssa3 <- ssb1 <- ssb2 <- ssb3 <- theta_c <- 0
+  } else {
     ssa0 <- admin_units_seasonal$a0[admin_matches]
     ssa1 <- admin_units_seasonal$a1[admin_matches]
     ssa2 <- admin_units_seasonal$a2[admin_matches]
@@ -358,8 +318,6 @@ equilibrium_init_create <- function(age_vector, het_brackets,
     ssb2 <- admin_units_seasonal$b2[admin_matches]
     ssb3 <- admin_units_seasonal$b3[admin_matches]
     theta_c <- admin_units_seasonal$theta_c[admin_matches]
-  } else {
-    ssa0 <- ssa1 <- ssa2 <- ssa3 <- ssb1 <- ssb2 <- ssb3 <- theta_c <- 0
   }
 
   # better het bounds for equilbirum initialisation in individual model
@@ -376,7 +334,6 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   wt_cuts <- c(0,wt_cuts)
   het_bounds <- sort(zetas)[wt_cuts]
   het_bounds[length(het_bounds)] <- (mpl$max_age/365)+1
-
 
   ## collate init
   res <- list(init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq,

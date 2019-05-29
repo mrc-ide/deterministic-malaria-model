@@ -15,6 +15,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+** This is work in progress and is only a very coarse approximate implementation.  Speak to OJ
+or Ettie about ideas on how to improve. **
 
 ## Introduction
 Varying insecticide treated net (ITNs) usage can be modelled with the default deterministic Imperial 

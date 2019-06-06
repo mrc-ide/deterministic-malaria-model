@@ -408,15 +408,15 @@ em_cov <- user() # proportion of population covered by emanator
 dim(cov_) <- 4
 cov_[1] <- (1-itn_cov)*(1-em_cov)  # {No intervention}
 cov_[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
-cov_[3] <- (1-itn_cov)*em_cov	#      {IRS only}
-cov_[4] <- itn_cov*em_cov #	   {Both ITN and IRS}
+cov_[3] <- (1-itn_cov)*em_cov	#      {EM only}
+cov_[4] <- itn_cov*em_cov #	   {Both ITN and EM}
 
 
 cov[] <- cov_[i]
 dim(cov) <- num_int
 
 EM_interval <- user() # how long until emanators are refreshed
-ITN_interval <- user() # how long ITN lasts
+ITN_interval <- user() # how long ITN lasts  
 # chi <- user() # proportion of vector endophily
 Q0 <- user() # proportion of anthropophagy
 bites_Bed <- user() # endophagy in bed

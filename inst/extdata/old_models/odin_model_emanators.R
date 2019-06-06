@@ -580,9 +580,15 @@ age59 <- user(integer=TRUE)
 # index of the age vector above 5 years
 age05 <- user(integer=TRUE)
 
+# slide positivity in 0-5 year olds
 dim(prev0to59) <- c(age59,nh,num_int)
 prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
+
+# slide positivity in whole population
+dim(prevall) <- c(na,nh,num_int)
+prevall[,,] <- T[i,j,k] + D[i,j,k] + A[i,j,k] * p_det[i,j,k]
+output(allprev) <- sum(prevall[,,])/sum(den[])
 
 # slide positivity in 0 -5 year age bracket
 dim(clin_inc0to5) <- c(age05,nh,num_int)

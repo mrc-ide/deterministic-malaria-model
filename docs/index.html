@@ -111,7 +111,7 @@
 <ul>
 <li>
 <a href="https://github.com/richfitz/odin#installation">Install the Odin package</a> and <a href="https://richfitz.github.io/odin/vignettes/odin.html">read the vignettes</a> to make sure you understand how to use Odin.</li>
-<li>Install a couple more R packages that you will need to get the model running: <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages("statmod","ggplot2","reshape2","dplyr","magrittr")</a></code>
+<li>Install a couple more R packages that you will need to get the model running: <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages("statmod","ggplot2","reshape2","dplyr","magrittr", "RecordLinkage")</a></code>
 </li>
 </ul>
 </div>
@@ -123,106 +123,7 @@
 <div id="running-the-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#running-the-model" class="anchor"></a>Running the model</h2>
-<p>Below is some code that shows how you might go about performing simple runs of the model</p>
-<pre><code>  # load the model package (or have it built and reloaded as described above)
-  library(hanojoel)
-
-  # create a vector of age categories
-  init_age &lt;- c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80)
-  
-  # provide a value of the annual EIR for this model run
-  init_EIR &lt;- 10
-  
-  # provide a string for the admin 2 unit that you want to use the seasonality profile for
-  admin_str &lt;- "Katanga"
-  
-  # provide the length of time (in days) that you want to run the model for
-  time_period &lt;- 365*2
-  
-  # provide a value for the proportion of cases that are treated (referred to as ft in the paper)
-  prop_treated &lt;- 0.6
-  
-  # run the model
-  model_run &lt;- run_model(age=init_age, EIR=init_EIR, ft = prop_treated, admin2 = admin_str, time = time_period)
-  
-  # After this has finished, `model_run` will have 2 components. model_run$plot is a ggplot of the main compartments of the model
-  # over time (summed over all age, biting &amp; intervention categories). model_run$dat is a list containing 
-  # the estimated values for all of the compartments in the model. For example, model_run$dat$S will 
-  # be a big 3-dimensional array with the indices relating to age, biting heterogeneity and intervention categories.
-  </code></pre>
-</div>
-<div id="running-alternative-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#running-alternative-models" class="anchor"></a>Running alternative models</h2>
-<p>The basic model used above has been adapted by various people, to add SMC, ivermectin courses, MDA etc. As such these model changes will have a number of diffrent parameters required within the actual odin model code (e.g. see “inst/extdata/odin_model_IVM_SMChet.R”). As such it becomes annoying having to do housekeeping about what parameters are required from the user, and creating the model becomes quite drawn out in terms of specifying what all the user paramaters are. As such there is an altenrative function <code>create_r_model</code> that will take some of the burden away, as demonstrated with this model that assumes a proportion of hrp2 deleted parasites exist.</p>
-<pre><code># first we use the function, by specifying very similar parameters such as 
-# the odin model path, and the initial EIR, ft, age categories, region etc.
-wh &lt;- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R",package = "hanojoel"),
-                                het_brackets = 5,
-                                age = init_age,
-                                init_EIR = init_EIR,
-                                init_ft = 0.4,
-                                country = "Uganda",
-                                admin2 = "Tororo")
-</code></pre>
-<p>The outpput of <code>create_r_model</code> returns a list with 4 elements.</p>
-<ol>
-<li>The first is an automatically created function called <code>generate_default_model</code>, which has scanned over the odin model and identified all the user required parameters before writing to a temp file the required function that pulls all the user required variables from your initial state solution.</li>
-<li>The initial state solution is the second element in the list. This is a list that contains the equilibirum solution for the default parameters and also contains all the parameters used to create the initial solution. These parameters will also then be used when the model is run forwards, and thus if you want to run the model for the next year with a different value for <code>ft</code> you can change that here. This will no affect the initial solution, but simply the parameters that are used when running the deterministic model forward from the initial solution.</li>
-<li>The actual odin model generated using the odin package.</li>
-<li>The model parameter list that was used to create the initial solution.</li>
-</ol>
-<p>We can now use the following to create our model:</p>
-<pre><code>mod &lt;- wh$generate_model_function(dat = wh$state,generator = wh$generator,dde = TRUE)</code></pre>
-<p>We’ll see the model errors intially as we didn’t declare a value for <code>hrp2_prop</code>. This variable is not needed in the basic model, but was found to be needed in this extended model. Thus we should add it to out model state as an extra variable.</p>
-<pre><code>wh$state$hrp2_prop &lt;- 0.1
-
-mod &lt;- wh$generate_model_function(dat = wh$state,generator = wh$generator,dde = TRUE)
-mod_run &lt;- mod$run(t = 1:90)
-out &lt;- mod$transform_variables(mod_run)
-plot(out$t,out$prev)
-
-# If we wanted to increase the treatment for example:
-wh$state$ft &lt;- 0.7
-mod &lt;- wh$generate_model_function(dat = wh$state,generator = wh$generator,dde = TRUE)
-mod_run &lt;- mod$run(t = 1:90)
-out2 &lt;- mod$transform_variables(mod_run)
-
-# And then compare the change in the prevalence
-par(mfrow=c(2,1))
-plot(out$t,out$prev)
-plot(out2$t,out2$prev)
-
-</code></pre>
-<p>This will now work and should show how once you have the model set up you can then directly change model variables within the state list object to alter how the deterministic model is run.</p>
-</div>
-<div id="further-thoughts-and-rambles" class="section level2">
-<h2 class="hasAnchor">
-<a href="#further-thoughts-and-rambles" class="anchor"></a>Further thoughts and rambles</h2>
-<p>Although the second way of running the model takes some of the burden from writing out the generate_model_function, it does start to become a bit messy still. In the above example it was only one variable that would affect how the model was run. We could have also specified this in the intial call to <code>create_r_model</code> like this:</p>
-<pre><code>wh &lt;- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R",package = "hanojoel"),
-                                het_brackets = 5,
-                                age = init_age,
-                                init_EIR = init_EIR,
-                                init_ft = 0.4,
-                                country = "Uganda",
-                                admin2 = "Tororo",
-                                hrp2_prop = 0.1)
-</code></pre>
-<p>This will append the parameter to the model parameter list and it will appear in the intial state list object. If we had lots of variables we need to add then we could also specify these as a list:</p>
-<pre><code>wh &lt;- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R",package = "hanojoel"),
-                                het_brackets = 5,
-                                age = init_age,
-                                init_EIR = init_EIR,
-                                init_ft = 0.4,
-                                country = "Uganda",
-                                admin2 = "Tororo",
-                                ... = list("hrp2_prop"=0.1, "IVM_start"=1)
-                                )
-</code></pre>
-<p>However, this does not change how the initial solution was created as ultimately the intial solution doesn’t change at the moment, regardless of what model you want to run. This will be an issue if, for example your model has a 4th dimension, such as the IVM_SMChet model. As such there is now a catch in the <code>equilibirum_init_create</code> function that looks for a variable called <code>ncc</code>, so that if you declared <code>ncc</code> as an extra variable within <code>create_r_model</code> the <code>equilibirum_init_create</code> function will catch this.</p>
-<p>This starts to become quite ugly and not reliably expandable, as you will need to change the <code>equilibirum_init_create</code> function every time a new model is needed that sets up the initial solution differently. It’s not perhaps the worst thing in the world, but it might be nice here to then specify a path name as a new variable to where your initial solution function is if it becomes very different.</p>
-<p>The above is hoped to possibly explain how we might start thinking about how to make the malaria models more modular and operational in the future, but the above might not be the correct way yet.</p>
+<p>There are vignettes that explain how to run the <a href="https://mrc-ide.github.io/deterministic-malaria-model/articles/run_model.html">simple model</a> and the more <a href="https://mrc-ide.github.io/deterministic-malaria-model/articles/create_r_model.html">flexible versions</a> of the model.</p>
 </div>
 </div>
   </div>
@@ -241,6 +142,7 @@ plot(out2$t,out2$prev)
 <ul class="list-unstyled">
 <li>Joel Hellewell <br><small class="roles"> Author </small>  </li>
 <li>Hannah Slater <br><small class="roles"> Author </small>  </li>
+<li>Juliette Unwin <br><small class="roles"> Author </small>  </li>
 <li>OJ Watson <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
@@ -249,7 +151,7 @@ plot(out2$t,out2$prev)
 </div>
 
       <footer><div class="copyright">
-  <p>Developed by Joel Hellewell, Hannah Slater, OJ Watson.</p>
+  <p>Developed by Joel Hellewell, Hannah Slater, Juliette Unwin, OJ Watson.</p>
 </div>
 
 <div class="pkgdown">

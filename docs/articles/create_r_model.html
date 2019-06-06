@@ -93,7 +93,7 @@
       <h1>More Flexible Model Run</h1>
                         <h4 class="author">H. Juliette T. Unwin</h4>
             
-            <h4 class="date">2019-04-24</h4>
+            <h4 class="date">2019-05-29</h4>
       
       
       <div class="hidden name"><code>create_r_model.Rmd</code></div>
@@ -138,7 +138,7 @@ mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">ge
 <span class="co"># Runs the model</span>
 mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">365</span>)
 out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span> <span class="st">"Prevalance"</span>)</code></pre></div>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span> <span class="st">"Prevalance"</span>, <span class="dt">ylim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.22</span>, <span class="fl">0.24</span>), <span class="dt">type=</span><span class="st">'l'</span>)</code></pre></div>
 <p><img src="create_r_model_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
 <div id="providing-alternative-arguments" class="section level2">
@@ -175,7 +175,7 @@ mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">ge
 <span class="co"># Runs the model</span>
 mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">365</span>)
 out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span><span class="st">"Prevalance"</span>)</code></pre></div>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span><span class="st">"Prevalence"</span>, <span class="dt">type=</span><span class="st">'l'</span>)</code></pre></div>
 <p><img src="create_r_model_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>It is also possible to change the odin model by editing the <code>odin_model_path</code>. If the model is built within the package, such as <code>odin_model_hrp2.R</code>, change the path to:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">odin_model_path =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model_hrp2.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>)</code></pre></div>
@@ -198,6 +198,62 @@ wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class=
                                 <span class="dt">hrp2_prop =</span> <span class="fl">0.5</span>)
 mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
+<div id="changing-seasonality-parameters" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changing-seasonality-parameters" class="anchor"></a>Changing seasonality parameters</h2>
+<p>It is possible to change the seasonality parameters by specifying a named admin unit or both an admin unit and country to the <code>hanojoel:::create_r_model()</code> function. The latter is better when the admin name is common. Fuzzy matching is used to match the provided arguments with the data set provided in the package. The data set can be loaded into your workspace as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seasonality_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_file.html">load_file</a></span>(<span class="st">"admin_units_seasonal.rds"</span>)</code></pre></div>
+</div>
+<div id="adding-interventions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#adding-interventions" class="anchor"></a>Adding interventions</h2>
+<p>It is possible to vary the number of interventions considered in the model.</p>
+<p>No interventions are included in the default settings of the model so <code>num_int = 1.</code></p>
+<p>Insecticide treated nets can be added to the default model as follows. Two intervention compartments are necessary. Net usage is set to 50% in this example and is turned on 365 days into the simulation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">het_brackets =</span> <span class="dv">5</span>,
+                                <span class="dt">age =</span> init_age,
+                                <span class="dt">init_EIR =</span> init_EIR,
+                                <span class="dt">init_ft =</span> prop_treated,
+                                <span class="dt">country =</span> <span class="st">"Uganda"</span>,
+                                <span class="dt">admin2 =</span> <span class="st">"Tororo"</span>,
+                                <span class="dt">num_int =</span> <span class="dv">2</span>,
+                                <span class="dt">ITN_IRS_on =</span> <span class="dv">365</span>,
+                                <span class="dt">itn_cov =</span> <span class="fl">0.5</span>)
+<span class="co">#&gt; Requested: Tororo</span>
+<span class="co">#&gt; Returned: Tororo, Uganda</span>
+
+<span class="co"># generates model functions with initial state data</span>
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Runs the model</span>
+mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">700</span>)
+out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span><span class="st">"Prevalence"</span>, <span class="dt">type=</span><span class="st">'l'</span>)</code></pre></div>
+<p><img src="create_r_model_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p>Indoor residual spraying (IRS) can be added to default model as follows. It requires four intervention compartments. Net usage is set to 50% in this example, IRS usage is 25% and both are turned on 365 days into the simulation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wh &lt;-<span class="st"> </span>hanojoel<span class="op">:::</span><span class="kw"><a href="../reference/create_r_model.html">create_r_model</a></span>(<span class="dt">odin_model_path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/odin_model.R"</span>, <span class="dt">package =</span> <span class="st">"hanojoel"</span>),
+                                <span class="dt">het_brackets =</span> <span class="dv">5</span>,
+                                <span class="dt">age =</span> init_age,
+                                <span class="dt">init_EIR =</span> init_EIR,
+                                <span class="dt">init_ft =</span> prop_treated,
+                                <span class="dt">country =</span> <span class="st">"Uganda"</span>,
+                                <span class="dt">admin2 =</span> <span class="st">"Tororo"</span>,
+                                <span class="dt">num_int =</span> <span class="dv">4</span>,
+                                <span class="dt">ITN_IRS_on =</span> <span class="dv">365</span>,
+                                <span class="dt">itn_cov =</span> <span class="fl">0.5</span>,
+                                <span class="dt">irs_cov =</span> <span class="fl">0.25</span>)
+
+<span class="co"># generates model functions with initial state data</span>
+mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">generator</span>(<span class="dt">user=</span> wh<span class="op">$</span>state, <span class="dt">use_dde =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Runs the model</span>
+mod_run &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">run</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">700</span>)
+out &lt;-<span class="st"> </span>mod<span class="op">$</span><span class="kw">transform_variables</span>(mod_run)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(out<span class="op">$</span>t,out<span class="op">$</span>prev, <span class="dt">main=</span><span class="st">"Prevalence"</span>, <span class="dt">type=</span><span class="st">'l'</span>)</code></pre></div>
+<p><img src="create_r_model_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p>Other interventions can be added in new model files specified with the <code>odin_model_path</code> variable. Any changes to the equilibrium solution should be made between the <code>hanojoel:::create_r_model()</code> and <code>wh$generator()</code> function calls and not through edits to the equilibrium solution in the model.</p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -209,6 +265,8 @@ mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">ge
       <li><a href="#default-use-of-function">Default use of function</a></li>
       <li><a href="#providing-alternative-arguments">Providing alternative arguments</a></li>
       <li><a href="#adding-additional-optional-arguments">Adding additional optional arguments</a></li>
+      <li><a href="#changing-seasonality-parameters">Changing seasonality parameters</a></li>
+      <li><a href="#adding-interventions">Adding interventions</a></li>
       </ul>
 </div>
       </div>
@@ -217,7 +275,7 @@ mod &lt;-<span class="st"> </span>wh<span class="op">$</span><span class="kw">ge
 
 
       <footer><div class="copyright">
-  <p>Developed by Joel Hellewell, Hannah Slater, OJ Watson.</p>
+  <p>Developed by Joel Hellewell, Hannah Slater, Juliette Unwin, OJ Watson.</p>
 </div>
 
 <div class="pkgdown">

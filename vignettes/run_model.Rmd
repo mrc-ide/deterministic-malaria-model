@@ -26,7 +26,7 @@ Within this package there are 2 ways to run the deterministic base model:
 The `run_model` function solves the base model, which can be found in 
 `inst/extdata/odin_model.R`. This function is designed to quickly simulate 
 transmission dynamics, and as such there are fewer parameters that you are able 
-to change. Whereas `create_r_model` allows you to specify
+to change. Whereas, `create_r_model` allows you to specify
 what model you would like to run. For more information please see the other 
 [vignette](https://mrc-ide.github.io/hanojoel/articles/anemia.html).
 
@@ -41,7 +41,7 @@ As illustrated below, without specifying any function arguments, `create_r_model
 will run a simulation for 1 year at an EIR of 10, with a treatment coverage equal to 40% 
 for Tororo, Uganda.
 
-```{r, fig.show='hold'}
+```{r, fig.show='hold', message = FALSE}
 library(hanojoel)
 out <- run_model()
 names(out)
@@ -62,13 +62,17 @@ To change simulation settings there are 5 optional function arguments:
 For example, to simulate Thies, Senegal for a given vector of ages, at an EIR of 1, for 2 years with 
 60% treatment coverage:
 
-```{r, echo=FALSE, results='asis'}
-thies <- run_model(age = c(0, 1, 2, 3, 4, 5, 10, 20, 40, 60), EIR = 1, ft = 0.6, admin2 = "Thies", time = 2*365)
+```{r, echo=FALSE, results='asis', message = FALSE}
+thies <- run_model(age = c(0, 1, 2, 3, 4, 5, 10, 20, 40, 60), 
+                   EIR = 1, 
+                   ft = 0.6, 
+                   admin2 = "Thies", 
+                   time = 2*365)
 thies$plot
 ```
 
 Other model outputs, such as the number of suceptible adult mosquitoes, can be plotted by interacting with the `dat` data frame returned by `run_model`:
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo=FALSE, results='asis', message = FALSE}
 plot(thies$dat$Sv, ylab = "Susceptible Adult Mosquitoes", xlab = "Time (days)", main="Number of susceptible mosquitoes")
 ```

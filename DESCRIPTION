@@ -11,6 +11,10 @@ Authors@R:
              family = "Slater",
              role = c("aut"),
              email =  "hannah.slater08@imperial.ac.uk"),
+      person(given = "Juliette",
+             family = "Unwin",
+             role = c("aut"),
+             email =  "h.unwin@imperial.ac.uk"),
       person(given = "OJ", 
              family = "Watson", 
              role = c("aut", "cre"), 
@@ -25,7 +29,8 @@ Imports:
     statmod,
     stringi,
     rlang,
-    odin
+    odin, 
+    RecordLinkage
 Remotes:
     richfitz/odin,
     richfitz/dde

@@ -34,13 +34,13 @@ initial(S[,,]) <- init_S[i,j,k]
 dim(S) <- c(na,nh,num_int)
 
 deriv(S[1, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] +
-  pop_split[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
+  cov[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
 deriv(S[2:na, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
   (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
 
 dim(derivS) <- c(na, nh, num_int)
 derivS[1, 1:nh, 1:num_int] <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] +
-  pop_split[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
+  cov[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
 derivS[2:na, 1:nh, 1:num_int] <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
   (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
 
@@ -397,11 +397,12 @@ deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 # general parameters
 ITN_on <- user() # day when ITNs are first introduced
 EM_on <- user() # day when emanators are first introduced
-num_int <- user() # number of intervention categorys, ITN only, emanator only, neither, both
+num_int <- 4 # number of intervention categorys, ITN only, emanator only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
 em_cov <- user() # proportion of population covered by emanator
-pop_split[] <- user() # population split for intervention groups
-dim(pop_split) <- num_int
+# pop_split[] <- user() # population split for intervention groups
+# dim(pop_split) <- num_int
+
 
 # cov is a vector of coverages for each intervention category:
 dim(cov_) <- 4
@@ -409,6 +410,8 @@ cov_[1] <- (1-itn_cov)*(1-em_cov)  # {No intervention}
 cov_[2] <- itn_cov*(1-em_cov) # 	   {ITN only}
 cov_[3] <- (1-itn_cov)*em_cov	#      {IRS only}
 cov_[4] <- itn_cov*em_cov #	   {Both ITN and IRS}
+
+
 cov[] <- cov_[i]
 dim(cov) <- num_int
 
@@ -417,9 +420,9 @@ ITN_interval <- user() # how long ITN lasts
 # chi <- user() # proportion of vector endophily
 Q0 <- user() # proportion of anthropophagy
 bites_Bed <- user() # endophagy in bed
-# bites_Indoors <- user() # endophagy indoors
-bites_Emanator <- user() # endophagy whilst outside, near an emanator
-
+bites_Indoors <- user() # endophagy indoors
+bites_Emanator <- 1-bites_Indoors # endophagy whilst outside, near an emanator
+output(bites_Emanator) <- TRUE
 ## ELLIE'S WORK ##
 
 # ITN parameters with pyrethroid resistance
@@ -481,6 +484,7 @@ em_loss <- user()
 ITN_decay = if(t < ITN_on) 0 else exp(-((t-ITN_on)%%ITN_interval) * itn_loss)
 EM_decay = if(t < EM_on) 0 else exp(-((t-EM_on)%%EM_interval) * em_loss)
 output(em_loss) <- em_loss
+output(EM_decay) <- EM_decay
 
 # The r,d and s values turn on after ITN_EM_on and decay accordingly
 d_ITN <- if(t < ITN_on) 0 else d_ITN0*ITN_decay
@@ -489,23 +493,28 @@ r_ITN <- if(t < ITN_on) 0 else r_ITN_min + (r_ITN0- r_ITN_min)*ITN_decay
 # Ellie's edit
 s_ITN <- if(t < ITN_on) 1 else 1 - d_ITN - r_ITN
 
-r_EM_out0 <- user()
-d_EM_out0 <- user()
+r_EM0 <- user()
+d_EM0 <- user()
 
-r_EM_out <- if(t < EM_on) 0 else r_EM_out0*EM_decay
+# r_EM <- if(t < EM_on) 0 else r_EM0*EM_decay
+#
+# d_EM <- if(t < EM_on) 0 else d_EM0*EM_decay
+#
+# s_EM <- if(t < EM_on) 1 else 1 - d_EM - r_EM
 
-d_EM_out <- if(t < EM_on) 0 else d_EM_out0*EM_decay
+r_EM <- r_EM0*EM_decay
 
-s_EM_out <- if(t < EM_on) 1 else 1 - d_EM_out - r_EM_out
+d_EM <- d_EM0*EM_decay
 
+s_EM <- 1 - d_EM - r_EM
 
 
 # probability that mosquito bites and survives for each intervention category
 dim(w_) <- 4
 w_[1] <- 1
 w_[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-w_[3] <- 1 - bites_Emanator + s_EM_out*bites_Emanator
-w_[4] <- 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator
+w_[3] <- 1 - bites_Emanator + s_EM*bites_Emanator
+w_[4] <- 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM*bites_Emanator
 w[] <- w_[i]
 dim(w) <- num_int
 
@@ -514,7 +523,7 @@ dim(yy_) <- 4
 yy_[1] <- 1
 yy_[2] <- w_[2]
 yy_[3] <- w_[3]
-yy_[4] <- 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM_out*bites_Emanator
+yy_[4] <- 1 - bites_Bed - bites_Emanator + bites_Bed*s_ITN + s_EM*bites_Emanator
 yy[] <- yy_[i]
 dim(yy) <- num_int
 
@@ -522,8 +531,8 @@ dim(yy) <- num_int
 dim(z_) <- 4
 z_[1] <- 0
 z_[2] <- bites_Bed*r_ITN
-z_[3] <- r_EM_out*bites_Emanator
-z_[4] <- bites_Bed*r_ITN + r_EM_out*bites_Emanator
+z_[3] <- r_EM*bites_Emanator
+z_[4] <- bites_Bed*r_ITN + r_EM*bites_Emanator
 z[] <- z_[i]
 dim(z) <- num_int
 
@@ -588,8 +597,13 @@ output(KL) <- KL
 output(mv) <- mv
 output(Q) <- Q
 output(wh) <- wh
+output(whi[]) <- whi
+output(zhi[]) <- zhi
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN
 output(s_ITN) <- s_ITN
+output(r_EM) <- r_EM
+output(d_EM) <- d_EM
+output(s_EM) <- s_EM
 output(cov[]) <- TRUE
 output(K0) <- K0

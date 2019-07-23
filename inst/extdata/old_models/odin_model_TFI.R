@@ -34,17 +34,9 @@ initial(S[,,]) <- init_S[i,j,k]
 dim(S) <- c(na,nh,num_int)
 
 deriv(S[1, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] +
-  pop_split[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
+  cov[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
 deriv(S[2:na, 1:nh, 1:num_int]) <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
   (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
-
-dim(derivS) <- c(na, nh, num_int)
-derivS[1, 1:nh, 1:num_int] <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] +
-  pop_split[k]*eta*H*het_wt[j] - (eta+age_rate[i])*S[i,j,k]
-derivS[2:na, 1:nh, 1:num_int] <- -FOI[i,j,k]*S[i,j,k] + rP*P[i,j,k] + rU*U[i,j,k] -
-  (eta+age_rate[i])*S[i,j,k] + age_rate[i-1]*S[i-1,j,k]
-
-output(derivS) <- TRUE
 
 # T- SUCCESSFULLY TREATED
 init_T[,,] <- user()
@@ -345,16 +337,12 @@ deriv(IvI) <- feb*Iv - inhib_rate*IvI - mu*IvI
 mvI = Sv + Ev + Iv + SvI + EvI + IvI
 
 # Feeding inhibition magnitude
-# PBO
-PBO_p <- if(PBO==0) 0 else -0.371
-PBO_int <- if(PBO==0) 0 else 1.089
-# Washes
-Washes <- 0 # 0 washes
-# Washes <- 1.31 # 3 washes
-# Washes <- -0.379 # 20 washes
 
-p <- 2.363 - 2.57*surv_bioassay + PBO_p + PBO_int*surv_bioassay
-inhib <- if(t < ITN_IRS_on) 0 else exp(p)/(exp(p)+1)
+PBO_p <- if(PBO==0) 0 else 1.77543
+G2_p <- if(G2==0) 1.39987 else 0
+
+p <- -2.49394 + 2.77239*(1-surv_bioassay) + PBO_p + G2_p
+inhib <- if(t < ITN_IRS_on) 0 else (exp(p)/(exp(p)+1))
 
 feb <- if(t < ITN_IRS_on) 0 else f_ITN*av_mosq[2]*bites_Bed
 
@@ -430,8 +418,6 @@ ITN_IRS_on <- user() # days after which interventions begin
 num_int <- user() # number of intervention categorys, ITN only, IRS only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
 irs_cov <- user() # proportion of population covered by IRS
-pop_split[] <- user() # population split for intervention groups
-dim(pop_split) <- num_int
 
 # cov is a vector of coverages for each intervention category:
 dim(cov_) <- 4
@@ -461,6 +447,7 @@ bites_Indoors <- user() # endophagy indoors
 # Linking cone assay and hut trial work on resistance to d_ITN and r_ITN, done by Ellie
 surv_bioassay <- user() # measure of % survival in discriminating dose bioassay
 PBO <- user()
+G2 <- user()
 pbo_benefit_a <- 3.407+5.88*((1-surv_bioassay)-0.5)/(1+0.783*((1-surv_bioassay)-0.5))
 pbo_benefit <- exp(pbo_benefit_a)/(1+exp(pbo_benefit_a))
 mort_assay <- if(PBO==0) 1 - surv_bioassay else pbo_benefit
@@ -498,7 +485,7 @@ Griff_s_ITN0<-1-Griff_d_ITN0-Griff_r_ITN0
 d_ITN0 <- d_ITN0_raw/0.6184016*Griff_d_ITN0
 s_ITN0 <- (Griff_s_ITN0)+(s_ITN0_raw-0.02989261)/(0.5020481 - 0.02989261)*(0.5020481 - Griff_s_ITN0)
 r_ITN0 <- 1-d_ITN0-s_ITN0
-f_ITN0 <- my_kill_det*inhib*inhibition_effect*surv_bioassay
+f_ITN0 <- my_kill_det*inhib*inhibition_effect*(1-1.09764*(1-surv_bioassay))
 
 # Insecticide halflife
 hut_max_a <- 0.6338 + 3.9970*(1-0.5) # maximum mortality seen in huts

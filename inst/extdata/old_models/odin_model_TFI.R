@@ -334,7 +334,7 @@ deriv(SvI) <- feb*Sv - inhib_rate*SvI - mu*SvI
 deriv(EvI) <- feb*Ev - mu*EvI - inhib_rate*EvI
 deriv(IvI) <- feb*Iv - inhib_rate*IvI - mu*IvI
 
-mvI = Sv + Ev + Iv + SvI + EvI + IvI
+#mvI = Sv + Ev + Iv + SvI + EvI + IvI
 
 # Feeding inhibition magnitude
 
@@ -446,6 +446,7 @@ bites_Indoors <- user() # endophagy indoors
 
 # Linking cone assay and hut trial work on resistance to d_ITN and r_ITN, done by Ellie
 surv_bioassay <- user() # measure of % survival in discriminating dose bioassay
+# surv_bioassay <- if(t < (365*19)) 0 else 0.5 # Used for figure 3
 PBO <- user()
 G2 <- user()
 pbo_benefit_a <- 3.407+5.88*((1-surv_bioassay)-0.5)/(1+0.783*((1-surv_bioassay)-0.5))
@@ -465,7 +466,7 @@ my_kill_det <- 1 - my_death - det_hut
 # Relationship between hut trial mortality and successful (feed)
 suc_hut <- 0.02491*exp(3.317*(1-mort_hut))
 rep_hut <- 1-suc_hut-mort_hut
-my_success_a <- suc_hut*(1-det_hut)
+#my_success_a <- suc_hut*(1-det_hut)
 
 n1n0 <- 1-det_hut
 kp1 <- n1n0*suc_hut
@@ -498,13 +499,12 @@ wash_decay_rate_a <- -2.360+-3.048*(mort_hut-0.5)
 wash_decay_rate   <- exp(wash_decay_rate_a)/(1+exp(wash_decay_rate_a))
 itn_half_life     <- (log(2)/wash_decay_rate)/my_max_washes*2.64*365
 r_ITN_min <- 0.24
-
+itn_loss <- log(2)/itn_half_life
 
 # The maximum (and then minimum) r and d values for ITN/IRS on day 0 before they decay
 d_IRS0 <- user()
 r_IRS0 <- user()
 irs_loss <- user()
-itn_loss <- user()
 
 # Calculates decay for ITN/IRS
 ITN_decay = if(t < ITN_IRS_on) 0 else exp(-((t-ITN_IRS_on)%%ITN_interval) * itn_loss)
@@ -616,3 +616,5 @@ output(r_IRS) <- r_IRS
 output(s_IRS) <- s_IRS
 output(cov[]) <- TRUE
 output(K0) <- K0
+output(w[]) <- TRUE
+output(f_ITN) <- f_ITN

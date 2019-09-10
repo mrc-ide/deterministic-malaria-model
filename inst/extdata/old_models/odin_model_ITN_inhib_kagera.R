@@ -133,14 +133,20 @@ dID <- user() # decay for detection immunity
 uD <- user() # scale param for ID immunity
 x_I[] <- user() # intermediate variable for calculating immunity functions
 dim(x_I) <- na
+age20l <- user(integer=TRUE) # lower index of age 20 age compartment
+age20u <- user(integer=TRUE) # upper index of age 20 age compartment
+age_20_factor <- user() # factor calculated in equilibrium solution
+PM <- user() # immunity constant
 
 # ICM - maternally acquired immunity
 init_ICM[,,] <- user()
 dim(init_ICM) <- c(na,nh,num_int)
 initial(ICM[,,]) <- init_ICM[i,j,k]
 dim(ICM) <- c(na,nh,num_int)
+dim(init_ICM_pre) <- c(nh,num_int)
+init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[age20l,i,j] + age_20_factor*(ICA[age20u,i,j]-ICA[age20l,i,j]))
 
-deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM[i,j,k]-ICM[i,j,k])/x_I[i]
+deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM_pre[j,k]-ICM[i,j,k])/x_I[i]
 deriv(ICM[2:na, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] - (ICM[i,j,k]-ICM[i-1,j,k])/x_I[i]
 
 # ICA - exposure driven immunity
@@ -245,17 +251,8 @@ ssb2 <- user()
 ssb3 <- user()
 theta_c <- user()
 # Recreation of the rainfall function
-# theta2 <- if(ssa0 == 0 && ssa1  == 0 && ssa2  == 0 && ssb1  == 0 && ssb2  == 0 && ssb3  == 0 && theta_c  == 0)
-#    1 else if(t < (14*365)) max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001) else
-#     theta2_scaled
-
-theta2 <- max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001)
-
-theta2_raw <- 6.4148 + 3.017*cos(2*pi*t/365) -3.9303*cos(4*pi*t/365) + 0.8912*cos(6*pi*t/365) + 4.209*sin(2*pi*t/365) - 1.2505*sin(4*pi*t/365) - 2.0129*sin(6*pi*t/365)
-th_min <- -1.432255
-th_max <- 20.67784
-theta2_scaled <- max(2*(theta2_raw-th_min)/(th_max-th_min),0.001)
-# theta2 <- if(theta2_scaled<0.001) 0.001 else theta2_scaled
+theta2 <- if(ssa0 == 0 && ssa1  == 0 && ssa2  == 0 && ssb1  == 0 && ssb2  == 0 && ssb3  == 0 && theta_c  == 0)
+  1 else max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001)
 
 ##------------------------------------------------------------------------------
 #####################
@@ -274,9 +271,9 @@ init_Sv <- user()
 init_Ev <- user()
 init_Iv <- user()
 initial(Sv) <- init_Sv * mv0
-# initial(Ev) <- init_Ev * mv0
-initial(Ev[1:10]) <- init_Ev/10 * mv0
-dim(Ev) <- 10
+initial(Ev) <- init_Ev * mv0
+#initial(Ev[1:10]) <- init_Ev/10 * mv0
+#dim(Ev) <- 10
 initial(Iv) <- init_Iv * mv0
 
 # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down

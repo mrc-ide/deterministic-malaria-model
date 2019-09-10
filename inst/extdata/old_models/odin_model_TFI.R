@@ -451,7 +451,10 @@ PBO <- user()
 G2 <- user()
 pbo_benefit_a <- 3.407+5.88*((1-surv_bioassay)-0.5)/(1+0.783*((1-surv_bioassay)-0.5))
 pbo_benefit <- exp(pbo_benefit_a)/(1+exp(pbo_benefit_a))
-mort_assay <- if(PBO==0) 1 - surv_bioassay else pbo_benefit
+
+G2_benefit <- 1 / (1 + exp(-4.334 * (1 / (1 + exp(0.63 + 4*(surv_bioassay-0.5)))) -  -0.078 ))
+
+mort_assay <- if(PBO==0) (if(G2==0) 1 - surv_bioassay else G2_benefit) else pbo_benefit
 
 # Relationship between mortality in bioassay to hut trial, logit scale
 mort_hut_a <- 0.63445 + 3.9970 * (mort_assay-0.5)
@@ -600,6 +603,15 @@ dim(clin_inc0to5) <- c(age05,nh,num_int)
 clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
+
+# Slide positivity for ITN users and non-users
+dim(clin_inc_null) <- c(age05,nh)
+dim(clin_inc_net) <- c(age05,nh)
+clin_inc_null[1:age05,] <- clin_inc[i,j,1]
+clin_inc_net[1:age05,] <- clin_inc[i,j,2]
+output(inc05i) <- sum(clin_inc_net)/sum(den[1:age05])
+output(inc05n) <- sum(clin_inc_null)/sum(den[1:age05])
+
 
 # Param checking outputs
 output(mu) <- mu

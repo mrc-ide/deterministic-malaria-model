@@ -613,3 +613,4 @@ output(d_EM) <- d_EM
 output(s_EM) <- s_EM
 output(cov[]) <- TRUE
 output(K0) <- K0
+output(av_mosq) <- TRUE

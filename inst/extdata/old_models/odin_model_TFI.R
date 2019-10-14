@@ -594,6 +594,11 @@ age59 <- user(integer=TRUE)
 # index of the age vector above 5 years
 age05 <- user(integer=TRUE)
 
+age15 <- 14
+dim(prev0to15) <- c(age15,nh,num_int)
+prev0to15[1:age15,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
+output(prev15) <- sum(prev0to15[,,])/sum(den[1::age15])
+
 dim(prev0to59) <- c(age59,nh,num_int)
 prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])

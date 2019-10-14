@@ -18,7 +18,7 @@
 #'
 #' @return list of generator function, initial state, model parameters and generator
 #'
-#'
+#' @export
 
 create_r_model <- function(odin_model_path = system.file("extdata/odin_model.R",package="hanojoel"),
                            het_brackets = 5,

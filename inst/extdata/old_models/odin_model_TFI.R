@@ -230,9 +230,7 @@ dim(rel_foi) <- nh
 rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int)
 EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega
-output(Ivout) <- Iv
 
-output(omega) <- omega
 ##------------------------------------------------------------------------------
 ##########################
 ## SEASONALITY FUNCTION ##
@@ -597,7 +595,7 @@ age05 <- user(integer=TRUE)
 age15 <- 14
 dim(prev0to15) <- c(age15,nh,num_int)
 prev0to15[1:age15,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
-output(prev15) <- sum(prev0to15[,,])/sum(den[1::age15])
+output(prev15) <- sum(prev0to15[,,])/sum(den[1:age15])
 
 dim(prev0to59) <- c(age59,nh,num_int)
 prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]

@@ -94,7 +94,7 @@ load_file <- function(name) {
   }
 
   # get full file path
-  name_full <- system.file("extdata/", name, package="hanojoel", mustWork = TRUE)
+  name_full <- system.file("extdata/", name, package="ICDMM", mustWork = TRUE)
 
   # read in file
   if (ext == "rds") {

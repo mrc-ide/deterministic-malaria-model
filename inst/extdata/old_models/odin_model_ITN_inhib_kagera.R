@@ -419,8 +419,8 @@ irs_cov <- user() # proportion of population covered by IRS
 
 # cov is a vector of coverages for each intervention category:
 dim(cov_) <- 4
-cov_[1] <- if(t < (365*13)) 0 else itn_cov_max  # if(t < ((365*13))) itn_cov_max  else if(t < (365*14))  # {No intervention}
-cov_[2] <- 1 - cov[2] # 	   {ITN only}
+cov_[2] <- if(t < (365*13)) 0 else itn_cov_max  # if(t < ((365*13))) itn_cov_max  else if(t < (365*14))  # {No intervention}
+cov_[1] <- if(t < (365*13)) 1 else 1-itn_cov_max # 	   {ITN only}
 cov_[3] <- 0	#      {IRS only}
 cov_[4] <- 0 #	   {Both ITN and IRS}
 cov[] <- cov_[i]
@@ -446,6 +446,7 @@ bites_Indoors <- user() # endophagy indoors
 # Linking cone assay and hut trial work on resistance to d_ITN and r_ITN, done by Ellie
 surv_bioassay <- user() # measure of % survival in discriminating dose bioassay
 PBO <- user()
+G2 <- user()
 pbo_benefit_a <- 3.407+5.88*((1-surv_bioassay)-0.5)/(1+0.783*((1-surv_bioassay)-0.5))
 pbo_benefit <- exp(pbo_benefit_a)/(1+exp(pbo_benefit_a))
 mort_assay <- if(PBO==0) 1 - surv_bioassay else pbo_benefit

@@ -342,7 +342,7 @@ G2_p <- if(G2==0) 1.39987 else 0
 p <- -2.49394 + 2.77239*(1-surv_bioassay) + PBO_p + G2_p
 inhib <- if(t < ITN_IRS_on) 0 else (exp(p)/(exp(p)+1))
 
-feb <- if(t < ITN_IRS_on) 0 else f_ITN*av_mosq[2]*bites_Bed
+feb <- if(t < ITN_IRS_on) 0 else f_ITN*av_mosq[2]*bites_Bed*inhibition_effect
 
 
 ##------------------------------------------------------------------------------

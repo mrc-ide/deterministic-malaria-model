@@ -34,7 +34,7 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
                                    admin_unit = admin2)
 
   # create odin generator
-  odin_model_path <- system.file("extdata/odin_model.R",package="hanojoel")
+  odin_model_path <- system.file("extdata/odin_model.R",package="ICDMM")
   gen <- odin::odin(odin_model_path,verbose=FALSE)
 
   # There are many parameters used that should not be passed through
@@ -76,7 +76,7 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
 #' \code{load_file} loads package file
 #'
 #' @description Load a file from within the inst/extdata folder of the
-#'   hanojoel package. File extension must be one of .csv, .txt, or .rds.
+#'   ICMDMM package. File extension must be one of .csv, .txt, or .rds.
 #'
 #' @param name the name of a file within the inst/extdata folder.
 #'

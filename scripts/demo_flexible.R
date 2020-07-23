@@ -1,5 +1,5 @@
 # load the model package (or have it built and reloaded as described above)
-library(hanojoel)
+library(ICDMM)
 
 # create a vector of age categories
 init_age <- c(0, 1, 2, 3.5, 5, 7.5, 10, 15, 20, 30, 40, 50, 60)
@@ -17,8 +17,8 @@ prop_treated <- 0.4
 ITN_IRS_on <- 5*365
 
 # creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
-                                                              package = "hanojoel"),
+wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
+                                                              package = "ICDMM"),
                                 het_brackets = 5,
                                 age = init_age,
                                 init_EIR = init_EIR,

@@ -4,9 +4,14 @@
 \alias{run_model}
 \title{run_model}
 \usage{
-run_model(age = c(0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3.5, 5, 7.5,
-  10, 15, 20, 30, 40, 50, 60), EIR = 10, ft = 0.4, admin2 = "Tororo",
-  time = 365)
+run_model(
+  age = c(0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3.5, 5, 7.5, 10, 15, 20, 30, 40,
+    50, 60),
+  EIR = 10,
+  ft = 0.4,
+  admin2 = "Tororo",
+  time = 365
+)
 }
 \arguments{
 \item{age}{Vector of age brackets.

@@ -18,6 +18,7 @@
 #'
 #' @return list of generator function, initial state, model parameters and generator
 #'
+#' @importFrom odin odin
 #' @export
 
 create_r_model <- function(odin_model_path = system.file("extdata/odin_model.R",package="hanojoel"),

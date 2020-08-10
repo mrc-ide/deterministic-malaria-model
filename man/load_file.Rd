@@ -11,7 +11,7 @@ load_file(name)
 }
 \description{
 Load a file from within the inst/extdata folder of the
-  hanojoel package. File extension must be one of .csv, .txt, or .rds.
+  ICMDMM package. File extension must be one of .csv, .txt, or .rds.
 }
 \details{
 \code{load_file} loads package file

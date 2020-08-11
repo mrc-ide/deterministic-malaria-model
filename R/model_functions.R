@@ -106,29 +106,7 @@ load_file <- function(name) {
   return(ret)
 }
 
-#------------------------------------------------
-#' match clean
-#'
-#' @param a First string to compare. Default = NULL
-#' @param b Second string to compare. Default = NULL
-#'
-#' @importFrom RecordLinkage levenshteinSim
-#'
-#' @export
 
-match_clean <- function(a, b){
-
-  a <- gsub("[[:punct:][:space:]]", "", tolower(stringi::stri_trans_general(a, "latin-ascii")))
-  b <- gsub("[[:punct:][:space:]]", "", tolower(stringi::stri_trans_general(b, "latin-ascii")))
-
-  ret <- which(b %in% a)
-
-  if(length(ret) == 0){
-    distance <- levenshteinSim(a, b)
-    ret <- which.max(distance)
-  }
-  return(ret)
-}
 
 #------------------------------------------------
 #' match admin region

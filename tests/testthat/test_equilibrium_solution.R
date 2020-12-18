@@ -1,15 +1,14 @@
 context("test-equilibrium_solution.R")
-library(hanojoel)
 
 age_vector = c(0, 1, 2, 3.5, 5, 7.5, 10, 15, 20, 30, 40, 50, 60)
 mpl <- model_param_list_create(eta=(1/(21*365)), rP=1/20)
 eqm_soln <- equilibrium_init_create(age_vector=age_vector, het_brackets=3, country = NULL, admin_unit = NULL,
                                     ft=0.4, EIR=10, model_param_list=mpl)
 
-bm_age <- unlist(read.delim("bm_data/age.txt")[1, 2:14], use.names=FALSE)
-bm_age_width <- unlist(read.delim("bm_data/age_width.txt")[1, 2:13], use.names=FALSE)
-bm_age_rate <- unlist(read.delim("bm_data/age_rate.txt")[1, 2:14], use.names=FALSE)
-bm_den <- unlist(read.delim("bm_data/den.txt")[1, 2:14], use.names=FALSE)
+bm_age <- unlist(read.delim(system.file("testdata/bm_data/age.txt", package="ICDMM"))[1, 2:14], use.names=FALSE)
+bm_age_width <- unlist(read.delim(system.file("testdata/bm_data/age_width.txt", package="ICDMM"))[1, 2:13], use.names=FALSE)
+bm_age_rate <- unlist(read.delim(system.file("testdata/bm_data/age_rate.txt", package="ICDMM"))[1, 2:14], use.names=FALSE)
+bm_den <- unlist(read.delim(system.file("testdata/bm_data/den.txt", package="ICDMM"))[1, 2:14], use.names=FALSE)
 
 test_that("equilibrium age data", {
   expect_identical(eqm_soln$age, bm_age)
@@ -18,8 +17,8 @@ test_that("equilibrium age data", {
   expect_equal(eqm_soln$den, bm_den, tolerance=1e-6)
 })
 
-bm_foi_age <- unlist(read.delim("bm_data/foi_age.txt")[1, 2:14], use.names=FALSE)
-bm_rel_foi <- unlist(read.delim("bm_data/rel_foi.txt")[1, 2:4], use.names=FALSE)
+bm_foi_age <- unlist(read.delim(system.file("testdata/bm_data/foi_age.txt", package="ICDMM"))[1, 2:14], use.names=FALSE)
+bm_rel_foi <- unlist(read.delim(system.file("testdata/bm_data/rel_foi.txt", package="ICDMM"))[1, 2:4], use.names=FALSE)
 
 test_that("equilibrium foi data", {
   expect_equal(eqm_soln$foi_age, bm_foi_age, tolerance=1e-6)
@@ -27,20 +26,20 @@ test_that("equilibrium foi data", {
   expect_equal(eqm_soln$rel_foi, bm_rel_foi, tolerance=1e-5)
 })
 
-bm_eir_eq <- unlist(read.delim("bm_data/eir_eq.txt")[1, 2:40], use.names=FALSE)
+bm_eir_eq <- unlist(read.delim(system.file("testdata/bm_data/eir_eq.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
 
 test_that("equilibrium eir", {
   expect_equal(as.vector(t(eqm_soln$EIR)), bm_eir_eq, tolerance=1e-6)
 })
 
-bm_x_I <- unlist(read.delim("bm_data/x_I.txt")[1, 2:14], use.names=FALSE)
-bm_ib_eq <- unlist(read.delim("bm_data/ib_eq.txt")[1, 2:40], use.names=FALSE)
-bm_foi_eq <- unlist(read.delim("bm_data/foi_eq.txt")[1, 2:40], use.names=FALSE)
-bm_id_eq <- unlist(read.delim("bm_data/id_eq.txt")[1, 2:40], use.names=FALSE)
-bm_ica_eq <- unlist(read.delim("bm_data/ica_eq.txt")[1, 2:40], use.names=FALSE)
-bm_icm_eq <- unlist(read.delim("bm_data/icm_eq.txt")[1, 2:40], use.names=FALSE)
-bm_icm_init_eq <- unlist(read.delim("bm_data/icm_init_eq.txt")[1, 2:4], use.names=FALSE)
-bm_ca_eq <- unlist(read.delim("bm_data/ca_eq.txt")[1, 2:40], use.names=FALSE)
+bm_x_I <- unlist(read.delim(system.file("testdata/bm_data/x_I.txt", package="ICDMM"))[1, 2:14], use.names=FALSE)
+bm_ib_eq <- unlist(read.delim(system.file("testdata/bm_data/ib_eq.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+bm_foi_eq <- unlist(read.delim(system.file("testdata/bm_data/foi_eq.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+bm_id_eq <- unlist(read.delim(system.file("testdata/bm_data/id_eq.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+bm_ica_eq <- unlist(read.delim(system.file("testdata/bm_data/ica_eq.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+bm_icm_eq <- unlist(read.delim(system.file("testdata/bm_data/icm_eq.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+bm_icm_init_eq <- unlist(read.delim(system.file("testdata/bm_data/icm_init_eq.txt", package="ICDMM"))[1, 2:4], use.names=FALSE)
+bm_ca_eq <- unlist(read.delim(system.file("testdata/bm_data/ca_eq.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
 
 # Note tolerances are quite high because absolute values of some of the numbers are large.  Sometimes only have 4dp
 test_that("equilibrium immunity", {
@@ -54,10 +53,10 @@ test_that("equilibrium immunity", {
   expect_equal(as.vector(t(eqm_soln$cA_eq)), bm_ca_eq, tolerance=1e-7)
 })
 
-bm_foivij_eq <- unlist(read.delim("bm_data/foivij_eq.txt")[1, 2:40], use.names=FALSE)
-bm_betas <- unlist(read.delim("bm_data/betaS.txt")[1, 2:40], use.names=FALSE)
-bm_betaa <- unlist(read.delim("bm_data/betaA.txt")[1, 2:40], use.names=FALSE)
-bm_betau <- unlist(read.delim("bm_data/betaU.txt")[1, 2:40], use.names=FALSE)
+bm_foivij_eq <- unlist(read.delim(system.file("testdata/bm_data/foivij_eq.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+bm_betas <- unlist(read.delim(system.file("testdata/bm_data/betaS.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+bm_betaa <- unlist(read.delim(system.file("testdata/bm_data/betaA.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+bm_betau <- unlist(read.delim(system.file("testdata/bm_data/betaU.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
 
 test_that("equilibrium humans", {
   expect_equal(as.vector(t(eqm_soln$FOIvij_eq)), bm_foivij_eq, tolerance=1e-8)
@@ -78,12 +77,12 @@ test_that("equilibrium lavae", {
   expect_equal(eqm_soln$init_EL, 192.078, tolerance=1e-4)
 })
 
-s <- unlist(read.delim("bm_data/S.txt")[1, 2:40], use.names=FALSE)
-t <- unlist(read.delim("bm_data/T.txt")[1, 2:40], use.names=FALSE)
-d <- unlist(read.delim("bm_data/D.txt")[1, 2:40], use.names=FALSE)
-a <- unlist(read.delim("bm_data/A.txt")[1, 2:40], use.names=FALSE)
-u <- unlist(read.delim("bm_data/U.txt")[1, 2:40], use.names=FALSE)
-p <- unlist(read.delim("bm_data/P.txt")[1, 2:40], use.names=FALSE)
+s <- unlist(read.delim(system.file("testdata/bm_data/S.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+t <- unlist(read.delim(system.file("testdata/bm_data/T.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+d <- unlist(read.delim(system.file("testdata/bm_data/D.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+a <- unlist(read.delim(system.file("testdata/bm_data/A.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+u <- unlist(read.delim(system.file("testdata/bm_data/U.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
+p <- unlist(read.delim(system.file("testdata/bm_data/P.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
 
 test_that("equilibrium inital compartments no coverage", {
   expect_equal(as.vector(t(eqm_soln$init_S[,,1])), s, tolerance=1e-7)

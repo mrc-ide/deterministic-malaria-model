@@ -1,8 +1,7 @@
 context("test-compare_with_BM.R")
-library(hanojoel)
 
 test_that("compare_no_ints_bm", {
-  bm_no_ints <- unlist(read.delim("bm_data/no_ints_prev.txt"), use.names=FALSE)
+  bm_no_ints <- unlist(read.delim(system.file("testdata/bm_data/no_ints_prev.txt", package="ICDMM")), use.names=FALSE)
   bm_no_ints <- matrix(bm_no_ints, nrow=11, ncol=2)
 
   init_age <- c(0, 10, 20, 30)
@@ -10,8 +9,8 @@ test_that("compare_no_ints_bm", {
   time_period <- 11
   prop_treated <- 0.4
   # TODO: Fix IRN_IRS_on problem with numbers of interventions or num_ints
-  wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
-                                                                package = "hanojoel"),
+  wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
+                                                                package = "ICDMM"),
                                   num_int = 1,
                                   het_brackets = 1,
                                   age = init_age,

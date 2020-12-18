@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 Within this package there are 2 ways to run the deterministic base model. This vignette focuses on the 
 `create_r_model` function, which gives the user maximum control of the input parameters. The second,  
 `run_model` function,  solves the base model. For more infomation about the `run_model` function see this 
-[vignette](https://mrc-ide.github.io/hanojoel/articles/run_model.html).
+[vignette](https://mrc-ide.github.io/deterministic-malaria-model/articles/run_model.html).
 
 ## Default use of function
 The `create_r_model` function creates the odin deterministic malaria model in R.  It has the 

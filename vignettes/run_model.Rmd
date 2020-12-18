@@ -28,7 +28,7 @@ The `run_model` function solves the base model, which can be found in
 transmission dynamics, and as such there are fewer parameters that you are able 
 to change. Whereas, `create_r_model` allows you to specify
 what model you would like to run. For more information please see the other 
-[vignette](https://mrc-ide.github.io/hanojoel/articles/anemia.html).
+[vignette](https://mrc-ide.github.io/deterministic-malaria-model/articles/anemia.html).
 
 ## Default Use
 This vignette focuses on using the `run_model` function to simulate the base 

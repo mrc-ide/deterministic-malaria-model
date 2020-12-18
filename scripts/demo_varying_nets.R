@@ -1,4 +1,4 @@
-library(hanojoel)
+library(ICDMM)
 source("scripts/eqm_soln_varying_nets.R")
 
 # create a vector of age categories

@@ -16,8 +16,8 @@ t_vector <- c(-22, 2*365, 8*365) # number of days at which the itn coverage chan
 ITN_IRS_on <- t_vector[min(which(itn_vector != 0))] # time at which nets switch on
 
 # creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
-                                                              package = "hanojoel"),
+wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
+                                                              package = "ICDMM"),
                                 num_int = 2,
                                 het_brackets = 5,
                                 age = init_age,

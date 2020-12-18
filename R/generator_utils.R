@@ -21,7 +21,7 @@
 #' @importFrom odin odin
 #' @export
 
-create_r_model <- function(odin_model_path = system.file("extdata/odin_model.R",package="hanojoel"),
+create_r_model <- function(odin_model_path = system.file("extdata/odin_model.R",package="ICDMM"),
                            het_brackets = 5,
                            age = c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80),
                            init_EIR = 10,

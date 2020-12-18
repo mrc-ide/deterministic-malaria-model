@@ -4,7 +4,7 @@ author: "OJ Watson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Simplest Model Run}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -42,7 +42,7 @@ will run a simulation for 1 year at an EIR of 10, with a treatment coverage equa
 for Tororo, Uganda.
 
 ```{r, fig.show='hold', message = FALSE}
-library(hanojoel)
+library(ICDMM)
 out <- run_model()
 names(out)
 out$plot

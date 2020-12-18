@@ -4,7 +4,7 @@ author: "H. Juliette T. Unwin"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Time varying ITN usage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -86,7 +86,7 @@ edit_equilibrium_varying_nets <- function(wh, population_split){
 
 An example of how the full similation is run is given below: 
 ```{r}
-library(hanojoel)
+library(ICDMM)
 # define the net usage 
 # need to define the coverage in the past so can have a usage using the delay
 itn_vector <- c(0, 0.1, 0.3)
@@ -95,8 +95,8 @@ ITN_IRS_on <- t_vector[min(which(itn_vector != 0))] # time at which nets switch 
 population_split <- c(0.5, 0.5)
 
 # creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
-                                                              package = "hanojoel"),
+wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
+                                                              package = "ICDMM"),
                                 num_int = 2, 
                                 itn_vector = itn_vector,
                                 t_vector = t_vector,
@@ -160,7 +160,7 @@ edit_equilibrium_varying_nets_irs <- function(wh, population_split){
 ```
 
 ```{r}
-library(hanojoel)
+library(ICDMM)
 # define the net usage 
 # need to define the coverage in the past so can have a usage using the delay
 itn_vector <- c(0, 0.1, 0.3)
@@ -169,13 +169,13 @@ ITN_IRS_on <- t_vector[min(which(itn_vector != 0))] # time at which nets switch 
 population_split <- c(0.25, 0.25, 0.25, 0.25)
 
 # creates the odin model
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
-                                                              package = "hanojoel"),
-                                num_int = 4, 
-                                itn_vector = itn_vector,
-                                t_vector = t_vector,
-                                irs_cov = 0.2,
-                                ITN_IRS_on = ITN_IRS_on)
+wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",
+                                                              package = "ICDMM"),
+                             num_int = 4, 
+                             itn_vector = itn_vector,
+                             t_vector = t_vector,
+                             irs_cov = 0.2,
+                             ITN_IRS_on = ITN_IRS_on)
 
 # edits equilibrium condition with new coverage split.
 wh <- edit_equilibrium_varying_nets_irs(wh, population_split)

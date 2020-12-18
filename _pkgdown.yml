@@ -1,4 +1,4 @@
-url: https://mrc-ide.github.io/hanojoel/
+url: https://mrc-ide.github.io/deterministic-malaria-model/
 
 template:
   params:
@@ -25,5 +25,5 @@ navbar:
     - text: News
       href: news/index.html
   right:
-    - href: https://github.com/mrc-ide/hanojoel
+    - href: https://mrc-ide.github.io/deterministic-malaria-model/
       icon: fa-github

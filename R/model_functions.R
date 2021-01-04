@@ -16,6 +16,7 @@
 #'   xlab ylab geom_line ggplot
 #' @importFrom reshape2 melt
 #' @importFrom odin odin
+#' @importFrom stats coef
 #'
 #' @export
 
@@ -39,7 +40,7 @@ run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20
 
   # There are many parameters used that should not be passed through
   # to the model.
-  state_use <- state[names(state) %in% names(formals(gen))]
+  state_use <- state[names(state) %in% coef(gen)$name]
 
   # create model with initial values
   mod <- gen(user=state_use, use_dde=TRUE)

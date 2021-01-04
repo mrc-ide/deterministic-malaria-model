@@ -29,7 +29,7 @@ Imports:
     statmod,
     stringi,
     rlang,
-    odin, 
+    odin (>= 1.1.5),
     RecordLinkage
 Remotes:
     richfitz/odin,

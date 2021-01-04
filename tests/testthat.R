@@ -1,4 +1,2 @@
 library(testthat)
-library(hanojoel)
-
-test_check("hanojoel")
+test_check("ICDMM")

@@ -4,7 +4,7 @@ author: "H. Juliette T. Unwin"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{More Flexible Model Run}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,13 +21,13 @@ knitr::opts_chunk$set(
 Within this package there are 2 ways to run the deterministic base model. This vignette focuses on the 
 `create_r_model` function, which gives the user maximum control of the input parameters. The second,  
 `run_model` function,  solves the base model. For more infomation about the `run_model` function see this 
-[vignette](https://mrc-ide.github.io/hanojoel/articles/run_model.html).
+[vignette](https://mrc-ide.github.io/deterministic-malaria-model/articles/run_model.html).
 
 ## Default use of function
 The `create_r_model` function creates the odin deterministic malaria model in R.  It has the 
 following default arguments:
 
-1. Odin model path - `odin_model_path = system.file("extdata/odin_model.R", package = "hanojoel"`
+1. Odin model path - `odin_model_path = system.file("extdata/odin_model.R", package = "ICDMM"`
 1. The number of heterogeneity brakets - `het_brackets = 5`
 2. The vector of age compartments - `age = c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80)`
 3. The initial EIR - `init_EIR = 10`
@@ -39,17 +39,17 @@ The simplest example of using the function to plot the malaria prevelance for a 
 with no seasonablity (found by setting both the country and admin2 to NULL) is:
 
 ```{r}
-library(hanojoel)
+#library(ICDMM)
 
-wh <- hanojoel:::create_r_model()
+#wh <- ICDMM:::create_r_model()
 
 # generates model functions with initial state data
-mod <- wh$generator(user= wh$state, use_dde = TRUE)
+#mod <- wh$generator(user=wh$state, use_dde = TRUE)
 
 # Runs the model
-mod_run <- mod$run(t = 1:365)
-out <- mod$transform_variables(mod_run)
-plot(out$t,out$prev, main= "Prevalance", ylim = c(0.22, 0.24), type='l')
+#mod_run <- mod$run(t = 1:365)
+#out <- mod$transform_variables(mod_run)
+#plot(out$t,out$prev, main= "Prevalance", ylim = c(0.22, 0.24), type='l')
 ```
 
 ## Providing alternative arguments
@@ -71,13 +71,13 @@ time_period <- 365*1
 prop_treated <- 0.4
 
 # creates the odin model using the default odin model file
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R", package = "hanojoel"),
-                                het_brackets = 5,
-                                age = init_age,
-                                init_EIR = init_EIR,
-                                init_ft = prop_treated,
-                                country = "Uganda",
-                                admin2 = "Tororo")
+wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R", package = "ICDMM"),
+                             het_brackets = 5,
+                             age = init_age,
+                             init_EIR = init_EIR,
+                             init_ft = prop_treated,
+                             country = "Uganda",
+                             admin2 = "Tororo")
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)
@@ -91,7 +91,7 @@ plot(out$t,out$prev, main="Prevalence", type='l')
 It is also possible to change the odin model by editing the `odin_model_path`.  If the model is 
 built within the package, such as `odin_model_hrp2.R`, change the path to:
 ```{r}
-odin_model_path = system.file("extdata/odin_model_hrp2.R", package = "hanojoel")
+odin_model_path = system.file("extdata/odin_model_hrp2.R", package = "ICDMM")
 ```
 If the odin model is only held locally, change the model path to:
 ```{r}
@@ -104,16 +104,16 @@ It may be necessary to provide extra optional arguments to the odin model. For e
 run the `odin_model_hrp2.R` model without any extra arguments it produces an error:
 ```{r, error=TRUE, purl = FALSE}
 # creates the odin model using the default odin model file
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R", 
-                                                              package = "hanojoel"))
+wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R", 
+                                                              package = "ICDMM"))
 mod <- wh$generator(user= wh$state, use_dde = TRUE)
 ```
 
 This is because the required user argument `hrp2_prop` has not been provided. This is done as follows:
 ```{r}
 # creates the odin model using the default odin model file
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R", 
-                                                              package = "hanojoel"), 
+wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model_hrp2.R", 
+                                                              package = "ICDMM"), 
                                 hrp2_prop = 0.5)
 mod <- wh$generator(user= wh$state, use_dde = TRUE)
 ```
@@ -121,12 +121,12 @@ mod <- wh$generator(user= wh$state, use_dde = TRUE)
 
 ## Changing seasonality parameters
 It is possible to change the seasonality parameters by specifying a named admin unit or both
-an admin unit and country to the `hanojoel:::create_r_model()` function.  The latter is better when the admin 
+an admin unit and country to the `ICDMM:::create_r_model()` function.  The latter is better when the admin 
 name is common. Fuzzy matching
 is used to match the provided arguments with the data set provided in the package.  The data set
 can be loaded into your workspace as follows:
 ```{r}
-seasonality_data <- load_file("admin_units_seasonal.rds")
+seasonality_data <- ICDMM::load_file("admin_units_seasonal.rds")
 ```
 
 
@@ -139,16 +139,17 @@ Insecticide treated nets can be added to the default model as follows. Two inter
 necessary. Net usage is set to 50% in this example and is turned on
 365 days into the simulation:
 ```{r}
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R", package = "hanojoel"),
-                                het_brackets = 5,
-                                age = init_age,
-                                init_EIR = init_EIR,
-                                init_ft = prop_treated,
-                                country = "Uganda",
-                                admin2 = "Tororo",
-                                num_int = 2,
-                                ITN_IRS_on = 365,
-                                itn_cov = 0.5)
+wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R", package = "ICDMM"),
+                             het_brackets = 5,
+                             age = init_age,
+                             init_EIR = init_EIR,
+                             init_ft = prop_treated,
+                             country = "Uganda",
+                             admin2 = "Tororo",
+                             num_int = 2,
+                             ITN_IRS_on = 365,
+                             itn_cov = 0.5)
+                               
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)
@@ -165,17 +166,17 @@ compartments. Net usage is set to 50% in this example, IRS usage is 25% and both
 
 
 ```{r, message = FALSE}
-wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R", package = "hanojoel"),
-                                het_brackets = 5,
-                                age = init_age,
-                                init_EIR = init_EIR,
-                                init_ft = prop_treated,
-                                country = "Uganda",
-                                admin2 = "Tororo",
-                                num_int = 4,
-                                ITN_IRS_on = 365,
-                                itn_cov = 0.5,
-                                irs_cov = 0.25)
+wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R", package = "ICDMM"),
+                             het_brackets = 5,
+                             age = init_age,
+                             init_EIR = init_EIR,
+                             init_ft = prop_treated,
+                             country = "Uganda",
+                             admin2 = "Tororo",
+                             num_int = 4,
+                             ITN_IRS_on = 365,
+                             itn_cov = 0.5,
+                             irs_cov = 0.25)
 
 # generates model functions with initial state data
 mod <- wh$generator(user= wh$state, use_dde = TRUE)
@@ -187,5 +188,5 @@ plot(out$t,out$prev, main="Prevalence", type='l')
 ```
 
 Other interventions can be added in new model files specified with the `odin_model_path` variable.  Any
-changes to the equilibrium solution should be made between the `hanojoel:::create_r_model()` and
+changes to the equilibrium solution should be made between the `ICDMM:::create_r_model()` and
 `wh$generator()` function calls and not through edits to the equilibrium solution in the model.

@@ -31,8 +31,8 @@ test_that("create_r_model demo runs", {
   time_period <- 30*1
   prop_treated <- 0.4
   # creates the odin model
-  wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
-                                                                package = "hanojoel"),
+  wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
+                                                                package = "ICDMM"),
                                   het_brackets = 5,
                                   age = init_age,
                                   init_EIR = init_EIR,
@@ -56,8 +56,8 @@ test_that("compare model outputs", {
   time_period <- 30*1
   prop_treated <- 0.4
   # creates the odin model
-  wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
-                                                                package = "hanojoel"),
+  wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
+                                                                package = "ICDMM"),
                                   num_int = 1,
                                   het_brackets = 5,
                                   age = init_age,
@@ -84,8 +84,8 @@ test_that("compare varying itns and not", {
   time_period <- 30
 
   # Specify coverage as a coverage after a time
-  wh <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
-                                                                package = "hanojoel"),
+  wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
+                                                                package = "ICDMM"),
                                   het_brackets = 5,
                                   age = init_age,
                                   init_EIR = init_EIR,
@@ -99,7 +99,7 @@ test_that("compare varying itns and not", {
   out <- mod$transform_variables(mod_run)
 
   # Specify coverage as a vector
-  wh2 <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "hanojoel"),
+  wh2 <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "ICDMM"),
                                    het_brackets = 5,
                                    age = init_age,
                                    init_EIR = init_EIR,
@@ -116,7 +116,7 @@ test_that("compare varying itns and not", {
   out2 <- mod2$transform_variables(mod_run2)
 
   # Specify coverage as old coverage vector
-  wh3 <- hanojoel:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "hanojoel"),
+  wh3 <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model_itn.R",package = "ICDMM"),
                                    het_brackets = 5,
                                    age = init_age,
                                    init_EIR = init_EIR,

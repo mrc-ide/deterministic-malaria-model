@@ -1,0 +1,50 @@
+---
+title: "Alternative model runs"
+author: "Joel Hellewell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Alternative model runs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Emanator model
+To run the version of the malaria model that has emanators in instead of IRS (see emanator modelling paper), several further parameter values need to be specified when calling `run_model`:
+
+```{r}
+# Some toy parameter values to run the emanator model
+out <- run_model(model = "odin_model_emanators",
+                 time = 1000,
+                 init_EIR = 5,
+                 r_EM0 = 0.6053263, # Probability of emanator repelling mosquito
+                 em_loss = 0.001954954, # Exponential decay of emanator effectiveness
+                 d_EM0 = 0, # Probability of emanator killing mosquito
+                 Q0 = 0.92, # Mosquito anthropophagy (% of bites on humans)
+                 bites_Emanator = 0.4, # % of bites while using emanator
+                 bites_Indoors = 0.6, # % of bites indoors
+                 bites_Bed = 0.55, #  % of bites in bed
+                 surv_bioassay = 0, # % of mosquitoes surviving insecticide bioassay
+                 EM_interval = 365, # How often emanators are refreshed
+                 EM_on = 365, # When emanators are first distributioed
+                 ITN_on = 365, # When ITNs are first distributed
+                 ITN_interval = 365*3, # How often ITNs are refreshed
+                 em_cov = 0.9, # Emanator population coverage
+                 irs_cov = 0.9, # This needs to be fixed at some point
+                 itn_cov = 0, # ITN population coverage
+                 num_int = 4,
+                 country = NULL,
+                 admin2 = NULL)
+plot(out$t,out$prev, main= "Prevalance", ylim = c(0, 0.3), type='l', col = "red")
+abline(v = 365, lty = 2)
+abline(h = 0.1522, lty = 2)
+```
+## Ivermectin SMC model
+

@@ -4,7 +4,7 @@
 na <- user() # number of age categories
 nh <- user() # number of biting heterogeneity categories
 ft <- user() # proportion of cases treated
-
+hrp2_prop <- user() # assumed proportion of strains that possess hrp2
 ##------------------------------------------------------------------------------
 ##################
 ## HUMAN STATES ##
@@ -44,9 +44,9 @@ dim(init_T) <- c(na,nh,num_int)
 initial(T[,,]) <- init_T[i,j,k]
 dim(T) <- c(na,nh,num_int)
 
-deriv(T[1, 1:nh, 1:num_int]) <- ft*clin_inc[i,j,k] - rT*T[i,j,k] -
+deriv(T[1, 1:nh, 1:num_int]) <- hrp2_prop*ft*clin_inc[i,j,k] - rT*T[i,j,k] -
   (eta+age_rate[i])*T[i,j,k]
-deriv(T[2:na, 1:nh, 1:num_int]) <- ft*clin_inc[i,j,k] - rT*T[i,j,k] -
+deriv(T[2:na, 1:nh, 1:num_int]) <- hrp2_prop*ft*clin_inc[i,j,k] - rT*T[i,j,k] -
   (eta+age_rate[i])*T[i,j,k] + age_rate[i-1]*T[i-1,j,k]
 
 # D - CLEAR DISEASE
@@ -55,9 +55,9 @@ dim(init_D) <- c(na,nh,num_int)
 initial(D[,,]) <- init_D[i,j,k]
 dim(D) <- c(na,nh,num_int)
 
-deriv(D[1, 1:nh, 1:num_int]) <- (1-ft)*clin_inc[i,j,k] - rD*D[i,j,k] -
+deriv(D[1, 1:nh, 1:num_int]) <- (1-(hrp2_prop*ft))*clin_inc[i,j,k] - rD*D[i,j,k] -
   (eta+age_rate[i])*D[i,j,k]
-deriv(D[2:na, 1:nh, 1:num_int]) <- (1-ft)*clin_inc[i,j,k] - rD*D[i,j,k] -
+deriv(D[2:na, 1:nh, 1:num_int]) <- (1-(hrp2_prop*ft))*clin_inc[i,j,k] - rD*D[i,j,k] -
   (eta+age_rate[i])*D[i,j,k] + age_rate[i-1]*D[i-1,j,k]
 
 # A - ASYMPTOMATIC DISEASE
@@ -198,9 +198,9 @@ deriv(ID[2:na, 1:nh, 1:num_int]) <- FOI[i,j,k]/(FOI[i,j,k]*uD + 1) - ID[i,j,k]/d
 
 # p_det - probability of detection by microscopy, immunity decreases chances of
 # infection because it pushes parasite density down
-aD <- user()
-fD0 <- user()
-gammaD <- user()
+aD <- user() # no idea where these are from
+fD0 <- user() # or who fit them
+gammaD <- user() #
 d1 <- user()
 ID0 <- user()
 kD <- user()
@@ -216,8 +216,9 @@ p_det[,,] <- d1 + (1-d1)/(1 + fd[i]*(ID[i,j,k]/ID0)^kD)
 dim(FOI_lag) <- c(na,nh,num_int)
 FOI_lag[1:na, 1:nh, 1:num_int] <- EIR[i,j,k] * (if(IB[i,j,k]==0) b0 else b[i,j,k])
 
-# Current FOI depends on humans that have been through the latent period
-dE <- user() # latent period of human infection.
+# Current FOI depends on humans that have been through the latent period and are
+# producing gametocytes
+dE <- user() # length of time from infection to gametocytogenesis
 dim(FOI) <- c(na,nh,num_int)
 FOI[,,] <- delay(FOI_lag[i,j,k],dE)
 
@@ -229,10 +230,8 @@ foi_age[] <- user()
 dim(rel_foi) <- nh
 rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int)
-EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega
-output(Ivout) <- Iv
+EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i]/omega*Iv
 
-output(omega) <- omega
 ##------------------------------------------------------------------------------
 ##########################
 ## SEASONALITY FUNCTION ##
@@ -272,9 +271,9 @@ init_Sv <- user()
 init_Ev <- user()
 init_Iv <- user()
 initial(Sv) <- init_Sv * mv0
-initial(Ev) <- init_Ev * mv0
-#initial(Ev[1:10]) <- init_Ev/10 * mv0 # Options if not using a delayed delay
-#dim(Ev) <- 10
+# initial(Ev) <- init_Ev * mv0
+initial(Ev[1:10]) <- init_Ev/10 * mv0
+dim(Ev) <- 10
 initial(Iv) <- init_Iv * mv0
 
 # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
@@ -293,8 +292,8 @@ FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k
 lag_FOIv=sum(FOIvijk)
 
 # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)
-delayGam <- user() # Lag from parasites to infectious gametocytes
-delayMos <- user() # Extrinsic incubation period.
+delayGam <- user() # latent period in gametocytogenesis
+delayMos <- user() # latent period in humans
 FOIv <- delay(lag_FOIv, delayGam)
 
 # Number of mosquitoes that become infected at each time point
@@ -302,23 +301,20 @@ surv <- exp(-mu*delayMos)
 ince <- FOIv * Sv
 lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
-#incv <- lag_incv
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
-betaa <- 0.5*PL/dPL
-#betaa <- mv0 * mu0 * theta2
+#betaa <- 0.5*PL/dPL
+betaa <- mv0 * mu * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
-deriv(Ev) <- ince - incv - mu*Ev
+#deriv(Ev) <- ince - incv - mu*Ev
+deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
+deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
 deriv(Iv) <- incv - mu*Iv
 
 # Total mosquito population
-mv = Sv+Ev+Iv
-
-# model options if don't want to use a delayed delay
-#deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
-#deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
-#mv = Sv+sum(Ev)+Iv
+#mv = Sv+Ev+Iv
+mv = Sv+sum(Ev)+Iv
 
 
 ##------------------------------------------------------------------------------
@@ -344,8 +340,8 @@ muEL <- user() #daily den. dep. mortality rate of early stage
 gammaL <- user() # eff. of den. dep. on late stage relative to early stage
 
 # fitted entomological parameters:
-mv0 <- user() # initial mosquito density
 mu0 <- user() # baseline mosquito death rate
+mv0 <- user() # initial mosquito density
 tau1 <- user() # duration of host-seeking behaviour
 tau2 <- user() # duration of resting behaviour
 p10 <- user() # prob of surviving 1 feeding cycle
@@ -357,7 +353,7 @@ eov <- betaL/mu*(exp(mu/fv)-1)
 beta_larval <- eov*mu*exp(-mu/fv)/(1-exp(-mu/fv)) # Number of eggs laid per day
 b_lambda <- (gammaL*muLL/muEL-dEL/dLL+(gammaL-1)*muLL*dEL)
 lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu0*dLL*(1+dPL*muPL)))
-K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
+K0 <- 2*mv0*dLL*mu*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
 
 # Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
 KL <- K0*theta2
@@ -503,12 +499,12 @@ output(Pout) <- sum(P[,,])
 den[] <- user()
 dim(den) <- na
 # index of the age vector above 59 months
-age59 <- user(integer=TRUE)
+age59 <- user()
 # index of the age vector above 5 years
-age05 <- user(integer=TRUE)
+age05 <- user()
 
 dim(prev0to59) <- c(age59,nh,num_int)
-prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
+prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k] + A[i,j,k] * p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
 
 # slide positivity in 0 -5 year age bracket

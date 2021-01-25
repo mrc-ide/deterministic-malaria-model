@@ -1,6 +1,6 @@
-#' Create generator for model creation
+#' Run named odin model
 #'
-#' \code{create_r_model} returns list with generator function automatically created given the odin model
+#' \code{run_model} returns list with generator function automatically created given the odin model
 #' specified.
 #'
 #' @param odin_model_path Character path to odin model
@@ -13,7 +13,7 @@
 #' @param ... Any other parameters needed for non-standard model. If they share the same name
 #' as any of the defined parameters \code{model_param_list_create} will stop. You can either write
 #' any extra parameters you like individually, e.g. create_r_model(extra1 = 1, extra2 = 2)
-#' and these parameteres will appear appended to the returned list, or you can pass explicitly
+#' and these parameters will appear appended to the returned list, or you can pass explicitly
 #' the ellipsis argument as a list created before, e.g. create_r_model(...=list(extra1 = 1, extra2 = 2))
 #'
 #' @return list of generator function, initial state, model parameters and generator
@@ -21,13 +21,14 @@
 #' @importFrom odin odin
 #' @export
 
-create_r_model <- function(odin_model_path = system.file("extdata/odin_model.R",package="ICDMM"),
+run_model <- function(model = "odin_model",
                            het_brackets = 5,
                            age = c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80),
                            init_EIR = 10,
                            init_ft = 0.4,
                            country = NULL,
                            admin2 = NULL,
+                           time = 100,
                            ...){
 
   ## create model param list using necessary variables
@@ -40,12 +41,28 @@ create_r_model <- function(odin_model_path = system.file("extdata/odin_model.R",
                                    admin_unit = admin2)
 
   # create odin generator
+  generator <- switch(model,
+    "odin_model" = odin_model,
+    "odin_model_emanators" = odin_model_emanators,
+    "odin_model_hrp2" = odin_model_hrp2,
+    "odin_model_IVM_SMChet" = odin_model_IVM_SMChet,
+    stop(sprintf("Unknown model '%s'", model)))
 
-  ## This creation should not be needed!
-  gen <- odin::odin(odin_model_path, verbose=FALSE)
-  state <- state[names(state) %in% coef(gen)$name]
+  # There are many parameters used that should not be passed through
+  # to the model.
+  state_use <- state[names(state) %in% coef(generator)$name]
+
+  # create model with initial values
+  mod <- generator(user = state_use, use_dde = TRUE)
+  tt <- seq(0, time, 1)
+
+  # run model
+  mod_run <- mod$run(tt)
+
+  # shape output
+  out <- mod$transform_variables(mod_run)
 
   # return mod
-  return(list("state"=state,"generator"=gen,"mpl"=mpl))
+  return(out)
 }
 

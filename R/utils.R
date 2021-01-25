@@ -1,7 +1,7 @@
 #------------------------------------------------
-#' run_model
+#' run_model_example
 #'
-#' \code{run_model} runs model using declared age, EIR, ft, country, admin
+#' \code{run_model_example} runs model using declared age, EIR, ft, country, admin
 #'
 #' @param age Vector of age brackets.
 #'   Default=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60)
@@ -17,34 +17,37 @@
 #' @importFrom reshape2 melt
 #' @importFrom odin odin
 #' @importFrom stats coef
+#' @useDynLib ICDMM
 #'
 #' @export
 
 
-run_model <- function(age=c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60),
-                      EIR=10,
-                      ft=0.4,
-                      admin2="Tororo",
-                      time=365){
+run_model_example <- function(age = c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60),
+                      EIR = 10,
+                      ft = 0.4,
+                      admin2 = "Tororo",
+                      time = 365){
 
   mpl <- model_param_list_create(num_int = 1)
 
   # generate initial state variables from equilibrium solution
-  state <- equilibrium_init_create(age_vector=age,EIR=EIR,ft=ft,
-                                   model_param_list = mpl,het_brackets=5,
+  state <- equilibrium_init_create(age_vector = age,
+                                   EIR = EIR,
+                                   ft = ft,
+                                   model_param_list = mpl,
+                                   het_brackets = 5,
                                    admin_unit = admin2)
 
   # create odin generator
-  odin_model_path <- system.file("extdata/odin_model.R",package="ICDMM")
-  gen <- odin::odin(odin_model_path,verbose=FALSE)
+  generator <- odin_model
 
   # There are many parameters used that should not be passed through
   # to the model.
-  state_use <- state[names(state) %in% coef(gen)$name]
+  state_use <- state[names(state) %in% coef(generator)$name]
 
   # create model with initial values
-  mod <- gen(user=state_use, use_dde=TRUE)
-  tt <- seq(0,time,1)
+  mod <- generator(user = state_use, use_dde = TRUE)
+  tt <- seq(0, time, 1)
 
   # run model
   mod_run <- mod$run(tt)

@@ -24,7 +24,7 @@ You should start by cloning this github repository to your own computer. If you 
 
 ## Adding your own odin model
 
-If you write some new code in a file called `example_model.R`, you should save it in `inst/odin` with the other models. You then need to run `odin::odin_package`, this will add a compiled version of your odin model to the package files. 
+If you write some new code in a file called `example_model.R`, you should save it in `inst/odin` with the other models. You then need to run `odin::odin_package()`, with the directory path of the project inside the parenthesis, this will add a compiled version of your odin model to the package files. 
 
 ## Other code changes
 

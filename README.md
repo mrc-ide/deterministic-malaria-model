@@ -1,5 +1,5 @@
-# deterministic-R-model
-This repository contains the R package version of the Imperial College malaria full transmission model.
+# Imperial College Deterministic Malaria Model
+This repository contains the R package version of the Imperial College malaria full transmission model. This is an age-stratified model, which incorporates the acquisition and loss of immunity experienced by human populations living in malaria-endemic settings. The parameterisation of the model is informed by data from a range of settings across sub-Saharan Africa. The model facilitates the introduction of public health interventions against malaria, such as insecticide-treated nets or indoor residual spraying. The seasonality of malaria transmission, driven by rainfall patterns, can also be specified in the model. Characterising malaria transmission observed in a particular setting can help inform decision-making on which interventions against malaria could be most impactful. 
 
 ## Learning the model
 Assuming that you are new to the model, the first step is to read the papers that describe the model to get a good understanding of the theory behind it and how it works. To start with you should read:

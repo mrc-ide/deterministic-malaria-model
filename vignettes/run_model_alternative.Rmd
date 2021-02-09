@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 ## Emanator model
-To run the version of the malaria model that has emanators in instead of IRS (see emanator modelling paper), several further parameter values need to be specified when calling `run_model`:
+To run the version of the malaria model that has emanators in instead of IRS (see [emanator modelling paper](http://dx.doi.org/10.1098/rstb.2019.0817)), several further parameter values need to be specified when calling `run_model`:
 
 ```{r}
 # Some toy parameter values to run the emanator model

@@ -12,7 +12,7 @@ This model has been developed over a number of years, and has been described in 
 ## Using Odin
 To run the model forward in time we need to solve a system of differential equations, we will do this using the R package that Rich Fitzjohn made called [Odin](https://github.com/richfitz/odin). The Odin package lets us write down the differential equations in a domain-specific language that is similar to R, it then converts the model that we have written down into C code and uses a numerical method to get an approximation of the solutions to the system of differential equations.
 
-* [Install the Odin package](https://github.com/richfitz/odin#installation) and [read the vignettes](https://richfitz.github.io/odin/vignettes/odin.html) to make sure you understand how to use Odin. Note: to be able to run this model, you will need to install the developmental version of the odin package directly from Github, using the devtools package.
+* [Install the Odin package](https://github.com/richfitz/odin#installation) and [read the vignettes](https://richfitz.github.io/odin/vignettes/odin.html) to make sure you understand how to use Odin. __Note:__ to be able to run this model, you will need to install the developmental version of the odin package directly from Github, using the devtools package.
 * Install a couple more R packages that you will need to get the model running:
 `install.packages("statmod","ggplot2","reshape2","dplyr","magrittr", "RecordLinkage")`
 

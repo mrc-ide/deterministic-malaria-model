@@ -4,7 +4,7 @@ CS_peak <-621 # JDC: edited to match Hogan et al. [2018] (previously 667)
 CS_boost <- 277 # JDC: edited to match Hogan et al. [2018] (previously 267)
 p_peak <- 0.88
 p_boost<-0.7
-ds <- 45 #JDC July2019: I think the previous value of 5 was a typo
+ds <- 45 
 dl <- 591
 beta_RTS <- 99.2
 alpha_RTS  <- 0.74

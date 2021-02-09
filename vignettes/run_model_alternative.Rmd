@@ -50,7 +50,7 @@ abline(h = 0.1522, lty = 2)
 In this version of the model, ivermectin is deployed as an endectocide
 
 ```{r}
-# Some toy parameter values to run the emanator model
+
 #Doesn't work at the moment. New params need defining
 out <- run_model(model = "odin_model_IVM_SMChet",
                  time = 4000,

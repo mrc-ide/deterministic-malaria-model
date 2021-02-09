@@ -17,9 +17,8 @@ To run the model forward in time we need to solve a system of differential equat
 `install.packages("statmod","ggplot2","reshape2","dplyr","magrittr", "RecordLinkage")`
 
 ## Installing the model
-Easiest way to install this model is probably to clone this repository to your local machine, open the `ICDMM.Rproj` file in RStudio and then Ctrl+Shift+B to build and reload the package
+Easiest way to install this model is probably to clone this repository to your local machine, open the `ICDMM.Rproj` file in RStudio and then Ctrl+Shift+B to build and reload the package. Alternatively, run the command `devtools::install_github("mrc-ide/ICDMM")` in RStudio.
 
 ## Running the model
-
 
 There are vignettes that explain how to run the [simple model](https://mrc-ide.github.io/deterministic-malaria-model/articles/run_model.html) and the more [flexible versions](https://mrc-ide.github.io/deterministic-malaria-model/articles/create_r_model.html) of the model. 

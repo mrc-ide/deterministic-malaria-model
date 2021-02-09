@@ -47,4 +47,36 @@ abline(v = 365, lty = 2)
 abline(h = 0.1522, lty = 2)
 ```
 ## Ivermectin SMC model
+In this version of the model, ivermectin is deployed as an endectocide
 
+```{r}
+# Some toy parameter values to run the emanator model
+#Doesn't work at the moment. New params need defining
+out <- run_model(model = "odin_model_IVM_SMChet",
+                 time = 4000,
+                 num_int = 4,
+                 init_EIR = 5,
+                 age02 = 4, #
+                 age10 = 11, #
+                 B2 = .1, #
+                 eff_len = 3,
+                 ivm_cov_par = 0.6,
+                 ivm_min_age = 7,
+                 MDA_cov = 0.4,
+                 MDA_grp_prop = 0.5,
+                 MDA_t1 = 0.2,
+                 MDA_t2 = 0.9,
+                 MDA_t3 = 3,
+                 MDA_t4 = 5,
+                 MDA_t5 = 7,
+                 MDA_t6 = 7.4,
+                 MDA_t7 = 7.9,
+                 MDA_t8 = 8.7,
+                 ncc = 4,
+                 SMCyrs = 3,
+                 ttt = 3, #could be a vector?
+                 ccov = c(0.1,0.4,0.7,0.9),
+                 haz = c(1,4,5)
+)
+
+```

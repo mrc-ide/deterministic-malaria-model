@@ -29,7 +29,7 @@ test_that("equilibrium foi data", {
 bm_eir_eq <- unlist(read.delim(system.file("testdata/bm_data/eir_eq.txt", package="ICDMM"))[1, 2:40], use.names=FALSE)
 
 test_that("equilibrium eir", {
-  expect_equal(as.vector(t(eqm_soln$EIR)), bm_eir_eq, tolerance=1e-6)
+  expect_equal(as.vector(t(eqm_soln$EIR_eq)), bm_eir_eq, tolerance=1e-6)
 })
 
 bm_x_I <- unlist(read.delim(system.file("testdata/bm_data/x_I.txt", package="ICDMM"))[1, 2:14], use.names=FALSE)

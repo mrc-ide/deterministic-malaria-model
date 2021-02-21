@@ -504,6 +504,7 @@ avB2 = av*B2
 
 
 # fitted entomological parameters:
+mu0 <- user() # baseline mosquito death rate
 mv0 <- user() # initial mosquito density
 tau1 <- user() # duration of host-seeking behaviour
 tau2 <- user() # duration of resting behaviour

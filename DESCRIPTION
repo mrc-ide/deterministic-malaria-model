@@ -1,7 +1,7 @@
 Package: ICDMM
 Type: Package
 Title: Deterministic malaria odin model
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     c(person(given = "Joel", 
              family = "Hellewell", 
@@ -29,7 +29,7 @@ Imports:
     statmod,
     stringi,
     rlang,
-    odin, 
+    odin (>= 1.1.5),
     RecordLinkage
 Remotes:
     richfitz/odin,

@@ -10,4 +10,5 @@ inst/doc
 .c
 .dll
 *.dll
+*.so
 *.DS_Store

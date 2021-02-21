@@ -185,7 +185,8 @@ b1 <- user() # prob of infection from bite with zero immunity
 kB <- user() #
 IB0 <- user()
 dim(b) <- c(na,nh,num_int)
-b[1:na, 1:nh, 1:num_int] <- b0 * ((1-b1)/(1+(IB[i,j,k]/IB0)^kB)+b1)
+#b[1:na, 1:nh, 1:num_int] <- b0 * ((1-b1)/(1+(IB[i,j,k]/IB0)^kB)+b1) b[1:na, 1:nh, 1:num_int] <-b_fun[i,j,k]
+b[1:na, 1:nh, 1:num_int] <-b_fun[i,j,k]
 
 # detection immunity
 init_ID[,,] <- user()
@@ -289,8 +290,13 @@ cA[,,] <- cU + (cD-cU)*p_det[i,j,k]^gamma1
 # Force of infection from humans to mosquitoes
 dim(FOIvijk) <- c(na,nh,num_int)
 omega <- user() #normalising constant for biting rates
-FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i]/omega
+#FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i]/omega
+#lag_FOIv=sum(FOIvijk)
+# FOI dependes on vaccine
+FOIvijk[1:na, 1:nh, 1:num_int] <-(cT_fcn[i,k]*T[i,j,k] + cD_fcn[i,k]*D[i,j,k] + cA_fcn[i,j,k]*A[i,j,k] + cU_fcn[i,k]*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i]/omega
+
 lag_FOIv=sum(FOIvijk)
+
 
 # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)
 delayGam <- user() # Lag from parasites to infectious gametocytes
@@ -437,31 +443,33 @@ d_IRS <- if(t < ITN_IRS_on) 0 else chi*d_IRS0*IRS_decay
 s_IRS <- if(t < ITN_IRS_on) 1 else 1 - d_IRS
 
 # probability that mosquito bites and survives for each intervention category
-dim(w_) <- 4
+dim(w_) <- 4#num_int
 w_[1] <- 1
 w_[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-w_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)*s_IRS
-w_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors - bites_Bed)*(1-r_IRS)*s_IRS
+w_[3] <- 1
+w_[4] <- 1 - bites_Bed + bites_Bed*s_ITN
 w[] <- w_[i]
 dim(w) <- num_int
 
 # probability that mosq feeds during a single attempt for each int. cat.
-dim(yy_) <- 4
+dim(yy_) <- 4#num_int
 yy_[1] <- 1
 yy_[2] <- w_[2]
-yy_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)
-yy_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN + (bites_Indoors - bites_Bed)*(1-r_IRS)
+yy_[3] <- 1
+yy_[4] <- w_[4]
 yy[] <- yy_[i]
 dim(yy) <- num_int
 
+
 # probability that mosquito is repelled during a single attempt for each int. cat.
-dim(z_) <- 4
+dim(z_) <- 4#num_int
 z_[1] <- 0
 z_[2] <- bites_Bed*r_ITN
-z_[3] <- bites_Indoors*r_IRS
-z_[4] <- bites_Bed*(r_IRS+ (1-r_IRS)*r_ITN) + (bites_Indoors - bites_Bed)*r_IRS
+z_[3] <- 0
+z_[4] <- bites_Bed*r_ITN
 z[] <- z_[i]
 dim(z) <- num_int
+
 
 # Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details
 dim(zhi) <- num_int
@@ -475,7 +483,6 @@ zbar <- Q0*zh
 # W (wbar) - average probability of mosquito successfully feeding during single attempt
 wbar <- 1 - Q0 + Q0*wh
 
-# p1 is the updated p10 given that interventions are now in place:
 p1 <- wbar*p10/(1-zbar*p10)
 Q <- 1-(1-Q0)/wbar # updated anthropophagy given interventions
 av <- fv*Q # biting rate on humans
@@ -483,6 +490,154 @@ dim(av_mosq) <- num_int
 av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
 dim(av_human) <- num_int
 av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
+
+vacc_lag <- user()
+v_interval <- user() #Interval between vaccinations
+vacc_on <- ITN_IRS_on + vacc_lag # days after which [vaccination] interventions begin
+
+switch_TBV <- user()
+hill1 <- user() #Hill parameter for dose-response curve
+hill2 <- user() #Hill parameter for dose-response curve
+mu25 <- user() #Titre (\mu g/ml) to centre the dose-response curve
+tau25 <- user() #Max. antibody titre
+rho25 <- user() #Proportion of antibody response associated with quicker decay
+ds25 <- user() #Short antibody half-life
+dl25 <- user() #Long antibody half-life
+rs25 <- ds25/log(2)
+rl25 <- dl25/log(2)
+
+# Indexes of age vector at which the intervention would take place
+age_min_tbv <- user()
+age_max_tbv <- user()
+
+tvacc <-(t-vacc_on)%%v_interval   # time since last vaccination
+
+### Antibody titre and vaccine efficiency changes over time
+titre25 <- tau25*(rho25*exp(-tvacc/rs25) + (1-rho25)*exp(-tvacc/rl25))
+vacc_effic <- ((titre25/mu25)^hill1)/(((titre25/mu25)^hill1) + hill2) # TRA model
+vacc_effic_TBA <- 0.917*(((titre25/12.628)^1.09)/(((titre25/12.628)^1.09) + 0.72)) #TBA model (via SMFA, Bompard [2017])
+
+# Infectousness:
+#
+#T
+mT <- 35.0 #Negative binomial parameters
+rrT <- 0.91#3.53 #Negative binomial parameters
+v_effic_T <- (1/(1-(rrT/(rrT+mT))^rrT)) * ( (rrT/(rrT+mT*(1-vacc_effic)))^rrT - (rrT/(rrT+mT))^rrT)
+#
+#D
+mD <- 46.7 #Negative binomial parameters
+rrD <- 0.91#3.39 #Negative binomial parameters
+v_effic_D <- (1/(1-(rrD/(rrD+mD))^rrD)) * ( (rrD/(rrD+mD*(1-vacc_effic)))^rrD - (rrD/(rrD+mD))^rrD)
+#
+#
+#A
+mA <- 3.8 #Negative binomial parameters
+rrA <- 0.91#1.03 #Negative binomial parameters
+v_effic_A <- (1/(1-(rrA/(rrA+mA))^rrA)) * ( (rrA/(rrA+mA*(1-vacc_effic)))^rrA - (rrA/(rrA+mA))^rrA)
+#
+#
+#U
+mU <- 0.84 #Negative binomial parameters
+rrU <- 0.91 #3.52 #Negative binomial parameters
+v_effic_U <- (1/(1-(rrU/(rrU+mU))^rrU)) * ( (rrU/(rrU+mU*(1-vacc_effic)))^rrU - (rrU/(rrU+mU))^rrU)
+#
+
+# Infectousness:
+#JDC: Add a switch, to swap TRA / TBA implementation?
+switch_TRA_to_TBA <- user()
+#T
+v_effic_T1 <- if(switch_TRA_to_TBA==1) v_effic_T else vacc_effic_TBA
+#D
+v_effic_D1 <- if(switch_TRA_to_TBA==1) v_effic_D else vacc_effic_TBA
+#A
+v_effic_A1 <- if(switch_TRA_to_TBA==1) v_effic_A else vacc_effic_TBA
+#U
+v_effic_U1 <- if(switch_TRA_to_TBA==1) v_effic_U else vacc_effic_TBA
+
+# Infectousness:
+
+dim(cT_fcn) <- c(na,num_int)
+cT_fcn[1:na, 1] <- cT
+cT_fcn[1:na, 2] <- cT
+cT_fcn[1:(age_min_tbv-1), 3:4] <- cT
+cT_fcn[(age_min_tbv):age_max_tbv, 3:4] <- if (t < vacc_on || switch_TBV==0) cT else  cT*(1 - v_effic_T1)
+cT_fcn[(age_max_tbv+1):na, 3:4] <- cT
+
+dim(cD_fcn) <- c(na,num_int)
+
+cD_fcn[1:na, 1] <- cD
+cD_fcn[1:na, 2] <- cD
+cD_fcn[1:(age_min_tbv-1), 3:4] <- cD
+cD_fcn[(age_min_tbv):age_max_tbv, 3:4] <- if (t < vacc_on || switch_TBV==0) cD else cD*(1 - v_effic_D1)
+cD_fcn[(age_max_tbv+1):na, 3:4] <- cD
+
+dim(cU_fcn) <- c(na,num_int)
+cU_fcn[1:na, 1] <- cU
+cU_fcn[1:na, 2] <- cU
+cU_fcn[1:(age_min_tbv-1), 3:4] <- cU
+cU_fcn[(age_min_tbv):age_max_tbv, 3:4] <-if  (t < vacc_on || switch_TBV==0) cU else cU*(1 - v_effic_U1)
+cU_fcn[(age_max_tbv+1):na, 3:4] <- cU
+
+dim(cA_fcn) <- c(na,nh,num_int)
+cA_fcn[1:na,1:nh, 1] <- cA[i,j,k]
+cA_fcn[1:na,1:nh, 2] <- cA[i,j,k]
+cA_fcn[1:(age_min_tbv-1),1:nh, 3:4] <- cA[i,j,k]
+cA_fcn[(age_min_tbv):age_max_tbv,1:nh, 3:4] <-if  (t < vacc_on || switch_TBV==0) cA[i,j,k] else cA[i,j,k]*(1 - v_effic_A1)
+cA_fcn[(age_max_tbv+1):na,1:nh, 3:4] <- cA[i,j,k]
+
+
+
+RTS_switch <- user()
+CS_peak <- user()
+CS_boost <- user()
+p_peak <- user()
+p_boost <- user()
+ds <- user()
+dl <- user()
+beta_RTS <- user()
+alpha_RTS <- user()
+V_max_RTS <- user()
+
+
+r_s <- log(2)/ds # You may wish to make these consistent with TBV defns.
+r_l <- log(2)/dl
+
+
+#Scheduling parameters
+age_min_rts <- user()
+age_max_rts <- user()
+t_boost_rts <- user()
+t_rts <-(t-vacc_on)%% t_boost_rts   # time since last vaccination
+#vcount <-  (t-vacc_on + 1) %/% t_boost_rts  # Number of vaccination rounds thus far?
+
+# Decay function for vaccine and boost
+CS_RTS <- CS_peak*(p_peak*exp(-r_s*t_rts) + (1-p_peak)*exp(-r_l*t_rts)) #Room for if statement here? Could test with output?
+Vef_RTS <- V_max_RTS *(1-(1/(1+(CS_RTS/beta_RTS)^alpha_RTS)))
+b_first <- ((1-Vef_RTS))
+
+
+CS_RTS_boost <- CS_boost*(p_boost*exp(-r_s*(t_rts)) + (1-p_boost)*exp(-r_l*(t_rts)))
+Vef_RTS_boost <- V_max_RTS *(1-(1/(1+(CS_RTS_boost/beta_RTS)^alpha_RTS)))
+b_boost <- ((1-Vef_RTS_boost))
+
+dim(b_fun) <- c(na,nh,num_int)
+# No intervention
+b_fun [,,1] <-  b0 * ((1-b1)/(1+(IB[i,j,1]/IB0)^kB)+b1)
+# Just INT
+b_fun [,,2] <-  b0 * ((1-b1)/(1+(IB[i,j,2]/IB0)^kB)+b1)
+
+# Vaccine
+b_fun[1:(age_min_rts-1), 1:nh,3] <-  b0 * ((1-b1)/(1+(IB[i,j,3]/IB0)^kB)+b1)
+b_fun[age_min_rts, 1:nh, 3] <- if(RTS_switch==0 ||t < vacc_on) b0 * ((1-b1)/(1+(IB[i,j,3]/IB0)^kB)+b1) else  b_first* b0 * ((1-b1)/(1+(IB[i,j,3]/IB0)^kB)+b1)
+b_fun[(age_min_rts+1):age_max_rts,1:nh,3] <-  if(RTS_switch==0 ||t < vacc_on)  b0 * ((1-b1)/(1+(IB[i,j,3]/IB0)^kB)+b1) else b_boost * b0 * ((1-b1)/(1+(IB[i,j,3]/IB0)^kB)+b1)
+b_fun[(age_max_rts+1):na,1:nh,3] <-  b0 * ((1-b1)/(1+(IB[i,j,3]/IB0)^kB)+b1)
+
+# Vaccine and INT
+b_fun[1:(age_min_rts-1), 1:nh,4] <-  b0 * ((1-b1)/(1+(IB[i,j,4]/IB0)^kB)+b1)
+b_fun[age_min_rts, 1:nh, 4] <- if(RTS_switch==0 ||t < vacc_on) b0 * ((1-b1)/(1+(IB[i,j,4]/IB0)^kB)+b1) else  b_first* b0 * ((1-b1)/(1+(IB[i,j,4]/IB0)^kB)+b1)
+b_fun[(age_min_rts+1):age_max_rts,1:nh,4] <-   if(RTS_switch==0 ||t < vacc_on)  b0 * ((1-b1)/(1+(IB[i,j,4]/IB0)^kB)+b1) else b_boost * b0 * ((1-b1)/(1+(IB[i,j,4]/IB0)^kB)+b1)
+b_fun[(age_max_rts+1):na,1:nh,4] <-  b0 * ((1-b1)/(1+(IB[i,j,4]/IB0)^kB)+b1)
+
 
 ##------------------------------------------------------------------------------
 ###################
@@ -498,6 +653,17 @@ output(Aout) <- sum(A[,,])
 output(Uout) <- sum(U[,,])
 output(Pout) <- sum(P[,,])
 
+#EIR
+dim(EIRweight) <- c(na,nh,num_int)
+EIRweight[,,] <- (T[i,j,k] + A[i,j,k] + D[i,j,k] + U[i,j,k] + P[i,j,k] + S[i,j,k])*EIR[i,j,k]
+EIRout <- sum(EIRweight[,,])
+output(EIRout) <- EIRout
+
+#Now also output the A's that are detectable by microscopy
+dim(vis_A) <- c(na,nh,num_int)
+vis_A[1:na, 1:nh, 1:num_int] <- A[i,j,k]*p_det[i,j,k]
+output(Aoutvis) <- sum(vis_A[,,])
+
 # Outputs for clinical incidence and prevalence on a given day
 # population densities for each age category
 den[] <- user()
@@ -507,15 +673,61 @@ age59 <- user(integer=TRUE)
 # index of the age vector above 5 years
 age05 <- user(integer=TRUE)
 
+#
 dim(prev0to59) <- c(age59,nh,num_int)
+dim(prev) <- c(na,nh,num_int)
 prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
-output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
+prev[1:na, 1:nh, 1:num_int] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
+#output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
+#dim(prev_age) <-na
+#output(prev_age[]) <- sum(prev_tot[i,,])/den[i]
+#prev_tot <- sum(prev[,,])
+output(prev_tot) <- sum(prev[,,])
 
 # slide positivity in 0 -5 year age bracket
 dim(clin_inc0to5) <- c(age05,nh,num_int)
 clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
+
+#Now also output the A's that are detectable by microscopy
+#dim(vis_A) <- c(na,nh,num_int)
+#vis_A[1:na, 1:nh, 1:num_int] <- A[i,j,k]*p_det[i,j,k]
+#output(Aoutvis) <- sum(vis_A[,,])
+
+#Output averaged infectivity due to state A?
+dim(ainf) <- c(na,nh,num_int)
+ainf[1:na, 1:nh, 1:num_int] <- cA_fcn[i,j,k]*A[i,j,k]
+output(Ainf) <- sum(ainf[,,])
+dim(ainf_Age) <- na
+output(ainf_Age[]) <- sum(ainf[i,,])
+#Also, the part of this due to the miscroscopy-detectable??
+dim(avisinf) <- c(na,nh,num_int)
+avisinf[1:na, 1:nh, 1:num_int] <- cA_fcn[i,j,k]*vis_A[i,j,k]
+output(Avisinf) <- sum(avisinf[,,])
+dim(avisinf_Age) <- na
+output(avisinf_Age[]) <- sum(avisinf[i,,])
+
+# now state T
+dim(tinf) <- c(na,nh,num_int)
+tinf[1:na, 1:nh, 1:num_int] <- cT_fcn[i,k]*T[i,j,k]
+dim(tinf_Age) <- na
+output(Tinf) <- sum(tinf[,,])
+output(tinf_Age[]) <- sum(tinf[i,,])
+
+# now state D
+dim(dinf) <- c(na,nh,num_int)
+dinf[1:na, 1:nh, 1:num_int] <- cD_fcn[i,k]*D[i,j,k]
+dim(dinf_Age) <- na
+output(Dinf) <- sum(dinf[,,])
+output(dinf_Age[]) <- sum(dinf[i,,])
+
+# now state U
+dim(uinf) <- c(na,nh,num_int)
+uinf[1:na, 1:nh, 1:num_int] <- cU_fcn[i,k]*U[i,j,k]
+dim(uinf_Age) <- na
+output(Uinf) <- sum(uinf[,,])
+output(uinf_Age[]) <- sum(uinf[i,,])
 
 # Param checking outputs
 output(mu) <- mu

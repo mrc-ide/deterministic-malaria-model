@@ -14,11 +14,13 @@ navbar:
     - text: Articles
       menu:
       - text: Simplest Model Run
-        href: articles/run_model.html
+        href: articles/run_model_example.html
       - text: More Flexible Model Run
-        href: articles/create_r_model.html
-      - text: Adding ITNs and IRS
-        href: articles/intro_to_nets.html
+        href: articles/run_model.html
+      - text: Alternative Model Runs
+        href: articles/run_model_alternative.html
+      - text: Writing Your Own Model
+        href: articles/write_own_model.html
       - text: --------
       - text: Contributing
         href: CONTRIBUTING.html

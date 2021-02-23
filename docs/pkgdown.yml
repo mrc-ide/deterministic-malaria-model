@@ -1,12 +1,12 @@
-pandoc: 2.11.2
-pkgdown: 1.6.1
+pandoc: 2.9.2.1
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   run_model: run_model.html
   run_model_alternative: run_model_alternative.html
   run_model_example: run_model_example.html
   write_own_model: write_own_model.html
-last_built: 2021-02-23T11:51Z
+last_built: 2021-02-23T16:53Z
 urls:
   reference: https://mrc-ide.github.io/deterministic-malaria-model//reference
   article: https://mrc-ide.github.io/deterministic-malaria-model//articles

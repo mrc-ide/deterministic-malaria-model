@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -78,7 +78,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://mrc-ide.github.io/deterministic-malaria-model/">
-    <span class="fas fa-github"></span>
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -92,7 +92,8 @@
 
       
 
-      </header><script src="run_model_alternative_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><script src="run_model_alternative_files/header-attrs-2.5/header-attrs.js"></script><script src="run_model_alternative_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="run_model_alternative_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="run_model_alternative_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Alternative model runs</h1>
@@ -111,64 +112,61 @@
 <h2 class="hasAnchor">
 <a href="#emanator-model" class="anchor"></a>Emanator model</h2>
 <p>To run the version of the malaria model that has emanators in instead of IRS (see <a href="http://dx.doi.org/10.1098/rstb.2019.0817">emanator modelling paper</a>), several further parameter values need to be specified when calling <code>run_model</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ICDMM</span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ICDMM</span>)
 
 <span class="co"># Some toy parameter values to run the emanator model</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"odin_model_emanators"</span>,
-                 time <span class="op">=</span> <span class="fl">1000</span>,
-                 init_EIR <span class="op">=</span> <span class="fl">5</span>,
-                 r_EM0 <span class="op">=</span> <span class="fl">0.6053263</span>, <span class="co"># Probability of emanator repelling mosquito</span>
-                 em_loss <span class="op">=</span> <span class="fl">0.001954954</span>, <span class="co"># Exponential decay of emanator effectiveness</span>
-                 d_EM0 <span class="op">=</span> <span class="fl">0</span>, <span class="co"># Probability of emanator killing mosquito</span>
-                 Q0 <span class="op">=</span> <span class="fl">0.92</span>, <span class="co"># Mosquito anthropophagy (% of bites on humans)</span>
-                 bites_Emanator <span class="op">=</span> <span class="fl">0.4</span>, <span class="co"># % of bites while using emanator</span>
-                 bites_Indoors <span class="op">=</span> <span class="fl">0.6</span>, <span class="co"># % of bites indoors</span>
-                 bites_Bed <span class="op">=</span> <span class="fl">0.55</span>, <span class="co">#  % of bites in bed</span>
-                 surv_bioassay <span class="op">=</span> <span class="fl">0</span>, <span class="co"># % of mosquitoes surviving insecticide bioassay</span>
-                 EM_interval <span class="op">=</span> <span class="fl">365</span>, <span class="co"># How often emanators are refreshed</span>
-                 EM_on <span class="op">=</span> <span class="fl">365</span>, <span class="co"># When emanators are first distributioed</span>
-                 ITN_on <span class="op">=</span> <span class="fl">365</span>, <span class="co"># When ITNs are first distributed</span>
-                 ITN_interval <span class="op">=</span> <span class="fl">365</span><span class="op">*</span><span class="fl">3</span>, <span class="co"># How often ITNs are refreshed</span>
-                 em_cov <span class="op">=</span> <span class="fl">0.9</span>, <span class="co"># Emanator population coverage</span>
-                 irs_cov <span class="op">=</span> <span class="fl">0.9</span>, <span class="co"># This needs to be fixed at some point</span>
-                 itn_cov <span class="op">=</span> <span class="fl">0</span>, <span class="co"># ITN population coverage</span>
-                 num_int <span class="op">=</span> <span class="fl">4</span>,
-                 country <span class="op">=</span> <span class="cn">NULL</span>,
-                 admin2 <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">t</span>,<span class="va">out</span><span class="op">$</span><span class="va">prev</span>, main<span class="op">=</span> <span class="st">"Prevalance"</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.3</span><span class="op">)</span>, type<span class="op">=</span><span class="st">'l'</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">365</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0.1522</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span>(<span class="kw">model</span> <span class="kw">=</span> <span class="st">"odin_model_emanators"</span>,
+                 <span class="kw">time</span> <span class="kw">=</span> <span class="fl">1000</span>,
+                 <span class="kw">init_EIR</span> <span class="kw">=</span> <span class="fl">5</span>,
+                 <span class="kw">r_EM0</span> <span class="kw">=</span> <span class="fl">0.6053263</span>, <span class="co"># Probability of emanator repelling mosquito</span>
+                 <span class="kw">em_loss</span> <span class="kw">=</span> <span class="fl">0.001954954</span>, <span class="co"># Exponential decay of emanator effectiveness</span>
+                 <span class="kw">d_EM0</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="co"># Probability of emanator killing mosquito</span>
+                 <span class="kw">Q0</span> <span class="kw">=</span> <span class="fl">0.92</span>, <span class="co"># Mosquito anthropophagy (% of bites on humans)</span>
+                 <span class="kw">bites_Emanator</span> <span class="kw">=</span> <span class="fl">0.4</span>, <span class="co"># % of bites while using emanator</span>
+                 <span class="kw">bites_Indoors</span> <span class="kw">=</span> <span class="fl">0.6</span>, <span class="co"># % of bites indoors</span>
+                 <span class="kw">bites_Bed</span> <span class="kw">=</span> <span class="fl">0.55</span>, <span class="co">#  % of bites in bed</span>
+                 <span class="kw">surv_bioassay</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="co"># % of mosquitoes surviving insecticide bioassay</span>
+                 <span class="kw">EM_interval</span> <span class="kw">=</span> <span class="fl">365</span>, <span class="co"># How often emanators are refreshed</span>
+                 <span class="kw">EM_on</span> <span class="kw">=</span> <span class="fl">365</span>, <span class="co"># When emanators are first distributioed</span>
+                 <span class="kw">ITN_on</span> <span class="kw">=</span> <span class="fl">365</span>, <span class="co"># When ITNs are first distributed</span>
+                 <span class="kw">ITN_interval</span> <span class="kw">=</span> <span class="fl">365</span>*<span class="fl">3</span>, <span class="co"># How often ITNs are refreshed</span>
+                 <span class="kw">em_cov</span> <span class="kw">=</span> <span class="fl">0.9</span>, <span class="co"># Emanator population coverage</span>
+                 <span class="kw">irs_cov</span> <span class="kw">=</span> <span class="fl">0.9</span>, <span class="co"># This needs to be fixed at some point</span>
+                 <span class="kw">itn_cov</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="co"># ITN population coverage</span>
+                 <span class="kw">num_int</span> <span class="kw">=</span> <span class="fl">4</span>,
+                 <span class="kw">country</span> <span class="kw">=</span> <span class="kw">NULL</span>,
+                 <span class="kw">admin2</span> <span class="kw">=</span> <span class="kw">NULL</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">out</span>$<span class="no">t</span>,<span class="no">out</span>$<span class="no">prev</span>, <span class="kw">main</span><span class="kw">=</span> <span class="st">"Prevalance"</span>, <span class="kw">ylim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0.3</span>), <span class="kw">type</span><span class="kw">=</span><span class="st">'l'</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">"red"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">v</span> <span class="kw">=</span> <span class="fl">365</span>, <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">2</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">h</span> <span class="kw">=</span> <span class="fl">0.1522</span>, <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
 <p><img src="run_model_alternative_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
 <div id="ivermectin-smc-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ivermectin-smc-model" class="anchor"></a>Ivermectin SMC model</h2>
 <p>In this version of the model, ivermectin is deployed as an endectocide</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">#Demo of this model to go here</span></code></pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r">
+#Demo of this model to go here</pre></body></html></div>
 </div>
 <div id="transmission-blocking-vaccine-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#transmission-blocking-vaccine-model" class="anchor"></a>Transmission blocking vaccine model</h2>
 <p>In this version of the model, a transmission-blocking vaccine (TBV) can be introduced (as described in Challenger et al. forthcoming publication). Note that IRS cannot be introduced in this version of the model. The TBV can be introduced on its own, or delivered alongside a pre-ethrocytic vaccine (based on the RTS,S vaccine). Parameterisation of the latter vaccine was taken from <a href="https://doi.org/10.1016/S1473-3099(15)00239-X">White et al.</a> and <a href="https://doi.org/10.1186/s12916-018-1095-6">Hogan et al.</a></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#Several vaccine-specific parameters are stored here, with their definitions</span>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co">#Several vaccine-specific parameters are stored here, with their definitions</span>
 <span class="co">#source("scripts/vaccine_params.R")</span>
 <span class="co">#Here they are, with their definitions</span>
-<span class="va">CS_peak</span> <span class="op">&lt;-</span><span class="fl">621</span> <span class="co">#Peak antibody titre (after primary vaccination with RTS,S)</span>
-<span class="va">CS_boost</span> <span class="op">&lt;-</span> <span class="fl">277</span> <span class="co"># Peak antibody titre (after booster dose of RTS,S)</span>
-<span class="va">p_peak</span> <span class="op">&lt;-</span> <span class="fl">0.88</span> <span class="co">#Proportion of antibody response that is short lived (after primary vaccination with RTS,S)</span>
-<span class="va">p_boost</span><span class="op">&lt;-</span><span class="fl">0.7</span> <span class="co">#Proportion of antibody response that is short lived (after booster dose of RTS,S)</span>
-<span class="va">ds</span> <span class="op">&lt;-</span> <span class="fl">45</span> <span class="co">#decay rate of short-lived anitbody response to RTS,S</span>
-<span class="va">dl</span> <span class="op">&lt;-</span> <span class="fl">591</span> <span class="co">#decay rate of long-lived anitbody response to RTS,S</span>
-<span class="va">beta_RTS</span> <span class="op">&lt;-</span> <span class="fl">99.2</span> <span class="co">#Shape param for dose-response of RTS,S</span>
-<span class="va">alpha_RTS</span>  <span class="op">&lt;-</span> <span class="fl">0.74</span> <span class="co">#Shape param for dose-response of RTS,S</span>
-<span class="va">V_max_RTS</span> <span class="op">&lt;-</span> <span class="fl">0.93</span> <span class="co"># Max RTS,S efficacy</span>
+<span class="no">CS_peak</span> <span class="kw">&lt;-</span><span class="fl">621</span> <span class="co">#Peak antibody titre (after primary vaccination with RTS,S)</span>
+<span class="no">CS_boost</span> <span class="kw">&lt;-</span> <span class="fl">277</span> <span class="co"># Peak antibody titre (after booster dose of RTS,S)</span>
+<span class="no">p_peak</span> <span class="kw">&lt;-</span> <span class="fl">0.88</span> <span class="co">#Proportion of antibody response that is short lived (after primary vaccination with RTS,S)</span>
+<span class="no">p_boost</span><span class="kw">&lt;-</span><span class="fl">0.7</span> <span class="co">#Proportion of antibody response that is short lived (after booster dose of RTS,S)</span>
+<span class="no">ds</span> <span class="kw">&lt;-</span> <span class="fl">45</span> <span class="co">#decay rate of short-lived anitbody response to RTS,S</span>
+<span class="no">dl</span> <span class="kw">&lt;-</span> <span class="fl">591</span> <span class="co">#decay rate of long-lived anitbody response to RTS,S</span>
+<span class="no">beta_RTS</span> <span class="kw">&lt;-</span> <span class="fl">99.2</span> <span class="co">#Shape param for dose-response of RTS,S</span>
+<span class="no">alpha_RTS</span>  <span class="kw">&lt;-</span> <span class="fl">0.74</span> <span class="co">#Shape param for dose-response of RTS,S</span>
+<span class="no">V_max_RTS</span> <span class="kw">&lt;-</span> <span class="fl">0.93</span> <span class="co"># Max RTS,S efficacy</span>
 
 <span class="co">#Scheduling parameters</span>
-<span class="va">t_boost_rts</span> <span class="op">&lt;-</span> <span class="fl">365</span>
+<span class="no">t_boost_rts</span> <span class="kw">&lt;-</span> <span class="fl">365</span>
 
 <span class="co">#Extra params for the TBV vaccine (For Pfs230 estimate)</span>
 <span class="co">#v_max_effic &lt;- 0.96</span>
@@ -178,68 +176,68 @@
 <span class="co">#v_interval &lt;- 365</span>
 
 <span class="co">#Extra params for the TBV vaccine (For Pfs25 estimate)</span>
-<span class="va">hill1</span> <span class="op">&lt;-</span> <span class="fl">2.50</span> <span class="co">#Hill parameter for dose-response curve</span>
-<span class="va">hill2</span> <span class="op">&lt;-</span> <span class="fl">0.06</span> <span class="co">#Hill parameter for dose-response curve</span>
-<span class="va">mu25</span> <span class="op">&lt;-</span> <span class="fl">12.63</span> <span class="co">#Titre (\mu g/ml) to centre the dose-response curve</span>
-<span class="va">tau25</span> <span class="op">&lt;-</span> <span class="fl">22</span> <span class="co">#Max. antibody titre</span>
-<span class="va">rho25</span> <span class="op">&lt;-</span> <span class="fl">0.7</span> <span class="co">#Proportion of antibody response associated with quicker decay</span>
-<span class="va">ds25</span> <span class="op">&lt;-</span> <span class="fl">45</span> <span class="co">#Short antibody half-life</span>
-<span class="va">dl25</span> <span class="op">&lt;-</span> <span class="fl">590</span> <span class="co">#Long antibody half-life</span>
-<span class="va">ds25worse</span> <span class="op">&lt;-</span> <span class="fl">0.5</span><span class="op">*</span><span class="va">ds25</span><span class="co">#35 #Short antibody half-life</span>
-<span class="va">dl25worse</span> <span class="op">&lt;-</span> <span class="fl">0.5</span><span class="op">*</span><span class="va">dl25</span> <span class="co">#450 #Long antibody half-life</span>
-<span class="va">ds25better</span> <span class="op">&lt;-</span> <span class="fl">2</span><span class="op">*</span><span class="va">ds25</span><span class="co">#55 #Short antibody half-life</span>
-<span class="va">dl25better</span> <span class="op">&lt;-</span> <span class="fl">2</span><span class="op">*</span><span class="va">dl25</span> <span class="co">#730 #Long antibody half-life</span>
-<span class="va">v_interval</span> <span class="op">&lt;-</span> <span class="fl">365</span> <span class="co">#Interval between TBV vaccinations</span>
+<span class="no">hill1</span> <span class="kw">&lt;-</span> <span class="fl">2.50</span> <span class="co">#Hill parameter for dose-response curve</span>
+<span class="no">hill2</span> <span class="kw">&lt;-</span> <span class="fl">0.06</span> <span class="co">#Hill parameter for dose-response curve</span>
+<span class="no">mu25</span> <span class="kw">&lt;-</span> <span class="fl">12.63</span> <span class="co">#Titre (\mu g/ml) to centre the dose-response curve</span>
+<span class="no">tau25</span> <span class="kw">&lt;-</span> <span class="fl">22</span> <span class="co">#Max. antibody titre</span>
+<span class="no">rho25</span> <span class="kw">&lt;-</span> <span class="fl">0.7</span> <span class="co">#Proportion of antibody response associated with quicker decay</span>
+<span class="no">ds25</span> <span class="kw">&lt;-</span> <span class="fl">45</span> <span class="co">#Short antibody half-life</span>
+<span class="no">dl25</span> <span class="kw">&lt;-</span> <span class="fl">590</span> <span class="co">#Long antibody half-life</span>
+<span class="no">ds25worse</span> <span class="kw">&lt;-</span> <span class="fl">0.5</span>*<span class="no">ds25</span><span class="co">#35 #Short antibody half-life</span>
+<span class="no">dl25worse</span> <span class="kw">&lt;-</span> <span class="fl">0.5</span>*<span class="no">dl25</span> <span class="co">#450 #Long antibody half-life</span>
+<span class="no">ds25better</span> <span class="kw">&lt;-</span> <span class="fl">2</span>*<span class="no">ds25</span><span class="co">#55 #Short antibody half-life</span>
+<span class="no">dl25better</span> <span class="kw">&lt;-</span> <span class="fl">2</span>*<span class="no">dl25</span> <span class="co">#730 #Long antibody half-life</span>
+<span class="no">v_interval</span> <span class="kw">&lt;-</span> <span class="fl">365</span> <span class="co">#Interval between TBV vaccinations</span>
 
 
 <span class="co">#Parameters to define</span>
-<span class="va">ITN_IRS_on</span> <span class="op">&lt;-</span> <span class="fl">4</span> <span class="op">*</span> <span class="fl">365</span> <span class="op">+</span> <span class="fl">100</span> <span class="co"># When ITNs are introduced</span>
+<span class="no">ITN_IRS_on</span> <span class="kw">&lt;-</span> <span class="fl">4</span> * <span class="fl">365</span> + <span class="fl">100</span> <span class="co"># When ITNs are introduced</span>
 
-<span class="va">init_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.25</span>,<span class="fl">0.5</span>,<span class="fl">0.75</span>,<span class="fl">1</span>,<span class="fl">1.25</span>,<span class="fl">1.5</span>,<span class="fl">1.75</span>,<span class="fl">2</span>,<span class="fl">3.5</span>,<span class="fl">5</span>,<span class="fl">7.5</span>,<span class="fl">10</span>,<span class="fl">15</span>,<span class="fl">20</span>,<span class="fl">30</span>,<span class="fl">40</span>,<span class="fl">50</span>,<span class="fl">60</span>,<span class="fl">70</span>,<span class="fl">80</span><span class="op">)</span>
+<span class="no">init_age</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0.25</span>,<span class="fl">0.5</span>,<span class="fl">0.75</span>,<span class="fl">1</span>,<span class="fl">1.25</span>,<span class="fl">1.5</span>,<span class="fl">1.75</span>,<span class="fl">2</span>,<span class="fl">3.5</span>,<span class="fl">5</span>,<span class="fl">7.5</span>,<span class="fl">10</span>,<span class="fl">15</span>,<span class="fl">20</span>,<span class="fl">30</span>,<span class="fl">40</span>,<span class="fl">50</span>,<span class="fl">60</span>,<span class="fl">70</span>,<span class="fl">80</span>)
 
 <span class="co">#Min &amp; Max age for vaccination. Values refer to the position in age vector, NOT age in years</span>
 <span class="co">#RTS,S</span>
-<span class="va">age_min_rts</span> <span class="op">&lt;-</span> <span class="fl">3</span>
-<span class="va">age_max_rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">init_age</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span> <span class="co"># index of age vector before age is 5 years</span>
+<span class="no">age_min_rts</span> <span class="kw">&lt;-</span> <span class="fl">3</span>
+<span class="no">age_max_rts</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="no">init_age</span> <span class="kw">&gt;</span> <span class="fl">5</span>)[<span class="fl">1</span>] - <span class="fl">1</span> <span class="co"># index of age vector before age is 5 years</span>
 <span class="co">#TBV</span>
-<span class="va">age_min_tbv</span> <span class="op">=</span> <span class="fl">5</span>
-<span class="va">age_max_tbv</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">init_age</span> <span class="op">&gt;</span> <span class="fl">40</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span> <span class="co"># index of age vector before age is 40 years</span>
+<span class="no">age_min_tbv</span> <span class="kw">=</span> <span class="fl">5</span>
+<span class="no">age_max_tbv</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="no">init_age</span> <span class="kw">&gt;</span> <span class="fl">40</span>)[<span class="fl">1</span>] - <span class="fl">1</span> <span class="co"># index of age vector before age is 40 years</span>
 
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">'odin_model_TBV'</span>,
-                 init_EIR <span class="op">=</span> <span class="fl">50</span>,
-                 time <span class="op">=</span> <span class="fl">10</span><span class="op">*</span><span class="fl">365</span>,
-                 age <span class="op">=</span> <span class="va">init_age</span>,
-                 RTS_switch <span class="op">=</span> <span class="fl">0</span>, <span class="co">#Include RTS,S in vaccination campaign? (Y/N)</span>
-                 switch_TBV <span class="op">=</span> <span class="fl">1</span>, <span class="co">#Include TBV in vaccination campaign? (Y/N)</span>
-                 switch_TRA_to_TBA <span class="op">=</span> <span class="fl">1</span>, <span class="co"># Set to 1 for the model used in the Nat Comms paper</span>
-                 irs_cov <span class="op">=</span> <span class="fl">0.8</span>, <span class="co">#Vaccine coverage (within the specified age group)</span>
-                 itn_cov <span class="op">=</span> <span class="fl">0</span>,
-                 num_int <span class="op">=</span> <span class="fl">4</span>,
-                 ITN_IRS_on <span class="op">=</span> <span class="va">ITN_IRS_on</span>,
-                 vacc_lag <span class="op">=</span> <span class="fl">0.0</span>, <span class="co">#Delay between ITN introduction &amp; start of vaccination campaign</span>
-                 v_interval <span class="op">=</span> <span class="va">v_interval</span>, <span class="co">#frequency of vaccination</span>
-                 hill1 <span class="op">=</span> <span class="va">hill1</span>,
-                 hill2 <span class="op">=</span> <span class="va">hill2</span>,
-                 mu25 <span class="op">=</span> <span class="va">mu25</span>,
-                 tau25 <span class="op">=</span> <span class="va">tau25</span>,
-                 rho25 <span class="op">=</span> <span class="va">rho25</span>,
-                 ds25 <span class="op">=</span> <span class="va">ds25</span>,
-                 dl25 <span class="op">=</span> <span class="va">dl25</span>,
-                 age_min_tbv <span class="op">=</span> <span class="va">age_min_tbv</span>,
-                 age_max_tbv <span class="op">=</span> <span class="va">age_max_tbv</span>,
-                 age_min_rts <span class="op">=</span> <span class="va">age_min_rts</span>,
-                 age_max_rts <span class="op">=</span> <span class="va">age_max_rts</span>,
-                 t_boost_rts <span class="op">=</span> <span class="va">t_boost_rts</span>,
-                 CS_peak <span class="op">=</span> <span class="va">CS_peak</span>,
-                 CS_boost <span class="op">=</span> <span class="va">CS_boost</span>,
-                 p_peak <span class="op">=</span> <span class="va">p_peak</span>,
-                 p_boost <span class="op">=</span> <span class="va">p_boost</span>,
-                 ds <span class="op">=</span> <span class="va">ds</span>,
-                 dl <span class="op">=</span> <span class="va">dl</span>,
-                 beta_RTS <span class="op">=</span> <span class="va">beta_RTS</span>,
-                 alpha_RTS <span class="op">=</span> <span class="va">alpha_RTS</span>,
-                 V_max_RTS <span class="op">=</span> <span class="va">V_max_RTS</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">t</span>,<span class="va">out</span><span class="op">$</span><span class="va">inc05</span>, main<span class="op">=</span> <span class="st">"Incidence in Under 5s"</span>, type<span class="op">=</span><span class="st">'l'</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span>(<span class="kw">model</span> <span class="kw">=</span> <span class="st">'odin_model_TBV'</span>,
+                 <span class="kw">init_EIR</span> <span class="kw">=</span> <span class="fl">50</span>,
+                 <span class="kw">time</span> <span class="kw">=</span> <span class="fl">10</span>*<span class="fl">365</span>,
+                 <span class="kw">age</span> <span class="kw">=</span> <span class="no">init_age</span>,
+                 <span class="kw">RTS_switch</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="co">#Include RTS,S in vaccination campaign? (Y/N)</span>
+                 <span class="kw">switch_TBV</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="co">#Include TBV in vaccination campaign? (Y/N)</span>
+                 <span class="kw">switch_TRA_to_TBA</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="co"># Set to 1 for the model used in the Nat Comms paper</span>
+                 <span class="kw">irs_cov</span> <span class="kw">=</span> <span class="fl">0.8</span>, <span class="co">#Vaccine coverage (within the specified age group)</span>
+                 <span class="kw">itn_cov</span> <span class="kw">=</span> <span class="fl">0</span>,
+                 <span class="kw">num_int</span> <span class="kw">=</span> <span class="fl">4</span>,
+                 <span class="kw">ITN_IRS_on</span> <span class="kw">=</span> <span class="no">ITN_IRS_on</span>,
+                 <span class="kw">vacc_lag</span> <span class="kw">=</span> <span class="fl">0.0</span>, <span class="co">#Delay between ITN introduction &amp; start of vaccination campaign</span>
+                 <span class="kw">v_interval</span> <span class="kw">=</span> <span class="no">v_interval</span>, <span class="co">#frequency of vaccination</span>
+                 <span class="kw">hill1</span> <span class="kw">=</span> <span class="no">hill1</span>,
+                 <span class="kw">hill2</span> <span class="kw">=</span> <span class="no">hill2</span>,
+                 <span class="kw">mu25</span> <span class="kw">=</span> <span class="no">mu25</span>,
+                 <span class="kw">tau25</span> <span class="kw">=</span> <span class="no">tau25</span>,
+                 <span class="kw">rho25</span> <span class="kw">=</span> <span class="no">rho25</span>,
+                 <span class="kw">ds25</span> <span class="kw">=</span> <span class="no">ds25</span>,
+                 <span class="kw">dl25</span> <span class="kw">=</span> <span class="no">dl25</span>,
+                 <span class="kw">age_min_tbv</span> <span class="kw">=</span> <span class="no">age_min_tbv</span>,
+                 <span class="kw">age_max_tbv</span> <span class="kw">=</span> <span class="no">age_max_tbv</span>,
+                 <span class="kw">age_min_rts</span> <span class="kw">=</span> <span class="no">age_min_rts</span>,
+                 <span class="kw">age_max_rts</span> <span class="kw">=</span> <span class="no">age_max_rts</span>,
+                 <span class="kw">t_boost_rts</span> <span class="kw">=</span> <span class="no">t_boost_rts</span>,
+                 <span class="kw">CS_peak</span> <span class="kw">=</span> <span class="no">CS_peak</span>,
+                 <span class="kw">CS_boost</span> <span class="kw">=</span> <span class="no">CS_boost</span>,
+                 <span class="kw">p_peak</span> <span class="kw">=</span> <span class="no">p_peak</span>,
+                 <span class="kw">p_boost</span> <span class="kw">=</span> <span class="no">p_boost</span>,
+                 <span class="kw">ds</span> <span class="kw">=</span> <span class="no">ds</span>,
+                 <span class="kw">dl</span> <span class="kw">=</span> <span class="no">dl</span>,
+                 <span class="kw">beta_RTS</span> <span class="kw">=</span> <span class="no">beta_RTS</span>,
+                 <span class="kw">alpha_RTS</span> <span class="kw">=</span> <span class="no">alpha_RTS</span>,
+                 <span class="kw">V_max_RTS</span> <span class="kw">=</span> <span class="no">V_max_RTS</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">out</span>$<span class="no">t</span>,<span class="no">out</span>$<span class="no">inc05</span>, <span class="kw">main</span><span class="kw">=</span> <span class="st">"Incidence in Under 5s"</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">'l'</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">"red"</span>)</pre></body></html></div>
 <p><img src="run_model_alternative_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
   </div>
@@ -259,7 +257,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

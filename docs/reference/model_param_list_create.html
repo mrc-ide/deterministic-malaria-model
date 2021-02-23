@@ -81,7 +81,7 @@ within equilibrium_init_create" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@ within equilibrium_init_create" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://mrc-ide.github.io/deterministic-malaria-model/">
-    <span class="fas fa-github"></span>
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -147,81 +147,81 @@ within equilibrium_init_create" />
 within <code>equilibrium_init_create</code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>model_param_list_create</span><span class='op'>(</span>
-  eta <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>21</span> <span class='op'>*</span> <span class='fl'>365</span><span class='op'>)</span>,
-  rho <span class='op'>=</span> <span class='fl'>0.85</span>,
-  a0 <span class='op'>=</span> <span class='fl'>2920</span>,
-  sigma2 <span class='op'>=</span> <span class='fl'>1.67</span>,
-  max_age <span class='op'>=</span> <span class='fl'>100</span> <span class='op'>*</span> <span class='fl'>365</span>,
-  rA <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>195</span>,
-  rT <span class='op'>=</span> <span class='fl'>0.2</span>,
-  rD <span class='op'>=</span> <span class='fl'>0.2</span>,
-  rU <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>110.299</span>,
-  rP <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>15</span>,
-  dE <span class='op'>=</span> <span class='fl'>12</span>,
-  delayGam <span class='op'>=</span> <span class='fl'>12.5</span>,
-  cD <span class='op'>=</span> <span class='fl'>0.0676909</span>,
-  cT <span class='op'>=</span> <span class='fl'>0.322</span> <span class='op'>*</span> <span class='va'>cD</span>,
-  cU <span class='op'>=</span> <span class='fl'>0.006203</span>,
-  gamma1 <span class='op'>=</span> <span class='fl'>1.82425</span>,
-  d1 <span class='op'>=</span> <span class='fl'>0.160527</span>,
-  dID <span class='op'>=</span> <span class='fl'>3650</span>,
-  ID0 <span class='op'>=</span> <span class='fl'>1.577533</span>,
-  kD <span class='op'>=</span> <span class='fl'>0.476614</span>,
-  uD <span class='op'>=</span> <span class='fl'>9.44512</span>,
-  aD <span class='op'>=</span> <span class='fl'>8001.99</span>,
-  fD0 <span class='op'>=</span> <span class='fl'>0.007055</span>,
-  gammaD <span class='op'>=</span> <span class='fl'>4.8183</span>,
-  alphaA <span class='op'>=</span> <span class='fl'>0.75735</span>,
-  alphaU <span class='op'>=</span> <span class='fl'>0.185624</span>,
-  b0 <span class='op'>=</span> <span class='fl'>0.590076</span>,
-  b1 <span class='op'>=</span> <span class='fl'>0.5</span>,
-  dB <span class='op'>=</span> <span class='fl'>3650</span>,
-  IB0 <span class='op'>=</span> <span class='fl'>43.8787</span>,
-  kB <span class='op'>=</span> <span class='fl'>2.15506</span>,
-  uB <span class='op'>=</span> <span class='fl'>7.19919</span>,
-  phi0 <span class='op'>=</span> <span class='fl'>0.791666</span>,
-  phi1 <span class='op'>=</span> <span class='fl'>0.000737</span>,
-  dCA <span class='op'>=</span> <span class='fl'>10950</span>,
-  IC0 <span class='op'>=</span> <span class='fl'>18.02366</span>,
-  kC <span class='op'>=</span> <span class='fl'>2.36949</span>,
-  uCA <span class='op'>=</span> <span class='fl'>6.06349</span>,
-  PM <span class='op'>=</span> <span class='fl'>0.774368</span>,
-  dCM <span class='op'>=</span> <span class='fl'>67.6952</span>,
-  delayMos <span class='op'>=</span> <span class='fl'>10</span>,
-  tau1 <span class='op'>=</span> <span class='fl'>0.69</span>,
-  tau2 <span class='op'>=</span> <span class='fl'>2.31</span>,
-  mu0 <span class='op'>=</span> <span class='fl'>0.132</span>,
-  Q0 <span class='op'>=</span> <span class='fl'>0.92</span>,
-  chi <span class='op'>=</span> <span class='fl'>0.86</span>,
-  bites_Bed <span class='op'>=</span> <span class='fl'>0.89</span>,
-  bites_Indoors <span class='op'>=</span> <span class='fl'>0.97</span>,
-  muEL <span class='op'>=</span> <span class='fl'>0.0338</span>,
-  muLL <span class='op'>=</span> <span class='fl'>0.0348</span>,
-  muPL <span class='op'>=</span> <span class='fl'>0.249</span>,
-  dEL <span class='op'>=</span> <span class='fl'>6.64</span>,
-  dLL <span class='op'>=</span> <span class='fl'>3.72</span>,
-  dPL <span class='op'>=</span> <span class='fl'>0.643</span>,
-  gammaL <span class='op'>=</span> <span class='fl'>13.25</span>,
-  km <span class='op'>=</span> <span class='fl'>11</span>,
-  cm <span class='op'>=</span> <span class='fl'>0.05</span>,
-  betaL <span class='op'>=</span> <span class='fl'>21.2</span>,
-  num_int <span class='op'>=</span> <span class='fl'>1</span>,
-  itn_cov <span class='op'>=</span> <span class='fl'>0</span>,
-  irs_cov <span class='op'>=</span> <span class='fl'>0</span>,
-  ITN_IRS_on <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1</span>,
-  DY <span class='op'>=</span> <span class='fl'>365</span>,
-  d_ITN0 <span class='op'>=</span> <span class='fl'>0.41</span>,
-  r_ITN0 <span class='op'>=</span> <span class='fl'>0.56</span>,
-  r_ITN1 <span class='op'>=</span> <span class='fl'>0.24</span>,
-  r_IRS0 <span class='op'>=</span> <span class='fl'>0.6</span>,
-  d_IRS0 <span class='op'>=</span> <span class='fl'>1</span>,
-  irs_half_life <span class='op'>=</span> <span class='fl'>0.5</span> <span class='op'>*</span> <span class='va'>DY</span>,
-  itn_half_life <span class='op'>=</span> <span class='fl'>2.64</span> <span class='op'>*</span> <span class='va'>DY</span>,
-  IRS_interval <span class='op'>=</span> <span class='fl'>1</span> <span class='op'>*</span> <span class='va'>DY</span>,
-  ITN_interval <span class='op'>=</span> <span class='fl'>3</span> <span class='op'>*</span> <span class='va'>DY</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>model_param_list_create</span>(
+  <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>1</span>/(<span class='fl'>21</span> * <span class='fl'>365</span>),
+  <span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>0.85</span>,
+  <span class='kw'>a0</span> <span class='kw'>=</span> <span class='fl'>2920</span>,
+  <span class='kw'>sigma2</span> <span class='kw'>=</span> <span class='fl'>1.67</span>,
+  <span class='kw'>max_age</span> <span class='kw'>=</span> <span class='fl'>100</span> * <span class='fl'>365</span>,
+  <span class='kw'>rA</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>195</span>,
+  <span class='kw'>rT</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
+  <span class='kw'>rD</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
+  <span class='kw'>rU</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>110.299</span>,
+  <span class='kw'>rP</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>15</span>,
+  <span class='kw'>dE</span> <span class='kw'>=</span> <span class='fl'>12</span>,
+  <span class='kw'>delayGam</span> <span class='kw'>=</span> <span class='fl'>12.5</span>,
+  <span class='kw'>cD</span> <span class='kw'>=</span> <span class='fl'>0.0676909</span>,
+  <span class='kw'>cT</span> <span class='kw'>=</span> <span class='fl'>0.322</span> * <span class='no'>cD</span>,
+  <span class='kw'>cU</span> <span class='kw'>=</span> <span class='fl'>0.006203</span>,
+  <span class='kw'>gamma1</span> <span class='kw'>=</span> <span class='fl'>1.82425</span>,
+  <span class='kw'>d1</span> <span class='kw'>=</span> <span class='fl'>0.160527</span>,
+  <span class='kw'>dID</span> <span class='kw'>=</span> <span class='fl'>3650</span>,
+  <span class='kw'>ID0</span> <span class='kw'>=</span> <span class='fl'>1.577533</span>,
+  <span class='kw'>kD</span> <span class='kw'>=</span> <span class='fl'>0.476614</span>,
+  <span class='kw'>uD</span> <span class='kw'>=</span> <span class='fl'>9.44512</span>,
+  <span class='kw'>aD</span> <span class='kw'>=</span> <span class='fl'>8001.99</span>,
+  <span class='kw'>fD0</span> <span class='kw'>=</span> <span class='fl'>0.007055</span>,
+  <span class='kw'>gammaD</span> <span class='kw'>=</span> <span class='fl'>4.8183</span>,
+  <span class='kw'>alphaA</span> <span class='kw'>=</span> <span class='fl'>0.75735</span>,
+  <span class='kw'>alphaU</span> <span class='kw'>=</span> <span class='fl'>0.185624</span>,
+  <span class='kw'>b0</span> <span class='kw'>=</span> <span class='fl'>0.590076</span>,
+  <span class='kw'>b1</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+  <span class='kw'>dB</span> <span class='kw'>=</span> <span class='fl'>3650</span>,
+  <span class='kw'>IB0</span> <span class='kw'>=</span> <span class='fl'>43.8787</span>,
+  <span class='kw'>kB</span> <span class='kw'>=</span> <span class='fl'>2.15506</span>,
+  <span class='kw'>uB</span> <span class='kw'>=</span> <span class='fl'>7.19919</span>,
+  <span class='kw'>phi0</span> <span class='kw'>=</span> <span class='fl'>0.791666</span>,
+  <span class='kw'>phi1</span> <span class='kw'>=</span> <span class='fl'>0.000737</span>,
+  <span class='kw'>dCA</span> <span class='kw'>=</span> <span class='fl'>10950</span>,
+  <span class='kw'>IC0</span> <span class='kw'>=</span> <span class='fl'>18.02366</span>,
+  <span class='kw'>kC</span> <span class='kw'>=</span> <span class='fl'>2.36949</span>,
+  <span class='kw'>uCA</span> <span class='kw'>=</span> <span class='fl'>6.06349</span>,
+  <span class='kw'>PM</span> <span class='kw'>=</span> <span class='fl'>0.774368</span>,
+  <span class='kw'>dCM</span> <span class='kw'>=</span> <span class='fl'>67.6952</span>,
+  <span class='kw'>delayMos</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>tau1</span> <span class='kw'>=</span> <span class='fl'>0.69</span>,
+  <span class='kw'>tau2</span> <span class='kw'>=</span> <span class='fl'>2.31</span>,
+  <span class='kw'>mu0</span> <span class='kw'>=</span> <span class='fl'>0.132</span>,
+  <span class='kw'>Q0</span> <span class='kw'>=</span> <span class='fl'>0.92</span>,
+  <span class='kw'>chi</span> <span class='kw'>=</span> <span class='fl'>0.86</span>,
+  <span class='kw'>bites_Bed</span> <span class='kw'>=</span> <span class='fl'>0.89</span>,
+  <span class='kw'>bites_Indoors</span> <span class='kw'>=</span> <span class='fl'>0.97</span>,
+  <span class='kw'>muEL</span> <span class='kw'>=</span> <span class='fl'>0.0338</span>,
+  <span class='kw'>muLL</span> <span class='kw'>=</span> <span class='fl'>0.0348</span>,
+  <span class='kw'>muPL</span> <span class='kw'>=</span> <span class='fl'>0.249</span>,
+  <span class='kw'>dEL</span> <span class='kw'>=</span> <span class='fl'>6.64</span>,
+  <span class='kw'>dLL</span> <span class='kw'>=</span> <span class='fl'>3.72</span>,
+  <span class='kw'>dPL</span> <span class='kw'>=</span> <span class='fl'>0.643</span>,
+  <span class='kw'>gammaL</span> <span class='kw'>=</span> <span class='fl'>13.25</span>,
+  <span class='kw'>km</span> <span class='kw'>=</span> <span class='fl'>11</span>,
+  <span class='kw'>cm</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>betaL</span> <span class='kw'>=</span> <span class='fl'>21.2</span>,
+  <span class='kw'>num_int</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>itn_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>irs_cov</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>ITN_IRS_on</span> <span class='kw'>=</span> -<span class='fl'>1</span>,
+  <span class='kw'>DY</span> <span class='kw'>=</span> <span class='fl'>365</span>,
+  <span class='kw'>d_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.41</span>,
+  <span class='kw'>r_ITN0</span> <span class='kw'>=</span> <span class='fl'>0.56</span>,
+  <span class='kw'>r_ITN1</span> <span class='kw'>=</span> <span class='fl'>0.24</span>,
+  <span class='kw'>r_IRS0</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
+  <span class='kw'>d_IRS0</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>irs_half_life</span> <span class='kw'>=</span> <span class='fl'>0.5</span> * <span class='no'>DY</span>,
+  <span class='kw'>itn_half_life</span> <span class='kw'>=</span> <span class='fl'>2.64</span> * <span class='no'>DY</span>,
+  <span class='kw'>IRS_interval</span> <span class='kw'>=</span> <span class='fl'>1</span> * <span class='no'>DY</span>,
+  <span class='kw'>ITN_interval</span> <span class='kw'>=</span> <span class='fl'>3</span> * <span class='no'>DY</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -540,7 +540,7 @@ the ellipsis argument as a list created before, e.g. model_param_list_create(...
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

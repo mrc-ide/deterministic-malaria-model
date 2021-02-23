@@ -9,18 +9,13 @@ test_that("compare_no_ints_bm", {
   time_period <- 11
   prop_treated <- 0.4
   # TODO: Fix IRN_IRS_on problem with numbers of interventions or num_ints
-  wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
-                                                                package = "ICDMM"),
-                                  num_int = 1,
+  wh <- ICDMM::run_model(num_int = 1,time = 10,
                                   het_brackets = 1,
                                   age = init_age,
                                   init_EIR = init_EIR,
                                   init_ft = prop_treated,
                                   country = NULL,
                                   admin2 = NULL)
-  mod <- wh$generator(user= wh$state, use_dde = TRUE)
-  mod_run <- mod$run(t = 1:time_period)
-  out <- mod$transform_variables(mod_run)
-  expect_equal(out$prev, bm_no_ints[,2], tolerance=1e-6)
+  expect_equal(wh$prev, bm_no_ints[,2], tolerance=1e-6)
 })
 

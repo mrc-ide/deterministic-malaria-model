@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -78,7 +78,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://mrc-ide.github.io/deterministic-malaria-model/">
-    <span class="fas fa-github"></span>
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -92,7 +92,8 @@
 
       
 
-      </header><script src="run_model_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><script src="run_model_files/header-attrs-2.5/header-attrs.js"></script><script src="run_model_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="run_model_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="run_model_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>More Flexible Model Run</h1>
@@ -132,10 +133,9 @@
 </li>
 </ol>
 <p>By default the <code>run_model</code> function runs the model for 100 days in a country with no seasonality (achieved by setting <code>admin2</code> and <code>country</code> equal to <code>NULL</code>) and no interventions. We can run the model and plot the prevalence as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ICDMM</span><span class="op">)</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">t</span>,<span class="va">out</span><span class="op">$</span><span class="va">prev</span>, main<span class="op">=</span> <span class="st">"Prevalance"</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, type<span class="op">=</span><span class="st">'l'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ICDMM</span>)
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span>()
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">out</span>$<span class="no">t</span>,<span class="no">out</span>$<span class="no">prev</span>, <span class="kw">main</span><span class="kw">=</span> <span class="st">"Prevalance"</span>, <span class="kw">ylim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>), <span class="kw">type</span><span class="kw">=</span><span class="st">'l'</span>)</pre></body></html></div>
 <p><img src="run_model_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
 <div id="providing-alternative-arguments" class="section level2">
@@ -143,52 +143,48 @@
 <a href="#providing-alternative-arguments" class="anchor"></a>Providing alternative arguments</h2>
 <p>You can provide new parameter values for parameters in the model (model parameters are listed here) by including them as arguments in the <code>run_model</code> function:</p>
 <p>It is possible to change the default arguments for the <code>create_r_model</code> function as shown below by setting the initial EIR (the average number of infectious bites per person each year) to 50 instead of the default value of 10:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>init_EIR <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">t</span>,<span class="va">out</span><span class="op">$</span><span class="va">prev</span>, main<span class="op">=</span> <span class="st">"Prevalance"</span>, type<span class="op">=</span><span class="st">'l'</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r">
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span>(<span class="kw">init_EIR</span> <span class="kw">=</span> <span class="fl">50</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">out</span>$<span class="no">t</span>,<span class="no">out</span>$<span class="no">prev</span>, <span class="kw">main</span><span class="kw">=</span> <span class="st">"Prevalance"</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">'l'</span>, <span class="kw">ylim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>))</pre></body></html></div>
 <p><img src="run_model_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>We can also change the length of time that the model is run for by setting <code>time = 1000</code> (days) and introduce an intervention by giving 75% of the population an insecticidal bed net (<code>itn_cov = 0.75</code>) after 365 days (<code>ITN_IRS_on = 365</code>). We also need to specify the number of intervention categories (<code>num_int</code>), if we introduce nets we need 2 categories for people with and without nets. If we introduce ITNs and IRS, we need 4 categories for no intervention, nets only, IRS only, and both nets and IRS. Here we compare introducing 75% ITN coverage after 365 days to 75% ITN coverage + 40% IRS coverage:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
+<div class="sourceCode" id="cb3"><html><body><pre class="r">
 <span class="co"># ITN only</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>init_EIR <span class="op">=</span> <span class="fl">50</span>, 
-                 time <span class="op">=</span> <span class="fl">1000</span>,
-                 ITN_IRS_on <span class="op">=</span> <span class="fl">365</span>,
-                 itn_cov <span class="op">=</span> <span class="fl">0.75</span>,
-                 num_int <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span>(<span class="kw">init_EIR</span> <span class="kw">=</span> <span class="fl">50</span>,
+                 <span class="kw">time</span> <span class="kw">=</span> <span class="fl">1000</span>,
+                 <span class="kw">ITN_IRS_on</span> <span class="kw">=</span> <span class="fl">365</span>,
+                 <span class="kw">itn_cov</span> <span class="kw">=</span> <span class="fl">0.75</span>,
+                 <span class="kw">num_int</span> <span class="kw">=</span> <span class="fl">2</span>)
 
 <span class="co"># ITN + IRS</span>
-<span class="va">out2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>init_EIR <span class="op">=</span> <span class="fl">50</span>, 
-                 time <span class="op">=</span> <span class="fl">1000</span>,
-                 ITN_IRS_on <span class="op">=</span> <span class="fl">365</span>,
-                 itn_cov <span class="op">=</span> <span class="fl">0.75</span>,
-                 irs_cov <span class="op">=</span> <span class="fl">0.4</span>,
-                 num_int <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="no">out2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span>(<span class="kw">init_EIR</span> <span class="kw">=</span> <span class="fl">50</span>,
+                 <span class="kw">time</span> <span class="kw">=</span> <span class="fl">1000</span>,
+                 <span class="kw">ITN_IRS_on</span> <span class="kw">=</span> <span class="fl">365</span>,
+                 <span class="kw">itn_cov</span> <span class="kw">=</span> <span class="fl">0.75</span>,
+                 <span class="kw">irs_cov</span> <span class="kw">=</span> <span class="fl">0.4</span>,
+                 <span class="kw">num_int</span> <span class="kw">=</span> <span class="fl">4</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">t</span>,<span class="va">out</span><span class="op">$</span><span class="va">prev</span>, main<span class="op">=</span> <span class="st">"Prevalance"</span>, type<span class="op">=</span><span class="st">'l'</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">out2</span><span class="op">$</span><span class="va">t</span>, <span class="va">out2</span><span class="op">$</span><span class="va">prev</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">365</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">out</span>$<span class="no">t</span>,<span class="no">out</span>$<span class="no">prev</span>, <span class="kw">main</span><span class="kw">=</span> <span class="st">"Prevalance"</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">'l'</span>, <span class="kw">ylim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>))
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="no">out2</span>$<span class="no">t</span>, <span class="no">out2</span>$<span class="no">prev</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">"blue"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">v</span> <span class="kw">=</span> <span class="fl">365</span>, <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
 <p><img src="run_model_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div id="changing-seasonality-parameters" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changing-seasonality-parameters" class="anchor"></a>Changing seasonality parameters</h2>
 <p>It is possible to change the seasonality parameters by specifying a named admin unit or both an admin unit and country to the <code>run_model</code> function. The latter is better when the admin name is common. Fuzzy matching is used to match the provided arguments with the data set provided in the package. The data set can be loaded into your workspace as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">seasonality_data</span> <span class="op">&lt;-</span> <span class="fu">ICDMM</span><span class="fu">::</span><span class="fu"><a href="../reference/load_file.html">load_file</a></span><span class="op">(</span><span class="st">"admin_units_seasonal.rds"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">seasonality_data</span> <span class="kw">&lt;-</span> <span class="kw pkg">ICDMM</span><span class="kw ns">::</span><span class="fu"><a href="../reference/load_file.html">load_file</a></span>(<span class="st">"admin_units_seasonal.rds"</span>)</pre></body></html></div>
 <p>You can then specify the location that you would like to load the seasonality profile for by specifying <code>country</code> and <code>admin2</code> using character strings when calling the <code>run_model</code> function (An example is shown in the previous <a href="https://mrc-ide.github.io/deterministic-malaria-model/articles/run_model_example.html">vignette</a>.</p>
 </div>
 <div id="using-alternative-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-alternative-models" class="anchor"></a>Using alternative models</h2>
 <p>It is also possible to change the odin model by editing the <code>model</code> argument. By default the <code>run_model</code> function uses the basic malaria model (called <code>odin_model</code>). You can see the four different models currently included in the package in the <code>inst/odin</code> directory. To run a different model just specify its name, however you may encounter errors unless you specify parameter values for extra parameters in the alternative models that may not have a default value.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Running this will give an error because we have not specified the value of the parameter hrp2_prop</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co">## Running this will give an error because we have not specified the value of the parameter hrp2_prop</span>
 <span class="co">#run_model(model = "odin_model_hrp2")</span>
 <span class="co">## We can specify the new parameter value in the function call</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"odin_model_hrp2"</span>, hrp2_prop <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">t</span>,<span class="va">out</span><span class="op">$</span><span class="va">prev</span>, main<span class="op">=</span> <span class="st">"Prevalance"</span>, type<span class="op">=</span><span class="st">'l'</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span>(<span class="kw">model</span> <span class="kw">=</span> <span class="st">"odin_model_hrp2"</span>, <span class="kw">hrp2_prop</span> <span class="kw">=</span> <span class="fl">0.5</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">out</span>$<span class="no">t</span>,<span class="no">out</span>$<span class="no">prev</span>, <span class="kw">main</span><span class="kw">=</span> <span class="st">"Prevalance"</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">'l'</span>, <span class="kw">ylim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>))</pre></body></html></div>
 <p><img src="run_model_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
   </div>
@@ -208,7 +204,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

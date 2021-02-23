@@ -3,7 +3,8 @@
 #' \code{run_model} returns list with generator function automatically created given the odin model
 #' specified.
 #'
-#' @param odin_model_path Character path to odin model
+#' @param model Name of odin model used. Default = \code{"odin_model"}
+#' @param time Integer for length of simulation in days. Default = 100
 #' @param het_brackets Numeric for heterogeneity brackets
 #' @param age Age vector
 #' @param init_EIR Initial EIR for initial solution

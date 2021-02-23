@@ -18,6 +18,8 @@ run_model(
 )
 }
 \arguments{
+\item{model}{Name of odin model used. Default = \code{"odin_model"}}
+
 \item{het_brackets}{Numeric for heterogeneity brackets}
 
 \item{age}{Age vector}
@@ -30,13 +32,13 @@ run_model(
 
 \item{admin2}{Character for admin level 2}
 
+\item{time}{Integer for length of simulation in days. Default = 100}
+
 \item{...}{Any other parameters needed for non-standard model. If they share the same name
 as any of the defined parameters \code{model_param_list_create} will stop. You can either write
 any extra parameters you like individually, e.g. create_r_model(extra1 = 1, extra2 = 2)
 and these parameters will appear appended to the returned list, or you can pass explicitly
 the ellipsis argument as a list created before, e.g. create_r_model(...=list(extra1 = 1, extra2 = 2))}
-
-\item{odin_model_path}{Character path to odin model}
 }
 \value{
 list of generator function, initial state, model parameters and generator

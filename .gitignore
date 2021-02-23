@@ -6,6 +6,7 @@ inst/doc
 .RData
 .Ruserdata
 ^scripts$
+scripts*
 *.o
 .c
 .dll

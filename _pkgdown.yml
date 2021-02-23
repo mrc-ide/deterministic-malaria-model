@@ -7,7 +7,7 @@ template:
 navbar:
   type: default
   left:
-    - href: index.html
+    - href: index
       icon: fa-home
     - text: Reference
       href: reference/index.html
@@ -27,5 +27,5 @@ navbar:
     - text: News
       href: news/index.html
   right:
-    - href: https://mrc-ide.github.io/deterministic-malaria-model/
+    - href: https://github.com/mrc-ide/deterministic-malaria-model
       icon: fa-github

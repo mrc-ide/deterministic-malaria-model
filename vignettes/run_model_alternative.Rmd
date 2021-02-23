@@ -20,6 +20,8 @@ knitr::opts_chunk$set(
 To run the version of the malaria model that has emanators in instead of IRS (see [emanator modelling paper](http://dx.doi.org/10.1098/rstb.2019.0817)), several further parameter values need to be specified when calling `run_model`:
 
 ```{r}
+library(ICDMM)
+
 # Some toy parameter values to run the emanator model
 out <- run_model(model = "odin_model_emanators",
                  time = 1000,
@@ -46,38 +48,14 @@ plot(out$t,out$prev, main= "Prevalance", ylim = c(0, 0.3), type='l', col = "red"
 abline(v = 365, lty = 2)
 abline(h = 0.1522, lty = 2)
 ```
+
 ## Ivermectin SMC model
 In this version of the model, ivermectin is deployed as an endectocide
 
 ```{r}
 
-#Doesn't work at the moment. New params need defining
-out <- run_model(model = "odin_model_IVM_SMChet",
-                 time = 4000,
-                 num_int = 4,
-                 init_EIR = 5,
-                 age02 = 4, #
-                 age10 = 11, #
-                 B2 = .1, #
-                 eff_len = 3,
-                 ivm_cov_par = 0.6,
-                 ivm_min_age = 7,
-                 MDA_cov = 0.4,
-                 MDA_grp_prop = 0.5,
-                 MDA_t1 = 0.2,
-                 MDA_t2 = 0.9,
-                 MDA_t3 = 3,
-                 MDA_t4 = 5,
-                 MDA_t5 = 7,
-                 MDA_t6 = 7.4,
-                 MDA_t7 = 7.9,
-                 MDA_t8 = 8.7,
-                 ncc = 4,
-                 SMCyrs = 3,
-                 ttt = 3, #could be a vector?
-                 ccov = c(0.1,0.4,0.7,0.9),
-                 haz = c(1,4,5)
-)
+#Demo of this model to go here
+
 
 ```
 ## Transmission blocking vaccine model
@@ -85,7 +63,42 @@ In this version of the model, a transmission-blocking vaccine (TBV) can be intro
 
 ```{r}
 #Several vaccine-specific parameters are stored here, with their definitions
-source("scripts/vaccine_params.R")
+#source("scripts/vaccine_params.R")
+#Here they are, with their definitions
+CS_peak <-621 #Peak antibody titre (after primary vaccination with RTS,S)
+CS_boost <- 277 # Peak antibody titre (after booster dose of RTS,S)
+p_peak <- 0.88 #Proportion of antibody response that is short lived (after primary vaccination with RTS,S)
+p_boost<-0.7 #Proportion of antibody response that is short lived (after booster dose of RTS,S)
+ds <- 45 #decay rate of short-lived anitbody response to RTS,S
+dl <- 591 #decay rate of long-lived anitbody response to RTS,S
+beta_RTS <- 99.2 #Shape param for dose-response of RTS,S
+alpha_RTS  <- 0.74 #Shape param for dose-response of RTS,S
+V_max_RTS <- 0.93 # Max RTS,S efficacy
+
+#Scheduling parameters
+t_boost_rts <- 365
+
+#Extra params for the TBV vaccine (For Pfs230 estimate)
+#v_max_effic <- 0.96
+#v_alpha <- 2.13
+#v_beta <- 349.58
+#v_decay <- 0.022
+#v_interval <- 365
+
+#Extra params for the TBV vaccine (For Pfs25 estimate)
+hill1 <- 2.50 #Hill parameter for dose-response curve
+hill2 <- 0.06 #Hill parameter for dose-response curve
+mu25 <- 12.63 #Titre (\mu g/ml) to centre the dose-response curve
+tau25 <- 22 #Max. antibody titre
+rho25 <- 0.7 #Proportion of antibody response associated with quicker decay
+ds25 <- 45 #Short antibody half-life
+dl25 <- 590 #Long antibody half-life
+ds25worse <- 0.5*ds25#35 #Short antibody half-life
+dl25worse <- 0.5*dl25 #450 #Long antibody half-life
+ds25better <- 2*ds25#55 #Short antibody half-life
+dl25better <- 2*dl25 #730 #Long antibody half-life
+v_interval <- 365 #Interval between TBV vaccinations
+
 
 #Parameters to define
 ITN_IRS_on <- 4 * 365 + 100 # When ITNs are introduced

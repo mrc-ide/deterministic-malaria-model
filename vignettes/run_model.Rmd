@@ -33,6 +33,7 @@ The `run_model` function has the following default arguments:
 
 By default the `run_model` function runs the model for 100 days in a country with no seasonality (achieved by setting `admin2` and `country` equal to `NULL`) and no interventions. We can run the model and plot the prevalence as follows:
 ```{r}
+library(ICDMM)
 out <- run_model()
 plot(out$t,out$prev, main= "Prevalance", ylim = c(0, 1), type='l')
 
@@ -89,7 +90,7 @@ It is also possible to change the odin model by editing the `model` argument. By
 
 ```{r}
 ## Running this will give an error because we have not specified the value of the parameter hrp2_prop
-run_model(model = "odin_model_hrp2")
+#run_model(model = "odin_model_hrp2")
 ## We can specify the new parameter value in the function call
 out <- run_model(model = "odin_model_hrp2", hrp2_prop = 0.5)
 plot(out$t,out$prev, main= "Prevalance", type='l', ylim = c(0, 1))

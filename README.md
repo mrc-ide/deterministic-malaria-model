@@ -23,4 +23,4 @@ devtools::install_github("mrc-ide/deterministic-malaria-model")
 
 ## Running the model
 
-There are vignettes that explain how to run the [simple model](https://mrc-ide.github.io/deterministic-malaria-model/articles/run_model.html) and the more [flexible versions](https://mrc-ide.github.io/deterministic-malaria-model/articles/create_r_model.html) of the model. 
+There are vignettes that explain how to run the [simple model](https://mrc-ide.github.io/deterministic-malaria-model//articles/run_model_example.html) and the more [flexible versions](https://mrc-ide.github.io/deterministic-malaria-model//articles/run_model.html) of the model. Alternative versions of the model, exploring the impact of other public health interventions against malaria, have also been developed and are discussed [here](https://mrc-ide.github.io/deterministic-malaria-model//articles/run_model_alternative.html).

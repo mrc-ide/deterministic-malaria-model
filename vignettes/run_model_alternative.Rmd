@@ -78,13 +78,6 @@ V_max_RTS <- 0.93 # Max RTS,S efficacy
 #Scheduling parameters
 t_boost_rts <- 365
 
-#Extra params for the TBV vaccine (For Pfs230 estimate)
-#v_max_effic <- 0.96
-#v_alpha <- 2.13
-#v_beta <- 349.58
-#v_decay <- 0.022
-#v_interval <- 365
-
 #Extra params for the TBV vaccine (For Pfs25 estimate)
 hill1 <- 2.50 #Hill parameter for dose-response curve
 hill2 <- 0.06 #Hill parameter for dose-response curve

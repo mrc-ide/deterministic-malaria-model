@@ -54,7 +54,7 @@ To change simulation settings there are 5 optional function arguments:
 For example, to simulate Thies, Senegal for a given vector of ages, at an EIR of 1, for 2 years with 
 60% treatment coverage:
 
-```{r, echo=FALSE, results='asis', message = FALSE}
+```{r, results='asis', message = FALSE}
 thies <- run_model_example(age = c(0, 1, 2, 3, 4, 5, 10, 20, 40, 60), 
                    EIR = 1, 
                    ft = 0.6, 
@@ -65,7 +65,7 @@ thies$plot
 
 Other model outputs, such as the number of suceptible adult mosquitoes, can be plotted by interacting with the `dat` data frame returned by `run_model`:
 
-```{r, echo=FALSE, results='asis', message = FALSE}
+```{r, results='asis', message = FALSE}
 plot(thies$dat$Sv, 
      ylab = "Susceptible Adult Mosquitoes", 
      xlab = "Time (days)", 

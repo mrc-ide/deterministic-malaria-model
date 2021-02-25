@@ -6,7 +6,7 @@ articles:
   run_model_alternative: run_model_alternative.html
   run_model_example: run_model_example.html
   write_own_model: write_own_model.html
-last_built: 2021-02-25T16:19Z
+last_built: 2021-02-25T16:51Z
 urls:
   reference: https://mrc-ide.github.io/deterministic-malaria-model//reference
   article: https://mrc-ide.github.io/deterministic-malaria-model//articles

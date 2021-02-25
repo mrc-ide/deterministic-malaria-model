@@ -148,8 +148,21 @@
 <code>time</code> - Numeric of length of time that the model will run for in days.</li>
 </ol>
 <p>For example, to simulate Thies, Senegal for a given vector of ages, at an EIR of 1, for 2 years with 60% treatment coverage:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">thies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">40</span>, <span class="fl">60</span><span class="op">)</span>, 
+                   EIR <span class="op">=</span> <span class="fl">1</span>, 
+                   ft <span class="op">=</span> <span class="fl">0.6</span>, 
+                   admin2 <span class="op">=</span> <span class="st">"Thies"</span>, 
+                   time <span class="op">=</span> <span class="fl">2</span><span class="op">*</span><span class="fl">365</span><span class="op">)</span>
+<span class="va">thies</span><span class="op">$</span><span class="va">plot</span></code></pre></div>
 <p><img src="run_model_example_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>Other model outputs, such as the number of suceptible adult mosquitoes, can be plotted by interacting with the <code>dat</code> data frame returned by <code>run_model</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">thies</span><span class="op">$</span><span class="va">dat</span><span class="op">$</span><span class="va">Sv</span>, 
+     ylab <span class="op">=</span> <span class="st">"Susceptible Adult Mosquitoes"</span>, 
+     xlab <span class="op">=</span> <span class="st">"Time (days)"</span>, 
+     main<span class="op">=</span><span class="st">"Number of susceptible mosquitoes"</span>,
+     type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></code></pre></div>
 <p><img src="run_model_example_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div id="other-malaria-models" class="section level2">

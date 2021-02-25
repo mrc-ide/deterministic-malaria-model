@@ -12,9 +12,7 @@ This model has been developed over a number of years, and has been described in 
 ## Installing the model
 Install the Odin package from github (we need a newer version than the one available on CRAN):
 ```
-# install.packages("drat") # -- if you don't have drat installed
-drat:::add("mrc-ide")
-install.packages("odin")
+devtools::install_github("mrc-ide/odin")
 ```
 Then install the ICDMM package from github:
 ```

@@ -1,3 +1,5 @@
+#Parameters used in the transmission-blocking vaccine model. Not relevant for other models
+
 #All parameters relating to the vaccine characteristics, that won't change depending on the intervention details
 # Equation parameters
 CS_peak <-621 #Peak antibody titre (after primary vaccination with RTS,S)

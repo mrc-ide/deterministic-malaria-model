@@ -16,11 +16,9 @@ prop_treated <- 0.4
 # Define time for turning on interventions
 ITN_IRS_on <- 5*365
 
-# creates the odin model
-wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R",
-                                                              package = "ICDMM"),
-                                het_brackets = 5,
+out <-    run_model(            het_brackets = 5,
                                 age = init_age,
+                                time = time_period,
                                 init_EIR = init_EIR,
                                 num_int = 2,
                                 itn_cov = 0.5,
@@ -29,14 +27,6 @@ wh <- ICDMM:::create_r_model(odin_model_path = system.file("extdata/odin_model.R
                                 country = "Kenya",
                                 admin2 = "Kisumu")
 
-# generates model functions with initial state data
-mod <- wh$generator(user= wh$state, use_dde = TRUE)
-
-# Runs the model.  Since we know at IRN_IRS_on there will be a discontinutiy we tell the solver
-t <- sort(unique(c(seq(1, time_period), seq(ITN_IRS_on, ITN_IRS_on + 50, by = 0.1))))
-mod_run <- mod$run(t = t, tcrit = c(ITN_IRS_on, ITN_IRS_on + 12))
-out <- mod$transform_variables(mod_run)
-
-plot(out$t, out$prev, type='l', ylim=c(0.21, 0.23))
+plot(out$t, out$prev, type='l', ylim=c(0.01, 0.33))
 plot(out$t, out$inc, type='l')
 

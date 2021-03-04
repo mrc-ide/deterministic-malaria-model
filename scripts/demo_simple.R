@@ -20,9 +20,6 @@ prop_treated <- 0.4
 model_run <- run_model(age=init_age, EIR=init_EIR, init_ft=prop_treated,
                        admin2=admin_str, time=time_period)
 
-# access model output
-output <- model_run$dat
-
 # plot model output (here we plot clinical incidence in children under 5)
 plot(model_run$t, model_run$inc05)
 

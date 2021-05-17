@@ -512,9 +512,9 @@ prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
 
 # index of the requested age vector min
-agestart <- user(integer=TRUE)
+agestart <- user()
 # index of the requested age vector max
-ageend <- user(integer=TRUE)
+ageend <- user()
 
 # output age_prev as new variable
 dim(age_prev) <- c(ageend-agestart+1,nh,num_int)

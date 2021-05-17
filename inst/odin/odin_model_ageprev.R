@@ -516,6 +516,7 @@ agestart <- user(integer=TRUE)
 # index of the requested age vector max
 ageend <- user(integer=TRUE)
 
+# output age_prev as new variable
 dim(age_prev) <- c(ageend-agestart+1,nh,num_int)
 age_prev[agestart:ageend,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
 output(age_prev) <- sum(age_prev[,,])/sum(den[agestart:ageend])

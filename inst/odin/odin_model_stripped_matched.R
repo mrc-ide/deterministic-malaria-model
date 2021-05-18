@@ -127,7 +127,6 @@ H <- Sh + Th + Dh + Ah + Uh + Ph
 # ID - Detection immunity, when immunity suppresses parasite densities this makes it less likely that diagnostics will detect parasite infection
 
 # fitted immunity parameters:
-dCM <- user() # decay of maternal immunity
 uCA <- user() # scale parameter (see Supplementary mats. 3.1.2)
 dCA <- user() # decay for clinical immunity
 dB <- user() # decay for infection blocking immunity
@@ -142,15 +141,13 @@ age_20_factor <- user() # factor calculated in equilibrium solution
 PM <- user() # immunity constant
 
 # ICM - maternally acquired immunity
-init_ICM[,] <- user()
-dim(init_ICM) <- c(na,nh)
-initial(ICM[,]) <- init_ICM[i,j]
-dim(ICM) <- c(na,nh)
 dim(init_ICM_pre) <- c(nh)
 init_ICM_pre[1:nh] <- PM*(ICA[age20l,i] + age_20_factor*(ICA[age20u,i]-ICA[age20l,i]))
+ICM_age[]<-user()
+dim(ICM_age)<-na
+dim(ICM) <- c(na,nh)
+ICM[1:na, 1:nh]<-ICM_age[i]*init_ICM_pre[j]
 
-deriv(ICM[1, 1:nh]) <- -1/dCM*ICM[i,j] + (init_ICM_pre[j]-ICM[i,j])/x_I[i]
-deriv(ICM[2:na, 1:nh]) <- -1/dCM*ICM[i,j] - (ICM[i,j]-ICM[i-1,j])/x_I[i]
 
 # ICA - exposure driven immunity
 init_ICA[,] <- user()
@@ -417,17 +414,16 @@ den[] <- user()
 dim(den) <- na
 # index of the age vector above 59 months
 age59 <- user(integer=TRUE)
-# index of the age vector above 5 years
-age05 <- user(integer=TRUE)
 
+# slide positivity in 0 -5 year age bracket
 dim(prev0to59) <- c(age59,nh)
 prev0to59[1:age59,] <- T[i,j] + D[i,j]  + A[i,j]*p_det[i,j]
 output(prev) <- sum(prev0to59[,])/sum(den[1:age59])
 output(age59)<-age59
-output(age05)<-age59
-output(den)<-den
-# slide positivity in 0 -5 year age bracket
-dim(clin_inc0to5) <- c(age05,nh)
+
+
+# clinical incidence
+dim(clin_inc0to5) <- c(age59,nh)
 clin_inc0to5[1:age59,] <- clin_inc[i,j]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age59])
 output(inc) <- sum(clin_inc[,])

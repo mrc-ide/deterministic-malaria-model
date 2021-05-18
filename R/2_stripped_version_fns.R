@@ -1,6 +1,7 @@
 remove(list=ls())
 library(odin)
 
+
 ##### stripped versions ##################################
 ##runs version that has time-varying EIR
 run_model_stripped <- function(het_brackets = 5,
@@ -10,6 +11,7 @@ run_model_stripped <- function(het_brackets = 5,
                                country = NULL,
                                admin2 = NULL,
                                time = 100,
+                               out_step=1,
                                ...){
 
   ## create model param list using necessary variables
@@ -20,12 +22,13 @@ run_model_stripped <- function(het_brackets = 5,
                                             model_param_list = mpl, het_brackets=het_brackets,
                                             country = country,
                                             admin_unit = admin2)
-  generator <- odin("./inst/odin/odin_model_stripped.R")
+
+  generator <- odin("./inst/odin/odin_model_stripped_matched.R")
   state_use <- state[names(state) %in% coef(generator)$name]
 
   # create model with initial values
   mod <- generator(user = state_use, use_dde = TRUE)
-  tt <- seq(0, time, 1)
+  tt <- seq(0, time, out_step)
 
   # run model
   start.time <- Sys.time()
@@ -46,6 +49,7 @@ run_model_stripped_flat <- function(het_brackets = 5,
                                country = NULL,
                                admin2 = NULL,
                                time = 100,
+                               out_step=1,
                                ...){
 
   ## create model param list using necessary variables
@@ -56,12 +60,12 @@ run_model_stripped_flat <- function(het_brackets = 5,
                                             model_param_list = mpl, het_brackets=het_brackets,
                                             country = country,
                                             admin_unit = admin2)
-  generator <- odin("./inst/odin/odin_model_stripped_flat.R")
+  generator <- odin("./inst/odin/odin_model_stripped_flat_matched.R")
   state_use <- state[names(state) %in% coef(generator)$name]
 
   # create model with initial values
   mod <- generator(user = state_use, use_dde = TRUE)
-  tt <- seq(0, time, 1)
+  tt <- seq(0, time, out_step)
 
   # run model
   start.time <- Sys.time()
@@ -372,13 +376,17 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
 
   ## force of infection
   foi_age <- c()
-  for (i in 1:na)
+ # for (i in 1:na){
+#    foi_age[i] <- 1 - (mpl$rho * exp(-age[i]/mpl$a0))  #force of infection for each age group
+#  }
+
+  for (i in 1:(na-1))
   {
-    foi_age[i] <- 1 - (mpl$rho * exp(-age[i]/mpl$a0))  #force of infection for each age group
+    foi_age[i] <- 1 - (mpl$rho * exp(-(age[i]+age[i+1])/2/mpl$a0))  #force of infection for each age group
   }
+  foi_age[na]<-1 - (mpl$rho * exp(-(age[i])/mpl$a0))
   fden <- foi_age * den
   omega <- sum(fden)  #normalising constant
-
   ## heterogeneity
   het_x <- h$nodes
   het_wt <- h$weights
@@ -416,8 +424,8 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
   FOI_eq <- matrix(0, na, nh)
   ID_eq <- matrix(0, na, nh)
   ICA_eq <- matrix(0, na, nh)
-  ICM_init_eq <- vector(length = nh, mode = "numeric")
-  ICM_eq <- matrix(0, na, nh)
+  IC_20 <- matrix(0, 1, nh)
+  ICM_age <- matrix(0, na,1)
   cA_eq <- matrix(0, na, nh)
   FOIvij_eq <- matrix(0, na, nh)
   p_det_eq <- matrix(0, na, nh)
@@ -438,20 +446,17 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
     }
   }
   # needs to be calculated after because it references ICA
+
+
   for (j in 1:nh)
-  {
-    for (i in 1:na)
-    {
-      ICM_init_eq[j] <- mpl$PM * (ICA_eq[age20l, j] + age_20_factor *
-                                    (ICA_eq[age20u, j] - ICA_eq[age20l, j]))
-      ICM_eq[i, j] <- ifelse(i == 1,
-                             ICM_init_eq[j], ICM_eq[i - 1,j])/(1 + x_I[i]/mpl$dCM)
-    }
-  }
-
-  IC_eq <- ICM_eq + ICA_eq
+    IC_20[j] <- mpl$PM * (ICA_eq[age20l, j] + age_20_factor *
+                                 (ICA_eq[age20u, j] - ICA_eq[age20l, j]))
+  for (i in 1:(na-1))
+    ICM_age[i]<- mpl$dCM/(age[i+1]-age[i])*(exp(-age[i]/mpl$dCM)-exp(-age[i+1]/mpl$dCM))
+  ICM_age[na]<-0
+  ICM_eq<-ICM_age%*%IC_20
+  IC_eq <- ICA_eq + ICM_eq
   phi_eq <- mpl$phi0 * ((1 - mpl$phi1)/(1 + (IC_eq/mpl$IC0)^mpl$kC) + mpl$phi1)
-
 
   # human states
   gamma <- mpl$eta + c(age_rate[1:(na - 1)], 0)
@@ -565,7 +570,7 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
   ## collate init
   res <- list(init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq,
               init_P = P_eq, init_Y = Y_eq, init_IB = IB_eq, init_ID = ID_eq, init_ICA = ICA_eq,
-              init_ICM = ICM_eq, ICM_init_eq = ICM_init_eq,
+              init_ICM = ICM_eq, ICM_age = as.vector(ICM_age),IC_20=IC_20,
               #init_Iv = Iv_eq, init_Sv = Sv_eq,init_Ev = Ev_eq, init_PL = PL_eq, init_LL = LL_eq, init_EL = EL_eq,
               age_width = age_width, age_rate = age_rate, het_wt = het_wt, het_x = het_x,
               foi_age = foi_age, rel_foi = rel_foi,

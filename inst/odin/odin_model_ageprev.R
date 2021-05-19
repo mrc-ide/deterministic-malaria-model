@@ -511,16 +511,15 @@ dim(prev0to59) <- c(age59,nh,num_int)
 prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
 
+
 # index of the requested age vector min
 agestart <- user()
-# index of the requested age vector max
+# index of the requested age vector just prior to the maximum value for the prevalence calculation
 ageend <- user()
-values <- ageend-agestart+1
 
-# output age_prev as new variable
-dim(age_prev) <- c(values,nh,num_int)
-age_prev[agestart:ageend,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
-output(agegroup_prev) <- sum(age_prev[,,])/sum(den[agestart:ageend])
+dim(prev_test2) <- c(na,nh,num_int)
+prev_test2[,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
+output(prev_agegroup) <- sum(prev_test2[agestart:ageend,,])/sum(den[agestart:ageend])
 
 # slide positivity in 0 -5 year age bracket
 dim(clin_inc0to5) <- c(age05,nh,num_int)

@@ -23,7 +23,7 @@
 #'
 #' @export
 
-equilibrium_init_create <- function(age_vector, het_brackets,
+equilibrium_init_create_m_immunity <- function(age_vector, het_brackets,
                                     country = NULL, admin_unit = NULL, ft,
                                     EIR, model_param_list)
 {
@@ -126,8 +126,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   FOI_eq <- matrix(0, na, nh)
   ID_eq <- matrix(0, na, nh)
   ICA_eq <- matrix(0, na, nh)
-  ICM_init_eq <- vector(length = nh, mode = "numeric")
-  ICM_eq <- matrix(0, na, nh)
+  # ICM_init_eq <- vector(length = nh, mode = "numeric")
+  # ICM_eq <- matrix(0, na, nh)
   cA_eq <- matrix(0, na, nh)
   FOIvij_eq <- matrix(0, na, nh)
   p_det_eq <- matrix(0, na, nh)
@@ -148,16 +148,26 @@ equilibrium_init_create <- function(age_vector, het_brackets,
     }
   }
   # needs to be calculated after because it references ICA
+  # for (j in 1:nh)
+  # {
+  #   for (i in 1:na)
+  #   {
+  #     ICM_init_eq[j] <- mpl$PM * (ICA_eq[age20l, j] + age_20_factor *
+  #                                   (ICA_eq[age20u, j] - ICA_eq[age20l, j]))
+  #     ICM_eq[i, j] <- ifelse(i == 1,
+  #                            ICM_init_eq[j], ICM_eq[i - 1,j])/(1 + x_I[i]/mpl$dCM)
+  #   }
+  # }
+IC_20 <- matrix(0, 1, nh)
+ICM_age <- matrix(0, na,1)
+
   for (j in 1:nh)
-  {
-    for (i in 1:na)
-    {
-      ICM_init_eq[j] <- mpl$PM * (ICA_eq[age20l, j] + age_20_factor *
-                                    (ICA_eq[age20u, j] - ICA_eq[age20l, j]))
-      ICM_eq[i, j] <- ifelse(i == 1,
-                             ICM_init_eq[j], ICM_eq[i - 1,j])/(1 + x_I[i]/mpl$dCM)
-    }
-  }
+    IC_20[j] <- mpl$PM * (ICA_eq[age20l, j] + age_20_factor *
+                            (ICA_eq[age20u, j] - ICA_eq[age20l, j]))
+  for (i in 1:(na-1))
+    ICM_age[i]<- mpl$dCM/(age[i+1]-age[i])*(exp(-age[i]/mpl$dCM)-exp(-age[i+1]/mpl$dCM))
+  ICM_age[na]<-0
+  ICM_eq<-ICM_age%*%IC_20
 
   IC_eq <- ICM_eq + ICA_eq
   phi_eq <- mpl$phi0 * ((1 - mpl$phi1)/(1 + (IC_eq/mpl$IC0)^mpl$kC) + mpl$phi1)

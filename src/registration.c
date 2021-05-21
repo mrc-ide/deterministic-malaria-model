@@ -25,6 +25,10 @@ extern void odin_model_IVM_SMChet_initmod_desolve(void *);
 extern void odin_model_IVM_SMChet_output_dde(void *);
 extern void odin_model_IVM_SMChet_rhs_dde(void *);
 extern void odin_model_IVM_SMChet_rhs_desolve(void *);
+extern void odin_model_m_immunity_initmod_desolve(void *);
+extern void odin_model_m_immunity_output_dde(void *);
+extern void odin_model_m_immunity_rhs_dde(void *);
+extern void odin_model_m_immunity_rhs_desolve(void *);
 extern void odin_model_output_dde(void *);
 extern void odin_model_rhs_dde(void *);
 extern void odin_model_rhs_desolve(void *);
@@ -65,6 +69,13 @@ extern SEXP odin_model_IVM_SMChet_metadata(SEXP);
 extern SEXP odin_model_IVM_SMChet_rhs_r(SEXP, SEXP, SEXP);
 extern SEXP odin_model_IVM_SMChet_set_initial(SEXP, SEXP, SEXP, SEXP);
 extern SEXP odin_model_IVM_SMChet_set_user(SEXP, SEXP);
+extern SEXP odin_model_m_immunity_contents(SEXP);
+extern SEXP odin_model_m_immunity_create(SEXP);
+extern SEXP odin_model_m_immunity_initial_conditions(SEXP, SEXP);
+extern SEXP odin_model_m_immunity_metadata(SEXP);
+extern SEXP odin_model_m_immunity_rhs_r(SEXP, SEXP, SEXP);
+extern SEXP odin_model_m_immunity_set_initial(SEXP, SEXP, SEXP, SEXP);
+extern SEXP odin_model_m_immunity_set_user(SEXP, SEXP);
 extern SEXP odin_model_metadata(SEXP);
 extern SEXP odin_model_rhs_r(SEXP, SEXP, SEXP);
 extern SEXP odin_model_set_initial(SEXP, SEXP, SEXP, SEXP);
@@ -95,6 +106,10 @@ static const R_CMethodDef CEntries[] = {
     {"odin_model_IVM_SMChet_output_dde",      (DL_FUNC) &odin_model_IVM_SMChet_output_dde,      1},
     {"odin_model_IVM_SMChet_rhs_dde",         (DL_FUNC) &odin_model_IVM_SMChet_rhs_dde,         1},
     {"odin_model_IVM_SMChet_rhs_desolve",     (DL_FUNC) &odin_model_IVM_SMChet_rhs_desolve,     1},
+    {"odin_model_m_immunity_initmod_desolve", (DL_FUNC) &odin_model_m_immunity_initmod_desolve, 1},
+    {"odin_model_m_immunity_output_dde",      (DL_FUNC) &odin_model_m_immunity_output_dde,      1},
+    {"odin_model_m_immunity_rhs_dde",         (DL_FUNC) &odin_model_m_immunity_rhs_dde,         1},
+    {"odin_model_m_immunity_rhs_desolve",     (DL_FUNC) &odin_model_m_immunity_rhs_desolve,     1},
     {"odin_model_output_dde",                 (DL_FUNC) &odin_model_output_dde,                 1},
     {"odin_model_rhs_dde",                    (DL_FUNC) &odin_model_rhs_dde,                    1},
     {"odin_model_rhs_desolve",                (DL_FUNC) &odin_model_rhs_desolve,                1},
@@ -137,6 +152,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"odin_model_IVM_SMChet_rhs_r",              (DL_FUNC) &odin_model_IVM_SMChet_rhs_r,              3},
     {"odin_model_IVM_SMChet_set_initial",        (DL_FUNC) &odin_model_IVM_SMChet_set_initial,        4},
     {"odin_model_IVM_SMChet_set_user",           (DL_FUNC) &odin_model_IVM_SMChet_set_user,           2},
+    {"odin_model_m_immunity_contents",           (DL_FUNC) &odin_model_m_immunity_contents,           1},
+    {"odin_model_m_immunity_create",             (DL_FUNC) &odin_model_m_immunity_create,             1},
+    {"odin_model_m_immunity_initial_conditions", (DL_FUNC) &odin_model_m_immunity_initial_conditions, 2},
+    {"odin_model_m_immunity_metadata",           (DL_FUNC) &odin_model_m_immunity_metadata,           1},
+    {"odin_model_m_immunity_rhs_r",              (DL_FUNC) &odin_model_m_immunity_rhs_r,              3},
+    {"odin_model_m_immunity_set_initial",        (DL_FUNC) &odin_model_m_immunity_set_initial,        4},
+    {"odin_model_m_immunity_set_user",           (DL_FUNC) &odin_model_m_immunity_set_user,           2},
     {"odin_model_metadata",                      (DL_FUNC) &odin_model_metadata,                      1},
     {"odin_model_rhs_r",                         (DL_FUNC) &odin_model_rhs_r,                         3},
     {"odin_model_set_initial",                   (DL_FUNC) &odin_model_set_initial,                   4},

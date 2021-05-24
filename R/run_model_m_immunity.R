@@ -22,7 +22,7 @@
 #' @importFrom odin odin
 #' @export
 
-run_model_m_immunity <- function(model = "odin_model",
+run_model_m_immunity <- function(model = "odin_model_m_immunity",
                            het_brackets = 5,
                            age = c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80),
                            init_EIR = 10,
@@ -43,14 +43,14 @@ run_model_m_immunity <- function(model = "odin_model",
 
   # create odin generator
   generator <- switch(model,
-    "odin_model" = odin_model,
-    "odin_model_emanators" = odin_model_emanators,
-    "odin_model_hrp2" = odin_model_hrp2,
-    "odin_model_IVM_SMChet" = odin_model_IVM_SMChet,
-    "odin_model_TBV" = odin_model_TBV,
-    "odin_model_ageprev" = odin_model_ageprev,
-    "odin_model_m_immunity" = odin_model_m_immunity,
-    stop(sprintf("Unknown model '%s'", model)))
+                      "odin_model" = odin_model,
+                      "odin_model_emanators" = odin_model_emanators,
+                      "odin_model_hrp2" = odin_model_hrp2,
+                      "odin_model_IVM_SMChet" = odin_model_IVM_SMChet,
+                      "odin_model_TBV" = odin_model_TBV,
+                      "odin_model_ageprev" = odin_model_ageprev,
+                      "odin_model_m_immunity" = odin_model_m_immunity,
+                      stop(sprintf("Unknown model '%s'", model)))
 
   # There are many parameters used that should not be passed through
   # to the model.

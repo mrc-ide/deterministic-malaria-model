@@ -71,8 +71,8 @@ equilibrium_init_create_m_immunity <- function(age_vector, het_brackets,
     den[i+1] <- age_rate[i] * den[i]/(age_rate[i+1] + mpl$eta)  # proportion in each age_vector group
   }
 
-  age59 <- which(age_vector * 12 > 59)[1] - 1  # index of age vector before age is >59 months
-  age05 <- which(age_vector > 5)[1] - 1  # index of age vector before age is 5 years
+  age59 <- which(age_vector * 12 >= 59)[1] - 1  # index of age vector before age is >59 months
+  age05 <- which(age_vector >= 5)[1] - 1  # index of age vector before age is 5 years
 
   ## force of infection - modified to match C++
   foi_age <- c()
@@ -354,7 +354,8 @@ ICM_age <- matrix(0, na,1)
   ## collate init
   res <- list(init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq,
               init_P = P_eq, init_Y = Y_eq, init_IB = IB_eq, init_ID = ID_eq, init_ICA = ICA_eq,
-              init_ICM = ICM_eq, ICM_init_eq = ICM_init_eq, init_Iv = Iv_eq, init_Sv = Sv_eq,
+              init_ICM = ICM_eq, ICM_age = as.vector(ICM_age),IC_20=IC_20,
+              init_Iv = Iv_eq, init_Sv = Sv_eq,
               init_Ev = Ev_eq, init_PL = PL_eq, init_LL = LL_eq, init_EL = EL_eq,
               age_width = age_width, age_rate = age_rate, het_wt = het_wt, het_x = het_x,
               omega = omega, foi_age = foi_age, rel_foi = rel_foi,

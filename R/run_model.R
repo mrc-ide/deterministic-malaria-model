@@ -54,6 +54,14 @@ run_model <- function(model = "odin_model",
   # There are many parameters used that should not be passed through
   # to the model.
   state_use <- state[names(state) %in% coef(generator)$name]
+  if(model == "odin_model_human"){
+    for(i in seq_along(state_use)){
+      if(is.array(state_use[[i]])){
+        dims <- dim(state_use[[i]])
+        state_use[[i]] <- matrix(state_use[[i]][,,1], nrow = dims[1], ncol = dims[2])
+      }
+    }
+  }
 
   # create model with initial values
   mod <- generator(user = state_use, use_dde = TRUE)

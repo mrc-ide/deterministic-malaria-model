@@ -417,14 +417,14 @@ odin_model_human_ <- R6::R6Class(
       initmod_desolve = "odin_model_human_initmod_desolve",
       output_dde = "odin_model_human_output_dde"),
     dll = "ICDMM",
-    user = c("aD", "age", "age_20_factor", "age_rate", "age05", "age20l",
-             "age20u", "age59", "b0", "b1", "d1", "dB", "dCA", "dCM", "den",
-             "dID", "DY", "EIR_times", "EIR_vals", "eta", "fD0", "foi_age",
-             "ft", "gammaD", "het_wt", "IB0", "IC0", "ID0", "init_A",
-             "init_D", "init_IB", "init_ICA", "init_ICM", "init_ID",
-             "init_P", "init_S", "init_T", "init_U", "kB", "kC", "kD", "na",
-             "nh", "phi0", "phi1", "PM", "rA", "rD", "rel_foi", "rP", "rT",
-             "rU", "uB", "uCA", "uD", "x_I"),
+    user = c("aD", "age", "age_20_factor", "age_rate", "age20l", "age20u",
+             "age59", "b0", "b1", "d1", "dB", "dCA", "den", "dID", "DY",
+             "EIR_times", "EIR_vals", "eta", "fD0", "foi_age", "ft",
+             "gammaD", "het_wt", "IB0", "IC0", "ICM_age", "ID0", "init_A",
+             "init_D", "init_IB", "init_ICA", "init_ID", "init_P", "init_S",
+             "init_T", "init_U", "kB", "kC", "kD", "na", "nh", "phi0",
+             "phi1", "PM", "rA", "rD", "rel_foi", "rP", "rT", "rU", "uB",
+             "uCA", "uD", "x_I"),
 
     ## This is never called, but is used to ensure that R finds our
     ## symbols that we will use from the package; without this they

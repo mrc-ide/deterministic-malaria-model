@@ -16,6 +16,10 @@ extern void odin_model_hrp2_initmod_desolve(void *);
 extern void odin_model_hrp2_output_dde(void *);
 extern void odin_model_hrp2_rhs_dde(void *);
 extern void odin_model_hrp2_rhs_desolve(void *);
+extern void odin_model_human_initmod_desolve(void *);
+extern void odin_model_human_output_dde(void *);
+extern void odin_model_human_rhs_dde(void *);
+extern void odin_model_human_rhs_desolve(void *);
 extern void odin_model_initmod_desolve(void *);
 extern void odin_model_IVM_SMChet_initmod_desolve(void *);
 extern void odin_model_IVM_SMChet_output_dde(void *);
@@ -46,6 +50,13 @@ extern SEXP odin_model_hrp2_metadata(SEXP);
 extern SEXP odin_model_hrp2_rhs_r(SEXP, SEXP, SEXP);
 extern SEXP odin_model_hrp2_set_initial(SEXP, SEXP, SEXP, SEXP);
 extern SEXP odin_model_hrp2_set_user(SEXP, SEXP);
+extern SEXP odin_model_human_contents(SEXP);
+extern SEXP odin_model_human_create(SEXP);
+extern SEXP odin_model_human_initial_conditions(SEXP, SEXP);
+extern SEXP odin_model_human_metadata(SEXP);
+extern SEXP odin_model_human_rhs_r(SEXP, SEXP, SEXP);
+extern SEXP odin_model_human_set_initial(SEXP, SEXP, SEXP, SEXP);
+extern SEXP odin_model_human_set_user(SEXP, SEXP);
 extern SEXP odin_model_initial_conditions(SEXP, SEXP);
 extern SEXP odin_model_IVM_SMChet_contents(SEXP);
 extern SEXP odin_model_IVM_SMChet_create(SEXP);
@@ -75,6 +86,10 @@ static const R_CMethodDef CEntries[] = {
     {"odin_model_hrp2_output_dde",            (DL_FUNC) &odin_model_hrp2_output_dde,            1},
     {"odin_model_hrp2_rhs_dde",               (DL_FUNC) &odin_model_hrp2_rhs_dde,               1},
     {"odin_model_hrp2_rhs_desolve",           (DL_FUNC) &odin_model_hrp2_rhs_desolve,           1},
+    {"odin_model_human_initmod_desolve",      (DL_FUNC) &odin_model_human_initmod_desolve,      1},
+    {"odin_model_human_output_dde",           (DL_FUNC) &odin_model_human_output_dde,           1},
+    {"odin_model_human_rhs_dde",              (DL_FUNC) &odin_model_human_rhs_dde,              1},
+    {"odin_model_human_rhs_desolve",          (DL_FUNC) &odin_model_human_rhs_desolve,          1},
     {"odin_model_initmod_desolve",            (DL_FUNC) &odin_model_initmod_desolve,            1},
     {"odin_model_IVM_SMChet_initmod_desolve", (DL_FUNC) &odin_model_IVM_SMChet_initmod_desolve, 1},
     {"odin_model_IVM_SMChet_output_dde",      (DL_FUNC) &odin_model_IVM_SMChet_output_dde,      1},
@@ -107,6 +122,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"odin_model_hrp2_rhs_r",                    (DL_FUNC) &odin_model_hrp2_rhs_r,                    3},
     {"odin_model_hrp2_set_initial",              (DL_FUNC) &odin_model_hrp2_set_initial,              4},
     {"odin_model_hrp2_set_user",                 (DL_FUNC) &odin_model_hrp2_set_user,                 2},
+    {"odin_model_human_contents",                (DL_FUNC) &odin_model_human_contents,                1},
+    {"odin_model_human_create",                  (DL_FUNC) &odin_model_human_create,                  1},
+    {"odin_model_human_initial_conditions",      (DL_FUNC) &odin_model_human_initial_conditions,      2},
+    {"odin_model_human_metadata",                (DL_FUNC) &odin_model_human_metadata,                1},
+    {"odin_model_human_rhs_r",                   (DL_FUNC) &odin_model_human_rhs_r,                   3},
+    {"odin_model_human_set_initial",             (DL_FUNC) &odin_model_human_set_initial,             4},
+    {"odin_model_human_set_user",                (DL_FUNC) &odin_model_human_set_user,                2},
     {"odin_model_initial_conditions",            (DL_FUNC) &odin_model_initial_conditions,            2},
     {"odin_model_IVM_SMChet_contents",           (DL_FUNC) &odin_model_IVM_SMChet_contents,           1},
     {"odin_model_IVM_SMChet_create",             (DL_FUNC) &odin_model_IVM_SMChet_create,             1},

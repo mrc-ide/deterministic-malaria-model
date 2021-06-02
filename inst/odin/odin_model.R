@@ -124,7 +124,7 @@ H <- Sh + Th + Dh + Ah + Uh + Ph
 # ID - Detection immunity, when immunity suppresses parasite densities this makes it less likely that diagnostics will detect parasite infection
 
 # fitted immunity parameters:
-dCM <- user() # decay of maternal immunity
+#dCM <- user() # decay of maternal immunity
 uCA <- user() # scale parameter (see Supplementary mats. 3.1.2)
 dCA <- user() # decay for clinical immunity
 dB <- user() # decay for infection blocking immunity
@@ -139,15 +139,21 @@ age_20_factor <- user() # factor calculated in equilibrium solution
 PM <- user() # immunity constant
 
 # ICM - maternally acquired immunity
-init_ICM[,,] <- user()
-dim(init_ICM) <- c(na,nh,num_int)
-initial(ICM[,,]) <- init_ICM[i,j,k]
-dim(ICM) <- c(na,nh,num_int)
+#init_ICM[,,] <- user()
+#dim(init_ICM) <- c(na,nh,num_int)
+#initial(ICM[,,]) <- init_ICM[i,j,k]
+#dim(ICM) <- c(na,nh,num_int)
+#dim(init_ICM_pre) <- c(nh,num_int)
+#init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[age20l,i,j] + age_20_factor*(ICA[age20u,i,j]-ICA[age20l,i,j]))
+
+#deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM_pre[j,k]-ICM[i,j,k])/x_I[i]
+#deriv(ICM[2:na, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] - (ICM[i,j,k]-ICM[i-1,j,k])/x_I[i]
 dim(init_ICM_pre) <- c(nh,num_int)
 init_ICM_pre[1:nh,1:num_int] <- PM*(ICA[age20l,i,j] + age_20_factor*(ICA[age20u,i,j]-ICA[age20l,i,j]))
-
-deriv(ICM[1, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] + (init_ICM_pre[j,k]-ICM[i,j,k])/x_I[i]
-deriv(ICM[2:na, 1:nh, 1:num_int]) <- -1/dCM*ICM[i,j,k] - (ICM[i,j,k]-ICM[i-1,j,k])/x_I[i]
+ICM_age[]<-user()
+dim(ICM_age)<-na
+dim(ICM) <- c(na,nh,num_int)
+ICM[1:na, 1:nh, 1:num_int]<-ICM_age[i]*init_ICM_pre[j,k]
 
 # ICA - exposure driven immunity
 init_ICA[,,] <- user()
@@ -511,11 +517,16 @@ dim(prev0to59) <- c(age59,nh,num_int)
 prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
 
-# slide positivity in 0 -5 year age bracket
+# clinical incidence
 dim(clin_inc0to5) <- c(age05,nh,num_int)
 clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
+                                                
+# clinical incidence in under 5s (i.e. not including 5 years of age)
+dim(clin_inc0tounder5) <- c(age59,nh,num_int)
+clin_inc0tounder5[1:age59,,] <- clin_inc[i,j,k]
+output(incunder5) <- sum(clin_inc0tounder5)/sum(den[1:age59])
 
 # Param checking outputs
 output(mu) <- mu

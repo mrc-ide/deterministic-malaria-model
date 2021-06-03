@@ -71,8 +71,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
     den[i+1] <- age_rate[i] * den[i]/(age_rate[i+1] + mpl$eta)  # proportion in each age_vector group
   }
 
-  age59 <- which(age_vector * 12 > 59)[1] - 1  # index of age vector before age is >59 months
-  age05 <- which(age_vector > 5)[1] - 1  # index of age vector before age is 5 years
+  age59 <- which(age_vector * 12 >= 59)[1] - 1  # index of age vector before age is >59 months
+  age05 <- which(age_vector >= 5)[1] - 1  # index of age vector before age is 5 years
 
   ## force of infection
   foi_age <- c()
@@ -165,7 +165,7 @@ equilibrium_init_create <- function(age_vector, het_brackets,
                           (ICA_eq[age20u, j] - ICA_eq[age20l, j]))
   for (i in 1:(na-1))
     ICM_age[i]<- mpl$dCM/(age[i+1]-age[i])*(exp(-age[i]/mpl$dCM)-exp(-age[i+1]/mpl$dCM))
-  
+
   ICM_age[na]<-0
   ICM_eq<-ICM_age%*%IC_20
 

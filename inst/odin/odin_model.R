@@ -124,7 +124,7 @@ H <- Sh + Th + Dh + Ah + Uh + Ph
 # ID - Detection immunity, when immunity suppresses parasite densities this makes it less likely that diagnostics will detect parasite infection
 
 # fitted immunity parameters:
-#dCM <- user() # decay of maternal immunity
+#dCM <- user() # decay of maternal immunity. Not needed here now?
 uCA <- user() # scale parameter (see Supplementary mats. 3.1.2)
 dCA <- user() # decay for clinical immunity
 dB <- user() # decay for infection blocking immunity

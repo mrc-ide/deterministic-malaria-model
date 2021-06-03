@@ -8,6 +8,10 @@
 */
 
 /* .C calls */
+extern void odin_model_ageprev_initmod_desolve(void *);
+extern void odin_model_ageprev_output_dde(void *);
+extern void odin_model_ageprev_rhs_dde(void *);
+extern void odin_model_ageprev_rhs_desolve(void *);
 extern void odin_model_emanators_initmod_desolve(void *);
 extern void odin_model_emanators_output_dde(void *);
 extern void odin_model_emanators_rhs_dde(void *);
@@ -30,6 +34,13 @@ extern void odin_model_TBV_rhs_dde(void *);
 extern void odin_model_TBV_rhs_desolve(void *);
 
 /* .Call calls */
+extern SEXP odin_model_ageprev_contents(SEXP);
+extern SEXP odin_model_ageprev_create(SEXP);
+extern SEXP odin_model_ageprev_initial_conditions(SEXP, SEXP);
+extern SEXP odin_model_ageprev_metadata(SEXP);
+extern SEXP odin_model_ageprev_rhs_r(SEXP, SEXP, SEXP);
+extern SEXP odin_model_ageprev_set_initial(SEXP, SEXP, SEXP, SEXP);
+extern SEXP odin_model_ageprev_set_user(SEXP, SEXP);
 extern SEXP odin_model_contents(SEXP);
 extern SEXP odin_model_create(SEXP);
 extern SEXP odin_model_emanators_contents(SEXP);
@@ -67,6 +78,10 @@ extern SEXP odin_model_TBV_set_initial(SEXP, SEXP, SEXP, SEXP);
 extern SEXP odin_model_TBV_set_user(SEXP, SEXP);
 
 static const R_CMethodDef CEntries[] = {
+    {"odin_model_ageprev_initmod_desolve",    (DL_FUNC) &odin_model_ageprev_initmod_desolve,    1},
+    {"odin_model_ageprev_output_dde",         (DL_FUNC) &odin_model_ageprev_output_dde,         1},
+    {"odin_model_ageprev_rhs_dde",            (DL_FUNC) &odin_model_ageprev_rhs_dde,            1},
+    {"odin_model_ageprev_rhs_desolve",        (DL_FUNC) &odin_model_ageprev_rhs_desolve,        1},
     {"odin_model_emanators_initmod_desolve",  (DL_FUNC) &odin_model_emanators_initmod_desolve,  1},
     {"odin_model_emanators_output_dde",       (DL_FUNC) &odin_model_emanators_output_dde,       1},
     {"odin_model_emanators_rhs_dde",          (DL_FUNC) &odin_model_emanators_rhs_dde,          1},
@@ -91,6 +106,13 @@ static const R_CMethodDef CEntries[] = {
 };
 
 static const R_CallMethodDef CallEntries[] = {
+    {"odin_model_ageprev_contents",              (DL_FUNC) &odin_model_ageprev_contents,              1},
+    {"odin_model_ageprev_create",                (DL_FUNC) &odin_model_ageprev_create,                1},
+    {"odin_model_ageprev_initial_conditions",    (DL_FUNC) &odin_model_ageprev_initial_conditions,    2},
+    {"odin_model_ageprev_metadata",              (DL_FUNC) &odin_model_ageprev_metadata,              1},
+    {"odin_model_ageprev_rhs_r",                 (DL_FUNC) &odin_model_ageprev_rhs_r,                 3},
+    {"odin_model_ageprev_set_initial",           (DL_FUNC) &odin_model_ageprev_set_initial,           4},
+    {"odin_model_ageprev_set_user",              (DL_FUNC) &odin_model_ageprev_set_user,              2},
     {"odin_model_contents",                      (DL_FUNC) &odin_model_contents,                      1},
     {"odin_model_create",                        (DL_FUNC) &odin_model_create,                        1},
     {"odin_model_emanators_contents",            (DL_FUNC) &odin_model_emanators_contents,            1},

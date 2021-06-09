@@ -72,8 +72,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   }
 
   age59 <- which(age_vector * 12 > 59)[1] - 1  # index of age vector before age is >59 months
-  age05 <- which(age_vector > 5)[1] - 1  # index of age vector before age is 5 years
-
+  #age05 <- which(age_vector > 5)[1] - 1  # index of age vector before age is 5 years
+  age05<-age59
   ## force of infection
   foi_age <- c()
   for (i in 1:na)

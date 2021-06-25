@@ -76,6 +76,10 @@
 #' @param itn_half_life ITN half life. Default =   2.64 * DY
 #' @param IRS_interval How long before IRS is repeated, i.e. when IRS decay = 1. Default =   1 * DY
 #' @param ITN_interval How long before ITN is repeated, i.e. when IRS decay = 1.  Default =   3 * DY
+#' @agestart Index of age vector for which to start calculating prevalence. Default = 1
+#' @ageend Index of age vector immediately prior to the end point for calculating prevalence. Default = 1
+#' @larval_factor Factor by which to change betaa. Needs to range from 0-1. Default = 1
+#' @FOI_factor Factor by which to change betaa. Needs to range from 0-1. Default = 1
 #' @param ... Any other parameters needed for non-standard model. If they share the same name
 #' as any of the defined parameters \code{model_param_list_create} will stop. You can either write
 #' any extra parameters you like individually, e.g. model_param_list_create(extra1 = 1, extra2 = 2)
@@ -168,6 +172,10 @@ model_param_list_create <- function(
   itn_half_life =   2.64 * DY,
   IRS_interval =   1 * DY,
   ITN_interval =   3 * DY,
+  agestart = 1,
+  ageend = 1,
+  larval_factor = 1,
+  FOI_factor = 1,
   ...
 
 ){

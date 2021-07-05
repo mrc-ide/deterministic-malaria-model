@@ -335,7 +335,7 @@ init_Sv <- user()
 init_Ev <- user()
 init_Iv <- user()
 init_Sx[] <- 0
-init_Ex[,] <- 0
+init_Ex[,] <-0
 init_Ix[] <- 0
 
 dim(init_Sx) = eff_len

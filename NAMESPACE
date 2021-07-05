@@ -2,11 +2,13 @@
 
 export(admin_match)
 export(equilibrium_init_create)
+export(equilibrium_init_multi)
 export(load_file)
 export(match_clean)
 export(model_param_list_create)
 export(run_model)
 export(run_model_example)
+export(run_model_metapop)
 importFrom(RecordLinkage,levenshteinSim)
 importFrom(ggplot2,aes)
 importFrom(ggplot2,geom_line)

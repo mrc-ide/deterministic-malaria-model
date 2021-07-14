@@ -79,7 +79,9 @@
 #' @agestart Index of age vector for which to start calculating prevalence. Default = 1
 #' @ageend Index of age vector immediately prior to the end point for calculating prevalence. Default = 1
 #' @larval_factor Factor by which to change betaa. Needs to range from 0-1. Default = 1
-#' @FOI_factor Factor by which to change betaa. Needs to range from 0-1. Default = 1
+#' @larvacide_on switch larvacide on / off at a certain time step default = 1 day,
+#' @FOI_factor_on switch FOI intervention on / off at a certain time step default = 1 day,,
+#' @FOI_factor Factor by which to change EIR. Needs to range from 0-1. Default = 1
 #' @param ... Any other parameters needed for non-standard model. If they share the same name
 #' as any of the defined parameters \code{model_param_list_create} will stop. You can either write
 #' any extra parameters you like individually, e.g. model_param_list_create(extra1 = 1, extra2 = 2)
@@ -172,9 +174,11 @@ model_param_list_create <- function(
   itn_half_life =   2.64 * DY,
   IRS_interval =   1 * DY,
   ITN_interval =   3 * DY,
-  agestart = 1,
-  ageend = 1,
+  agestart = 9,
+  ageend = 12,
   larval_factor = 1,
+  larvacide_on = 1,
+  FOI_factor_on = 1,
   FOI_factor = 1,
   ...
 
@@ -317,6 +321,15 @@ model_param_list_create <- function(
   mp_list$itn_half_life <- itn_half_life
   mp_list$IRS_interval <- IRS_interval
   mp_list$ITN_interval <- ITN_interval
+
+  # added vars odin_model_experimentation
+  mp_list$agestart <- agestart
+  mp_list$ageend <- ageend
+  mp_list$larval_factor <- larval_factor
+  mp_list$larvacide_on <- larvacide_on
+  mp_list$FOI_factor_on <- FOI_factor_on
+  mp_list$FOI_factor <- FOI_factor
+
   mp_list$irs_loss <- log(2)/mp_list$irs_half_life
   mp_list$itn_loss <- log(2)/mp_list$itn_half_life
 

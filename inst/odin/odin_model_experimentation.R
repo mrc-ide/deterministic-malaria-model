@@ -219,8 +219,8 @@ FOI_lag[1:na, 1:nh, 1:num_int] <- EIR[i,j,k] * (if(IB[i,j,k]==0) b0 else b[i,j,k
 # Current FOI depends on humans that have been through the latent period
 dE <- user() # latent period of human infection.
 dim(FOI) <- c(na,nh,num_int)
-FOI_factor <- user()
-FOI[,,] <- delay(FOI_lag[i,j,k],dE)*FOI_factor
+
+FOI[,,] <- delay(FOI_lag[i,j,k],dE)
 
 # EIR -rate at which each age/het/int group is bitten
 # rate for age group * rate for biting category * FOI for age group * prop of
@@ -230,7 +230,14 @@ foi_age[] <- user()
 dim(rel_foi) <- nh
 rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int)
-EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega
+
+FOI_factor_on <- user()
+FOI_factor <- user()
+
+FOI_factor2 <- if(t < FOI_factor_on) 1 else FOI_factor
+
+EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_factor2
+
 output(Ivout) <- Iv
 
 output(omega) <- omega
@@ -310,9 +317,19 @@ larval_factor <- user()
 betaa <- 0.5*PL/dPL
 #betaa <- mv0 * mu0 * theta2
 
-deriv(Sv) <- -ince - mu*Sv + betaa*larval_factor
+larvacide_on <- user() # set default 1
+
+# adding this in to fix problem of larval_factor values not running between 0.88 and 0.99
+# expm4 <- exp(-4) # you can make the slope steeper to reduce the delay time
+pred1gam2 = larval_factor + (1-larval_factor) * (1 + exp(-4)) / (1 + exp(-4) * exp(0.1*(t-larvacide_on)))
+
+pred1gam <- if(t < larvacide_on) 1 else pred1gam2
+
+deriv(Sv) <- -ince - mu*Sv + betaa*pred1gam
 deriv(Ev) <- ince - incv - mu*Ev
 deriv(Iv) <- incv - mu*Iv
+
+output(pred1gam) <- pred1gam
 
 # Total mosquito population
 mv = Sv+Ev+Iv

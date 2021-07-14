@@ -77,6 +77,10 @@ model_param_list_create(
   itn_half_life = 2.64 * DY,
   IRS_interval = 1 * DY,
   ITN_interval = 3 * DY,
+  agestart = 9,
+  ageend = 12,
+  larval_factor = 1,
+  FOI_factor = 1,
   ...
 )
 }

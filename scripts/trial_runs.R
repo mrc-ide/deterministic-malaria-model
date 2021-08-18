@@ -73,7 +73,7 @@ lines(Ssum$X3, col = "blue")
 # ITN only
 out <- run_model(init_EIR = 50,
                  age =init_age,
-                 time = 1000,
+                 time = 10000,
                  ITN_IRS_on = 365,
                  itn_cov=0.75,
                  num_int = 2)
@@ -102,7 +102,7 @@ mixing <- matrix(1,nrow=1)
 
 out_metapop <- run_model_metapop(init_EIR = 50,
                                  age =init_age,
-                                 time = 1000,
+                                 time = 10000,
                                  ITN_IRS_on = 365,
                                  itn_cov = 0.75,
                                  num_int = 2,
@@ -128,7 +128,7 @@ abline(v = 365, lty = 2)
 # 2.3 Metapop with two independent patches
 
 
-d2<-matrix(c(1,0,0,1),nrow=2)
+d2<-matrix(c(0.5,0.5,0.5,0.5),nrow=2)
 
 d3<-matrix(c(1,0,0,
              0,1,0,
@@ -163,9 +163,9 @@ lines(Ssum$X3, col = "green")
 
 
 # ITN + IRS
-out_meta_dob2 <- run_model_metapop(init_EIR = c(50,50),
+out_meta_dob2 <- run_model_metapop(init_EIR = c(10,50),
                                    age =init_age,
-                                   time =1.5 ,
+                                   time =1000,
                                    ITN_IRS_on = 365,
                                    itn_cov = c(0.75,0.75),
                                    irs_cov = c(0.4,0.4),

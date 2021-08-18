@@ -1,0 +1,14 @@
+#!/usr/bin/env Rscript
+context_startup <- function ()
+{
+    fmt <- "[ %-9s ]  %s"
+    message(sprintf(fmt, "hello", Sys.time()))
+    message(sprintf(fmt, "wd", getwd()))
+    withCallingHandlers(loadNamespace("context"), error = function(e) {
+        message("Could not find context package; aborting startup")
+        message(".libPaths():\n", paste("*", .libPaths(), collapse = "\n"))
+    })
+    invisible()
+}
+context_startup()
+context:::main_task_run()

@@ -222,32 +222,33 @@ fd[1:na] <- 1-(1-fD0)/(1+(age[i]/aD)^gammaD)
 dim(p_det) <- c(na,nh,num_int,np)
 p_det[,,,] <- d1 + (1-d1)/(1 + fd[i]*(ID[i,j,k,l]/ID0)^kD)
 
-# Force of infection, depends on level of infection blocking immunity
-dim(FOI_lag) <- c(na,nh,num_int,np)
-FOI_lag[1:na, 1:nh, 1:num_int,1:np] <- EIR[i,j,k,l] * (if(IB[i,j,k,l]==0) b0 else b[i,j,k,l])
-
-# Current FOI depends on humans that have been through the latent period
-dE <- user() # latent period of human infection.
-dim(FOI) <- c(na,nh,num_int,np)
-FOI[,,,] <- delay(FOI_lag[i,j,k,l],dE)
-
 
 # EIR -rate at which each age/het/int group is bitten
 # rate for age group * rate for biting category * FOI for age group * prop of
 # infectious mosquitoes
-#
+
 dim(mix) <- c(np,np)
 mix[,] <- user()                 #  Strength of transmission between populations (patches)
 dim(rows) <- c(np,np)
 rows[,] <- mix[i,j]*Iv[j]
-
 
 dim(foi_age) <- na
 foi_age[] <- user()
 dim(rel_foi) <- nh
 rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int,np)
-EIR[,,,] <- av_human[k,l] * rel_foi[j] * foi_age[i] *sum(rows[l,]) /omega
+EIR[,,,] <- av_human[k,l] * rel_foi[j] * foi_age[i] *sum(rows[l,]) /omega #av_human[k,l] * rel_foi[j] * foi_age[i] * Iv[l]/omega
+
+
+# Force of infection, depends on level of infection blocking immunity
+dim(FOI_lag) <- c(na,nh,num_int,np)
+FOI_lag[1:na, 1:nh, 1:num_int,1:np] <- EIR[i,j,k,l] * (if(IB[i,j,k,l]==0) b0 else b[i,j,k,l])
+
+
+# Current FOI depends on humans that have been through the latent period
+dE <- user() # latent period of human infection.
+dim(FOI) <- c(na,nh,num_int,np)
+FOI[,,,] <- delay(FOI_lag[i,j,k,l],dE)
 
 output(Ivout[]) <- Iv[i]
 dim(Ivout) <- np
@@ -323,7 +324,6 @@ FOIvijk[1:na, 1:nh, 1:num_int,1:np] <- (cT*T[i,j,k,l] + cD*D[i,j,k,l] + cA[i,j,k
 dim(lag_FOIv) <- np
 lag_FOIv[]=sum(FOIvijk[,,,i])
 
-# Metapopulation force of infection
 dim(lag_mix_FOIv) <- np
 dim(rows_v) <- c(np,np)
 rows_v[,] <- mix[i,j]*lag_FOIv[j]

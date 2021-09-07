@@ -139,6 +139,7 @@ mixing <- d2
 
 
 
+
 #
 
 out_metapop <- run_model_metapop(init_EIR =c(50,50),
@@ -148,7 +149,7 @@ out_metapop <- run_model_metapop(init_EIR =c(50,50),
                                  itn_cov = c(0.75,0.75),
                                  irs_cov = c (0,0),
                                  num_int = 2,
-                                 mix = mixing)
+                                 mix = d2)
 
 Ssum <- data.frame(lapply(list(out_metapop$S),function(x){apply(x,sum,MARGIN=c(1,5))}))
 Ssum$t <-out_metapop$t
@@ -170,7 +171,7 @@ out_meta_dob2 <- run_model_metapop(init_EIR = c(10,50),
                                    itn_cov = c(0.75,0.75),
                                    irs_cov = c(0.4,0.4),
                                    num_int = 4,
-                                   mix =mixing)
+                                   mix =d2)
 
 Ssum2 <- data.frame(lapply(list(out_meta_dob2$S),function(x){apply(x,sum,MARGIN=c(1,5))}))
 Ssum2$t <-out_meta_dob2$t

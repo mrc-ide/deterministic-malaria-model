@@ -9,12 +9,11 @@ run_model_metapop(
   het_brackets = 5,
   age = c(0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3.5, 5, 7.5, 10, 15, 20, 30, 40,
     50, 60, 70, 80),
-  init_EIR = c(10, 10, 10),
+  init_EIR = 10,
   init_ft = 0.4,
   country = NULL,
   admin2 = NULL,
   time = 100,
-  mix = matrix(c(1, 0, 0, 0, 1, 0, 0, 0, 1), nrow = 3),
   ...
 )
 }
@@ -34,12 +33,6 @@ run_model_metapop(
 \item{admin2}{Character for admin level 2}
 
 \item{time}{Integer for length of simulation in days. Default = 100}
-
-\item{...}{Any other parameters needed for non-standard model. If they share the same name
-as any of the defined parameters \code{model_param_list_create} will stop. You can either write
-any extra parameters you like individually, e.g. create_r_model(extra1 = 1, extra2 = 2)
-and these parameters will appear appended to the returned list, or you can pass explicitly
-the ellipsis argument as a list created before, e.g. create_r_model(...=list(extra1 = 1, extra2 = 2))}
 }
 \value{
 list of generator function, initial state, model parameters and generator

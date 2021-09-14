@@ -80,7 +80,11 @@ model_param_list_create(
   agestart = 9,
   ageend = 12,
   larval_factor = 1,
-  FOI_factor = 1,
+  larvacide_on = 1,
+  FOI_proportion_on = 1,
+  FOI_proportion = 1,
+  FOI_diff_on = 1,
+  FOI_diff = 0,
   ...
 )
 }

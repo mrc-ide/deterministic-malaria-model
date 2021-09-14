@@ -231,16 +231,25 @@ dim(rel_foi) <- nh
 rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int)
 
-FOI_factor_on <- user()
-FOI_factor <- user()
+# Creating an intervention for reducing FOI
+FOI_proportion_on <- user() # timestep intervention ON
+FOI_proportion <- user() # proportion by which FOI is reduced
 
-FOI_factor2 <- if(t < FOI_factor_on) 1 else FOI_factor
+FOI_diff_on <- user()  # timestep intervention ON
+FOI_diff <- user() # absolute difference by which FOI is reduced
 
-EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_factor2
+FOI_proportion2 <- if(t < FOI_proportion_on) 1 else FOI_proportion
+FOI_diff2 <- if(t < FOI_diff_on) 0 else FOI_diff
+
+EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_proportion2 - FOI_diff2
+
+output(FOIout) <- sum(FOI[,,])
+output(EIRout) <- sum(EIR[,,])
 
 output(Ivout) <- Iv
 
 output(omega) <- omega
+
 ##------------------------------------------------------------------------------
 ##########################
 ## SEASONALITY FUNCTION ##

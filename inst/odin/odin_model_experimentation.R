@@ -230,6 +230,7 @@ foi_age[] <- user()
 dim(rel_foi) <- nh
 rel_foi[] <- user()
 dim(EIR) <- c(na,nh,num_int)
+#dim(EIRinter) <- c(na,nh,num_int)
 
 # Creating an intervention for reducing FOI
 FOI_proportion_on <- user() # timestep intervention ON
@@ -239,7 +240,14 @@ FOI_diff_on <- user()  # timestep intervention ON
 FOI_diff <- user() # absolute difference by which FOI is reduced
 
 FOI_proportion2 <- if(t < FOI_proportion_on) 1 else FOI_proportion
-FOI_diff2 <- if(t < FOI_diff_on) 0 else FOI_diff
+
+# preventing EIR from going below 0
+dim(EIRsum) <- c(na,nh,num_int)
+EIRsum[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_proportion2
+EIRsum2 <- sum(EIRsum[,,])
+
+FOI_diff1 <- if (FOI_diff < EIRsum2) FOI_diff else EIRsum2
+FOI_diff2 <- if(t < FOI_diff_on) 0 else FOI_diff1
 
 EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_proportion2 - FOI_diff2
 

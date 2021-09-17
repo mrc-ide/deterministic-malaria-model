@@ -238,6 +238,9 @@ FOI_factor2 <- if(t < FOI_factor_on) 1 else FOI_factor
 
 EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_factor2
 
+output(FOIout) <- sum(FOI[,,])
+output(EIRout) <- sum(EIR[,,])
+
 output(Ivout) <- Iv
 
 output(omega) <- omega

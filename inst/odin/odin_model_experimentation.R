@@ -233,26 +233,22 @@ dim(EIR) <- c(na,nh,num_int)
 #dim(EIRinter) <- c(na,nh,num_int)
 
 # Creating an intervention for reducing FOI
+
+# Either reducing by a % ...
 FOI_proportion_on <- user() # timestep intervention ON
 FOI_proportion <- user() # proportion by which FOI is reduced
 
-FOI_diff_on <- user()  # timestep intervention ON
-FOI_diff <- user() # absolute difference by which FOI is reduced
-
 FOI_proportion2 <- if(t < FOI_proportion_on) 1 else FOI_proportion
 
-# preventing EIR from going below 0
-dim(EIRsum) <- c(na,nh,num_int)
-EIRsum[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_proportion2
-EIRsum2 <- sum(EIRsum[,,])
+# ...or by an absolute difference in EIR
+EIR_diff_on <- user()  # timestep intervention ON
+EIR_diff <- user() # absolute difference by which FOI is reduced
+init_EIR <- user()  # input equilibrium EIR
 
-FOI_diff1 <- if (FOI_diff < EIRsum2) FOI_diff else EIRsum2
-FOI_diff2 <- if(t < FOI_diff_on) 0 else FOI_diff1
+# Calculate proportionate reduction in equilibrium EIR that the input absolute difference corresponds to:
+EIR_diff_proportion <- if(t < EIR_diff_on) 1 else (init_EIR-EIR_diff)/init_EIR
 
-EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_proportion2 - FOI_diff2
-
-output(FOIout) <- sum(FOI[,,])
-output(EIRout) <- sum(EIR[,,])
+EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_proportion2 * EIR_diff_proportion
 
 output(Ivout) <- Iv
 

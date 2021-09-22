@@ -246,7 +246,7 @@ EIR_diff <- user() # absolute difference by which FOI is reduced
 init_EIR <- user()  # input equilibrium EIR
 
 # Calculate proportionate reduction in equilibrium EIR that the input absolute difference corresponds to:
-EIR_diff_proportion <- if(t < EIR_diff_on) 0 else (init_EIR-EIR_diff)/init_EIR
+EIR_diff_proportion <- if(t < EIR_diff_on) 1 else (init_EIR-EIR_diff)/init_EIR
 
 EIR[,,] <- av_human[k] * rel_foi[j] * foi_age[i] * Iv/omega * FOI_proportion2 * EIR_diff_proportion
 

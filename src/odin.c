@@ -11314,7 +11314,7 @@ void odin_model_experimentation_rhs(odin_model_experimentation_internal* interna
   double PL = state[3];
   double betaa = 0.5 * PL / (double) internal->dPL;
   dstatedt[3] = LL / (double) internal->dLL - internal->muPL * PL - PL / (double) internal->dPL;
-  double EIR_diff_proportion = (t < internal->EIR_diff_on ? 0 : (internal->init_EIR - internal->EIR_diff) / (double) internal->init_EIR);
+  double EIR_diff_proportion = (t < internal->EIR_diff_on ? 1 : (internal->init_EIR - internal->EIR_diff) / (double) internal->init_EIR);
   double FOI_proportion2 = (t < internal->FOI_proportion_on ? 1 : internal->FOI_proportion);
   double IRS_decay = (t < internal->ITN_IRS_on ? 0 : exp(-((fmodr((t - internal->ITN_IRS_on), internal->IRS_interval))) * internal->irs_loss));
   double ITN_decay = (t < internal->ITN_IRS_on ? 0 : exp(-((fmodr((t - internal->ITN_IRS_on), internal->ITN_interval))) * internal->itn_loss));
@@ -11566,7 +11566,7 @@ void odin_model_experimentation_rhs(odin_model_experimentation_internal* interna
       IB = internal->delay_state_FOI + 1;
     }
     double FOI_proportion2 = (t < internal->FOI_proportion_on ? 1 : internal->FOI_proportion);
-    double EIR_diff_proportion = (t < internal->EIR_diff_on ? 0 : (internal->init_EIR - internal->EIR_diff) / (double) internal->init_EIR);
+    double EIR_diff_proportion = (t < internal->EIR_diff_on ? 1 : (internal->init_EIR - internal->EIR_diff) / (double) internal->init_EIR);
     double IRS_decay = (t < internal->ITN_IRS_on ? 0 : exp(-((fmodr((t - internal->ITN_IRS_on), internal->IRS_interval))) * internal->irs_loss));
     double ITN_decay = (t < internal->ITN_IRS_on ? 0 : exp(-((fmodr((t - internal->ITN_IRS_on), internal->ITN_interval))) * internal->itn_loss));
     double r_IRS = (t < internal->ITN_IRS_on ? 0 : internal->r_IRS0 * IRS_decay);
@@ -12168,7 +12168,7 @@ void odin_model_experimentation_output_dde(size_t n_eq, double t, double * state
       IB = internal->delay_state_FOI + 1;
     }
     double FOI_proportion2 = (t < internal->FOI_proportion_on ? 1 : internal->FOI_proportion);
-    double EIR_diff_proportion = (t < internal->EIR_diff_on ? 0 : (internal->init_EIR - internal->EIR_diff) / (double) internal->init_EIR);
+    double EIR_diff_proportion = (t < internal->EIR_diff_on ? 1 : (internal->init_EIR - internal->EIR_diff) / (double) internal->init_EIR);
     double IRS_decay = (t < internal->ITN_IRS_on ? 0 : exp(-((fmodr((t - internal->ITN_IRS_on), internal->IRS_interval))) * internal->irs_loss));
     double ITN_decay = (t < internal->ITN_IRS_on ? 0 : exp(-((fmodr((t - internal->ITN_IRS_on), internal->ITN_interval))) * internal->itn_loss));
     double r_IRS = (t < internal->ITN_IRS_on ? 0 : internal->r_IRS0 * IRS_decay);

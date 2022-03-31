@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ICDMM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -39,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -47,7 +49,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,7 +68,8 @@
       <a href="../articles/write_own_model.html">Writing Your Own Model</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="../CONTRIBUTING.html">Contributing</a>
     </li>
   </ul>
@@ -77,8 +80,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/mrc-ide/deterministic-malaria-model">
-    <span class="fas fa-github"></span>
+  <a href="https://github.com/mrc-ide/deterministic-malaria-model" class="external-link">
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -96,9 +99,9 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Writing your own model</h1>
-                        <h4 class="author">Joel Hellewell</h4>
+                        <h4 data-toc-skip class="author">Joel Hellewell</h4>
             
-            <h4 class="date">2021-06-03</h4>
+            <h4 data-toc-skip class="date">2022-03-31</h4>
       
       
       <div class="hidden name"><code>write_own_model.Rmd</code></div>
@@ -107,39 +110,39 @@
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>You might want to write your own extension to the malaria models, in this vignette I will try and cover the easiest way of doing this.</p>
 <p>You should start by cloning this github repository to your own computer. If you are new to R package development the next best step is to open the <code>ICDMM.Rproj</code> file using RStudio.</p>
 </div>
-<div id="adding-your-own-odin-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-your-own-odin-model" class="anchor"></a>Adding your own odin model</h2>
-<p>If you write some new code in a file called <code>example_model.R</code>, you should save it in <code>inst/odin</code> with the other models. You then need to run <code><a href="https://rdrr.io/pkg/odin/man/odin_package.html">odin::odin_package()</a></code>, with the directory path of the project inside the parenthesis, this will add a compiled version of your odin model to the package files.</p>
+<div class="section level2">
+<h2 id="adding-your-own-odin-model">Adding your own odin model<a class="anchor" aria-label="anchor" href="#adding-your-own-odin-model"></a>
+</h2>
+<p>If you write some new code in a file called <code>example_model.R</code>, you should save it in <code>inst/odin</code> with the other models. You then need to run <code><a href="https://rdrr.io/pkg/odin/man/odin_package.html" class="external-link">odin::odin_package()</a></code>, with the directory path of the project inside the parenthesis, this will add a compiled version of your odin model to the package files.</p>
 </div>
-<div id="other-code-changes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#other-code-changes" class="anchor"></a>Other code changes</h2>
+<div class="section level2">
+<h2 id="other-code-changes">Other code changes<a class="anchor" aria-label="anchor" href="#other-code-changes"></a>
+</h2>
 <p>You will need to add your model name to the following bit of code in line 44 of <code>R/run_model.R</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">  <span class="va">generator</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html">switch</a></span><span class="op">(</span><span class="va">model</span>,
+<code class="sourceCode R">  <span class="va">generator</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="va">model</span>,
     <span class="st">"odin_model"</span> <span class="op">=</span> <span class="va">odin_model</span>,
     <span class="st">"odin_model_emanators"</span> <span class="op">=</span> <span class="va">odin_model_emanators</span>,
     <span class="st">"odin_model_hrp2"</span> <span class="op">=</span> <span class="va">odin_model_hrp2</span>,
     <span class="st">"odin_model_IVM_SMChet"</span> <span class="op">=</span> <span class="va">odin_model_IVM_SMChet</span>,
     <span class="st">"example"</span> <span class="op">=</span> <span class="va">example</span>,
-    <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"Unknown model '%s'"</span>, <span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>This will allow for you to eventually run <code><a href="../reference/run_model.html">run_model(model = "example")</a></code> to run your odin model.</p>
+    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Unknown model '%s'"</span>, <span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>This will allow for you to eventually run <code>run_model(model = "example")</code> to run your odin model.</p>
 </div>
-<div id="rebuild-package" class="section level2">
-<h2 class="hasAnchor">
-<a href="#rebuild-package" class="anchor"></a>Rebuild package</h2>
+<div class="section level2">
+<h2 id="rebuild-package">Rebuild package<a class="anchor" aria-label="anchor" href="#rebuild-package"></a>
+</h2>
 <p>The final step is to rebuild the R package, you can do this by pressing “Install and Restart” in the “Build” panel in RStudio (usually in the top right panels) or the usual keyboard is ctrl + shift + b (or cmd + shift + b on a mac)</p>
 </div>
-<div id="working-with-github" class="section level2">
-<h2 class="hasAnchor">
-<a href="#working-with-github" class="anchor"></a>Working with github</h2>
+<div class="section level2">
+<h2 id="working-with-github">Working with github<a class="anchor" aria-label="anchor" href="#working-with-github"></a>
+</h2>
 <p>The easiest way to develop your new package using github will be to make a new branch. You can do this using the “New Branch” button in the RStudio interface or by running <code>git checkout -b &lt;branch name&gt;</code>. You can then push this new branch to github to do version control but your changes won’t affect anything on the main branch. When you have finished working on your model you can use github to create a pull request and we can merge it with the main branch so that everyone downloading the package also recieves your model as part of it.</p>
 </div>
   </div>
@@ -155,11 +158,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Joel Hellewell, Hannah Slater, Juliette Unwin, OJ Watson.</p>
+  <p></p>
+<p>Developed by Joel Hellewell, Hannah Slater, Juliette Unwin, OJ Watson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -167,6 +172,8 @@
 
   
 
+
+  
 
   </body>
 </html>

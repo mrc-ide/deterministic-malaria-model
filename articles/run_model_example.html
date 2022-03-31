@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ICDMM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -39,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -47,7 +49,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,7 +68,8 @@
       <a href="../articles/write_own_model.html">Writing Your Own Model</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="../CONTRIBUTING.html">Contributing</a>
     </li>
   </ul>
@@ -77,8 +80,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/mrc-ide/deterministic-malaria-model">
-    <span class="fas fa-github"></span>
+  <a href="https://github.com/mrc-ide/deterministic-malaria-model" class="external-link">
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -96,9 +99,9 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simplest Model Run</h1>
-                        <h4 class="author">OJ Watson &amp; Joel Hellewell</h4>
+                        <h4 data-toc-skip class="author">OJ Watson &amp; Joel Hellewell</h4>
             
-            <h4 class="date">2021-06-03</h4>
+            <h4 data-toc-skip class="date">2022-03-31</h4>
       
       
       <div class="hidden name"><code>run_model_example.Rmd</code></div>
@@ -107,14 +110,14 @@
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>In this vignette we will run the simplest version of the model. This is good for getting to grips with how to run the model as well as testing that everything is working correctly.</p>
 </div>
-<div id="default-use" class="section level2">
-<h2 class="hasAnchor">
-<a href="#default-use" class="anchor"></a>Default Use</h2>
+<div class="section level2">
+<h2 id="default-use">Default Use<a class="anchor" aria-label="anchor" href="#default-use"></a>
+</h2>
 <p>The <code>run_model_example</code> function solves the basic malaria model with no interventions. It returns the following list with 2 elements:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -124,16 +127,16 @@
 </ol>
 <p>As illustrated below, without specifying any function arguments, <code>create_r_model</code> will run a simulation for 1 year at an EIR of 10, with a treatment coverage equal to 40% for Tororo, Uganda.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ICDMM</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ICDMM</span><span class="op">)</span>
 <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="co">#&gt; [1] "plot" "dat"</span>
 <span class="va">out</span><span class="op">$</span><span class="va">plot</span></code></pre></div>
 <p><img src="run_model_example_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
-<div id="passing-variables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#passing-variables" class="anchor"></a>Passing Variables</h2>
+<div class="section level2">
+<h2 id="passing-variables">Passing Variables<a class="anchor" aria-label="anchor" href="#passing-variables"></a>
+</h2>
 <p>You can change the values of a small number of variables in the <code>run_model_example</code> function. To change simulation settings there are 5 optional function arguments:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -149,7 +152,7 @@
 </ol>
 <p>For example, to simulate Thies, Senegal for a given vector of ages, at an EIR of 1, for 2 years with 60% treatment coverage:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">thies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">40</span>, <span class="fl">60</span><span class="op">)</span>, 
+<code class="sourceCode R"><span class="va">thies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">40</span>, <span class="fl">60</span><span class="op">)</span>, 
                    EIR <span class="op">=</span> <span class="fl">1</span>, 
                    ft <span class="op">=</span> <span class="fl">0.6</span>, 
                    admin2 <span class="op">=</span> <span class="st">"Thies"</span>, 
@@ -158,16 +161,16 @@
 <p><img src="run_model_example_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>Other model outputs, such as the number of suceptible adult mosquitoes, can be plotted by interacting with the <code>dat</code> data frame returned by <code>run_model</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">thies</span><span class="op">$</span><span class="va">dat</span><span class="op">$</span><span class="va">Sv</span>, 
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">thies</span><span class="op">$</span><span class="va">dat</span><span class="op">$</span><span class="va">Sv</span>, 
      ylab <span class="op">=</span> <span class="st">"Susceptible Adult Mosquitoes"</span>, 
      xlab <span class="op">=</span> <span class="st">"Time (days)"</span>, 
      main<span class="op">=</span><span class="st">"Number of susceptible mosquitoes"</span>,
      type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></code></pre></div>
 <p><img src="run_model_example_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
-<div id="other-malaria-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#other-malaria-models" class="anchor"></a>Other malaria models</h2>
+<div class="section level2">
+<h2 id="other-malaria-models">Other malaria models<a class="anchor" aria-label="anchor" href="#other-malaria-models"></a>
+</h2>
 <p>To run the basic model with the option of changing further parameter values or to run other versions of the model that might include further intervention methods, please read the flexible model run <a href="https://mrc-ide.github.io/deterministic-malaria-model/articles/run_model.html">vignette</a></p>
 </div>
   </div>
@@ -183,11 +186,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Joel Hellewell, Hannah Slater, Juliette Unwin, OJ Watson.</p>
+  <p></p>
+<p>Developed by Joel Hellewell, Hannah Slater, Juliette Unwin, OJ Watson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -195,6 +200,8 @@
 
   
 
+
+  
 
   </body>
 </html>

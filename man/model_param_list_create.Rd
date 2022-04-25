@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_parameters.R
 \name{model_param_list_create}
 \alias{model_param_list_create}
-\title{Model Parameter List Creation}
+\title{Model Parameter List Creation: P. falciparum}
 \usage{
 model_param_list_create(
   eta = 1/(21 * 365),
@@ -228,10 +228,10 @@ model_param_list_create(
 \item{...}{Any other parameters needed for non-standard model. If they share the same name
 as any of the defined parameters \code{model_param_list_create} will stop. You can either write
 any extra parameters you like individually, e.g. model_param_list_create(extra1 = 1, extra2 = 2)
-and these parameteres will appear appended to the returned list, or you can pass explicitly
+and these parameters will appear appended to the returned list, or you can pass explicitly
 the ellipsis argument as a list created before, e.g. model_param_list_create(...=list(extra1 = 1, extra2 = 2))}
 }
 \description{
-\code{model_param_list_create} creates list of model parameters to be used
-within \code{equilibrium_init_create}
+The function \code{model_param_list_create} creates list of model parameters for
+P. falciparum  to be used within \code{equilibrium_init_create}
 }

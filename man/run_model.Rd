@@ -11,6 +11,7 @@ run_model(
     50, 60, 70, 80),
   init_EIR = 10,
   init_ft = 0.4,
+  K_max = NULL,
   country = NULL,
   admin2 = NULL,
   time = 100,
@@ -24,9 +25,14 @@ run_model(
 
 \item{age}{Age vector}
 
-\item{init_EIR}{Initial EIR for initial solution}
+\item{init_EIR}{Initial EIR for initial solution (mean annual EIR among adults)}
 
 \item{init_ft}{Initial ft for initial solution}
+
+\item{K_max}{Maximum number of hypnozoite batches for P. vivax, needs to be specified
+if model = "vivax_model". Has to be an integer between 1 and 30.
+Note a model with stratification into larger number of hypnozoite batches (e.g. K_max > 5)
+may have to be run on the cluster. For an EIR of 1 or less, K_max = 2 is sufficient.}
 
 \item{country}{Character of country in which admin unit exists}
 

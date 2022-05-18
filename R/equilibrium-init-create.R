@@ -75,6 +75,10 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   age59 <- which(age_vector * 12 > 59)[1] - 1  # index of age vector before age is >59 months
   age05 <- which(age_vector > 5)[1] - 1  # index of age vector before age is 5 years
 
+  age02 <- which(age_vector > 2)[1] - 1   # index of age vector at age 2 years
+  age10 <- which(age_vector >= 10)[1] - 1  # index of age vector before age is 10 years
+
+
   ## force of infection
   foi_age <- c()
   for (i in 1:na)
@@ -345,7 +349,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
               omega = omega, foi_age = foi_age, rel_foi = rel_foi,
               K0 = K0, mv0 = mv0, na = na, nh = nh, ni = num_int, x_I = x_I,
               FOI = FOI_eq, EIR_eq = EIR_eq, cA_eq = cA_eq,
-              den = den, age59 = age59, age05 = age05, ssa0 = ssa0, ssa1 = ssa1,
+              den = den, age59 = age59, age05 = age05, age02 = age02, age10 = age10,
+              ssa0 = ssa0, ssa1 = ssa1,
               ssa2 = ssa2, ssa3 = ssa3, ssb1 = ssb1, ssb2 = ssb2, ssb3 = ssb3,
               theta_c = theta_c, age = age_vector*mpl$DY, ft = ft, FOIv_eq = FOIv_eq,
               betaS = betaS, betaA = betaA, betaU = betaU, FOIvij_eq=FOIvij_eq,

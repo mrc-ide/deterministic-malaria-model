@@ -506,12 +506,21 @@ dim(den) <- na
 age59 <- user(integer=TRUE)
 # index of the age vector above 5 years
 age05 <- user(integer=TRUE)
+# index of the age vector at 2 years
+age02 <- user(integer=TRUE)
+# index of the age vector at 10 years
+age10 <- user(integer=TRUE)
 
+# slide positivity in 0 -5 year age bracket
 dim(prev0to59) <- c(age59,nh,num_int)
 prev0to59[1:age59,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
 output(prev) <- sum(prev0to59[,,])/sum(den[1:age59])
 
-# slide positivity in 0 -5 year age bracket
+# Slide positivity in 2-10 year olds
+dim(prev0to10) <- c(age10,nh,num_int)
+prev0to10[1:age10,,] <- T[i,j,k] + D[i,j,k]  + A[i,j,k]*p_det[i,j,k]
+output(prev2to10) <- sum(prev0to10[age02:age10,,])/sum(den[age02:age10])
+
 dim(clin_inc0to5) <- c(age05,nh,num_int)
 clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])

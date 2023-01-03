@@ -11,7 +11,7 @@
 # Iv - Infectious mosquitoes
 
 require(odin)
-
+require(tidyverse)
 
 ##------------------------------------------------------------------------------
 #####################
@@ -146,13 +146,20 @@ ento_model_simple <- odin::odin({
 
 ento_model_ivm <- odin::odin({
   init_Sv <- user()
-  init_Ev_di_human <- user()
-  init_Iv_di_human <- user()
+  init_Sv_di_human <- 0
+  init_Ev_di_human <- 0
+  init_Iv_di_human <- 0
   initial(Sv) <- init_Sv * mv0
-  initial(Ev) <- init_Ev * mv0
+  initial(Sv_di_human) <- init_Sv_di_human*mv0
+  initial(Ev_di_human) <- init_Ev_di_human * mv0
   #initial(Ev[1:10]) <- init_Ev/10 * mv0 # Options if not using a delayed delay
   #dim(Ev) <- 10
-  initial(Iv) <- init_Iv * mv0
+  initial(Iv_di_human) <- init_Iv_di_human * mv0
+
+  #ivm cow
+  init_Sv_di_cow <- 0
+
+  initial(Sv_di_cow) <- init_Sv_di_cow*mv0
 
   # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
   # by age/het/int category, infectiousness depends on p_det which depends on detection immunity
@@ -165,16 +172,16 @@ ento_model_ivm <- odin::odin({
 
   # Force of infection from humans to mosquitoes
   #dim(FOIvijk) <- c(na,nh,num_int)
-  omega <- user() #normalising constant for biting rates
+  #omega <- user() #normalising constant for biting rates
   #FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i]/omega
   #lag_FOIv=sum(FOIvijk)
-  lag_FOIv = 0.6 #just set to a value and making it a function of Q0 - anthropophagy and av0
-  Q0 <- user()
+  lag_FOIv = 9 #just set to a value and making it a function of Q0 - anthropophagy and av0
+  Q0 <- 0.3
   av0 <- 0.333 #1 bite every 3 days
 
   # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)
-  delayGam <- user() # Lag from parasites to infectious gametocytes
-  delayMos <- user() # Extrinsic incubation period.
+  delayGam <- 12.5 # Lag from parasites to infectious gametocytes
+  delayMos <- 10 # Extrinsic incubation period.
   FOIv <- delay(lag_FOIv, delayGam)
 
   # Number of mosquitoes that become infected at each time point
@@ -205,11 +212,11 @@ ento_model_ivm <- odin::odin({
   deriv(Sv_di_cow) <- (((1-Q0)*av0)*prop_cow_ivm) - (mu_ivm_cow*Sv_di_cow)
 
   #cow compartment
-  init_calf <- user()
-  init_cow <- user()
+  init_calf <- 0
+  init_cow <- 100
 
-  initial_calf <- 100
-  initial_cow <- 0
+  initial(calf) <- init_calf
+  initial(cow) <- init_cow
 
   cattle = calf + cow
 
@@ -221,7 +228,13 @@ ento_model_ivm <- odin::odin({
   b <- d #match birth and death rate
 
   prop_cow_ivm <- ((cow)/(cow+calf))*coverage_cow_ivm #proportion of cows with ivermectin
-  prop_human_ivm <- user() #coverage of humans with ivm. age and height restrictions...make up a number
+  prop_human_ivm <- coverage_humans_ivm #coverage of humans with ivm. age and height restrictions...make up a number
+
+  coverage_cow_ivm = user() #start off with all cows treated with ivm
+  coverage_humans_ivm = user()
+
+  mu_ivm = 0.9 #made up a killing effect of ivm from human treatment
+  mu_ivm_cow = 0.5 #made up a killing effect of ivm from the cow treatment
 
   # model options if don't want to use a delayed delay
   #deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
@@ -229,12 +242,33 @@ ento_model_ivm <- odin::odin({
   #mv = Sv+sum(Ev)+Iv
 
   # Total mosquito population
-  mv = Sv+Ev+Iv
+  mv = Sv+Sv_di_human+Ev_di_human+Iv_di_human+Sv_di_cow
 
 
 })
 
+#define model
+params <- list(init_Sv = 1000, coverage_cow_ivm = 0, coverage_humans_ivm = 1)
+mod <- ento_model_ivm$new(user = params)
 
+#time points: run for 5 years
+t1 <- seq(0, 1825, length.out = 1825)
 
+#run model
+yy1 <- mod$run(t1)
+df_out <- data.frame(yy1)
+df_out
 
+ggplot(df_out) +
+  geom_line(aes(x = t, y = Iv_di_human), col = "red")
 
+#then run again with the cow ivermectin
+params_int <- list(init_Sv = 1000, coverage_cow_ivm = 0, coverage_humans_ivm = 0.5)
+mod_int <- ento_model_ivm$new(user = params_int)
+
+#run int model
+yy1_int <- mod_int$run(t1)
+df_out_int <- data.frame(yy1_int)
+
+ggplot(df_out)+
+  geom_line(aes(x = t, y = Iv_di_human), col = "blue")

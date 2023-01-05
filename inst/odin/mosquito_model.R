@@ -346,64 +346,36 @@ ivm_model <- odin::odin({
   mu_h <- 0.728 #elevated mort rate due to IVM humans
   bv <- 0.05 #probability of transmission from human to vector
   g <- 10 #latent period. days
-  R <- (1/2)*(PL/dPL)
+  R <- mu0 #setting to baseline death rate for ease
   Nv = Sv+Ev+Iv
-
-
-  #slot in the larval model####
-  # mean carrying capacity from initial mosquito density:
-  dLL <- user() # development time of larvae
-  dPL <- user() #development time of pupae
-  dEL <- user() #development time of early stage
-  muLL <- user() #daily density dep. mortality rate of larvae
-  muPL <- user() #daily den. dep. mortality rate of pupae
-  muEL <- user() #daily den. dep. mortality rate of early stage
-  gammaL <- user() # eff. of den. dep. on late stage relative to early stage
-
-  # fitted entomological parameters:
-  mv0 <- user() # initial mosquito density
-  mv <- user()
-  tau1 <- 0.69 # duration of host-seeking behaviour
-  tau2 <- 2.31 # duration of resting behaviour
-  p10 <- exp(-mu0 * tau1) # prob of surviving 1 feeding cycle
-  p2 <- exp(-mu0 * tau2) #prob of surviving one resting cycle
-  betaL <- 21.2 # maximum number of eggs per oviposition per mosq
-
-  # Entomological variables:
-  eov <- betaL/mu*(exp(mu/fv)-1)
-  beta_larval <- eov*mu*exp(-mu/fv)/(1-exp(-mu/fv)) # Number of eggs laid per day
-  b_lambda <- (gammaL*muLL/muEL-dEL/dLL+(gammaL-1)*muLL*dEL)
-  lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu0*dLL*(1+dPL*muPL)))
-  K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
-
-  # Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
-  KL <- K0*theta2
-  fv <- 1/( tau1/(1-zbar) + tau2 ) # mosquito feeding rate (zbar from intervention param.)
-  mu <- -fv*log(p1*p2) # mosquito death rate
-
-  # finding equilibrium and initial values for EL, LL & PL
-  init_PL <- user()
-  initial(PL) <- init_PL
-  init_LL <- user()
-  initial(LL) <- init_LL
-  init_EL <- user()
-  initial(EL) <- init_EL
-
-  # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
-  deriv(EL) <- beta_larval*mv-muEL*(1+(EL+LL)/KL)*EL - EL/dEL
-  # egg hatching - den. dep. mortality - maturing larvae
-  deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL)*LL - LL/dLL
-  # pupae - mortality - fully developed pupae
-  deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
-
-
 
   #tracking the EIR
   output(EIR) <- (V/H)*a*Q0*(Iv/Nv)
+
 })
 
+params <- list(init_Sv = 1000, init_Ev = 0, init_Iv = 0,
+               init_Svih = 0, init_Evih = 0, init_Ivih = 0,
+               init_Svic = 0, init_Evic = 0, init_Ivic = 0,
+               gamma_c = 1, gamma_h = 1, Q0 = 0.7, Ih = 600)
+
+mod <- ivm_model$new(user = params)
+
+#time points: run for 5 years
+t1 <- seq(0, 90, length.out = 90)
+
+#run model
+yy1 <- mod$run(t1)
+df_out <- data.frame(yy1)
+df_out$EIR
+
+ggplot(df_out) +
+  geom_line(aes(x = t, y = EIR), col = "red")
+
+
+
 #with larval....needs more work####
-ivm_model <- odin::odin({
+ivm_model_larval <- odin::odin({
   #no ivermectin
 
   deriv(Sv) <- R - (mu0*Sv) - (FOIhv*Sv) - (a*gamma_c*(1-Q0))*Sv - (a*gamma_h*Q0)*Sv
@@ -473,7 +445,7 @@ ivm_model <- odin::odin({
   mu_h <- 0.728 #elevated mort rate due to IVM humans
   bv <- 0.05 #probability of transmission from human to vector
   g <- 10 #latent period. days
-  R <- mu0
+  R <- (1/2)*PL/dPL
   Nv = Sv+Ev+Iv
 
 

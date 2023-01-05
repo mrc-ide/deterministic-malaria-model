@@ -279,25 +279,206 @@ ggplot(df_out)+
 ivm_model <- odin::odin({
   #no ivermectin
 
-  deriv(Sv) <- R - (mu0*Sv) - (FOIhv*Sv) - (alpha*gamma_c*(1-Q0))*Sv - (alpha*gamma_h*Q0)*Sv
+  deriv(Sv) <- R - (mu0*Sv) - (FOIhv*Sv) - (a*gamma_c*(1-Q0))*Sv - (a*gamma_h*Q0)*Sv
 
-  deriv(Ev) <- (FOIhv*Sv) - (mu0*Ev) - ((alpha*gamma_h*(1-Q0))*Ev) - (g*Ev) - (alpha*gamma_h*Q0)*Ev
+  deriv(Ev) <- (FOIhv*Sv) - (mu0*Ev) - (a)*Ev - (g*Ev) - (a*gamma_h*Q0)*Ev
 
   deriv(Iv) <- (g*Ev) - (mu0*Iv)
 
   #ivermectin humans
 
-  deriv(Svih) <- -(FOIhv*Svih) + (alpha*gamma_h*Q0)*Sv - (mu_h*Svih)
+  deriv(Svih) <- -(FOIhv*Svih) + (a*gamma_h*Q0)*Sv - (mu_h*Svih)
 
-  deriv(Evih) <- (FOIhv*Sv) - (g*Evih) + (alpha*gamma_h*Q0*Evih) - (mu_h*Evih)
+  deriv(Evih) <- (FOIhv*Sv) - (g*Evih) + (a*gamma_h*Q0*Evih) - (mu_h*Evih)
 
   deriv(Ivih) <- (g*Evih) - (mu_h*Ivih)
 
   #ivermectin cattle
 
-  deriv(Svic) <- (alpha*gamma_c*(1-Q0))Sv - (mu_c*Svic) - (FOIhv*Svic)
+  deriv(Svic) <- (a*gamma_c*(1-Q0))*Sv - (mu_c*Svic) - (FOIhv*Svic)
 
-  deriv(Evic) <- (FOIhv*Svic) - (mu_c*Evic) - (g*Evic) + (alpha*gamma_h*(1-Q0)*Ev)
+  deriv(Evic) <- (FOIhv*Svic) - (mu_c*Evic) - (g*Evic) + (a*gamma_h*(1-Q0)*Ev)
 
   deriv(Ivic) <- (g*Evic) - (mu_c*Ivic)
+
+
+  #initial conditions
+
+  #no ivermectin####
+  initial(Sv) <-init_Sv
+  initial(Ev) <- init_Ev
+  initial(Iv) <- init_Iv
+
+  init_Sv <- user()
+  init_Ev <- user()
+  init_Iv <- user()
+
+  #ivermectin humans
+  initial(Svih) <- init_Svih
+  initial(Evih) <- init_Evih
+  initial(Ivih) <- init_Ivih
+
+  init_Svih <- user()
+  init_Evih <- user()
+  init_Ivih <- user()
+
+  #ivermectin cattle
+  initial(Svic) <- init_Svic
+  initial(Evic) <- init_Evic
+  initial(Ivic) <- init_Ivic
+
+  init_Svic <- user()
+  init_Evic <- user()
+  init_Ivic <- user()
+
+  #parameters
+  FOIhv <- (V/H) * a * Q0 * bv * (Ih/Nh)
+  V <- Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic
+  Ih <- user() #I can set prevalence in humans this way
+  Nh <- 1000
+  H <- Nh
+  a <- 0.333 #1 bite every 3 days
+  Q0 <- user() #proportion of bites that are on humans
+  gamma_c <- user() #proportion of livestock with ivermectin
+  gamma_h <- user() #proportion of humans with ivermectin
+  mu0 <- 0.132 #baseline mortality rate
+  mu_c <- 0.728 #elevated mort rate due to IVM cattle. From Dighe and Elong work. per day
+  mu_h <- 0.728 #elevated mort rate due to IVM humans
+  bv <- 0.05 #probability of transmission from human to vector
+  g <- 10 #latent period. days
+  R <- (1/2)*(PL/dPL)
+  Nv = Sv+Ev+Iv
+
+
+  #slot in the larval model####
+  # mean carrying capacity from initial mosquito density:
+  dLL <- user() # development time of larvae
+  dPL <- user() #development time of pupae
+  dEL <- user() #development time of early stage
+  muLL <- user() #daily density dep. mortality rate of larvae
+  muPL <- user() #daily den. dep. mortality rate of pupae
+  muEL <- user() #daily den. dep. mortality rate of early stage
+  gammaL <- user() # eff. of den. dep. on late stage relative to early stage
+
+  # fitted entomological parameters:
+  mv0 <- user() # initial mosquito density
+  mv <- user()
+  tau1 <- 0.69 # duration of host-seeking behaviour
+  tau2 <- 2.31 # duration of resting behaviour
+  p10 <- exp(-mu0 * tau1) # prob of surviving 1 feeding cycle
+  p2 <- exp(-mu0 * tau2) #prob of surviving one resting cycle
+  betaL <- 21.2 # maximum number of eggs per oviposition per mosq
+
+  # Entomological variables:
+  eov <- betaL/mu*(exp(mu/fv)-1)
+  beta_larval <- eov*mu*exp(-mu/fv)/(1-exp(-mu/fv)) # Number of eggs laid per day
+  b_lambda <- (gammaL*muLL/muEL-dEL/dLL+(gammaL-1)*muLL*dEL)
+  lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu0*dLL*(1+dPL*muPL)))
+  K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
+
+  # Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
+  KL <- K0*theta2
+  fv <- 1/( tau1/(1-zbar) + tau2 ) # mosquito feeding rate (zbar from intervention param.)
+  mu <- -fv*log(p1*p2) # mosquito death rate
+
+  # finding equilibrium and initial values for EL, LL & PL
+  init_PL <- user()
+  initial(PL) <- init_PL
+  init_LL <- user()
+  initial(LL) <- init_LL
+  init_EL <- user()
+  initial(EL) <- init_EL
+
+  # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
+  deriv(EL) <- beta_larval*mv-muEL*(1+(EL+LL)/KL)*EL - EL/dEL
+  # egg hatching - den. dep. mortality - maturing larvae
+  deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL)*LL - LL/dLL
+  # pupae - mortality - fully developed pupae
+  deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
+
+
+
+  #tracking the EIR
+  output(EIR) <- (V/H)*a*Q0*(Iv/Nv)
 })
+
+#with larval....needs more work####
+ivm_model <- odin::odin({
+  #no ivermectin
+
+  deriv(Sv) <- R - (mu0*Sv) - (FOIhv*Sv) - (a*gamma_c*(1-Q0))*Sv - (a*gamma_h*Q0)*Sv
+
+  deriv(Ev) <- (FOIhv*Sv) - (mu0*Ev) - (a)*Ev - (g*Ev) - (a*gamma_h*Q0)*Ev
+
+  deriv(Iv) <- (g*Ev) - (mu0*Iv)
+
+  #ivermectin humans
+
+  deriv(Svih) <- -(FOIhv*Svih) + (a*gamma_h*Q0)*Sv - (mu_h*Svih)
+
+  deriv(Evih) <- (FOIhv*Sv) - (g*Evih) + (a*gamma_h*Q0*Evih) - (mu_h*Evih)
+
+  deriv(Ivih) <- (g*Evih) - (mu_h*Ivih)
+
+  #ivermectin cattle
+
+  deriv(Svic) <- (a*gamma_c*(1-Q0))*Sv - (mu_c*Svic) - (FOIhv*Svic)
+
+  deriv(Evic) <- (FOIhv*Svic) - (mu_c*Evic) - (g*Evic) + (a*gamma_h*(1-Q0)*Ev)
+
+  deriv(Ivic) <- (g*Evic) - (mu_c*Ivic)
+
+
+  #initial conditions
+
+  #no ivermectin####
+  initial(Sv) <-init_Sv
+  initial(Ev) <- init_Ev
+  initial(Iv) <- init_Iv
+
+  init_Sv <- user()
+  init_Ev <- user()
+  init_Iv <- user()
+
+  #ivermectin humans
+  initial(Svih) <- init_Svih
+  initial(Evih) <- init_Evih
+  initial(Ivih) <- init_Ivih
+
+  init_Svih <- user()
+  init_Evih <- user()
+  init_Ivih <- user()
+
+  #ivermectin cattle
+  initial(Svic) <- init_Svic
+  initial(Evic) <- init_Evic
+  initial(Ivic) <- init_Ivic
+
+  init_Svic <- user()
+  init_Evic <- user()
+  init_Ivic <- user()
+
+  #parameters
+  FOIhv <- (V/H) * a * Q0 * bv * (Ih/Nh)
+  V <- Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic
+  Ih <- user() #I can set prevalence in humans this way
+  Nh <- 1000
+  H <- Nh
+  a <- 0.333 #1 bite every 3 days
+  Q0 <- user() #proportion of bites that are on humans
+  gamma_c <- user() #proportion of livestock with ivermectin
+  gamma_h <- user() #proportion of humans with ivermectin
+  mu0 <- 0.132 #baseline mortality rate
+  mu_c <- 0.728 #elevated mort rate due to IVM cattle. From Dighe and Elong work. per day
+  mu_h <- 0.728 #elevated mort rate due to IVM humans
+  bv <- 0.05 #probability of transmission from human to vector
+  g <- 10 #latent period. days
+  R <- mu0
+  Nv = Sv+Ev+Iv
+
+
+  #tracking the EIR
+  output(EIR) <- (V/H)*a*Q0*(Iv/Nv)
+})
+
+

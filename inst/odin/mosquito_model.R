@@ -272,3 +272,32 @@ df_out_int <- data.frame(yy1_int)
 
 ggplot(df_out)+
   geom_line(aes(x = t, y = Iv_di_human), col = "blue")
+
+
+#####new mosquito model with ivermectin humans and cattle ####
+
+ivm_model <- odin::odin({
+  #no ivermectin
+
+  deriv(Sv) <- R - (mu0*Sv) - (FOIhv*Sv) - (alpha*gamma_c*(1-Q0))*Sv - (alpha*gamma_h*Q0)*Sv
+
+  deriv(Ev) <- (FOIhv*Sv) - (mu0*Ev) - ((alpha*gamma_h*(1-Q0))*Ev) - (g*Ev) - (alpha*gamma_h*Q0)*Ev
+
+  deriv(Iv) <- (g*Ev) - (mu0*Iv)
+
+  #ivermectin humans
+
+  deriv(Svih) <- -(FOIhv*Svih) + (alpha*gamma_h*Q0)*Sv - (mu_h*Svih)
+
+  deriv(Evih) <- (FOIhv*Sv) - (g*Evih) + (alpha*gamma_h*Q0*Evih) - (mu_h*Evih)
+
+  deriv(Ivih) <- (g*Evih) - (mu_h*Ivih)
+
+  #ivermectin cattle
+
+  deriv(Svic) <- (alpha*gamma_c*(1-Q0))Sv - (mu_c*Svic) - (FOIhv*Svic)
+
+  deriv(Evic) <- (FOIhv*Svic) - (mu_c*Evic) - (g*Evic) + (alpha*gamma_h*(1-Q0)*Ev)
+
+  deriv(Ivic) <- (g*Evic) - (mu_c*Ivic)
+})

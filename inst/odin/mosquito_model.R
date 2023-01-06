@@ -470,10 +470,32 @@ plot5 <- ggplot(df_out_5) +
   geom_hline(aes(yintercept = max(df_out_lowQ0$EIR)), linetype = "dashed")+
   geom_hline(aes(yintercept = max(df_out_lowQ0_ivh$EIR)), linetype = "dashed")
 
+params_6 <- list(init_Sv = 1000, init_Ev = 0, init_Iv = 0,
+                 init_Svih = 0, init_Evih = 0, init_Ivih = 0,
+                 init_Svic = 0, init_Evic = 0, init_Ivic = 0,
+                 gamma_c = 1, gamma_h = 0, Q0 = 0.4, Ih = 600)
+
+mod_6 <- ivm_model$new(user = params_6)
+
+#time points: run for 5 years
+t1_6 <- seq(0, 90, length.out = 90)
+
+#run model
+yy1_6 <- mod_5$run(t1_6)
+df_out_6 <- data.frame(yy1_6)
+df_out_6$EIR
+
+plot6 <- ggplot(df_out_6) +
+  geom_line(aes(x = t, y = EIR), col = "red")+
+  ggtitle("100% cattle IVM and no human, Q0 = 0.4")+
+  ylim(0, 0.003)+
+  geom_hline(aes(yintercept = max(df_out_lowQ0$EIR)), linetype = "dashed")+
+  geom_hline(aes(yintercept = max(df_out_lowQ0_ivh$EIR)), linetype = "dashed")
+
 
 require(cowplot)
 
-summary_plots <- plot_grid(plot1, plot2, plot3, plot4, plot5)
+summary_plots <- plot_grid(plot1, plot2, plot3, plot4, plot5, plot6)
 
 
 

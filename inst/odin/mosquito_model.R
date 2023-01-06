@@ -354,23 +354,126 @@ ivm_model <- odin::odin({
 
 })
 
-params <- list(init_Sv = 1000, init_Ev = 0, init_Iv = 0,
+#params no ivermectin on humans or cattle ####
+params_noivm <- list(init_Sv = 1000, init_Ev = 0, init_Iv = 0,
+               init_Svih = 0, init_Evih = 0, init_Ivih = 0,
+               init_Svic = 0, init_Evic = 0, init_Ivic = 0,
+               gamma_c = 0, gamma_h = 0, Q0 = 0.7, Ih = 600)
+
+mod_noivm <- ivm_model$new(user = params_noivm)
+
+#time points: run for 5 years
+t1_noivm <- seq(0, 90, length.out = 90)
+
+#run model
+yy1_noivm <- mod_noivm$run(t1_noivm)
+df_out_noivm <- data.frame(yy1_noivm)
+df_out_noivm$EIR
+max(df_out_noivm$EIR)
+plot1 <- ggplot(df_out_noivm) +
+  geom_line(aes(x = t, y = EIR), col = "red")+
+  ggtitle("No ivermectin treatment, Q0 = 0.7")+
+  ylim(0, 0.003)+
+  geom_hline(aes(yintercept = max(df_out_noivm$EIR)), linetype = "dashed")
+
+
+#params 100% coverage humans and cattle ####
+params_ivm_ch <- list(init_Sv = 1000, init_Ev = 0, init_Iv = 0,
                init_Svih = 0, init_Evih = 0, init_Ivih = 0,
                init_Svic = 0, init_Evic = 0, init_Ivic = 0,
                gamma_c = 1, gamma_h = 1, Q0 = 0.7, Ih = 600)
 
-mod <- ivm_model$new(user = params)
+mod_ivm_ch <- ivm_model$new(user = params_ivm_ch)
 
 #time points: run for 5 years
-t1 <- seq(0, 90, length.out = 90)
+t1_ivm_ch <- seq(0, 90, length.out = 90)
 
 #run model
-yy1 <- mod$run(t1)
-df_out <- data.frame(yy1)
-df_out$EIR
+yy1_ivm_ch <- mod_ivm_ch$run(t1_ivm_ch)
+df_out_ivm_ch <- data.frame(yy1_ivm_ch)
+df_out_ivm_ch$EIR
 
-ggplot(df_out) +
-  geom_line(aes(x = t, y = EIR), col = "red")
+plot2 <- ggplot(df_out_ivm_ch) +
+  geom_line(aes(x = t, y = EIR), col = "red")+
+  ggtitle("100% coverage human and cattle IVM, Q0 = 0.7")+
+  ylim(0, 0.003)+
+  geom_hline(aes(yintercept = max(df_out_noivm$EIR)), linetype = "dashed")
+
+
+#params no ivermectin and low Q0 ####
+
+params_lowQ0 <- list(init_Sv = 1000, init_Ev = 0, init_Iv = 0,
+                      init_Svih = 0, init_Evih = 0, init_Ivih = 0,
+                      init_Svic = 0, init_Evic = 0, init_Ivic = 0,
+                      gamma_c = 0, gamma_h = 0, Q0 = 0.4, Ih = 600)
+
+mod_lowQ0 <- ivm_model$new(user = params_lowQ0)
+
+#time points: run for 5 years
+t1_lowQ0 <- seq(0, 90, length.out = 90)
+
+#run model
+yy1_lowQ0 <- mod_lowQ0$run(t1_lowQ0)
+df_out_lowQ0 <- data.frame(yy1_lowQ0)
+df_out_lowQ0$EIR
+
+plot3 <- ggplot(df_out_lowQ0) +
+  geom_line(aes(x = t, y = EIR), col = "red")+
+  ggtitle("100% coverage human and cattle IVM, Q0 = 0.4")+
+  ylim(0, 0.003)+
+  geom_hline(aes(yintercept = max(df_out_lowQ0$EIR)), linetype = "dashed")
+
+
+#treat humans and low Q0####
+params_lowQ0_ivh <- list(init_Sv = 1000, init_Ev = 0, init_Iv = 0,
+                     init_Svih = 0, init_Evih = 0, init_Ivih = 0,
+                     init_Svic = 0, init_Evic = 0, init_Ivic = 0,
+                     gamma_c = 0, gamma_h = 1, Q0 = 0.4, Ih = 600)
+
+mod_lowQ0_ivh <- ivm_model$new(user = params_lowQ0_ivh)
+
+#time points: run for 5 years
+t1_lowQ0_ivh <- seq(0, 90, length.out = 90)
+
+#run model
+yy1_lowQ0_ivh <- mod_lowQ0_ivh$run(t1_lowQ0_ivh)
+df_out_lowQ0_ivh <- data.frame(yy1_lowQ0_ivh)
+df_out_lowQ0_ivh$EIR
+
+plot4 <- ggplot(df_out_lowQ0_ivh) +
+  geom_line(aes(x = t, y = EIR), col = "red")+
+  ggtitle("100% coverage humans, no cattle IVM, Q0 = 0.4")+
+  ylim(0, 0.003)+
+  geom_hline(aes(yintercept = max(df_out_lowQ0$EIR)), linetype = "dashed")+
+  geom_hline(aes(yintercept = max(df_out_lowQ0_ivh$EIR)), linetype = "dashed")
+
+#then the additional benefit of spraying cattle
+params_5 <- list(init_Sv = 1000, init_Ev = 0, init_Iv = 0,
+                         init_Svih = 0, init_Evih = 0, init_Ivih = 0,
+                         init_Svic = 0, init_Evic = 0, init_Ivic = 0,
+                         gamma_c = 1, gamma_h = 1, Q0 = 0.4, Ih = 600)
+
+mod_5 <- ivm_model$new(user = params_5)
+
+#time points: run for 5 years
+t1_5 <- seq(0, 90, length.out = 90)
+
+#run model
+yy1_5 <- mod_5$run(t1_5)
+df_out_5 <- data.frame(yy1_5)
+df_out_5$EIR
+
+plot5 <- ggplot(df_out_5) +
+  geom_line(aes(x = t, y = EIR), col = "red")+
+  ggtitle("100% coverage human and cattle IVM, Q0 = 0.4")+
+  ylim(0, 0.003)+
+  geom_hline(aes(yintercept = max(df_out_lowQ0$EIR)), linetype = "dashed")+
+  geom_hline(aes(yintercept = max(df_out_lowQ0_ivh$EIR)), linetype = "dashed")
+
+
+require(cowplot)
+
+summary_plots <- plot_grid(plot1, plot2, plot3, plot4, plot5)
 
 
 

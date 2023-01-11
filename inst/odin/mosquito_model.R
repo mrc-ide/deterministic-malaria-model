@@ -281,7 +281,7 @@ ivm_model <- odin::odin({
 
   deriv(Sv) <- R - (mu0*Sv) - (FOIhv*Sv) - (a*gamma_c*(1-Q0))*Sv - (a*gamma_h*Q0)*Sv
 
-  deriv(Ev) <- (FOIhv*Sv) - (mu0*Ev) - (a)*Ev - (g*Ev) - (a*gamma_h*Q0)*Ev
+  deriv(Ev) <- (FOIhv*Sv) - (mu0*Ev) - (g*Ev) - (a*gamma_h*Q0)*Ev #- (a)*Ev
 
   deriv(Iv) <- (g*Ev) - (mu0*Iv) - (a*gamma_h*Q0*Iv) - (a*gamma_c*(1-Q0)*Iv)
 
@@ -309,7 +309,7 @@ ivm_model <- odin::odin({
   initial(Ev) <- init_Ev
   initial(Iv) <- init_Iv
 
-  init_Sv <- 50000
+  init_Sv <- 50000000
   init_Ev <- user()
   init_Iv <- user()
 
@@ -332,25 +332,26 @@ ivm_model <- odin::odin({
   init_Ivic <- user()
 
   #parameters
-  FOIhv <- (V/H) * a * Q0 * bv * (Ih/Nh)
+  FOIhv <- a * Q0 * bv * 0.2
   V <- Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic
-  Ih <- user() #I can set prevalence in humans this way
+  #Ih <- user() #I can set prevalence in humans this way
   Nh <- 1000
   H <- Nh
   a <- 0.333 #1 bite every 3 days
   Q0 <- user() #proportion of bites that are on humans
   gamma_c <- user() #proportion of livestock with ivermectin
   gamma_h <- user() #proportion of humans with ivermectin
-  mu0 <- 0.132 #baseline mortality rate
-  mu_c <- 0.728 #elevated mort rate due to IVM cattle. From Dighe and Elong work. per day
-  mu_h <- 0.728 #elevated mort rate due to IVM humans
+  mu0 <- 0 #baseline mortality rate
+  mu_c <- mu0 #elevated mort rate due to IVM cattle. From Dighe and Elong work. per day
+  mu_h <- mu0 #elevated mort rate due to IVM humans
   bv <- 0.05 #probability of transmission from human to vector
-  g <- 0.1 #latent period. days
-  R <- mu0 #setting to baseline death rate for ease
+  g <- 0 #latent period. days
+  R <- mu0*Nv #setting to baseline death rate for ease
   Nv = Sv+Ev+Iv
 
   #tracking the EIR
   output(EIR) <- (V/H)*a*Q0*((Iv+Ivih+Ivic)/Nv)
+  output(total_mosq) <- Nv
 
 })
 
@@ -358,7 +359,7 @@ ivm_model <- odin::odin({
 params_noivm <- list(init_Ev = 0, init_Iv = 0,
                init_Svih = 0, init_Evih = 0, init_Ivih = 0,
                init_Svic = 0, init_Evic = 0, init_Ivic = 0,
-               gamma_c = 0, gamma_h = 0, Q0 = 0.7, Ih = 600)
+               gamma_c = 0, gamma_h = 0, Q0 = 0.7)
 
 mod_noivm <- ivm_model$new(user = params_noivm)
 
@@ -370,6 +371,7 @@ yy1_noivm <- mod_noivm$run(t1_noivm)
 df_out_noivm <- data.frame(yy1_noivm)
 df_out_noivm$EIR
 max(df_out_noivm$EIR)
+df_out_noivm$total_mosq
 plot1 <- ggplot(df_out_noivm) +
   geom_line(aes(x = t, y = EIR), col = "red")+
   ggtitle("No ivermectin treatment, Q0 = 0.7")+
@@ -486,10 +488,7 @@ df_6 <- data.frame(yy1_6)
 plot6 <- ggplot(df_6) +
   geom_line(aes(x = t, y = EIR), col = "red")+
   ggtitle("100% coverage humans and cattle IVM, Q0 = 0.4")+
-  ylim(0, 40)+
-  geom_hline(aes(yintercept = max(df_out_lowQ0$EIR)), linetype = "dashed")+
-  geom_hline(aes(yintercept = max(df_out_lowQ0_ivh$EIR)), linetype = "dashed")
-
+  ylim(0, 40)
 #then the additional benefit of spraying cattle
 params_7 <- list(init_Ev = 0, init_Iv = 0,
                          init_Svih = 0, init_Evih = 0, init_Ivih = 0,
@@ -509,9 +508,7 @@ df_out_7 <- data.frame(yy1_7)
 plot7 <- ggplot(df_out_7) +
   geom_line(aes(x = t, y = EIR), col = "red")+
   ggtitle("100% coverage human, no cattle IVM, Q0 = 0.4")+
-  ylim(0, 40)+
-  geom_hline(aes(yintercept = max(df_out_lowQ0$EIR)), linetype = "dashed")+
-  geom_hline(aes(yintercept = max(df_out_lowQ0_ivh$EIR)), linetype = "dashed")
+  ylim(0, 40)
 
 #100% cov cattle, no human IVM. Q0 = 0.4
 
@@ -532,10 +529,7 @@ df_8 <- data.frame(yy1_8)
 plot8 <- ggplot(df_8) +
   geom_line(aes(x = t, y = EIR), col = "red")+
   ggtitle("100% cattle IVM and no human, Q0 = 0.4")+
-  ylim(0, 40)+
-  geom_hline(aes(yintercept = max(df_out_lowQ0$EIR)), linetype = "dashed")+
-  geom_hline(aes(yintercept = max(df_out_lowQ0_ivh$EIR)), linetype = "dashed")
-
+  ylim(0, 40)
 
 require(cowplot)
 
@@ -552,11 +546,11 @@ df_5 <- df_5 %>%
 
 no_ivm_dat <- rbind(df1, df_5)
 
-no_ivm_plot <- ggplot(no_ivm_dat) +
-  geom_line(aes(x  = t, y = EIR, col = as.factor(scenario)))+
-  theme_minimal()+
-  labs(col = "Scenario")+
-  ylim(0, 1)
+  no_ivm_plot <- ggplot(no_ivm_dat) +
+    geom_line(aes(x  = t, y = EIR, col = as.factor(scenario)))+
+    theme_minimal()+
+    labs(col = "Scenario")+
+  ylim(0, 3)
 
 #100% IVM in both
 df2 <- df2 %>%
@@ -571,7 +565,7 @@ ivm_both_plot <- ggplot(ivm_both_dat)+
   geom_line(aes(x  = t, y = EIR, col = as.factor(scenario)))+
   theme_minimal()+
   labs(col = "Scenario")+
-  ylim(0, 1)
+  ylim(0, 3)
 
 #100% cov humans, no cattle
 df_3 <- df_3 %>%
@@ -586,7 +580,7 @@ ivm_human_only_plot <- ggplot(ivm_human_only_dat)+
   geom_line(aes(x = t, y = EIR, col = as.factor(scenario)))+
   theme_minimal()+
   labs(col = "Scenario")+
-  ylim(0, 1)
+  ylim(0, 3)
 
 #100% cov cattle, no human
 df_4 <- df_4 %>%
@@ -601,7 +595,7 @@ ivm_cattle_only_plot <- ggplot(ivm_cattle_only_dat)+
   geom_line(aes(x = t, y = EIR, col = as.factor(scenario)))+
   theme_minimal()+
   labs(col = "Scenario")+
-  ylim(0, 1)
+  ylim(0, 3)
 
 scenario_plots <- plot_grid(no_ivm_plot, ivm_both_plot, ivm_human_only_plot, ivm_cattle_only_plot,
                             labels = c("A", "B", "C", "D"))
@@ -616,7 +610,7 @@ high_Q0_plot <- ggplot(high_Q0_df)+
   theme_minimal()+
   labs(col = "Scenario")+
   ggtitle("Q0 = 0.7")+
-  ylim(0, 30)
+  ylim(0, 1.5)
 
 #low Q0 df
 low_Q0_df <- do.call("rbind", list(df_5, df_6, df_out_7, df_8))
@@ -626,7 +620,7 @@ low_Q0_plot <- ggplot(low_Q0_df)+
   theme_minimal()+
   labs(col = "Scenario")+
   ggtitle("Q0 = 0.4")+
-  ylim(0, 30)
+  ylim(0, 1.5)
 
 unique(low_Q0_df$scenario)
 plot_grid(high_Q0_plot, low_Q0_plot)

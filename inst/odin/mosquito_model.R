@@ -119,7 +119,7 @@ params_noivm <- list(init_Ev = 0, init_Iv = 0,
 mod_noivm <- ivm_model$new(user = params_noivm)
 
 #time points: run for 30 days
-t1_noivm <- seq(0, 90, length.out = 90)
+t1_noivm <- seq(0, 270, length.out = 270)
 
 #run model
 yy1_noivm <- mod_noivm$run(t1_noivm)
@@ -127,7 +127,7 @@ df_out_noivm <- data.frame(yy1_noivm)
 df_out_noivm$total_mosq
 df_out_noivm$EIR
 max(df_out_noivm$EIR)
-df_out_noivm$total_mosq
+df_out_noivm$total_mosq #getting a stable mosquito population this way
 plot1 <- ggplot(df_out_noivm) +
   geom_line(aes(x = t, y = EIR), col = "red")+
   ggtitle("No ivermectin treatment, Q0 = 0.7")+

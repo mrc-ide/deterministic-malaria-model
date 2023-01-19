@@ -111,29 +111,26 @@ ivm_model <- odin::odin({
 })
 
 #params no ivermectin on humans or cattle ####
-params_noivm <- list(init_Ev = 0, init_Iv = 0,
+params_1 <- list(init_Ev = 0, init_Iv = 0,
                init_Svih = 0, init_Evih = 0, init_Ivih = 0,
                init_Svic = 0, init_Evic = 0, init_Ivic = 0,
                gamma_c = 0, gamma_h = 0, Q0 = 0.7)
 
-mod_noivm <- ivm_model$new(user = params_noivm)
+mod_1 <- ivm_model$new(user = params_1)
 
 #time points: run for 90 days
-t1_noivm <- seq(0, 90, length.out = 90)
+t1_1 <- seq(0, 90, length.out = 90)
 
 #run model
-yy1_noivm <- mod_noivm$run(t1_noivm)
-df_out_noivm <- data.frame(yy1_noivm)
-df_out_noivm$total_mosq
-df_out_noivm$EIR
-max(df_out_noivm$EIR)
-df_out_noivm$total_mosq #getting a stable mosquito population this way
-plot1 <- ggplot(df_out_noivm) +
+yy1_1 <- mod_1$run(t1_1)
+df_1 <- data.frame(yy1_1)
+df_1$total_mosq #getting a stable mosquito population this way
+df_1$EIR
+plot1 <- ggplot(df_1) +
   geom_line(aes(x = t, y = EIR), col = "red")+
   ggtitle("No ivermectin treatment, Q0 = 0.7")+
   geom_hline(aes(yintercept = max(df_out_noivm$EIR)), linetype = "dashed")
 
-df1 <- df_out_noivm
 max(df1$EIR)
 #params 100% coverage humans and cattle ####
 params_ivm_ch <- list(init_Ev = 0, init_Iv = 0,

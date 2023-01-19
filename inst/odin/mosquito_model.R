@@ -34,7 +34,7 @@ ivm_model <- odin::odin({
 
   deriv(Sv) <- R - (mu0*Sv) - (FOIhv*Sv) - (a*gamma_c*(1-Q0))*Sv - (a*gamma_h*Q0)*Sv
 
-  deriv(Ev) <- (FOIhv*Sv) - (mu0*Ev) - (g*Ev) - (a*gamma_h*Q0)*Ev #- (a)*Ev
+  deriv(Ev) <- (FOIhv*Sv) - (mu0*Ev) - (g*Ev) - (a*gamma_h*Q0)*Ev
 
   deriv(Iv) <- (g*Ev) - (mu0*Iv) - (a*gamma_h*Q0*Iv) - (a*gamma_c*(1-Q0)*Iv)
 
@@ -94,11 +94,13 @@ ivm_model <- odin::odin({
   Q0 <- user() #proportion of bites that are on humans
   gamma_c <- user() #proportion of livestock with ivermectin
   gamma_h <- user() #proportion of humans with ivermectin
-  mu0 <- 0 #baseline mortality rate
-  mu_c <- mu0 #elevated mort rate due to IVM cattle. From Dighe and Elong work. per day
-  mu_h <- mu0 #elevated mort rate due to IVM humans
+  mu0 <- 0.1 #baseline mortality rate
+  mu_c_elev <- 0.628
+  mu_h_elev <- 0.628
+  mu_c <- mu0 + mu_c_elev #elevated mort rate due to IVM cattle. From Dighe and Elong work. per day
+  mu_h <- mu0 + mu_h_elev #elevated mort rate due to IVM humans
   bv <- 0.05 #probability of transmission from human to vector
-  g <- 0 #latent period. days
+  g <- 0.1 #1/latent period. 10 days
   R <- mu0*Nv #setting to baseline death rate for ease
   Nv = Sv+Ev+Iv
 
@@ -116,19 +118,19 @@ params_noivm <- list(init_Ev = 0, init_Iv = 0,
 
 mod_noivm <- ivm_model$new(user = params_noivm)
 
-#time points: run for 5 years
+#time points: run for 30 days
 t1_noivm <- seq(0, 90, length.out = 90)
 
 #run model
 yy1_noivm <- mod_noivm$run(t1_noivm)
 df_out_noivm <- data.frame(yy1_noivm)
+df_out_noivm$total_mosq
 df_out_noivm$EIR
 max(df_out_noivm$EIR)
 df_out_noivm$total_mosq
 plot1 <- ggplot(df_out_noivm) +
   geom_line(aes(x = t, y = EIR), col = "red")+
   ggtitle("No ivermectin treatment, Q0 = 0.7")+
-  ylim(0, 40)+
   geom_hline(aes(yintercept = max(df_out_noivm$EIR)), linetype = "dashed")
 
 df1 <- df_out_noivm

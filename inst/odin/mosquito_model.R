@@ -118,8 +118,8 @@ params_noivm <- list(init_Ev = 0, init_Iv = 0,
 
 mod_noivm <- ivm_model$new(user = params_noivm)
 
-#time points: run for 30 days
-t1_noivm <- seq(0, 270, length.out = 270)
+#time points: run for 90 days
+t1_noivm <- seq(0, 90, length.out = 90)
 
 #run model
 yy1_noivm <- mod_noivm$run(t1_noivm)

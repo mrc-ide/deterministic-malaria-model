@@ -6,6 +6,10 @@
 require(odin)
 
 ivm_model_complex <- odin::odin({
+  na <- user() # number of age categories
+  nh <- user() # number of biting heterogeneity categories
+  ft <- user() # proportion of cases treated
+
   ##------------------------------------------------------------------------------
   #####################
   ## MOSQUITO STATES ##
@@ -19,6 +23,8 @@ ivm_model_complex <- odin::odin({
   # Iv - Infectious mosquitoes
 
   # initial state values:
+
+  #NO IVM
   init_Sv <- 50000000#user()
   init_Ev <- 0#user()
   init_Iv <- 0#user()
@@ -27,6 +33,7 @@ ivm_model_complex <- odin::odin({
   #initial(Ev[1:10]) <- init_Ev/10 * mv0 # Options if not using a delayed delay
   #dim(Ev) <- 10
   initial(Iv) <- init_Iv #* mv0
+
 
   # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
   # by age/het/int category, infectiousness depends on p_det which depends on detection immunity
@@ -59,6 +66,7 @@ ivm_model_complex <- odin::odin({
   betaa <- 0.5*PL/dPL
   #betaa <- mv0 * mu0 * theta2
 
+  #NO IVM
   deriv(Sv) <- -ince - mu*Sv + betaa
   deriv(Ev) <- ince - incv - mu*Ev
   deriv(Iv) <- incv - mu*Iv

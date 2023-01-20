@@ -149,7 +149,8 @@ df_2 <- data.frame(yy1_2)
 
 plot2 <- ggplot(df_2) +
   geom_line(aes(x = t, y = EIR), col = "red")+
-  ggtitle("100% coverage human and cattle IVM, Q0 = 0.7")
+  ggtitle("100% coverage human and cattle IVM, Q0 = 0.7")+
+  ylim(0, ylim_upper)
 
 #params 100% IVM humans, no cattle
 params_3 <- list(init_Ev = 0, init_Iv = 0,

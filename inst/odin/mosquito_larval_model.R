@@ -66,13 +66,20 @@ ivm_model_complex <- odin::odin({
   betaa <- 0.5*PL/dPL #PL is fully developed pupae and dPL is the developmnent time of the pupae. 0.5 because only interested in females
   #betaa <- mv0 * mu0 * theta2
 
-  #NO IVM
+  #NO IVM####
   deriv(Sv) <- -ince - mu*Sv + betaa
   deriv(Ev) <- ince - incv - mu*Ev
   deriv(Iv) <- incv - mu*Iv
 
+  #IVM humans
+
+
+  #IVM cattle
+
   # Total mosquito population
-  mv = Sv+Ev+Iv
+  #mv = Sv+Ev+Iv if no ivermectin addition
+  #add on the extra compartments e.g. Svih, Evih, Ivih, Svic, Evic, Ivic
+
 
   # model options if don't want to use a delayed delay
   #deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
@@ -102,7 +109,7 @@ ivm_model_complex <- odin::odin({
   muEL <- user() #daily den. dep. mortality rate of early stage
   gammaL <- user() # eff. of den. dep. on late stage relative to early stage
 
-  # fitted entomological parameters:
+  # FITTED entomological parameters:
   mv0 <- user() # initial mosquito density
   mu0 <- user() # baseline mosquito death rate
   tau1 <- user() # duration of host-seeking behaviour

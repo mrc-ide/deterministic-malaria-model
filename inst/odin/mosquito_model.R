@@ -193,6 +193,9 @@ plot_4 <- ggplot(df_4) +
   ylim(0, ylim_upper)
 
 
+
+
+
 #params no ivermectin and low Q0 ####
 
 params_5 <- list(init_Ev = 0, init_Iv = 0,
@@ -347,7 +350,7 @@ ivm_cattle_only_plot <- ggplot(ivm_cattle_only_dat)+
 scenario_plots <- plot_grid(no_ivm_plot, ivm_both_plot, ivm_human_only_plot, ivm_cattle_only_plot,
                             labels = c("A", "B", "C", "D"))
 
-
+ggsave(scenario_plots, file = "C:/Users/nc1115/OneDrive - Imperial College London/PhD/PhD_malaria/plots_ivm_model/ivm_cov_scenarios.png")
 #do the same but anthropophagy plots so two panels
 
 #high Q0 df
@@ -380,86 +383,31 @@ low_Q0_plot <- ggplot(low_Q0_df)+
   ylim(0, ylim_upper)
 
 unique(low_Q0_df$scenario)
-plot_grid(high_Q0_plot, low_Q0_plot)
+Q0_plots <- plot_grid(high_Q0_plot, low_Q0_plot)
+ggsave(Q0_plots, file = "C:/Users/nc1115/OneDrive - Imperial College London/PhD/PhD_malaria/plots_ivm_model/Q0_plots.png")
 
 
-#with larval....needs more work####
-ivm_model_larval <- odin::odin({
-  #no ivermectin
 
-  deriv(Sv) <- R - (mu0*Sv) - (FOIhv*Sv) - (a*gamma_c*(1-Q0))*Sv - (a*gamma_h*Q0)*Sv
+#low Q0 investigation
+params_8a <- list(init_Ev = 0, init_Iv = 0,
+                 init_Svih = 0, init_Evih = 0, init_Ivih = 0,
+                 init_Svic = 0, init_Evic = 0, init_Ivic = 0,
+                 gamma_c = 1, gamma_h = 0, Q0 = 0.5, Ih = 600)
 
-  deriv(Ev) <- (FOIhv*Sv) - (mu0*Ev) - (a)*Ev - (g*Ev) - (a*gamma_h*Q0)*Ev
+mod_8a <- ivm_model$new(user = params_8a)
 
-  deriv(Iv) <- (g*Ev) - (mu0*Iv)
+#time points: run for 90 days
+t1_8a <- seq(0, 90, length.out = 90)
 
-  #ivermectin humans
+#run model
+yy1_8a <- mod_4$run(t1_8a)
+df_8a <- data.frame(yy1_8a)
 
-  deriv(Svih) <- -(FOIhv*Svih) + (a*gamma_h*Q0)*Sv - (mu_h*Svih)
+plot_8a <- ggplot(df_8a) +
+  geom_line(aes(x = t, y = EIR), col = "red")+
+  ggtitle("100% coverage cattle, no human IVM, Q0 = 0.5")+
+  ylim(0, ylim_upper)
 
-  deriv(Evih) <- (FOIhv*Sv) - (g*Evih) + (a*gamma_h*Q0*Evih) - (mu_h*Evih)
-
-  deriv(Ivih) <- (g*Evih) - (mu_h*Ivih)
-
-  #ivermectin cattle
-
-  deriv(Svic) <- (a*gamma_c*(1-Q0))*Sv - (mu_c*Svic) - (FOIhv*Svic)
-
-  deriv(Evic) <- (FOIhv*Svic) - (mu_c*Evic) - (g*Evic) + (a*gamma_h*(1-Q0)*Ev)
-
-  deriv(Ivic) <- (g*Evic) - (mu_c*Ivic)
-
-
-  #initial conditions
-
-  #no ivermectin####
-  initial(Sv) <-init_Sv
-  initial(Ev) <- init_Ev
-  initial(Iv) <- init_Iv
-
-  init_Sv <- user()
-  init_Ev <- user()
-  init_Iv <- user()
-
-  #ivermectin humans
-  initial(Svih) <- init_Svih
-  initial(Evih) <- init_Evih
-  initial(Ivih) <- init_Ivih
-
-  init_Svih <- user()
-  init_Evih <- user()
-  init_Ivih <- user()
-
-  #ivermectin cattle
-  initial(Svic) <- init_Svic
-  initial(Evic) <- init_Evic
-  initial(Ivic) <- init_Ivic
-
-  init_Svic <- user()
-  init_Evic <- user()
-  init_Ivic <- user()
-
-  #parameters
-  FOIhv <- (V/H) * a * Q0 * bv * (Ih/Nh)
-  V <- Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic
-  Ih <- user() #I can set prevalence in humans this way
-  Nh <- 1000
-  H <- Nh
-  a <- 0.333 #1 bite every 3 days
-  Q0 <- user() #proportion of bites that are on humans
-  gamma_c <- user() #proportion of livestock with ivermectin
-  gamma_h <- user() #proportion of humans with ivermectin
-  mu0 <- 0.132 #baseline mortality rate
-  mu_c <- 0.728 #elevated mort rate due to IVM cattle. From Dighe and Elong work. per day
-  mu_h <- 0.728 #elevated mort rate due to IVM humans
-  bv <- 0.05 #probability of transmission from human to vector
-  g <- 10 #latent period. days
-  R <- (1/2)*PL/dPL
-  Nv = Sv+Ev+Iv
-
-
-  #tracking the EIR
-  output(EIR) <- (V/H)*a*Q0*(Iv/Nv)
-})
+plot_grid(plot_4, plot_8a, plot8)
 
 

@@ -6,9 +6,9 @@
 require(odin)
 
 ivm_model_complex <- odin::odin({
-  na <- user() # number of age categories
-  nh <- user() # number of biting heterogeneity categories
-  ft <- user() # proportion of cases treated
+  na <- c(0,0.25,0.5,0.75,1,1.25,1.5,1.75,2,3.5,5,7.5,10,15,20,30,40,50,60,70,80) #user() # number of age categories
+  nh <- 5 #user() # number of biting heterogeneity categories
+  ft <- 0.4 #user() # proportion of cases treated
 
   ##------------------------------------------------------------------------------
   #####################
@@ -37,33 +37,33 @@ ivm_model_complex <- odin::odin({
 
   # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
   # by age/het/int category, infectiousness depends on p_det which depends on detection immunity
-  cU <- user() # infectiousness U -> mosq
-  cD <- user() # infectiousness D -> mosq
-  cT <- user() # T -> mosq
-  gamma1 <- user() # fitted value of gamma1 characterises cA function
+  cU <- 0.006203#user() # infectiousness U -> mosq
+  cD <- 0.0676909#user() # infectiousness D -> mosq
+  cT <- 0.322 * cD #user() # T -> mosq
+  gamma1 <- 1.82425 #user() # fitted value of gamma1 characterises cA function. infectiousness state of A
   dim(cA) <- c(na,nh,num_int)
   cA[,,] <- cU + (cD-cU)*p_det[i,j,k]^gamma1
 
   # Force of infection from humans to mosquitoes
   dim(FOIvijk) <- c(na,nh,num_int)
-  omega <- user() #normalising constant for biting rates
-  FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i]/omega
+  omega <- 1#user() #normalising constant for biting rates
+  FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i] #/omega
   lag_FOIv=sum(FOIvijk)
 
   # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)
-  delayGam <- user() # Lag from parasites to infectious gametocytes
-  delayMos <- user() # Extrinsic incubation period.
+  delayGam <- 12 #user() # Lag from parasites to infectious gametocytes
+  delayMos <- 10 #user() # Extrinsic incubation period.
   FOIv <- delay(lag_FOIv, delayGam)
 
   # Number of mosquitoes that become infected at each time point
   surv <- exp(-mu*delayMos)
-  ince <- FOIv * Sv
-  lag_incv <- ince * surv
+  ince <- FOIv * Sv #rate into Ev compartment
+  lag_incv <- ince * surv #need to lag the rate into the infectious compartment
   incv <- delay(lag_incv, delayMos)
   #incv <- lag_incv
 
   # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
-  betaa <- 0.5*PL/dPL
+  betaa <- 0.5*PL/dPL #PL is fully developed pupae and dPL is the developmnent time of the pupae. 0.5 because only interested in females
   #betaa <- mv0 * mu0 * theta2
 
   #NO IVM

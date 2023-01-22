@@ -87,235 +87,380 @@ within <code>equilibrium_init_create</code></p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">model_param_list_create</span><span class="op">(</span>
-  eta <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">21</span> <span class="op">*</span> <span class="fl">365</span><span class="op">)</span>,
-  rho <span class="op">=</span> <span class="fl">0.85</span>,
-  a0 <span class="op">=</span> <span class="fl">2920</span>,
-  sigma2 <span class="op">=</span> <span class="fl">1.67</span>,
-  max_age <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="fl">365</span>,
-  rA <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">195</span>,
-  rT <span class="op">=</span> <span class="fl">0.2</span>,
-  rD <span class="op">=</span> <span class="fl">0.2</span>,
-  rU <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">110.299</span>,
-  rP <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">15</span>,
-  dE <span class="op">=</span> <span class="fl">12</span>,
-  delayGam <span class="op">=</span> <span class="fl">12.5</span>,
-  cD <span class="op">=</span> <span class="fl">0.0676909</span>,
-  cT <span class="op">=</span> <span class="fl">0.322</span> <span class="op">*</span> <span class="va">cD</span>,
-  cU <span class="op">=</span> <span class="fl">0.006203</span>,
-  gamma1 <span class="op">=</span> <span class="fl">1.82425</span>,
-  d1 <span class="op">=</span> <span class="fl">0.160527</span>,
-  dID <span class="op">=</span> <span class="fl">3650</span>,
-  ID0 <span class="op">=</span> <span class="fl">1.577533</span>,
-  kD <span class="op">=</span> <span class="fl">0.476614</span>,
-  uD <span class="op">=</span> <span class="fl">9.44512</span>,
-  aD <span class="op">=</span> <span class="fl">8001.99</span>,
-  fD0 <span class="op">=</span> <span class="fl">0.007055</span>,
-  gammaD <span class="op">=</span> <span class="fl">4.8183</span>,
-  alphaA <span class="op">=</span> <span class="fl">0.75735</span>,
-  alphaU <span class="op">=</span> <span class="fl">0.185624</span>,
-  b0 <span class="op">=</span> <span class="fl">0.590076</span>,
-  b1 <span class="op">=</span> <span class="fl">0.5</span>,
-  dB <span class="op">=</span> <span class="fl">3650</span>,
-  IB0 <span class="op">=</span> <span class="fl">43.8787</span>,
-  kB <span class="op">=</span> <span class="fl">2.15506</span>,
-  uB <span class="op">=</span> <span class="fl">7.19919</span>,
-  phi0 <span class="op">=</span> <span class="fl">0.791666</span>,
-  phi1 <span class="op">=</span> <span class="fl">0.000737</span>,
-  dCA <span class="op">=</span> <span class="fl">10950</span>,
-  IC0 <span class="op">=</span> <span class="fl">18.02366</span>,
-  kC <span class="op">=</span> <span class="fl">2.36949</span>,
-  uCA <span class="op">=</span> <span class="fl">6.06349</span>,
-  PM <span class="op">=</span> <span class="fl">0.774368</span>,
-  dCM <span class="op">=</span> <span class="fl">67.6952</span>,
-  delayMos <span class="op">=</span> <span class="fl">10</span>,
-  tau1 <span class="op">=</span> <span class="fl">0.69</span>,
-  tau2 <span class="op">=</span> <span class="fl">2.31</span>,
-  mu0 <span class="op">=</span> <span class="fl">0.132</span>,
-  Q0 <span class="op">=</span> <span class="fl">0.92</span>,
-  chi <span class="op">=</span> <span class="fl">0.86</span>,
-  bites_Bed <span class="op">=</span> <span class="fl">0.89</span>,
-  bites_Indoors <span class="op">=</span> <span class="fl">0.97</span>,
-  muEL <span class="op">=</span> <span class="fl">0.0338</span>,
-  muLL <span class="op">=</span> <span class="fl">0.0348</span>,
-  muPL <span class="op">=</span> <span class="fl">0.249</span>,
-  dEL <span class="op">=</span> <span class="fl">6.64</span>,
-  dLL <span class="op">=</span> <span class="fl">3.72</span>,
-  dPL <span class="op">=</span> <span class="fl">0.643</span>,
-  gammaL <span class="op">=</span> <span class="fl">13.25</span>,
-  km <span class="op">=</span> <span class="fl">11</span>,
-  cm <span class="op">=</span> <span class="fl">0.05</span>,
-  betaL <span class="op">=</span> <span class="fl">21.2</span>,
-  num_int <span class="op">=</span> <span class="fl">1</span>,
-  itn_cov <span class="op">=</span> <span class="fl">0</span>,
-  irs_cov <span class="op">=</span> <span class="fl">0</span>,
-  ITN_IRS_on <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,
-  DY <span class="op">=</span> <span class="fl">365</span>,
-  d_ITN0 <span class="op">=</span> <span class="fl">0.41</span>,
-  r_ITN0 <span class="op">=</span> <span class="fl">0.56</span>,
-  r_ITN1 <span class="op">=</span> <span class="fl">0.24</span>,
-  r_IRS0 <span class="op">=</span> <span class="fl">0.6</span>,
-  d_IRS0 <span class="op">=</span> <span class="fl">1</span>,
-  irs_half_life <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">DY</span>,
-  itn_half_life <span class="op">=</span> <span class="fl">2.64</span> <span class="op">*</span> <span class="va">DY</span>,
-  IRS_interval <span class="op">=</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">DY</span>,
-  ITN_interval <span class="op">=</span> <span class="fl">3</span> <span class="op">*</span> <span class="va">DY</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">model_param_list_create</span><span class="op">(</span></span>
+<span>  eta <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">21</span> <span class="op">*</span> <span class="fl">365</span><span class="op">)</span>,</span>
+<span>  rho <span class="op">=</span> <span class="fl">0.85</span>,</span>
+<span>  a0 <span class="op">=</span> <span class="fl">2920</span>,</span>
+<span>  sigma2 <span class="op">=</span> <span class="fl">1.67</span>,</span>
+<span>  max_age <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="fl">365</span>,</span>
+<span>  rA <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">195</span>,</span>
+<span>  rT <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  rD <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  rU <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">110.299</span>,</span>
+<span>  rP <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">15</span>,</span>
+<span>  dE <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  delayGam <span class="op">=</span> <span class="fl">12.5</span>,</span>
+<span>  cD <span class="op">=</span> <span class="fl">0.0676909</span>,</span>
+<span>  cT <span class="op">=</span> <span class="fl">0.322</span> <span class="op">*</span> <span class="va">cD</span>,</span>
+<span>  cU <span class="op">=</span> <span class="fl">0.006203</span>,</span>
+<span>  gamma1 <span class="op">=</span> <span class="fl">1.82425</span>,</span>
+<span>  d1 <span class="op">=</span> <span class="fl">0.160527</span>,</span>
+<span>  dID <span class="op">=</span> <span class="fl">3650</span>,</span>
+<span>  ID0 <span class="op">=</span> <span class="fl">1.577533</span>,</span>
+<span>  kD <span class="op">=</span> <span class="fl">0.476614</span>,</span>
+<span>  uD <span class="op">=</span> <span class="fl">9.44512</span>,</span>
+<span>  aD <span class="op">=</span> <span class="fl">8001.99</span>,</span>
+<span>  fD0 <span class="op">=</span> <span class="fl">0.007055</span>,</span>
+<span>  gammaD <span class="op">=</span> <span class="fl">4.8183</span>,</span>
+<span>  alphaA <span class="op">=</span> <span class="fl">0.75735</span>,</span>
+<span>  alphaU <span class="op">=</span> <span class="fl">0.185624</span>,</span>
+<span>  b0 <span class="op">=</span> <span class="fl">0.590076</span>,</span>
+<span>  b1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  dB <span class="op">=</span> <span class="fl">3650</span>,</span>
+<span>  IB0 <span class="op">=</span> <span class="fl">43.8787</span>,</span>
+<span>  kB <span class="op">=</span> <span class="fl">2.15506</span>,</span>
+<span>  uB <span class="op">=</span> <span class="fl">7.19919</span>,</span>
+<span>  phi0 <span class="op">=</span> <span class="fl">0.791666</span>,</span>
+<span>  phi1 <span class="op">=</span> <span class="fl">0.000737</span>,</span>
+<span>  dCA <span class="op">=</span> <span class="fl">10950</span>,</span>
+<span>  IC0 <span class="op">=</span> <span class="fl">18.02366</span>,</span>
+<span>  kC <span class="op">=</span> <span class="fl">2.36949</span>,</span>
+<span>  uCA <span class="op">=</span> <span class="fl">6.06349</span>,</span>
+<span>  PM <span class="op">=</span> <span class="fl">0.774368</span>,</span>
+<span>  dCM <span class="op">=</span> <span class="fl">67.6952</span>,</span>
+<span>  delayMos <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  tau1 <span class="op">=</span> <span class="fl">0.69</span>,</span>
+<span>  tau2 <span class="op">=</span> <span class="fl">2.31</span>,</span>
+<span>  mu0 <span class="op">=</span> <span class="fl">0.132</span>,</span>
+<span>  Q0 <span class="op">=</span> <span class="fl">0.92</span>,</span>
+<span>  chi <span class="op">=</span> <span class="fl">0.86</span>,</span>
+<span>  bites_Bed <span class="op">=</span> <span class="fl">0.89</span>,</span>
+<span>  bites_Indoors <span class="op">=</span> <span class="fl">0.97</span>,</span>
+<span>  muEL <span class="op">=</span> <span class="fl">0.0338</span>,</span>
+<span>  muLL <span class="op">=</span> <span class="fl">0.0348</span>,</span>
+<span>  muPL <span class="op">=</span> <span class="fl">0.249</span>,</span>
+<span>  dEL <span class="op">=</span> <span class="fl">6.64</span>,</span>
+<span>  dLL <span class="op">=</span> <span class="fl">3.72</span>,</span>
+<span>  dPL <span class="op">=</span> <span class="fl">0.643</span>,</span>
+<span>  gammaL <span class="op">=</span> <span class="fl">13.25</span>,</span>
+<span>  km <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>  cm <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  betaL <span class="op">=</span> <span class="fl">21.2</span>,</span>
+<span>  num_int <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  itn_cov <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  irs_cov <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  ITN_IRS_on <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
+<span>  DY <span class="op">=</span> <span class="fl">365</span>,</span>
+<span>  d_ITN0 <span class="op">=</span> <span class="fl">0.41</span>,</span>
+<span>  r_ITN0 <span class="op">=</span> <span class="fl">0.56</span>,</span>
+<span>  r_ITN1 <span class="op">=</span> <span class="fl">0.24</span>,</span>
+<span>  r_IRS0 <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  d_IRS0 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  irs_half_life <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">DY</span>,</span>
+<span>  itn_half_life <span class="op">=</span> <span class="fl">2.64</span> <span class="op">*</span> <span class="va">DY</span>,</span>
+<span>  IRS_interval <span class="op">=</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">DY</span>,</span>
+<span>  ITN_interval <span class="op">=</span> <span class="fl">3</span> <span class="op">*</span> <span class="va">DY</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>eta</dt>
 <dd><p>Death rate for expoential population distribtuion, i.e. 1/Mean Population Age. Default = 0.0001305</p></dd>
+
+
 <dt>rho</dt>
 <dd><p>Age-dependent biting parameter. Default = 0.85</p></dd>
+
+
 <dt>a0</dt>
 <dd><p>Age-dependent biting parameter. Default = 2920</p></dd>
+
+
 <dt>sigma2</dt>
 <dd><p>Variance of the log heterogeneity in biting rates. Default = 1.67</p></dd>
+
+
 <dt>max_age</dt>
 <dd><p>Maximum age in days. Default = 100*365</p></dd>
+
+
 <dt>rA</dt>
 <dd><p>Rate of leaving asymptomatic infection. Default = 0.00512821</p></dd>
+
+
 <dt>rT</dt>
 <dd><p>Rate of leaving treatment. Default = 0.2</p></dd>
+
+
 <dt>rD</dt>
 <dd><p>Rate of leaving clinical disease. Default = 0.2</p></dd>
+
+
 <dt>rU</dt>
 <dd><p>Rate of recovering from subpatent infection. Default = 0.00906627</p></dd>
+
+
 <dt>rP</dt>
 <dd><p>Rate of leaving prophylaxis. Default = 0.06666667</p></dd>
+
+
 <dt>dE</dt>
 <dd><p>Latent period of human infection. Default = 12</p></dd>
+
+
 <dt>delayGam</dt>
 <dd><p>Lag from parasites to infectious gametocytes. Default = 12.5</p></dd>
+
+
 <dt>cD</dt>
 <dd><p>Untreated disease contribution to infectiousness. Default = 0.0676909</p></dd>
+
+
 <dt>cT</dt>
 <dd><p>Treated disease contribution to infectiousness. Default =   0.322 * cD</p></dd>
+
+
 <dt>cU</dt>
 <dd><p>Subpatent disease contribution to infectiousness. Default = 0.006203</p></dd>
+
+
 <dt>gamma1</dt>
 <dd><p>Parameter for infectiousness of state A. Default = 1.82425</p></dd>
+
+
 <dt>d1</dt>
 <dd><p>Minimum probability due to maximum immunity. Default = 0.160527</p></dd>
+
+
 <dt>dID</dt>
 <dd><p>Inverse of decay rate. Default = 3650</p></dd>
+
+
 <dt>ID0</dt>
 <dd><p>Scale parameter. Default = 1.577533</p></dd>
+
+
 <dt>kD</dt>
 <dd><p>Shape parameter. Default = 0.476614</p></dd>
+
+
 <dt>uD</dt>
 <dd><p>Duration in which immunity is not boosted. Default = 9.44512</p></dd>
+
+
 <dt>aD</dt>
 <dd><p>Scale parameter relating age to immunity. Default = 8001.99</p></dd>
+
+
 <dt>fD0</dt>
 <dd><p>Time-scale at which immunity changes with age. Default = 0.007055</p></dd>
+
+
 <dt>gammaD</dt>
 <dd><p>Shape parameter relating age to immunity. Default = 4.8183</p></dd>
+
+
 <dt>alphaA</dt>
 <dd><p>PCR detection probability parameters state A. Default = 0.757</p></dd>
+
+
 <dt>alphaU</dt>
 <dd><p>PCR detection probability parameters state U. Default = 0.186</p></dd>
+
+
 <dt>b0</dt>
 <dd><p>Maximum probability due to no immunity. Default = 0.590076</p></dd>
+
+
 <dt>b1</dt>
 <dd><p>Maximum relative reduction due to immunity. Default = 0.5</p></dd>
+
+
 <dt>dB</dt>
 <dd><p>Inverse of decay rate. Default = 3650</p></dd>
+
+
 <dt>IB0</dt>
 <dd><p>Scale parameter. Default = 43.8787</p></dd>
+
+
 <dt>kB</dt>
 <dd><p>Shape parameter. Default = 2.15506</p></dd>
+
+
 <dt>uB</dt>
 <dd><p>Duration in which immunity is not boosted. Default = 7.19919</p></dd>
+
+
 <dt>phi0</dt>
 <dd><p>Maximum probability due to no immunity. Default = 0.791666</p></dd>
+
+
 <dt>phi1</dt>
 <dd><p>Maximum relative reduction due to immunity. Default = 0.000737</p></dd>
+
+
 <dt>dCA</dt>
 <dd><p>Inverse of decay rate. Default = 10950</p></dd>
+
+
 <dt>IC0</dt>
 <dd><p>Scale parameter. Default = 18.02366</p></dd>
+
+
 <dt>kC</dt>
 <dd><p>Shape parameter. Default = 2.36949</p></dd>
+
+
 <dt>uCA</dt>
 <dd><p>Duration in which immunity is not boosted. Default = 6.06349</p></dd>
+
+
 <dt>PM</dt>
 <dd><p>New-born immunity relative to mother’s. Default = 0.774368</p></dd>
+
+
 <dt>dCM</dt>
 <dd><p>Inverse of decay rate of maternal immunity. Default = 67.6952</p></dd>
+
+
 <dt>delayMos</dt>
 <dd><p>Extrinsic incubation period. Default = 10</p></dd>
+
+
 <dt>tau1</dt>
 <dd><p>Duration of host seeking, assumed to be constant between species. Default = 0.69</p></dd>
+
+
 <dt>tau2</dt>
 <dd><p>Duration of mosquito resting after feed. Default = 2.31</p></dd>
+
+
 <dt>mu0</dt>
 <dd><p>Daily mortality of adult mosquitos. Default = 0.132</p></dd>
+
+
 <dt>Q0</dt>
 <dd><p>Anthrophagy probability. Default = 0.92</p></dd>
+
+
 <dt>chi</dt>
 <dd><p>Endophily probability. Default = 0.86</p></dd>
+
+
 <dt>bites_Bed</dt>
 <dd><p>Percentage of bites indoors and in bed. Default = 0.89</p></dd>
+
+
 <dt>bites_Indoors</dt>
 <dd><p>Percentage of bites indoors . Default = 0.97</p></dd>
+
+
 <dt>muEL</dt>
 <dd><p>Per capita daily mortality rate of early stage larvae (low density). Default = 0.0338</p></dd>
+
+
 <dt>muLL</dt>
 <dd><p>Per capita daily mortality rate of late stage larvae (low density). Default = 0.0348</p></dd>
+
+
 <dt>muPL</dt>
 <dd><p>Per capita daily mortality rate of pupae. Default = 0.249</p></dd>
+
+
 <dt>dEL</dt>
 <dd><p>Development time of early stage larvae. Default = 6.64</p></dd>
+
+
 <dt>dLL</dt>
 <dd><p>Development time of late stage larvae. Default = 3.72</p></dd>
+
+
 <dt>dPL</dt>
 <dd><p>Development time of pupae. Default = 0.643</p></dd>
+
+
 <dt>gammaL</dt>
 <dd><p>Relative effect of density dependence on late instars relative to early instars. Default = 13.25</p></dd>
+
+
 <dt>km</dt>
 <dd><p>Seasonal carrying capacity. Default = 11</p></dd>
+
+
 <dt>cm</dt>
 <dd><p>Seasonal birth rate. Default = 0.05</p></dd>
+
+
 <dt>betaL</dt>
 <dd><p>Number of eggs laid per day per mosquito. Default = 21.2</p></dd>
+
+
 <dt>num_int</dt>
 <dd><p>Number of intervention parameters.  Default = 4</p></dd>
+
+
 <dt>itn_cov</dt>
 <dd><p>The proportion of people that use an ITN. Default = 0</p></dd>
+
+
 <dt>irs_cov</dt>
 <dd><p>The proportion of people living in houses that have been sprayed. Default = 0</p></dd>
+
+
 <dt>ITN_IRS_on</dt>
 <dd><p>Time of ITN and IRS to be activated. Default = -1, i.e. never.</p></dd>
+
+
 <dt>DY</dt>
 <dd><p>Duration of year (days). Default = 365</p></dd>
+
+
 <dt>d_ITN0</dt>
 <dd><p>Probability of dying with an encounter with ITN (max). Default = 0.41</p></dd>
+
+
 <dt>r_ITN0</dt>
 <dd><p>Probability of repeating behaviour with ITN (max). Default = 0.56</p></dd>
+
+
 <dt>r_ITN1</dt>
 <dd><p>Probability of repeating behaviour with ITN (min). Default = 0.24</p></dd>
+
+
 <dt>r_IRS0</dt>
 <dd><p>Probability of repeating behaviour with IRS (min). Default = 0.6</p></dd>
+
+
 <dt>d_IRS0</dt>
 <dd><p>Probability of dying with an encounter with IRS (max). Default = 1</p></dd>
+
+
 <dt>irs_half_life</dt>
 <dd><p>IRS half life. Default =   0.5 * DY</p></dd>
+
+
 <dt>itn_half_life</dt>
 <dd><p>ITN half life. Default =   2.64 * DY</p></dd>
+
+
 <dt>IRS_interval</dt>
 <dd><p>How long before IRS is repeated, i.e. when IRS decay = 1. Default =   1 * DY</p></dd>
+
+
 <dt>ITN_interval</dt>
 <dd><p>How long before ITN is repeated, i.e. when IRS decay = 1.  Default =   3 * DY</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Any other parameters needed for non-standard model. If they share the same name
 as any of the defined parameters <code>model_param_list_create</code> will stop. You can either write
 any extra parameters you like individually, e.g. model_param_list_create(extra1 = 1, extra2 = 2)
 and these parameteres will appear appended to the returned list, or you can pass explicitly
 the ellipsis argument as a list created before, e.g. model_param_list_create(...=list(extra1 = 1, extra2 = 2))</p></dd>
+
 </dl></div>
 
   </div>
@@ -330,7 +475,7 @@ the ellipsis argument as a list created before, e.g. model_param_list_create(...
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

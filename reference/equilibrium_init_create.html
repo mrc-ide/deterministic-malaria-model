@@ -87,39 +87,52 @@ used within later model runs</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">equilibrium_init_create</span><span class="op">(</span>
-  <span class="va">age_vector</span>,
-  <span class="va">het_brackets</span>,
-  country <span class="op">=</span> <span class="cn">NULL</span>,
-  admin_unit <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">ft</span>,
-  <span class="va">EIR</span>,
-  <span class="va">model_param_list</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">equilibrium_init_create</span><span class="op">(</span></span>
+<span>  <span class="va">age_vector</span>,</span>
+<span>  <span class="va">het_brackets</span>,</span>
+<span>  country <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  admin_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">ft</span>,</span>
+<span>  <span class="va">EIR</span>,</span>
+<span>  <span class="va">model_param_list</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>age_vector</dt>
 <dd><p>Vector of age brackets.</p></dd>
+
+
 <dt>het_brackets</dt>
 <dd><p>Integer number of biting heteogenity compartments.</p></dd>
+
+
 <dt>country</dt>
 <dd><p>String for country of interest. If NULL the seasonal parameters
 will attempt to be loaded using just the admin unit, however if there is ambiguity
 in the admin unit an error will be thrown. If both NULL then no seasonality is
 assumed. Default = NULL.</p></dd>
+
+
 <dt>admin_unit</dt>
 <dd><p>String for admin unit with country for loading seasonal
 parameters. If country is NULL, the admin unit will attempt to be located,however
 if there is ambiguity in the admin unit an error will be thrown. If both country
 and admin_unit are NULL then no seasonality is assumed. Default = NULL.</p></dd>
+
+
 <dt>ft</dt>
 <dd><p>Numeric for the frequency of people seeking treatment.</p></dd>
+
+
 <dt>EIR</dt>
 <dd><p>Numeric for desired annual EIR.</p></dd>
+
+
 <dt>model_param_list</dt>
 <dd><p>List of epidemiological parameters created by</p></dd>
+
 </dl></div>
 
   </div>
@@ -134,7 +147,7 @@ and admin_unit are NULL then no seasonality is assumed. Default = NULL.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

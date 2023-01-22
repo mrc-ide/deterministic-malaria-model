@@ -104,7 +104,7 @@
       <h1 data-toc-skip>Simplest Model Run</h1>
                         <h4 data-toc-skip class="author">OJ Watson &amp; Joel Hellewell</h4>
             
-            <h4 data-toc-skip class="date">2022-03-31</h4>
+            <h4 data-toc-skip class="date">2023-01-22</h4>
       
       
       <div class="hidden name"><code>run_model_example.Rmd</code></div>
@@ -130,11 +130,11 @@
 </ol>
 <p>As illustrated below, without specifying any function arguments, <code>create_r_model</code> will run a simulation for 1 year at an EIR of 10, with a treatment coverage equal to 40% for Tororo, Uganda.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ICDMM</span><span class="op">)</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
-<span class="co">#&gt; [1] "plot" "dat"</span>
-<span class="va">out</span><span class="op">$</span><span class="va">plot</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ICDMM</span><span class="op">)</span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "plot" "dat"</span></span>
+<span><span class="va">out</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
 <p><img src="run_model_example_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -155,20 +155,20 @@
 </ol>
 <p>For example, to simulate Thies, Senegal for a given vector of ages, at an EIR of 1, for 2 years with 60% treatment coverage:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">thies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">40</span>, <span class="fl">60</span><span class="op">)</span>, 
-                   EIR <span class="op">=</span> <span class="fl">1</span>, 
-                   ft <span class="op">=</span> <span class="fl">0.6</span>, 
-                   admin2 <span class="op">=</span> <span class="st">"Thies"</span>, 
-                   time <span class="op">=</span> <span class="fl">2</span><span class="op">*</span><span class="fl">365</span><span class="op">)</span>
-<span class="va">thies</span><span class="op">$</span><span class="va">plot</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">thies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">40</span>, <span class="fl">60</span><span class="op">)</span>, </span>
+<span>                   EIR <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                   ft <span class="op">=</span> <span class="fl">0.6</span>, </span>
+<span>                   admin2 <span class="op">=</span> <span class="st">"Thies"</span>, </span>
+<span>                   time <span class="op">=</span> <span class="fl">2</span><span class="op">*</span><span class="fl">365</span><span class="op">)</span></span>
+<span><span class="va">thies</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
 <p><img src="run_model_example_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>Other model outputs, such as the number of suceptible adult mosquitoes, can be plotted by interacting with the <code>dat</code> data frame returned by <code>run_model</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">thies</span><span class="op">$</span><span class="va">dat</span><span class="op">$</span><span class="va">Sv</span>, 
-     ylab <span class="op">=</span> <span class="st">"Susceptible Adult Mosquitoes"</span>, 
-     xlab <span class="op">=</span> <span class="st">"Time (days)"</span>, 
-     main<span class="op">=</span><span class="st">"Number of susceptible mosquitoes"</span>,
-     type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">thies</span><span class="op">$</span><span class="va">dat</span><span class="op">$</span><span class="va">Sv</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"Susceptible Adult Mosquitoes"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">"Time (days)"</span>, </span>
+<span>     main<span class="op">=</span><span class="st">"Number of susceptible mosquitoes"</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="run_model_example_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -195,7 +195,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

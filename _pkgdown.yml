@@ -21,6 +21,8 @@ navbar:
         href: articles/run_model_alternative.html
       - text: Writing Your Own Model
         href: articles/write_own_model.html
+      - text: Model Reference
+        href: articles/model_reference.html
       - text: --------
       - text: Contributing
         href: CONTRIBUTING.html

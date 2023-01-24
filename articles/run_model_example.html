@@ -98,11 +98,12 @@
 
       
 
-      </header><script src="run_model_example_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simplest Model Run</h1>
-                        <h4 data-toc-skip class="author">OJ Watson &amp; Joel Hellewell</h4>
+                        <h4 data-toc-skip class="author">OJ Watson &amp;
+Joel Hellewell</h4>
             
             <h4 data-toc-skip class="date">2023-01-24</h4>
       
@@ -116,19 +117,27 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>In this vignette we will run the simplest version of the model. This is good for getting to grips with how to run the model as well as testing that everything is working correctly.</p>
+<p>In this vignette we will run the simplest version of the model. This
+is good for getting to grips with how to run the model as well as
+testing that everything is working correctly.</p>
 </div>
 <div class="section level2">
 <h2 id="default-use">Default Use<a class="anchor" aria-label="anchor" href="#default-use"></a>
 </h2>
-<p>The <code>run_model_example</code> function solves the basic malaria model with no interventions. It returns the following list with 2 elements:</p>
+<p>The <code>run_model_example</code> function solves the basic malaria
+model with no interventions. It returns the following list with 2
+elements:</p>
 <ol style="list-style-type: decimal">
 <li>
-<code>dat</code> - the simulation output as a list of data frames.</li>
+<code>dat</code> - the simulation output as a list of data
+frames.</li>
 <li>
-<code>plot</code> - a plot of the 6 human compartments in the malaria model.</li>
+<code>plot</code> - a plot of the 6 human compartments in the
+malaria model.</li>
 </ol>
-<p>As illustrated below, without specifying any function arguments, <code>create_r_model</code> will run a simulation for 1 year at an EIR of 10, with a treatment coverage equal to 40% for Tororo, Uganda.</p>
+<p>As illustrated below, without specifying any function arguments,
+<code>create_r_model</code> will run a simulation for 1 year at an EIR
+of 10, with a treatment coverage equal to 40% for Tororo, Uganda.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ICDMM</span><span class="op">)</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -140,20 +149,25 @@
 <div class="section level2">
 <h2 id="passing-variables">Passing Variables<a class="anchor" aria-label="anchor" href="#passing-variables"></a>
 </h2>
-<p>You can change the values of a small number of variables in the <code>run_model_example</code> function. To change simulation settings there are 5 optional function arguments:</p>
+<p>You can change the values of a small number of variables in the
+<code>run_model_example</code> function. To change simulation settings
+there are 5 optional function arguments:</p>
 <ol style="list-style-type: decimal">
 <li>
 <code>age</code> - Vector of age brackets.</li>
 <li>
 <code>EIR</code> - Numeric of annual EIR.</li>
 <li>
-<code>ft</code> - Numeric of proportion of symptomatic cases receiving treatment.</li>
+<code>ft</code> - Numeric of proportion of symptomatic cases
+receiving treatment.</li>
 <li>
 <code>admin2</code> - Character of admin unit.</li>
 <li>
-<code>time</code> - Numeric of length of time that the model will run for in days.</li>
+<code>time</code> - Numeric of length of time that the model will
+run for in days.</li>
 </ol>
-<p>For example, to simulate Thies, Senegal for a given vector of ages, at an EIR of 1, for 2 years with 60% treatment coverage:</p>
+<p>For example, to simulate Thies, Senegal for a given vector of ages,
+at an EIR of 1, for 2 years with 60% treatment coverage:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">thies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_example.html">run_model_example</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">40</span>, <span class="fl">60</span><span class="op">)</span>, </span>
 <span>                   EIR <span class="op">=</span> <span class="fl">1</span>, </span>
@@ -162,7 +176,9 @@
 <span>                   time <span class="op">=</span> <span class="fl">2</span><span class="op">*</span><span class="fl">365</span><span class="op">)</span></span>
 <span><span class="va">thies</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
 <p><img src="run_model_example_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-<p>Other model outputs, such as the number of suceptible adult mosquitoes, can be plotted by interacting with the <code>dat</code> data frame returned by <code>run_model</code>:</p>
+<p>Other model outputs, such as the number of suceptible adult
+mosquitoes, can be plotted by interacting with the <code>dat</code> data
+frame returned by <code>run_model</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">thies</span><span class="op">$</span><span class="va">dat</span><span class="op">$</span><span class="va">Sv</span>, </span>
 <span>     ylab <span class="op">=</span> <span class="st">"Susceptible Adult Mosquitoes"</span>, </span>
@@ -174,7 +190,9 @@
 <div class="section level2">
 <h2 id="other-malaria-models">Other malaria models<a class="anchor" aria-label="anchor" href="#other-malaria-models"></a>
 </h2>
-<p>To run the basic model with the option of changing further parameter values or to run other versions of the model that might include further intervention methods, please read the flexible model run <a href="https://mrc-ide.github.io/deterministic-malaria-model/articles/run_model.html">vignette</a></p>
+<p>To run the basic model with the option of changing further parameter
+values or to run other versions of the model that might include further
+intervention methods, please read the flexible model run <a href="https://mrc-ide.github.io/deterministic-malaria-model/articles/run_model.html">vignette</a></p>
 </div>
   </div>
 

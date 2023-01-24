@@ -98,11 +98,12 @@
 
       
 
-      </header><script src="write_own_model_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Writing your own model</h1>
-                        <h4 data-toc-skip class="author">Joel Hellewell</h4>
+                        <h4 data-toc-skip class="author">Joel
+Hellewell</h4>
             
             <h4 data-toc-skip class="date">2023-01-24</h4>
       
@@ -116,18 +117,27 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>You might want to write your own extension to the malaria models, in this vignette I will try and cover the easiest way of doing this.</p>
-<p>You should start by cloning this github repository to your own computer. If you are new to R package development the next best step is to open the <code>ICDMM.Rproj</code> file using RStudio.</p>
+<p>You might want to write your own extension to the malaria models, in
+this vignette I will try and cover the easiest way of doing this.</p>
+<p>You should start by cloning this github repository to your own
+computer. If you are new to R package development the next best step is
+to open the <code>ICDMM.Rproj</code> file using RStudio.</p>
 </div>
 <div class="section level2">
 <h2 id="adding-your-own-odin-model">Adding your own odin model<a class="anchor" aria-label="anchor" href="#adding-your-own-odin-model"></a>
 </h2>
-<p>If you write some new code in a file called <code>example_model.R</code>, you should save it in <code>inst/odin</code> with the other models. You then need to run <code><a href="https://rdrr.io/pkg/odin/man/odin_package.html" class="external-link">odin::odin_package()</a></code>, with the directory path of the project inside the parenthesis, this will add a compiled version of your odin model to the package files.</p>
+<p>If you write some new code in a file called
+<code>example_model.R</code>, you should save it in
+<code>inst/odin</code> with the other models. You then need to run
+<code><a href="https://rdrr.io/pkg/odin/man/odin_package.html" class="external-link">odin::odin_package()</a></code>, with the directory path of the
+project inside the parenthesis, this will add a compiled version of your
+odin model to the package files.</p>
 </div>
 <div class="section level2">
 <h2 id="other-code-changes">Other code changes<a class="anchor" aria-label="anchor" href="#other-code-changes"></a>
 </h2>
-<p>You will need to add your model name to the following bit of code in line 44 of <code>R/run_model.R</code>:</p>
+<p>You will need to add your model name to the following bit of code in
+line 44 of <code>R/run_model.R</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="va">generator</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="va">model</span>,</span>
 <span>    <span class="st">"odin_model"</span> <span class="op">=</span> <span class="va">odin_model</span>,</span>
@@ -136,17 +146,29 @@
 <span>    <span class="st">"odin_model_IVM_SMChet"</span> <span class="op">=</span> <span class="va">odin_model_IVM_SMChet</span>,</span>
 <span>    <span class="st">"example"</span> <span class="op">=</span> <span class="va">example</span>,</span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Unknown model '%s'"</span>, <span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>This will allow for you to eventually run <code>run_model(model = "example")</code> to run your odin model.</p>
+<p>This will allow for you to eventually run
+<code>run_model(model = "example")</code> to run your odin model.</p>
 </div>
 <div class="section level2">
 <h2 id="rebuild-package">Rebuild package<a class="anchor" aria-label="anchor" href="#rebuild-package"></a>
 </h2>
-<p>The final step is to rebuild the R package, you can do this by pressing “Install and Restart” in the “Build” panel in RStudio (usually in the top right panels) or the usual keyboard is ctrl + shift + b (or cmd + shift + b on a mac)</p>
+<p>The final step is to rebuild the R package, you can do this by
+pressing “Install and Restart” in the “Build” panel in RStudio (usually
+in the top right panels) or the usual keyboard is ctrl + shift + b (or
+cmd + shift + b on a mac)</p>
 </div>
 <div class="section level2">
 <h2 id="working-with-github">Working with github<a class="anchor" aria-label="anchor" href="#working-with-github"></a>
 </h2>
-<p>The easiest way to develop your new package using github will be to make a new branch. You can do this using the “New Branch” button in the RStudio interface or by running <code>git checkout -b &lt;branch name&gt;</code>. You can then push this new branch to github to do version control but your changes won’t affect anything on the main branch. When you have finished working on your model you can use github to create a pull request and we can merge it with the main branch so that everyone downloading the package also recieves your model as part of it.</p>
+<p>The easiest way to develop your new package using github will be to
+make a new branch. You can do this using the “New Branch” button in the
+RStudio interface or by running
+<code>git checkout -b &lt;branch name&gt;</code>. You can then push this
+new branch to github to do version control but your changes won’t affect
+anything on the main branch. When you have finished working on your
+model you can use github to create a pull request and we can merge it
+with the main branch so that everyone downloading the package also
+recieves your model as part of it.</p>
 </div>
   </div>
 

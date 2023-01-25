@@ -206,10 +206,10 @@ ivm_model_complex <- odin::odin({
 
   # probability that mosquito bites and survives for each intervention category
   dim(w_) <- 4
-  w_[1] <- 1
-  w_[2] <- 1 - bites_Bed + bites_Bed*s_ITN
-  w_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)*s_IRS
-  w_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors - bites_Bed)*(1-r_IRS)*s_IRS
+  w_[1] <- 1 # no intervention
+  w_[2] <- 1 - bites_Bed + bites_Bed*s_ITN #ITN only
+  w_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)*s_IRS #IRS only
+  w_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors - bites_Bed)*(1-r_IRS)*s_IRS #ITN and IRS
   w[] <- w_[i]
   dim(w) <- num_int
 

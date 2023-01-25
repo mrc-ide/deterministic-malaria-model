@@ -66,7 +66,9 @@ ivm_model_complex <- odin::odin({
   betaa <- 0.5*PL/dPL #PL is fully developed pupae and dPL is the developmnent time of the pupae. 0.5 because only interested in females
   #betaa <- mv0 * mu0 * theta2
 
-  #NO IVM####
+  #IVERMECTIN INTEGRATION####
+
+  #no IVM
   deriv(Sv) <- -ince - mu*Sv + betaa
   deriv(Ev) <- ince - incv - mu*Ev
   deriv(Iv) <- incv - mu*Iv
@@ -101,22 +103,22 @@ ivm_model_complex <- odin::odin({
   # PL - pupal stage
 
   # mean carrying capacity from initial mosquito density:
-  dLL <- user() # development time of larvae
-  dPL <- user() #development time of pupae
-  dEL <- user() #development time of early stage
-  muLL <- user() #daily density dep. mortality rate of larvae
-  muPL <- user() #daily den. dep. mortality rate of pupae
-  muEL <- user() #daily den. dep. mortality rate of early stage
-  gammaL <- user() # eff. of den. dep. on late stage relative to early stage
+  dLL <- 3.72#user() # development time of larvae
+  dPL <- 0.643#user() #development time of pupae
+  dEL <- 6.64#user() #development time of early stage
+  muLL <- 0.0348 #user() #daily density dep. mortality rate of larvae
+  muPL <- 0.249 #user() #daily den. dep. mortality rate of pupae
+  muEL <- 0.0338#user() #daily den. dep. mortality rate of early stage
+  gammaL <- 13.25 #user() # eff. of den. dep. on late stage relative to early stage
 
   # FITTED entomological parameters:
-  mv0 <- user() # initial mosquito density
-  mu0 <- user() # baseline mosquito death rate
-  tau1 <- user() # duration of host-seeking behaviour
-  tau2 <- user() # duration of resting behaviour
+  mv0 <- user() # initial mosquito density (V/H Ratio - I can set this)
+  mu0 <- 0.132 #user() # baseline mosquito death rate
+  tau1 <- 0.69#user() # duration of host-seeking behaviour
+  tau2 <- 2.31 #user() # duration of resting behaviour
   p10 <- user() # prob of surviving 1 feeding cycle
   p2 <- user() #prob of surviving one resting cycle
-  betaL <- user() # maximum number of eggs per oviposition per mosq
+  betaL <- 21.2 #user() # maximum number of eggs per oviposition per mosq
 
   # Entomological variables:
   eov <- betaL/mu*(exp(mu/fv)-1)
@@ -154,10 +156,10 @@ ivm_model_complex <- odin::odin({
   # See supplementary materials S2 from http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000324#s6
 
   # general parameters
-  ITN_IRS_on <- user() # days after which interventions begin
-  num_int <- user() # number of intervention categorys, ITN only, IRS only, neither, both
-  itn_cov <- user() # proportion of population covered by ITN
-  irs_cov <- user() # proportion of population covered by IRS
+  ITN_IRS_on <- -1#user() # days after which interventions begin
+  num_int <- 4#user() # number of intervention categorys, ITN only, IRS only, neither, both
+  itn_cov <- 0#user() # proportion of population covered by ITN
+  irs_cov <- 0#user() # proportion of population covered by IRS
 
   # cov is a vector of coverages for each intervention category:
   dim(cov_) <- 4
@@ -168,12 +170,12 @@ ivm_model_complex <- odin::odin({
   cov[] <- cov_[i]
   dim(cov) <- num_int
 
-  IRS_interval <- user() # how long IRS lasts
-  ITN_interval <- user() # how long ITN lasts
-  chi <- user() # proportion of vector endophily
-  Q0 <- user() # proportion of anthropophagy
-  bites_Bed <- user() # endophagy in bed
-  bites_Indoors <- user() # endophagy indoors
+  IRS_interval <- 365 #user() # how long IRS lasts
+  ITN_interval <- 1095 #user() # how long ITN lasts
+  chi <- 0.86 #user() # proportion of vector endophily
+  Q0 <- 0.92 #user() # proportion of anthropophagy
+  bites_Bed <- 0.89 #user() # endophagy in bed
+  bites_Indoors <- 0.97 #user() # endophagy indoors
 
   # General intervention model terminology:
   # r - probability of trying to repeat feed after hitting ITN/IRS
@@ -181,11 +183,11 @@ ivm_model_complex <- odin::odin({
   # s - probability of successful feed after hitting ITN/IRS
 
   # The maximum (and then minimum) r and d values for ITN/IRS on day 0 before they decay
-  r_ITN0 <- user()
-  d_ITN0 <- user()
-  d_IRS0 <- user()
-  r_IRS0 <- user()
-  r_ITN1 <- user()
+  r_ITN0 <- 0.56 #user() #prob of repeating behaviour with ITN (max)
+  d_ITN0 <- 0.41 #user()
+  d_IRS0 <- 1#user()
+  r_IRS0 <- 0.6#user()
+  r_ITN1 <- 0.24 #user()
   irs_loss <- user()
   itn_loss <- user()
 

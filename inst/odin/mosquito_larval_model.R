@@ -89,8 +89,8 @@ ivm_model_complex <- odin::odin({
 
   ivm_cow_eff_cov <-(1-av_mosq[1:num_int])*gamma_c
 
-  mu_h = mu + 0.728 #excess mort due to IVM on humans (relative to baseline mort)
-  mu_c = mu + 0.728 #excess mort due to IVM on cattle (relative to baseline mort)
+  mu_h = mu0 + 0.628 #excess mort due to IVM on humans (relative to baseline mort)
+  mu_c = mu0 + 0.628 #excess mort due to IVM on cattle (relative to baseline mort)
 
   #IVERMECTIN INTEGRATION####
 

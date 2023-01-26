@@ -34,6 +34,21 @@ ivm_model_complex <- odin::odin({
   #dim(Ev) <- 10
   initial(Iv) <- init_Iv #* mv0
 
+  #IVM on humans. MAY NEED TO ADD mv0 terms
+  init_Svih <- 0
+  init_Evih <- 0
+  init_Ivic <- 0
+  initial(Svih) <- init_Svih
+  initial(Evih) <- init_Evih
+  initial(Ivih) <- init_Ivih
+
+  #IVM on cattle. MAY NEED TO ADD mv0 terms
+  init_Svic <- 0
+  init_Evic <- 0
+  init_Ivic <- 0
+  initial(Svic) <- init_Svic
+  initial(Evic) <- init_Evic
+  initial(Ivic) <- init_Ivic
 
   # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
   # by age/het/int category, infectiousness depends on p_det which depends on detection immunity
@@ -66,17 +81,33 @@ ivm_model_complex <- odin::odin({
   betaa <- 0.5*PL/dPL #PL is fully developed pupae and dPL is the developmnent time of the pupae. 0.5 because only interested in females
   #betaa <- mv0 * mu0 * theta2
 
+  #ivermectin parameters####
+  gamma_h <- user() #prop human pop treated with IVM. Will be subject to eligibility criteria so this param is going to become more complicated (will depend on age structure)
+  gamma_c <- user() #prop cattle treated with IVM (are there eligibility criteria?)
+
+  ivm_human_eff_cov <- av_mosq[1:num_int] * gamma_h #effective coverage of IVM on humans given biting rate on humans
+
+  ivm_cow_eff_cov <-(1-av_mosq[1:num_int])*gamma_c
+
+  mu_h = mu+0.628 #excess mort due to IVM on humans
+  mu_c = mu + 0.628 #excess mort due to IVM on cattle
+
   #IVERMECTIN INTEGRATION####
 
   #no IVM
-  deriv(Sv) <- -ince - mu*Sv + betaa
-  deriv(Ev) <- ince - incv - mu*Ev
-  deriv(Iv) <- incv - mu*Iv
+  deriv(Sv) <- -ince - (ivm_human_eff_cov*Sv) - (ivm_cow_eff_cov*Sv) - mu*Sv + betaa
+  deriv(Ev) <- ince - incv -(ivm_human_eff_cov*Ev) - (ivm_cow_eff_cov*Ev) - mu*Ev
+  deriv(Iv) <- incv - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
 
   #IVM humans
+  deriv(Svih) <- -ince + (ivm_human_eff_cov*Sv) - (mu_h*Svih)
+  deriv(Evih) <- ince - incv + (ivm_human_eff_cov*Ev) - (mh_h*Evih)
+  deriv(Ivih) <- incv + (ivm_human_eff_cov*Iv) - (mh_h*Iv)
 
-
-  #IVM cattle
+  #IVM on cattle
+  deriv(Svic) <- - ince + (ivm_cow_eff_cov*Sv) - (mu_c*Svic)
+  deriv(Evic) <- ince - incv + (ivm_cow_eff_cov*Ev) - (mu_c*Evic)
+  deriv(Ivic) <- incv + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
 
   # Total mosquito population
   #mv = Sv+Ev+Iv if no ivermectin addition

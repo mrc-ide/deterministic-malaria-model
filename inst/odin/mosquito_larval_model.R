@@ -62,7 +62,7 @@ ivm_model_complex <- odin::odin({
   # Force of infection from humans to mosquitoes
   dim(FOIvijk) <- c(na,nh,num_int)
   omega <- 1#user() #normalising constant for biting rates
-  FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i] #/omega
+  FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i] /omega
   lag_FOIv=sum(FOIvijk)
 
   # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)

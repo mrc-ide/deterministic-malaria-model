@@ -523,6 +523,7 @@ output(beta_larval) <- beta_larval
 output(KL) <- KL
 output(mv) <- mv
 output(Q) <- Q
+output(Q0) <- Q0
 output(wh) <- wh
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN

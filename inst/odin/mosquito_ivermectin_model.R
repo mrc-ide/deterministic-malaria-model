@@ -291,6 +291,8 @@ init_Evih <- 0
 init_Ivih <- 0
 initial(Svih) <- init_Svih*mv0
 initial(Evih) <- init_Evih*mv0
+#initial(Evih[1:10]) <- init_Evih/10 * mv0 # Options if not using a delayed delay
+#dim(Evih) <- 10
 initial(Ivih) <- init_Ivih*mv0
 
 #IVM on cattle. MAY NEED TO ADD mv0 terms
@@ -299,6 +301,8 @@ init_Evic <- 0
 init_Ivic <- 0
 initial(Svic) <- init_Svic*mv0
 initial(Evic) <- init_Evic*mv0
+#initial(Evic[1:10]) <- init_Evic/10 * mv0 # Options if not using a delayed delay
+#dim(Evic) <- 10
 initial(Ivic) <- init_Ivic*mv0
 
 # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
@@ -589,6 +593,9 @@ output(mv) <- mv
 output(Q) <- Q
 output(Q0) <- Q0
 output(wh) <- wh
+output(lag_incv_ic) <- lag_incv_ic
+output(lag_incv_ih) <- lag_incv_ih
+output(lag_incv) <- lag_incv
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN
 output(s_ITN) <- s_ITN

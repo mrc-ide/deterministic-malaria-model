@@ -307,12 +307,13 @@ incv <- lag_incv
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
 betaa <- 0.5*PL/dPL
 #betaa <- mv0 * mu0 * theta2
+beta_e <- 47/10
 
 deriv(Sv) <- -ince - mu*Sv + betaa
 #deriv(Ev) <- ince - incv - mu*Ev
-deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
-deriv(Ev[2:47]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
-deriv(Iv) <- Ev[47] - mu*Iv
+deriv(Ev[1]) <- ince - (beta_e*Ev[1]) - mu*Ev[1]
+deriv(Ev[2:47]) <- (beta_e*Ev[i-1]) - (beta_e*Ev[i]) - mu*Ev[i]
+deriv(Iv) <- (beta_e*Ev[47]) - mu*Iv
 
 # Total mosquito population
 #mv = Sv+Ev+Iv

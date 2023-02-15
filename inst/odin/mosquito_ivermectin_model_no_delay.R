@@ -326,23 +326,24 @@ delayMos <- user() # Extrinsic incubation period.
 FOIv <- delay(lag_FOIv, delayGam)
 
 # Number of mosquitoes that become infected at each time point
-surv <- exp(-mu*delayMos) #may have to change this after compare IVM v net death
+#surv <- exp(-mu*delayMos) #may have to change this after compare IVM v net death
 ince <- FOIv * Sv #rate into Ev compartment
-lag_incv <- ince * surv #need to lag the rate into the infectious compartment
+#lag_incv <- ince * surv #need to lag the rate into the infectious compartment
 #incv <- delay(lag_incv, delayMos)
-incv <- lag_incv
+#incv <- lag_incv
+beta_e <- 47/10 #transition between E compartments must occur at a constant rate. Assuming mean EIP is 10 days
 
 # Number of mosquitoes that become infected at each time point in human IVM compartments
 ince_ih <- FOIv*Svih
-lag_incv_ih <- ince_ih*surv
+#lag_incv_ih <- ince_ih*surv
 #incv_ih <- delay(lag_incv_ih, delayMos)
-incv_ih <- lag_incv_ih
+#incv_ih <- lag_incv_ih
 
 #Number of mosquitoes that become infected at each time point in cattle IVm compartments
 ince_ic <- FOIv*Svic
-lag_incv_ic <- ince_ic*surv
+#lag_incv_ic <- ince_ic*surv
 #incv_ic <- delay(lag_incv_ic, delayMos)
-incv_ic <- lag_incv_ic
+#incv_ic <- lag_incv_ic
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
 betaa <- 0.5*PL/dPL #PL is fully developed pupae and dPL is the developmnent time of the pupae. 0.5 because only interested in females
@@ -364,26 +365,26 @@ mu_c <- mu0 + 0.628 #excess mort due to IVM on cattle (relative to baseline mort
 #no IVM
 deriv(Sv) <- -ince - (ivm_human_eff_cov*Sv) - (ivm_cow_eff_cov*Sv) - mu*Sv + betaa
 #deriv(Ev) <- ince - incv -(ivm_human_eff_cov*Ev) - (ivm_cow_eff_cov*Ev) - mu*Ev
-deriv(Ev[1]) <- ince - Ev[1] -  (ivm_human_eff_cov*Ev[1]) - (ivm_cow_eff_cov*Ev[1]) - mu*Ev[1]
-deriv(Ev[2:47]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
+deriv(Ev[1]) <- ince - (beta_e*Ev[1]) -  (ivm_human_eff_cov*Ev[1]) - (ivm_cow_eff_cov*Ev[1]) - (mu*Ev[1])
+deriv(Ev[2:47]) <- (beta_e*Ev[i-1]) - (beta_e*Ev[i]) - (mu*Ev[i])
 #deriv(Iv) <- incv - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
-deriv(Iv) <- Ev[47] - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
+deriv(Iv) <- (beta_e*Ev[47]) - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
 
 #IVM humans
 deriv(Svih) <- -ince_ih + (ivm_human_eff_cov*Sv) - (mu_h*Svih)
 #deriv(Evih) <- ince_ih - incv_ih + (ivm_human_eff_cov*Ev) - (mu_h*Evih)
-deriv(Evih[1]) <- ince_ih - Evih[1] +  (ivm_human_eff_cov*Ev[1]) - mu_h*Evih[1]
-deriv(Evih[2:47]) <- Evih[i-1] - Evih[i] - mu_h*Evih[i]
+deriv(Evih[1]) <- ince_ih - (beta_e*Evih[1]) +  (ivm_human_eff_cov*Ev[1]) - (mu_h*Evih[1])
+deriv(Evih[2:47]) <- (beta_e*Evih[i-1]) - (beta_e*Evih[i]) - mu_h*Evih[i]
 #deriv(Ivih) <- incv_ih + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
-deriv(Ivih) <- Evih[47] + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
+deriv(Ivih) <- (beta_e*Evih[47]) + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
 
 #IVM on cattle
 deriv(Svic) <- - ince_ic + (ivm_cow_eff_cov*Sv) - (mu_c*Svic)
 #deriv(Evic) <- ince_ic - incv_ic + (ivm_cow_eff_cov*Ev) - (mu_c*Evic)
-deriv(Evic[1]) <- ince_ic - Evic[1] +  (ivm_human_eff_cov*Ev[1]) - mu_c*Evic[1]
-deriv(Evic[2:47]) <- Evic[i-1] - Evic[i] - mu_c*Evic[i]
+deriv(Evic[1]) <- ince_ic - (beta_e*Evic[1]) +  (ivm_human_eff_cov*Ev[1]) - mu_c*Evic[1]
+deriv(Evic[2:47]) <- (beta_e*Evic[i-1]) - (beta_e*Evic[i]) - (mu_c*Evic[i])
 #deriv(Ivic) <- incv_ic + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
-deriv(Ivic) <- Evic[47] + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
+deriv(Ivic) <- (beta_e*Evic[47]) + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
 
 # Total mosquito population
 #mv = Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic #if no ivermectin addition

@@ -48,7 +48,9 @@ run_model <- function(model = "odin_model",
     "odin_model_hrp2" = odin_model_hrp2,
     "odin_model_IVM_SMChet" = odin_model_IVM_SMChet,
     "odin_model_TBV" = odin_model_TBV,
-    "mosquito_larval_model" = mosquito_larval_model,
+    "mosquito_ivermectin_model" = mosquito_ivermectin_model,
+    "mosquito_ivermectin_model_no_delay" = mosquito_ivermectin_model_no_delay,
+    "odin_model_no_delay" = odin_model_no_delay,
     stop(sprintf("Unknown model '%s'", model)))
 
   # There are many parameters used that should not be passed through

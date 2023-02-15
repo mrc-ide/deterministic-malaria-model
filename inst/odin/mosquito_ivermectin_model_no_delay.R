@@ -291,8 +291,8 @@ init_Evih <- 0
 init_Ivih <- 0
 initial(Svih) <- init_Svih*mv0
 #initial(Evih) <- init_Evih*mv0
-initial(Evih[1:10]) <- init_Evih/10 * mv0 # Options if not using a delayed delay
-dim(Evih) <- 10
+initial(Evih[1:47]) <- init_Evih/47 * mv0 # Options if not using a delayed delay
+dim(Evih) <- 47
 initial(Ivih) <- init_Ivih*mv0
 
 #IVM on cattle. MAY NEED TO ADD mv0 terms
@@ -301,8 +301,8 @@ init_Evic <- 0
 init_Ivic <- 0
 initial(Svic) <- init_Svic*mv0
 #initial(Evic) <- init_Evic*mv0
-initial(Evic[1:10]) <- init_Evic/10 * mv0 # Options if not using a delayed delay
-dim(Evic) <- 10
+initial(Evic[1:47]) <- init_Evic/47 * mv0 # Options if not using a delayed delay
+dim(Evic) <- 47
 initial(Ivic) <- init_Ivic*mv0
 
 # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
@@ -365,21 +365,21 @@ mu_c <- mu0 + 0.628 #excess mort due to IVM on cattle (relative to baseline mort
 deriv(Sv) <- -ince - (ivm_human_eff_cov*Sv) - (ivm_cow_eff_cov*Sv) - mu*Sv + betaa
 #deriv(Ev) <- ince - incv -(ivm_human_eff_cov*Ev) - (ivm_cow_eff_cov*Ev) - mu*Ev
 deriv(Ev[1]) <- ince - Ev[1] -  (ivm_human_eff_cov*Ev[1]) - (ivm_cow_eff_cov*Ev[1]) - mu*Ev[1]
-deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
+deriv(Ev[2:47]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
 deriv(Iv) <- incv - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
 
 #IVM humans
 deriv(Svih) <- -ince_ih + (ivm_human_eff_cov*Sv) - (mu_h*Svih)
 #deriv(Evih) <- ince_ih - incv_ih + (ivm_human_eff_cov*Ev) - (mu_h*Evih)
 deriv(Evih[1]) <- ince_ih - Evih[1] +  (ivm_human_eff_cov*Ev[1]) - mu_h*Evih[1]
-deriv(Evih[2:10]) <- Evih[i-1] - Evih[i] - mu_h*Evih[i]
+deriv(Evih[2:47]) <- Evih[i-1] - Evih[i] - mu_h*Evih[i]
 deriv(Ivih) <- incv_ih + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
 
 #IVM on cattle
 deriv(Svic) <- - ince_ic + (ivm_cow_eff_cov*Sv) - (mu_c*Svic)
 #deriv(Evic) <- ince_ic - incv_ic + (ivm_cow_eff_cov*Ev) - (mu_c*Evic)
 deriv(Evic[1]) <- ince_ic - Evic[1] +  (ivm_human_eff_cov*Ev[1]) - mu_c*Evic[1]
-deriv(Evic[2:10]) <- Evic[i-1] - Evic[i] - mu_c*Evic[i]
+deriv(Evic[2:47]) <- Evic[i-1] - Evic[i] - mu_c*Evic[i]
 deriv(Ivic) <- incv_ic + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
 
 # Total mosquito population

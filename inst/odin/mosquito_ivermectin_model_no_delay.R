@@ -381,7 +381,7 @@ deriv(Ivih) <- (beta_e*Evih[47]) + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
 #IVM on cattle
 deriv(Svic) <- - ince_ic + (ivm_cow_eff_cov*Sv) - (mu_c*Svic)
 #deriv(Evic) <- ince_ic - incv_ic + (ivm_cow_eff_cov*Ev) - (mu_c*Evic)
-deriv(Evic[1]) <- ince_ic - (beta_e*Evic[1]) +  (ivm_human_eff_cov*Ev[1]) - mu_c*Evic[1]
+deriv(Evic[1]) <- ince_ic - (beta_e*Evic[1]) +  (ivm_cow_eff_cov*Ev[1]) - mu_c*Evic[1]
 deriv(Evic[2:47]) <- (beta_e*Evic[i-1]) - (beta_e*Evic[i]) - (mu_c*Evic[i])
 #deriv(Ivic) <- incv_ic + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
 deriv(Ivic) <- (beta_e*Evic[47]) + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
@@ -603,9 +603,6 @@ output(mv) <- mv
 output(Q) <- Q
 output(Q0) <- Q0
 output(wh) <- wh
-output(lag_incv_ic) <- lag_incv_ic
-output(lag_incv_ih) <- lag_incv_ih
-output(lag_incv) <- lag_incv
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN
 output(s_ITN) <- s_ITN

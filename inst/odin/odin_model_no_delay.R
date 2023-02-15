@@ -312,7 +312,7 @@ deriv(Sv) <- -ince - mu*Sv + betaa
 #deriv(Ev) <- ince - incv - mu*Ev
 deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
 deriv(Ev[2:47]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
-deriv(Iv) <- incv - mu*Iv
+deriv(Iv) <- Ev[47] - mu*Iv
 
 # Total mosquito population
 #mv = Sv+Ev+Iv

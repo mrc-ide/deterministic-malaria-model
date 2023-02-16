@@ -323,7 +323,8 @@ lag_FOIv=sum(FOIvijk)
 # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)
 delayGam <- user() # Lag from parasites to infectious gametocytes
 delayMos <- user() # Extrinsic incubation period.
-FOIv <- delay(lag_FOIv, delayGam)
+FOIv <- lag_FOIv #removing human delay
+#FOIv <- delay(lag_FOIv, delayGam)
 
 # Number of mosquitoes that become infected at each time point
 #surv <- exp(-mu*delayMos) #may have to change this after compare IVM v net death

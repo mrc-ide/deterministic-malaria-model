@@ -281,8 +281,8 @@ init_Ev <- user()
 init_Iv <- user()
 initial(Sv) <- init_Sv * mv0
 #initial(Ev) <- init_Ev * mv0
-initial(Ev[1:47]) <- init_Ev/47 * mv0 # Options if not using a delayed delay
-dim(Ev) <- 47
+initial(Ev[1:10]) <- init_Ev/10 * mv0 # Options if not using a delayed delay
+dim(Ev) <- 10
 initial(Iv) <- init_Iv * mv0
 
 #IVM on humans. MAY NEED TO ADD mv0 terms
@@ -291,8 +291,8 @@ init_Evih <- 0
 init_Ivih <- 0
 initial(Svih) <- init_Svih*mv0
 #initial(Evih) <- init_Evih*mv0
-initial(Evih[1:47]) <- init_Evih/47 * mv0 # Options if not using a delayed delay
-dim(Evih) <- 47
+initial(Evih[1:10]) <- init_Evih/10 * mv0 # Options if not using a delayed delay
+dim(Evih) <- 10
 initial(Ivih) <- init_Ivih*mv0
 
 #IVM on cattle. MAY NEED TO ADD mv0 terms
@@ -301,8 +301,8 @@ init_Evic <- 0
 init_Ivic <- 0
 initial(Svic) <- init_Svic*mv0
 #initial(Evic) <- init_Evic*mv0
-initial(Evic[1:47]) <- init_Evic/47 * mv0 # Options if not using a delayed delay
-dim(Evic) <- 47
+initial(Evic[1:10]) <- init_Evic/10 * mv0 # Options if not using a delayed delay
+dim(Evic) <- 10
 initial(Ivic) <- init_Ivic*mv0
 
 # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
@@ -332,7 +332,7 @@ ince <- FOIv * Sv #rate into Ev compartment
 #lag_incv <- ince * surv #need to lag the rate into the infectious compartment
 #incv <- delay(lag_incv, delayMos)
 #incv <- lag_incv
-beta_e <- 47/10 #transition between E compartments must occur at a constant rate. Assuming mean EIP is 10 days
+beta_e <- 10/10 #transition between E compartments must occur at a constant rate. Assuming mean EIP is 10 days
 
 # Number of mosquitoes that become infected at each time point in human IVM compartments
 ince_ih <- FOIv*Svih
@@ -367,25 +367,25 @@ mu_c <- mu0 + 0.628 #excess mort due to IVM on cattle (relative to baseline mort
 deriv(Sv) <- -ince - (ivm_human_eff_cov*Sv) - (ivm_cow_eff_cov*Sv) - mu*Sv + betaa
 #deriv(Ev) <- ince - incv -(ivm_human_eff_cov*Ev) - (ivm_cow_eff_cov*Ev) - mu*Ev
 deriv(Ev[1]) <- ince - (beta_e*Ev[1]) -  (ivm_human_eff_cov*Ev[1]) - (ivm_cow_eff_cov*Ev[1]) - (mu*Ev[1])
-deriv(Ev[2:47]) <- (beta_e*Ev[i-1]) - (beta_e*Ev[i]) - (mu*Ev[i])
+deriv(Ev[2:10]) <- (beta_e*Ev[i-1]) - (beta_e*Ev[i]) - (mu*Ev[i])
 #deriv(Iv) <- incv - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
-deriv(Iv) <- (beta_e*Ev[47]) - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
+deriv(Iv) <- (beta_e*Ev[10]) - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
 
 #IVM humans
 deriv(Svih) <- -ince_ih + (ivm_human_eff_cov*Sv) - (mu_h*Svih)
 #deriv(Evih) <- ince_ih - incv_ih + (ivm_human_eff_cov*Ev) - (mu_h*Evih)
 deriv(Evih[1]) <- ince_ih - (beta_e*Evih[1]) +  (ivm_human_eff_cov*Ev[1]) - (mu_h*Evih[1])
-deriv(Evih[2:47]) <- (beta_e*Evih[i-1]) - (beta_e*Evih[i]) - mu_h*Evih[i]
+deriv(Evih[2:10]) <- (beta_e*Evih[i-1]) - (beta_e*Evih[i]) - mu_h*Evih[i]
 #deriv(Ivih) <- incv_ih + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
-deriv(Ivih) <- (beta_e*Evih[47]) + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
+deriv(Ivih) <- (beta_e*Evih[10]) + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
 
 #IVM on cattle
 deriv(Svic) <- - ince_ic + (ivm_cow_eff_cov*Sv) - (mu_c*Svic)
 #deriv(Evic) <- ince_ic - incv_ic + (ivm_cow_eff_cov*Ev) - (mu_c*Evic)
 deriv(Evic[1]) <- ince_ic - (beta_e*Evic[1]) +  (ivm_cow_eff_cov*Ev[1]) - mu_c*Evic[1]
-deriv(Evic[2:47]) <- (beta_e*Evic[i-1]) - (beta_e*Evic[i]) - (mu_c*Evic[i])
+deriv(Evic[2:10]) <- (beta_e*Evic[i-1]) - (beta_e*Evic[i]) - (mu_c*Evic[i])
 #deriv(Ivic) <- incv_ic + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
-deriv(Ivic) <- (beta_e*Evic[47]) + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
+deriv(Ivic) <- (beta_e*Evic[10]) + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
 
 # Total mosquito population
 #mv = Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic #if no ivermectin addition

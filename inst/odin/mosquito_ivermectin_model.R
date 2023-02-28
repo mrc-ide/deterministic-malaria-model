@@ -356,8 +356,8 @@ ivm_human_eff_cov <- fv*Q * gamma_h #effective coverage of IVM on humans given b
 
 ivm_cow_eff_cov <-fv*(1-Q)*gamma_c
 
-mu_h <- mu0 + 0.628 #excess mort due to IVM on humans (relative to baseline mort)
-mu_c <- mu0 + 0.628 #excess mort due to IVM on cattle (relative to baseline mort)
+mu_h <- mu + 0.628 #excess mort due to IVM on humans (relative to baseline mort)
+mu_c <- mu + 0.628 #excess mort due to IVM on cattle (relative to baseline mort)
 
 #IVERMECTIN INTEGRATION####
 
@@ -366,7 +366,7 @@ deriv(Sv) <- -ince - (ivm_human_eff_cov*Sv) - (ivm_cow_eff_cov*Sv) - mu*Sv + bet
 deriv(Ev) <- ince - incv -(ivm_human_eff_cov*Ev) - (ivm_cow_eff_cov*Ev) - mu*Ev
 deriv(Iv) <- incv - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
 
-#IVM humans
+#IVM on humans
 deriv(Svih) <- -ince_ih + (ivm_human_eff_cov*Sv) - (mu_h*Svih)
 deriv(Evih) <- ince_ih - incv_ih + (ivm_human_eff_cov*Ev) - (mu_h*Evih)
 deriv(Ivih) <- incv_ih + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
@@ -593,6 +593,8 @@ output(mv) <- mv
 output(Q) <- Q
 output(Q0) <- Q0
 output(wh) <- wh
+output(ivm_human_eff_cov) <- ivm_human_eff_cov
+output(ivm_cow_eff_cov) <- ivm_cow_eff_cov
 output(lag_incv_ic) <- lag_incv_ic
 output(lag_incv_ih) <- lag_incv_ih
 output(lag_incv) <- lag_incv

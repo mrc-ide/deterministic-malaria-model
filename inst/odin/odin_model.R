@@ -1,4 +1,4 @@
-## MODEL VARIABLES
+ ## MODEL VARIABLES
 ##------------------------------------------------------------------------------
 
 na <- user() # number of age categories
@@ -525,6 +525,11 @@ output(mv) <- mv
 output(Q) <- Q
 output(Q0) <- Q0
 output(wh) <- wh
+output(ince) <- ince
+output(incv) <- incv
+output(FOIv) <- FOIv
+output(lag_FOIv) <- lag_FOIv
+output(delayMos) <- delayMos
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN
 output(s_ITN) <- s_ITN

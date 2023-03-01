@@ -1,8 +1,3 @@
-#MOSQUITO MODEL WITH LARVAE AND IVERMECTIN####
-
-#going to keep the same framework wrt the ivermectin compartments
-#but going to add in the larvae and the nets
-
 ## MODEL VARIABLES
 ##------------------------------------------------------------------------------
 
@@ -260,7 +255,6 @@ theta_c <- user()
 theta2 <- if(ssa0 == 0 && ssa1  == 0 && ssa2  == 0 && ssb1  == 0 && ssb2  == 0 && ssb3  == 0 && theta_c  == 0)
   1 else max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001)
 
-
 ##------------------------------------------------------------------------------
 #####################
 ## MOSQUITO STATES ##
@@ -310,14 +304,14 @@ initial(Ivic) <- init_Ivic*mv0
 cU <- user() # infectiousness U -> mosq
 cD <- user() # infectiousness D -> mosq
 cT <- user() # T -> mosq
-gamma1 <- user() # fitted value of gamma1 characterises cA function. infectiousness state of A
+gamma1 <- user() # fitted value of gamma1 characterises cA function
 dim(cA) <- c(na,nh,num_int)
 cA[,,] <- cU + (cD-cU)*p_det[i,j,k]^gamma1
 
 # Force of infection from humans to mosquitoes
 dim(FOIvijk) <- c(na,nh,num_int)
-omega <- 1#user() #normalising constant for biting rates
-FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i] /omega
+omega <- user() #normalising constant for biting rates
+FOIvijk[1:na, 1:nh, 1:num_int] <- (cT*T[i,j,k] + cD*D[i,j,k] + cA[i,j,k]*A[i,j,k] + cU*U[i,j,k]) * rel_foi[j] * av_mosq[k]*foi_age[i]/omega
 lag_FOIv=sum(FOIvijk)
 
 # Current hum->mos FOI depends on the number of individuals now producing gametocytes (12 day lag)
@@ -326,9 +320,9 @@ delayMos <- user() # Extrinsic incubation period.
 FOIv <- delay(lag_FOIv, delayGam)
 
 # Number of mosquitoes that become infected at each time point
-surv <- exp(-mu*delayMos) #may have to change this after compare IVM v net death
-ince <- FOIv * Sv #rate into Ev compartment
-lag_incv <- ince * surv #need to lag the rate into the infectious compartment
+surv <- exp(-mu*delayMos)
+ince <- FOIv * Sv
+lag_incv <- ince * surv
 incv <- delay(lag_incv, delayMos)
 #incv <- lag_incv
 
@@ -345,28 +339,31 @@ incv_ic <- delay(lag_incv_ic, delayMos)
 #incv_ic <- lag_incv_ic
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
-betaa <- 0.5*PL/dPL #PL is fully developed pupae and dPL is the developmnent time of the pupae. 0.5 because only interested in females
+betaa <- 0.5*PL/dPL
 #betaa <- mv0 * mu0 * theta2
-
-#ivermectin parameters####
-gamma_h <- user() #prop human pop treated with IVM. Will be subject to eligibility criteria so this param is going to become more complicated (will depend on age structure)
-gamma_c <- user() #prop cattle treated with IVM (are there eligibility criteria?)
-
-ivm_human_eff_cov <- fv*Q * gamma_h #effective coverage of IVM on humans given biting rate on humans. don't know if this should be a*Q0 or av_human
-
-ivm_cow_eff_cov <-fv*(1-Q)*gamma_c
-
-mu_h <- mu + 0.628 #excess mort due to IVM on humans (relative to baseline mort)
-mu_c <- mu + 0.628 #excess mort due to IVM on cattle (relative to baseline mort)
 
 #IVERMECTIN INTEGRATION####
 
-#no IVM
+mu_h <- mu+0.628 #excess mort due to IVM humans
+mu_c <- mu+0.628 #excess mort due to IVM cattle
+
+#new model parameters####
+gamma_h <- user() #prop of human pop treated with IVM (eligible pop)
+gamma_c <- user() #prop cattle pop treated with IVM (eligible pop)
+
+ivm_human_eff_cov <- fv*Q * gamma_h
+ivm_cow_eff_cov <-fv*(1-Q)*gamma_c
+
+#no IVM####
 deriv(Sv) <- -ince - (ivm_human_eff_cov*Sv) - (ivm_cow_eff_cov*Sv) - mu*Sv + betaa
 deriv(Ev) <- ince - incv -(ivm_human_eff_cov*Ev) - (ivm_cow_eff_cov*Ev) - mu*Ev
 deriv(Iv) <- incv - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
 
-#IVM on humans
+#deriv(Sv) <- -ince - mu*Sv + betaa
+#deriv(Ev) <- ince - incv - mu*Ev
+#deriv(Iv) <- incv - mu*Iv
+
+#IVM on humans####
 deriv(Svih) <- -ince_ih + (ivm_human_eff_cov*Sv) - (mu_h*Svih)
 deriv(Evih) <- ince_ih - incv_ih + (ivm_human_eff_cov*Ev) - (mu_h*Evih)
 deriv(Ivih) <- incv_ih + (ivm_human_eff_cov*Iv) - (mu_h*Ivih)
@@ -377,10 +374,8 @@ deriv(Evic) <- ince_ic - incv_ic + (ivm_cow_eff_cov*Ev) - (mu_c*Evic)
 deriv(Ivic) <- incv_ic + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
 
 # Total mosquito population
-mv = Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic #if no ivermectin addition
-#add on the extra compartments e.g. Svih, Evih, Ivih, Svic, Evic, Ivic
-
-
+#mv = Sv+Ev+Iv
+mv = Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic
 # model options if don't want to use a delayed delay
 #deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
 #deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
@@ -409,8 +404,8 @@ muPL <- user() #daily den. dep. mortality rate of pupae
 muEL <- user() #daily den. dep. mortality rate of early stage
 gammaL <- user() # eff. of den. dep. on late stage relative to early stage
 
-# FITTED entomological parameters:
-mv0 <- user() # initial mosquito density (V/H Ratio - I can set this)
+# fitted entomological parameters:
+mv0 <- user() # initial mosquito density
 mu0 <- user() # baseline mosquito death rate
 tau1 <- user() # duration of host-seeking behaviour
 tau2 <- user() # duration of resting behaviour
@@ -469,7 +464,7 @@ cov[] <- cov_[i]
 dim(cov) <- num_int
 
 IRS_interval <- user() # how long IRS lasts
-ITN_interval <-user() # how long ITN lasts
+ITN_interval <- user() # how long ITN lasts
 chi <- user() # proportion of vector endophily
 Q0 <- user() # proportion of anthropophagy
 bites_Bed <- user() # endophagy in bed
@@ -481,7 +476,7 @@ bites_Indoors <- user() # endophagy indoors
 # s - probability of successful feed after hitting ITN/IRS
 
 # The maximum (and then minimum) r and d values for ITN/IRS on day 0 before they decay
-r_ITN0 <- user() #prob of repeating behaviour with ITN (max)
+r_ITN0 <- user()
 d_ITN0 <- user()
 d_IRS0 <- user()
 r_IRS0 <- user()
@@ -504,10 +499,10 @@ s_IRS <- if(t < ITN_IRS_on) 1 else 1 - d_IRS
 
 # probability that mosquito bites and survives for each intervention category
 dim(w_) <- 4
-w_[1] <- 1 # no intervention
-w_[2] <- 1 - bites_Bed + bites_Bed*s_ITN #ITN only
-w_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)*s_IRS #IRS only
-w_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors - bites_Bed)*(1-r_IRS)*s_IRS #ITN and IRS
+w_[1] <- 1
+w_[2] <- 1 - bites_Bed + bites_Bed*s_ITN
+w_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)*s_IRS
+w_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors - bites_Bed)*(1-r_IRS)*s_IRS
 w[] <- w_[i]
 dim(w) <- num_int
 
@@ -585,16 +580,12 @@ output(inc) <- sum(clin_inc[,,])
 
 # Param checking outputs
 output(mu) <- mu
-output(mu_h) <- mu_h
-output(mu_c) <- mu_c
 output(beta_larval) <- beta_larval
 output(KL) <- KL
 output(mv) <- mv
 output(Q) <- Q
 output(Q0) <- Q0
 output(wh) <- wh
-output(ivm_human_eff_cov) <- ivm_human_eff_cov
-output(ivm_cow_eff_cov) <- ivm_cow_eff_cov
 output(ince) <- ince
 output(incv) <- incv
 output(FOIv) <- FOIv
@@ -608,4 +599,3 @@ output(r_IRS) <- r_IRS
 output(s_IRS) <- s_IRS
 output(cov[]) <- TRUE
 output(K0) <- K0
-

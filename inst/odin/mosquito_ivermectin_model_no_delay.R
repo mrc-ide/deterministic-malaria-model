@@ -224,7 +224,8 @@ FOI_lag[1:na, 1:nh, 1:num_int] <- EIR[i,j,k] * (if(IB[i,j,k]==0) b0 else b[i,j,k
 # Current FOI depends on humans that have been through the latent period
 dE <- user() # latent period of human infection.
 dim(FOI) <- c(na,nh,num_int)
-FOI[,,] <- delay(FOI_lag[i,j,k],dE)
+FOI[,,] <- FOI_lag[i,j,k]
+#FOI[,,] <- delay(FOI_lag[i,j,k],dE)
 
 # EIR -rate at which each age/het/int group is bitten
 # rate for age group * rate for biting category * FOI for age group * prop of

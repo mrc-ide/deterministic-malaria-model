@@ -31,10 +31,10 @@ mosquito_ivermectin_model_ <- R6::R6Class(
              "init_U", "irs_cov", "IRS_interval", "irs_loss", "itn_cov",
              "ITN_interval", "ITN_IRS_on", "itn_loss", "kB", "kC", "kD",
              "mu0", "muEL", "muLL", "muPL", "mv0", "na", "nh", "num_int",
-             "p10", "p2", "phi0", "phi1", "pi", "PM", "Q0", "r_IRS0",
-             "r_ITN0", "r_ITN1", "rA", "rD", "rel_foi", "rP", "rT", "rU",
-             "ssa0", "ssa1", "ssa2", "ssa3", "ssb1", "ssb2", "ssb3", "tau1",
-             "tau2", "theta_c", "uB", "uCA", "uD", "x_I"),
+             "omega", "p10", "p2", "phi0", "phi1", "pi", "PM", "Q0",
+             "r_IRS0", "r_ITN0", "r_ITN1", "rA", "rD", "rel_foi", "rP", "rT",
+             "rU", "ssa0", "ssa1", "ssa2", "ssa3", "ssb1", "ssb2", "ssb3",
+             "tau1", "tau2", "theta_c", "uB", "uCA", "uD", "x_I"),
 
     ## This is never called, but is used to ensure that R finds our
     ## symbols that we will use from the package; without this they
@@ -261,7 +261,7 @@ mosquito_ivermectin_model_no_delay_ <- R6::R6Class(
     },
 
     run = function(t, y = NULL, ..., use_names = TRUE) {
-      private$odin$wrapper_run_delay(
+      private$odin$wrapper_run_ode(
         self, private, t, y, ..., use_names = use_names)
     }
   ))

@@ -51,6 +51,7 @@ run_model <- function(model = "odin_model",
     "mosquito_ivermectin_model" = mosquito_ivermectin_model,
     "mosquito_ivermectin_model_no_delay" = mosquito_ivermectin_model_no_delay,
     "odin_model_no_delay" = odin_model_no_delay,
+    "mosquito_ivm_model2" = mosquito_ivm_model2,
     stop(sprintf("Unknown model '%s'", model)))
 
   # There are many parameters used that should not be passed through
@@ -62,7 +63,7 @@ run_model <- function(model = "odin_model",
   tt <- seq(0, time, 1)
 
   # run model
-  mod_run <- mod$run(tt)
+  mod_run <- mod$run(tt, step_size_max = 10)
 
   # shape output
   out <- mod$transform_variables(mod_run)

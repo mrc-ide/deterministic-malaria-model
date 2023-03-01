@@ -595,9 +595,11 @@ output(Q0) <- Q0
 output(wh) <- wh
 output(ivm_human_eff_cov) <- ivm_human_eff_cov
 output(ivm_cow_eff_cov) <- ivm_cow_eff_cov
-output(lag_incv_ic) <- lag_incv_ic
-output(lag_incv_ih) <- lag_incv_ih
-output(lag_incv) <- lag_incv
+output(ince) <- ince
+output(incv) <- incv
+output(FOIv) <- FOIv
+output(lag_FOIv) <- lag_FOIv
+output(delayMos) <- delayMos
 output(d_ITN) <- d_ITN
 output(r_ITN) <- r_ITN
 output(s_ITN) <- s_ITN

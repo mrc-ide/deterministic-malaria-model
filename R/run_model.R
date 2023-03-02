@@ -62,6 +62,7 @@ run_model <- function(model = "odin_model",
   tt <- seq(0, time, 1)
 
   # run model
+  #mod_run <- mod$run(tt, step_size_max = 10)
   mod_run <- mod$run(tt)
 
   # shape output

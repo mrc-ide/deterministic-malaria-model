@@ -4,6 +4,40 @@
 require(ICDMM)
 require(tidyverse)
 
+
+#base model
+out_0 <- run_model(model = "odin_model",
+                   init_EIR = 100,
+                   #increasing this EIR gets rid of the dde error
+                    time = 730)
+
+out_0_df <- as.data.frame(out_0) %>%
+  select(t, Sv, Ev, Iv) %>%
+  rowwise() %>%
+  mutate(total_mosq = sum(Sv, Ev, Iv))
+
+out_0_df_prop <- out_0_df %>%
+  rowwise() %>%
+  mutate(Sv = Sv/total_mosq,
+         Ev = Ev/total_mosq,
+         Iv = Iv/total_mosq)
+
+out_0_df_long <- gather(out_0_df_prop, state_var, prop_mosq, Sv:Iv, factor_key=TRUE)
+
+s_comp <- c("Sv", "Svic", "Svih")
+e_comp <- c("Ev", "Evic", "Evih")
+i_comp <- c("Iv", "Ivic", "Ivih")
+
+out_0_df_long <- out_0_df_long %>%
+  mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
+                                 state_var %in% e_comp ~ "Exposed",
+                                 state_var %in% i_comp ~ "Infectious"))
+
+
+ggplot(out_0_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
+  geom_line()+
+  ylim(0, 1)
+
 #no ivermectin####
 out_1 <- run_model(model = "mosquito_ivermectin_model",
                  init_EIR = 100,
@@ -12,9 +46,23 @@ out_1 <- run_model(model = "mosquito_ivermectin_model",
                  gamma_h = 0, time = 730) #need to run a bit longer to get to equilibrium
 
 out_1_df <- as.data.frame(out_1) %>%
-  select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic)
+  select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic) %>%
+  rowwise() %>%
+  mutate(total_mosq = sum(Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic))
 
-out_1_df_long <- gather(out_1_df, state_var, count, Sv:Ivic, factor_key=TRUE)
+out_1_df_prop <- out_1_df %>%
+  rowwise() %>%
+  mutate(Sv = Sv/total_mosq,
+         Ev = Ev/total_mosq,
+         Iv = Iv/total_mosq,
+         Svih = Svih/total_mosq,
+         Evih = Evih/total_mosq,
+         Ivih = Ivih/total_mosq,
+         Svic = Svic/total_mosq,
+         Evic = Evic/total_mosq,
+         Ivic = Ivic/total_mosq)
+
+out_1_df_long <- gather(out_1_df_prop, state_var, prop_mosq, Sv:Ivic, factor_key=TRUE)
 
 
 s_comp <- c("Sv", "Svic", "Svih")
@@ -30,9 +78,10 @@ out_1_df_long <- out_1_df_long %>%
                                TRUE ~ "No ivermectin treatment"))
 
 
-ggplot(out_1_df_long, aes(x = t, y = count, col = as.factor(ivm_categ)))+
+ggplot(out_1_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
   geom_line()+
-  facet_wrap(~state_categ)
+  facet_wrap(~fct_relevel(ivm_categ, "Susceptible", "Exposed", "Infectious"))+
+  ylim(0, 1)
 
 #colour-code this so coloured if no ivm, cattle or human
 
@@ -43,3 +92,88 @@ out_2 <- run_model(model = "mosquito_ivermectin_model",
                    gamma_c = 0,
                    gamma_h = 1, time = 730) #need to run a bit longer to get to equilibrium
 
+out_2_df <- as.data.frame(out_2) %>%
+  select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic) %>%
+  rowwise() %>%
+  mutate(total_mosq = sum(Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic))
+
+out_2_df_prop <- out_2_df %>%
+  rowwise() %>%
+  mutate(Sv = Sv/total_mosq,
+         Ev = Ev/total_mosq,
+         Iv = Iv/total_mosq,
+         Svih = Svih/total_mosq,
+         Evih = Evih/total_mosq,
+         Ivih = Ivih/total_mosq,
+         Svic = Svic/total_mosq,
+         Evic = Evic/total_mosq,
+         Ivic = Ivic/total_mosq)
+
+out_2_df_long <- gather(out_2_df_prop, state_var, prop_mosq, Sv:Ivic, factor_key=TRUE)
+
+
+s_comp <- c("Sv", "Svic", "Svih")
+e_comp <- c("Ev", "Evic", "Evih")
+i_comp <- c("Iv", "Ivic", "Ivih")
+
+out_2_df_long <- out_2_df_long %>%
+  mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
+                                 state_var %in% e_comp ~ "Exposed",
+                                 state_var %in% i_comp ~ "Infectious"),
+         ivm_categ = case_when(grepl("ih", state_var) ~ "Ivermectin-treated human",
+                               grepl("ic", state_var) ~ "Ivermectin-treated cattle",
+                               TRUE ~ "No ivermectin treatment"))
+
+
+ggplot(out_2_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
+  geom_line()+
+  facet_wrap(~ivm_categ)+
+  ylim(0, 1)
+
+head(out_2_df_long)
+
+#do work from here
+#100% cow coverage####
+out_3 <- run_model(model = "mosquito_ivermectin_model",
+                   init_EIR = 100,
+                   #increasing this EIR gets rid of the dde error
+                   gamma_c = 1,
+                   gamma_h = 0, time = 730) #need to run a bit longer to get to equilibrium
+
+out_3_df <- as.data.frame(out_3) %>%
+  select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic) %>%
+  rowwise() %>%
+  mutate(total_mosq = sum(Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic))
+
+out_3_df_prop <- out_3_df %>%
+  rowwise() %>%
+  mutate(Sv= Sv/total_mosq,
+         Ev = Ev/total_mosq,
+         Iv = Iv/total_mosq,
+         Svih = Svih/total_mosq,
+         Evih = Evih/total_mosq,
+         Ivih = Ivih/total_mosq,
+         Svic = Svic/total_mosq,
+         Evic = Evic/total_mosq,
+         Ivic = Ivic/total_mosq)
+
+out_3_df_long <- gather(out_3_df_prop, state_var, prop_mosq, Sv:Ivic, factor_key=TRUE)
+
+
+s_comp <- c("Sv", "Svic", "Svih")
+e_comp <- c("Ev", "Evic", "Evih")
+i_comp <- c("Iv", "Ivic", "Ivih")
+
+out_3_df_long <- out_3_df_long %>%
+  mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
+                                 state_var %in% e_comp ~ "Exposed",
+                                 state_var %in% i_comp ~ "Infectious"),
+         ivm_categ = case_when(grepl("ih", state_var) ~ "Ivermectin-treated human",
+                               grepl("ic", state_var) ~ "Ivermectin-treated cattle",
+                               TRUE ~ "No ivermectin treatment"))
+
+ggplot(out_3_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
+  geom_line()+
+  facet_wrap(fct_relevel(~ivm_categ("No ivermectin treatment", "Ivermectin-treated human",
+                                    "Ivermectin-treated cattle")))+
+  ylim(0, 1)

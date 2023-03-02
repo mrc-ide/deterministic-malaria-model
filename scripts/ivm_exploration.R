@@ -236,38 +236,47 @@ out_4_plot <- ggplot(out_4_df_long, aes(x = t, y = prop_mosq, col = as.factor(st
 
 #plot showing prop of mosquitoes, for each ivm intervention, in each compartment
 ivermectin_coverage_plots <- plot_grid(out_1_plot, out_2_plot, out_3_plot, out_4_plot)
-
+ggsave(ivermectin_coverage_plots, file = "C:/Users/nc1115/OneDrive - Imperial College London/PhD/PhD_malaria/plots_ivm_model/odin_model/ivm_cov_plots.pdf",
+       device = cairo_pdf,
+       width = 297,
+       height = 210,
+       units = "mm")
 
 #show proportions the other way
 out_1_plot_2 <- ggplot(out_1_df_long, aes(x = t, y = prop_mosq, col = as.factor(ivm_categ)))+
   geom_line()+
   facet_wrap(~fct_relevel(state_categ,"Susceptible", "Exposed","Infectious"))+
   ggtitle("No IVM treatment")+
-  labs(col = "IVM treatment", y = "Proportion of mosquitoes in compartment")+
+  labs(col = "IVM treatment", y = "Proportion of mosquitoes in compartment \n (for given treatment)")+
   theme_minimal()
 
 out_2_plot_2 <- ggplot(out_2_df_long, aes(x = t, y = prop_mosq, col = as.factor(ivm_categ)))+
   geom_line()+
   facet_wrap(~fct_relevel(state_categ,"Susceptible", "Exposed","Infectious"))+
   ggtitle("100% human IVM coverage")+
-  labs(col = "IVM treatment", y = "Proportion of mosquitoes in compartment")+
+  labs(col = "IVM treatment", y = "Proportion of mosquitoes in compartment \n (for given treatment)")+
   theme_minimal()
 
 out_3_plot_2 <- ggplot(out_3_df_long, aes(x = t, y = prop_mosq, col = as.factor(ivm_categ)))+
   geom_line()+
   facet_wrap(~fct_relevel(state_categ,"Susceptible", "Exposed","Infectious"))+
   ggtitle("100% cattle IVM coverage")+
-  labs(col = "IVM treatment", y = "Proportion of mosquitoes in compartment")+
+  labs(col = "IVM treatment", y = "Proportion of mosquitoes in compartment \n (for given treatment)")+
   theme_minimal()
 
 out_4_plot_2 <- ggplot(out_4_df_long, aes(x = t, y = prop_mosq, col = as.factor(ivm_categ)))+
   geom_line()+
   facet_wrap(~fct_relevel(state_categ,"Susceptible", "Exposed","Infectious"))+
   ggtitle("100% human IVM coverage")+
-  labs(col = "IVM treatment", y = "Proportion of mosquitoes in compartment")+
+  labs(col = "IVM treatment", y = "Proportion of mosquitoes in compartment \n (for given treatment)")+
   theme_minimal()
 
 ivm_cov_plots_2 <- plot_grid(out_1_plot_2, out_2_plot_2, out_3_plot_2, out_4_plot_2)
+ggsave(ivm_cov_plots_2, file = "C:/Users/nc1115/OneDrive - Imperial College London/PhD/PhD_malaria/plots_ivm_model/odin_model/ivm_cov_plots2.pdf",
+       device = cairo_pdf,
+       width = 297,
+       height = 210,
+       units = "mm")
 
 #distribution of mosquito counts in each compartment####??
 out_1_df_long_distr <- gather(out_1_df, state_var, total_mosq, Sv:Ivic, factor_key=TRUE)

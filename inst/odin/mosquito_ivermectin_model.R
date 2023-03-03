@@ -578,6 +578,13 @@ clin_inc0to5[1:age05,,] <- clin_inc[i,j,k]
 output(inc05) <- sum(clin_inc0to5)/sum(den[1:age05])
 output(inc) <- sum(clin_inc[,,])
 
+
+#ento outputs
+sporo_rate_no_ivm <- Iv/(Sv+Ev+Iv)
+sporo_rate_ivm_human <- Ivih/(Svih+Evih+Ivih)
+sporo_rate_ivm_cattle <- Ivic/(Svic+Evic+Ivic)
+sporo_rate_total <- (Iv+Ivih+Ivic)/(Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic)
+
 # Param checking outputs
 output(mu) <- mu
 output(beta_larval) <- beta_larval
@@ -589,6 +596,10 @@ output(wh) <- wh
 output(ince) <- ince
 output(incv) <- incv
 output(FOIv) <- FOIv
+output(sporo_rate_no_ivm) <- sporo_rate_no_ivm
+output(sporo_rate_ivm_human) <- sporo_rate_ivm_human
+output(sporo_rate_ivm_cattle) <- sporo_rate_ivm_cattle
+output(sporo_rate_total) <- sporo_rate_total
 output(lag_FOIv) <- lag_FOIv
 output(delayMos) <- delayMos
 output(d_ITN) <- d_ITN

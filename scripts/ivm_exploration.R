@@ -73,14 +73,13 @@ out_1_df_long <- out_1_df_long %>%
   mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
                                  state_var %in% e_comp ~ "Exposed",
                                  state_var %in% i_comp ~ "Infectious"),
-         ivm_categ = case_when(grepl("ih", state_var) ~ "Ivermectin-treated human",
-                               grepl("ic", state_var) ~ "Ivermectin-treated cattle",
-                               TRUE ~ "No ivermectin treatment"))
-
+         ivm_categ = case_when(grepl("ih", state_var) ~ "IVM from humans",
+                               grepl("ic", state_var) ~ "IVM from cattle",
+                               TRUE ~ "No IVM"))
 
 out_1_plot <- ggplot(out_1_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
   geom_line()+
-  facet_wrap(~fct_relevel(ivm_categ,"No ivermectin treatment", "Ivermectin-treated human","Ivermectin-treated cattle"))+
+  facet_wrap(~fct_relevel(ivm_categ,"No IVM", "IVM from humans","IVM from cattle"))+
   ylim(0, 1)+
   ggtitle("No ivermectin treatment")+
   labs(col = "Mosquito infection state", y = "Proportion of mosquitoes in compartment")+
@@ -123,20 +122,19 @@ out_2_df_long <- out_2_df_long %>%
   mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
                                  state_var %in% e_comp ~ "Exposed",
                                  state_var %in% i_comp ~ "Infectious"),
-         ivm_categ = case_when(grepl("ih", state_var) ~ "Ivermectin-treated human",
-                               grepl("ic", state_var) ~ "Ivermectin-treated cattle",
-                               TRUE ~ "No ivermectin treatment"))
+         ivm_categ = case_when(grepl("ih", state_var) ~ "IVM from humans",
+                               grepl("ic", state_var) ~ "IVM from cattle",
+                               TRUE ~ "No IVM"))
 
 
 out_2_plot <- ggplot(out_2_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
   geom_line()+
-  facet_wrap(~fct_relevel(ivm_categ,"No ivermectin treatment", "Ivermectin-treated human","Ivermectin-treated cattle"))+
+  facet_wrap(~fct_relevel(ivm_categ,"No IVM", "IVM from humans","IVM from cattle"))+
   ylim(0, 1)+
   ggtitle("100% human IVM coverage")+
   labs(col = "Mosquito infection state", y = "Proportion of mosquitoes in compartment")+
   theme_minimal()
 
-head(out_2_df_long)
 
 #do work from here
 #100% cow coverage####
@@ -165,7 +163,6 @@ out_3_df_prop <- out_3_df %>%
 
 out_3_df_long <- gather(out_3_df_prop, state_var, prop_mosq, Sv:Ivic, factor_key=TRUE)
 
-
 s_comp <- c("Sv", "Svic", "Svih")
 e_comp <- c("Ev", "Evic", "Evih")
 i_comp <- c("Iv", "Ivic", "Ivih")
@@ -174,18 +171,16 @@ out_3_df_long <- out_3_df_long %>%
   mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
                                  state_var %in% e_comp ~ "Exposed",
                                  state_var %in% i_comp ~ "Infectious"),
-         ivm_categ = case_when(grepl("ih", state_var) ~ "Ivermectin-treated human",
-                               grepl("ic", state_var) ~ "Ivermectin-treated cattle",
-                               TRUE ~ "No ivermectin treatment"))
-
+         ivm_categ = case_when(grepl("ih", state_var) ~ "IVM from humans",
+                               grepl("ic", state_var) ~ "IVM from cattle",
+                               TRUE ~ "No IVM"))
 out_3_plot <- ggplot(out_3_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
   geom_line()+
-  facet_wrap(~fct_relevel(ivm_categ,"No ivermectin treatment", "Ivermectin-treated human","Ivermectin-treated cattle"))+
+  facet_wrap(~fct_relevel(ivm_categ,"No IVM", "IVM from humans","IVM from cattle"))+
   ylim(0, 1)+
   ggtitle("100% cattle IVM coverage")+
   labs(col = "Mosquito infection state", y = "Proportion of mosquitoes in compartment")+
   theme_minimal()
-
 
 #50% coverage in each
 out_4 <- run_model(model = "mosquito_ivermectin_model",
@@ -222,13 +217,13 @@ out_4_df_long <- out_4_df_long %>%
   mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
                                  state_var %in% e_comp ~ "Exposed",
                                  state_var %in% i_comp ~ "Infectious"),
-         ivm_categ = case_when(grepl("ih", state_var) ~ "Ivermectin-treated human",
-                               grepl("ic", state_var) ~ "Ivermectin-treated cattle",
-                               TRUE ~ "No ivermectin treatment"))
+         ivm_categ = case_when(grepl("ih", state_var) ~ "IVM from humans",
+                               grepl("ic", state_var) ~ "IVM from cattle",
+                               TRUE ~ "No IVM"))
 
 out_4_plot <- ggplot(out_4_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
   geom_line()+
-  facet_wrap(~fct_relevel(ivm_categ,"No ivermectin treatment", "Ivermectin-treated human","Ivermectin-treated cattle"))+
+  facet_wrap(~fct_relevel(ivm_categ,"No IVM", "IVM from humans","IVM from cattle"))+
   ylim(0, 1)+
   ggtitle("50% cattle, 50% IVM coverage")+
   labs(col = "Mosquito infection state", y = "Proportion of mosquitoes in compartment")+
@@ -278,19 +273,6 @@ ggsave(ivm_cov_plots_2, file = "C:/Users/nc1115/OneDrive - Imperial College Lond
        height = 210,
        units = "mm")
 
-#distribution of mosquito counts in each compartment####??
-out_1_df_long_distr <- gather(out_1_df, state_var, total_mosq, Sv:Ivic, factor_key=TRUE)
-out_1_df_long_distr <- out_1_df_long_distr %>%
-  mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
-                                 state_var %in% e_comp ~ "Exposed",
-                                 state_var %in% i_comp ~ "Infectious"),
-         ivm_categ = case_when(grepl("ih", state_var) ~ "Ivermectin-treated human",
-                               grepl("ic", state_var) ~ "Ivermectin-treated cattle",
-                               TRUE ~ "No ivermectin treatment"))
 
-ggplot(out_1_df_long_distr, aes(x = total_mosq, fill = as.factor(state_categ)))+
-  geom_histogram(aes(y = ..density..),
-                 binwidth = .5,
-                 colour = "black")+
-  geom_density(alpha = .2, fill = "pink")+
-  facet_wrap(~fct_relevel(ivm_categ,"No ivermectin treatment", "Ivermectin-treated human","Ivermectin-treated cattle"))
+
+#outputting Q under different net coverages####

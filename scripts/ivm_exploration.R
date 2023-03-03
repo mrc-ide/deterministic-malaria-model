@@ -273,6 +273,44 @@ ggsave(ivm_cov_plots_2, file = "C:/Users/nc1115/OneDrive - Imperial College Lond
        height = 210,
        units = "mm")
 
+#look at sporozoite prevalence in each mosquito compartment
+
+#no ivm
+out_1_sporo <- as.data.frame(out_1)
+out_1_sporo_dat <- out_1_sporo %>%
+  select(t, sporo_rate_no_ivm, sporo_rate_ivm_human, sporo_rate_ivm_cattle, sporo_rate_total)
+
+out_1_sporo_dat_long <- gather(out_1_sporo_dat, ivm_categ, sporo_rate, sporo_rate_no_ivm:sporo_rate_total, factor_key = TRUE)
+
+ggplot(out_1_sporo_dat_long, aes(x = t, y = sporo_rate))+
+  geom_line()+
+  facet_wrap(~ivm_categ)+
+  ggtitle("No Ivermectin")
+
+
+#ivm in humans
+out_2_sporo <- as.data.frame(out_2)
+out_2_sporo_dat <- out_2_sporo %>%
+  select(t, sporo_rate_no_ivm, sporo_rate_ivm_human, sporo_rate_ivm_cattle, sporo_rate_total)
+
+out_2_sporo_dat_long <- gather(out_2_sporo_dat, ivm_categ, sporo_rate, sporo_rate_no_ivm:sporo_rate_total, factor_key = TRUE)
+
+ggplot(out_2_sporo_dat_long, aes(x = t, y = sporo_rate))+
+  geom_line()+
+  facet_wrap(~ivm_categ)+
+  ggtitle("No Ivermectin")
+
+#ivm in cattle
+out_3_sporo <- as.data.frame(out_3)
+out_3_sporo_dat <- out_3_sporo %>%
+  select(t, sporo_rate_no_ivm, sporo_rate_ivm_human, sporo_rate_ivm_cattle, sporo_rate_total)
+
+out_3_sporo_dat_long <- gather(out_3_sporo_dat, ivm_categ, sporo_rate, sporo_rate_no_ivm:sporo_rate_total, factor_key = TRUE)
+
+ggplot(out_3_sporo_dat_long, aes(x = t, y = sporo_rate))+
+  geom_line()+
+  facet_wrap(~ivm_categ)+
+  ggtitle("No Ivermectin")
 
 
 #outputting Q under different net coverages####

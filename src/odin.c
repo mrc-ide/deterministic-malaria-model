@@ -5663,8 +5663,8 @@ SEXP mosquito_ivermectin_model_metadata(SEXP internal_p) {
   SET_STRING_ELT(variable_names, 21, mkChar("ID"));
   SET_VECTOR_ELT(ret, 0, variable_length);
   UNPROTECT(2);
-  SEXP output_length = PROTECT(allocVector(VECSXP, 31));
-  SEXP output_names = PROTECT(allocVector(STRSXP, 31));
+  SEXP output_length = PROTECT(allocVector(VECSXP, 35));
+  SEXP output_names = PROTECT(allocVector(STRSXP, 35));
   setAttrib(output_length, R_NamesSymbol, output_names);
   SET_VECTOR_ELT(output_length, 0, R_NilValue);
   SET_VECTOR_ELT(output_length, 1, R_NilValue);
@@ -5696,7 +5696,11 @@ SEXP mosquito_ivermectin_model_metadata(SEXP internal_p) {
   SET_VECTOR_ELT(output_length, 27, R_NilValue);
   SET_VECTOR_ELT(output_length, 28, R_NilValue);
   SET_VECTOR_ELT(output_length, 29, R_NilValue);
-  SET_VECTOR_ELT(output_length, 30, ScalarInteger(internal->dim_cov));
+  SET_VECTOR_ELT(output_length, 30, R_NilValue);
+  SET_VECTOR_ELT(output_length, 31, R_NilValue);
+  SET_VECTOR_ELT(output_length, 32, R_NilValue);
+  SET_VECTOR_ELT(output_length, 33, R_NilValue);
+  SET_VECTOR_ELT(output_length, 34, ScalarInteger(internal->dim_cov));
   SET_STRING_ELT(output_names, 0, mkChar("Ivout"));
   SET_STRING_ELT(output_names, 1, mkChar("omega"));
   SET_STRING_ELT(output_names, 2, mkChar("Sout"));
@@ -5718,19 +5722,23 @@ SEXP mosquito_ivermectin_model_metadata(SEXP internal_p) {
   SET_STRING_ELT(output_names, 18, mkChar("ince"));
   SET_STRING_ELT(output_names, 19, mkChar("incv"));
   SET_STRING_ELT(output_names, 20, mkChar("FOIv"));
-  SET_STRING_ELT(output_names, 21, mkChar("lag_FOIv"));
-  SET_STRING_ELT(output_names, 22, mkChar("delayMos"));
-  SET_STRING_ELT(output_names, 23, mkChar("d_ITN"));
-  SET_STRING_ELT(output_names, 24, mkChar("r_ITN"));
-  SET_STRING_ELT(output_names, 25, mkChar("s_ITN"));
-  SET_STRING_ELT(output_names, 26, mkChar("d_IRS"));
-  SET_STRING_ELT(output_names, 27, mkChar("r_IRS"));
-  SET_STRING_ELT(output_names, 28, mkChar("s_IRS"));
-  SET_STRING_ELT(output_names, 29, mkChar("K0"));
-  SET_STRING_ELT(output_names, 30, mkChar("cov"));
+  SET_STRING_ELT(output_names, 21, mkChar("sporo_rate_no_ivm"));
+  SET_STRING_ELT(output_names, 22, mkChar("sporo_rate_ivm_human"));
+  SET_STRING_ELT(output_names, 23, mkChar("sporo_rate_ivm_cattle"));
+  SET_STRING_ELT(output_names, 24, mkChar("sporo_rate_total"));
+  SET_STRING_ELT(output_names, 25, mkChar("lag_FOIv"));
+  SET_STRING_ELT(output_names, 26, mkChar("delayMos"));
+  SET_STRING_ELT(output_names, 27, mkChar("d_ITN"));
+  SET_STRING_ELT(output_names, 28, mkChar("r_ITN"));
+  SET_STRING_ELT(output_names, 29, mkChar("s_ITN"));
+  SET_STRING_ELT(output_names, 30, mkChar("d_IRS"));
+  SET_STRING_ELT(output_names, 31, mkChar("r_IRS"));
+  SET_STRING_ELT(output_names, 32, mkChar("s_IRS"));
+  SET_STRING_ELT(output_names, 33, mkChar("K0"));
+  SET_STRING_ELT(output_names, 34, mkChar("cov"));
   SET_VECTOR_ELT(ret, 1, output_length);
   UNPROTECT(2);
-  SET_VECTOR_ELT(ret, 2, ScalarInteger(internal->dim_cov + 30));
+  SET_VECTOR_ELT(ret, 2, ScalarInteger(internal->dim_cov + 34));
   UNPROTECT(2);
   return ret;
 }
@@ -6887,25 +6895,33 @@ void mosquito_ivermectin_model_rhs(mosquito_ivermectin_model_internal* internal,
   dstatedt[11] = beta_larval * mv - internal->muEL * (1 + (EL + LL) / (double) KL) * EL - EL / (double) internal->dEL;
   dstatedt[10] = EL / (double) internal->dEL - internal->muLL * (1 + internal->gammaL * (EL + LL) / (double) KL) * LL - LL / (double) internal->dLL;
   if (output) {
-    output[22] = internal->delayMos;
+    output[26] = internal->delayMos;
     output[0] = Iv;
     output[1] = internal->omega;
     output[16] = internal->Q0;
+    double sporo_rate_ivm_cattle = Ivic / (double) (Svic + Evic + Ivic);
+    double sporo_rate_ivm_human = Ivih / (double) (Svih + Evih + Ivih);
+    double sporo_rate_no_ivm = Iv / (double) (Sv + Ev + Iv);
+    double sporo_rate_total = (Iv + Ivih + Ivic) / (double) (Sv + Ev + Iv + Svih + Evih + Ivih + Svic + Evic + Ivic);
     output[14] = mv;
+    output[23] = sporo_rate_ivm_cattle;
+    output[22] = sporo_rate_ivm_human;
+    output[21] = sporo_rate_no_ivm;
+    output[24] = sporo_rate_total;
     output[5] = odin_sum3(A, 0, internal->dim_A_1, 0, internal->dim_A_2, 0, internal->dim_A_3, internal->dim_A_1, internal->dim_A_12);
-    output[26] = d_IRS;
-    output[23] = d_ITN;
+    output[30] = d_IRS;
+    output[27] = d_ITN;
     output[4] = odin_sum3(D, 0, internal->dim_D_1, 0, internal->dim_D_2, 0, internal->dim_D_3, internal->dim_D_1, internal->dim_D_12);
     output[7] = odin_sum3(P, 0, internal->dim_P_1, 0, internal->dim_P_2, 0, internal->dim_P_3, internal->dim_P_1, internal->dim_P_12);
-    output[27] = r_IRS;
-    output[24] = r_ITN;
+    output[31] = r_IRS;
+    output[28] = r_ITN;
     output[2] = odin_sum3(S, 0, internal->dim_S_1, 0, internal->dim_S_2, 0, internal->dim_S_3, internal->dim_S_1, internal->dim_S_12);
     output[3] = odin_sum3(T, 0, internal->dim_T_1, 0, internal->dim_T_2, 0, internal->dim_T_3, internal->dim_T_1, internal->dim_T_12);
     output[6] = odin_sum3(U, 0, internal->dim_U_1, 0, internal->dim_U_2, 0, internal->dim_U_3, internal->dim_U_1, internal->dim_U_12);
-    memcpy(output + 30, internal->cov, internal->dim_cov * sizeof(double));
+    memcpy(output + 34, internal->cov, internal->dim_cov * sizeof(double));
     output[19] = incv;
-    output[28] = s_IRS;
-    output[25] = s_ITN;
+    output[32] = s_IRS;
+    output[29] = s_ITN;
     for (int i = 1; i <= internal->dim_p_det_1; ++i) {
       for (int j = 1; j <= internal->dim_p_det_2; ++j) {
         for (int k = 1; k <= internal->dim_p_det_3; ++k) {
@@ -6954,8 +6970,8 @@ void mosquito_ivermectin_model_rhs(mosquito_ivermectin_model_internal* internal,
     }
     double lag_FOIv = odin_sum1(internal->FOIvijk, 0, internal->dim_FOIvijk);
     output[12] = beta_larval;
-    output[21] = lag_FOIv;
-    output[29] = K0;
+    output[25] = lag_FOIv;
+    output[33] = K0;
     output[13] = KL;
   }
 }
@@ -6988,14 +7004,22 @@ void mosquito_ivermectin_model_output_dde(size_t n_eq, double t, double * state,
   double IRS_decay = (t < internal->ITN_IRS_on ? 0 : exp(-((fmodr((t - internal->ITN_IRS_on), internal->IRS_interval))) * internal->irs_loss));
   double ITN_decay = (t < internal->ITN_IRS_on ? 0 : exp(-((fmodr((t - internal->ITN_IRS_on), internal->ITN_interval))) * internal->itn_loss));
   double mv = Sv + Ev + Iv + Svih + Evih + Ivih + Svic + Evic + Ivic;
-  output[22] = internal->delayMos;
+  output[26] = internal->delayMos;
   output[0] = Iv;
   output[1] = internal->omega;
   output[16] = internal->Q0;
+  double sporo_rate_ivm_cattle = Ivic / (double) (Svic + Evic + Ivic);
+  double sporo_rate_ivm_human = Ivih / (double) (Svih + Evih + Ivih);
+  double sporo_rate_no_ivm = Iv / (double) (Sv + Ev + Iv);
+  double sporo_rate_total = (Iv + Ivih + Ivic) / (double) (Sv + Ev + Iv + Svih + Evih + Ivih + Svic + Evic + Ivic);
   double theta2 = (internal->ssa0 == 0 && internal->ssa1 == 0 && internal->ssa2 == 0 && internal->ssb1 == 0 && internal->ssb2 == 0 && internal->ssb3 == 0 && internal->theta_c == 0 ? 1 : fmax((internal->ssa0 + internal->ssa1 * cos(2 * internal->pi * t / (double) 365) + internal->ssa2 * cos(2 * 2 * internal->pi * t / (double) 365) + internal->ssa3 * cos(3 * 2 * internal->pi * t / (double) 365) + internal->ssb1 * sin(2 * internal->pi * t / (double) 365) + internal->ssb2 * sin(2 * 2 * internal->pi * t / (double) 365) + internal->ssb3 * sin(3 * 2 * internal->pi * t / (double) 365)) / (double) internal->theta_c, 0.001));
   double d_IRS = (t < internal->ITN_IRS_on ? 0 : internal->chi * internal->d_IRS0 * IRS_decay);
   double d_ITN = (t < internal->ITN_IRS_on ? 0 : internal->d_ITN0 * ITN_decay);
   output[14] = mv;
+  output[23] = sporo_rate_ivm_cattle;
+  output[22] = sporo_rate_ivm_human;
+  output[21] = sporo_rate_no_ivm;
+  output[24] = sporo_rate_total;
   double r_IRS = (t < internal->ITN_IRS_on ? 0 : internal->r_IRS0 * IRS_decay);
   double r_ITN = (t < internal->ITN_IRS_on ? 0 : internal->r_ITN1 + (internal->r_ITN0 - internal->r_ITN1) * ITN_decay);
   // delay block for incv
@@ -7185,12 +7209,12 @@ void mosquito_ivermectin_model_output_dde(size_t n_eq, double t, double * state,
     incv = lag_incv;
   }
   output[5] = odin_sum3(A, 0, internal->dim_A_1, 0, internal->dim_A_2, 0, internal->dim_A_3, internal->dim_A_1, internal->dim_A_12);
-  output[26] = d_IRS;
-  output[23] = d_ITN;
+  output[30] = d_IRS;
+  output[27] = d_ITN;
   output[4] = odin_sum3(D, 0, internal->dim_D_1, 0, internal->dim_D_2, 0, internal->dim_D_3, internal->dim_D_1, internal->dim_D_12);
   output[7] = odin_sum3(P, 0, internal->dim_P_1, 0, internal->dim_P_2, 0, internal->dim_P_3, internal->dim_P_1, internal->dim_P_12);
-  output[27] = r_IRS;
-  output[24] = r_ITN;
+  output[31] = r_IRS;
+  output[28] = r_ITN;
   output[2] = odin_sum3(S, 0, internal->dim_S_1, 0, internal->dim_S_2, 0, internal->dim_S_3, internal->dim_S_1, internal->dim_S_12);
   output[3] = odin_sum3(T, 0, internal->dim_T_1, 0, internal->dim_T_2, 0, internal->dim_T_3, internal->dim_T_1, internal->dim_T_12);
   output[6] = odin_sum3(U, 0, internal->dim_U_1, 0, internal->dim_U_2, 0, internal->dim_U_3, internal->dim_U_1, internal->dim_U_12);
@@ -7453,10 +7477,10 @@ void mosquito_ivermectin_model_output_dde(size_t n_eq, double t, double * state,
       }
     }
   }
-  memcpy(output + 30, internal->cov, internal->dim_cov * sizeof(double));
+  memcpy(output + 34, internal->cov, internal->dim_cov * sizeof(double));
   output[19] = incv;
-  output[28] = s_IRS;
-  output[25] = s_ITN;
+  output[32] = s_IRS;
+  output[29] = s_ITN;
   for (int i = 1; i <= internal->dim_p_det_1; ++i) {
     for (int j = 1; j <= internal->dim_p_det_2; ++j) {
       for (int k = 1; k <= internal->dim_p_det_3; ++k) {
@@ -7568,15 +7592,15 @@ void mosquito_ivermectin_model_output_dde(size_t n_eq, double t, double * state,
   double lambda = -(0.5) * internal->b_lambda + sqrt(0.25 * pow(internal->b_lambda, 2) + internal->gammaL * beta_larval * internal->muLL * internal->dEL / (double) (2 * internal->muEL * internal->mu0 * internal->dLL * (1 + internal->dPL * internal->muPL)));
   output[12] = beta_larval;
   double K0 = 2 * internal->mv0 * internal->dLL * internal->mu0 * (1 + internal->dPL * internal->muPL) * internal->gammaL * (lambda + 1) / (double) (lambda / (double) (internal->muLL * internal->dEL) - 1 / (double) (internal->muLL * internal->dLL) - 1);
-  output[21] = lag_FOIv;
+  output[25] = lag_FOIv;
   double KL = K0 * theta2;
-  output[29] = K0;
+  output[33] = K0;
   output[13] = KL;
 }
 SEXP mosquito_ivermectin_model_rhs_r(SEXP internal_p, SEXP t, SEXP state) {
   SEXP dstatedt = PROTECT(allocVector(REALSXP, LENGTH(state)));
   mosquito_ivermectin_model_internal *internal = mosquito_ivermectin_model_get_internal(internal_p, 1);
-  SEXP output_ptr = PROTECT(allocVector(REALSXP, internal->dim_cov + 30));
+  SEXP output_ptr = PROTECT(allocVector(REALSXP, internal->dim_cov + 34));
   setAttrib(dstatedt, install("output"), output_ptr);
   UNPROTECT(1);
   double *output = REAL(output_ptr);

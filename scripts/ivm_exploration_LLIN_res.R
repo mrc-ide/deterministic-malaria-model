@@ -1,3 +1,6 @@
+#load packages
+require(ICDMM)
+
 #exploring the mosquito_ivermectin_model odin model with insecticide resistance and LLINs####
 
 #thinking: LLINs and resistance will both (separately and together?)

@@ -452,18 +452,20 @@ deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 ITN_IRS_on <- user() # days after which interventions begin
 num_int <- user() # number of intervention categorys, ITN only, IRS only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
-irs_cov <- user() # proportion of population covered by IRS
+#irs_cov <- user() # proportion of population covered by IRS
+ivm_cov <- (gamma_h+gamma_c)/2
+
 
 # cov is a vector of coverages for each intervention category:
 dim(cov_) <- 4
 cov_[1] <- (1-itn_cov)*(1-irs_cov)  # {No intervention}
 cov_[2] <- itn_cov*(1-irs_cov) # 	   {ITN only}
-cov_[3] <- (1-itn_cov)*irs_cov	#      {IRS only}
-cov_[4] <- itn_cov*irs_cov #	   {Both ITN and IRS}
+cov_[3] <- (1-itn_cov)*ivm_cov	#      {IVM only} #will not get ivm if net is there. Does this account for successful feeding with IVM?
+cov_[4] <- itn_cov*ivm_cov #	   {Both ITN and IVM}
 cov[] <- cov_[i]
 dim(cov) <- num_int
 
-IRS_interval <- user() # how long IRS lasts
+ivm_interval <- user() # how long until IVM is topped up
 ITN_interval <- user() # how long ITN lasts
 chi <- user() # proportion of vector endophily
 Q0 <- user() # proportion of anthropophagy
@@ -478,8 +480,8 @@ bites_Indoors <- user() # endophagy indoors
 # The maximum (and then minimum) r and d values for ITN/IRS on day 0 before they decay
 r_ITN0 <- user()
 d_ITN0 <- user()
-d_IRS0 <- user()
-r_IRS0 <- user()
+d_IVM0 <- user()
+#r_IRS0 <- user()
 r_ITN1 <- user()
 irs_loss <- user()
 itn_loss <- user()

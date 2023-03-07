@@ -449,7 +449,8 @@ deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 # See supplementary materials S2 from http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000324#s6
 
 # general parameters
-ITN_IRS_on <- user() # days after which interventions begin
+ITN_on <- user() # days after which ITN intervention begins
+IVM_on <- user() #days after which IVM was turned on
 num_int <- user() # number of intervention categorys, ITN only, IRS only, neither, both
 itn_cov <- user() # proportion of population covered by ITN
 #irs_cov <- user() # proportion of population covered by IRS
@@ -481,23 +482,24 @@ bites_Indoors <- user() # endophagy indoors
 r_ITN0 <- user()
 d_ITN0 <- user()
 d_IVM0 <- user()
-#r_IRS0 <- user()
+#r_IRS0 <- user() don't need any repellency from ivermectin
 r_ITN1 <- user()
-irs_loss <- user()
+ivm_loss <- user() #properties of IVM given decay in concentration
 itn_loss <- user()
 
 # Calculates decay for ITN/IRS
-ITN_decay = if(t < ITN_IRS_on) 0 else exp(-((t-ITN_IRS_on)%%ITN_interval) * itn_loss)
-IRS_decay = if(t < ITN_IRS_on) 0 else exp(-((t-ITN_IRS_on)%%IRS_interval) * irs_loss)
+ITN_decay = if(t < ITN_on) 0 else exp(-((t-ITN_on)%%ITN_interval) * itn_loss)
+IVM_decay = if(t < IVM_on) 0 else exp(-((t-IVM_on)%%IVM_interval) * ivm_loss)
 
 # The r,d and s values turn on after ITN_IRS_on and decay accordingly
-d_ITN <- if(t < ITN_IRS_on) 0 else d_ITN0*ITN_decay
-r_ITN <- if(t < ITN_IRS_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
-s_ITN <- if(t < ITN_IRS_on) 1 else 1 - d_ITN - r_ITN
+d_ITN <- if(t < ITN_on) 0 else d_ITN0*ITN_decay
+r_ITN <- if(t < ITN_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
+s_ITN <- if(t < ITN_on) 1 else 1 - d_ITN - r_ITN
 
-r_IRS <- if(t < ITN_IRS_on) 0 else r_IRS0*IRS_decay
-d_IRS <- if(t < ITN_IRS_on) 0 else chi*d_IRS0*IRS_decay
-s_IRS <- if(t < ITN_IRS_on) 1 else 1 - d_IRS
+#r_IRS <- if(t < ITN_IRS_on) 0 else r_IRS0*IRS_decay
+#can model d_IVM and s_IVM like this
+d_IVM <- if(t < IVM_on) 0 else d_IVM0*IVM_decay
+s_IVM <- if(t < IVM_on) 1 else 1 - d_IVM
 
 # probability that mosquito bites and survives for each intervention category
 dim(w_) <- 4

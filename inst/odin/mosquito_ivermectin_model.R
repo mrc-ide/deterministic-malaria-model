@@ -344,12 +344,41 @@ betaa <- 0.5*PL/dPL
 
 #IVERMECTIN INTEGRATION####
 
-mu_h <- mu+0.628 #excess mort due to IVM humans
-mu_c <- mu+0.628 #excess mort due to IVM cattle
+#need to have time we turn ivm_h and ivm_c on
+ivm_h_on <- user()
+ivm_c_on <- user()
+
+#additional ivm mort (may change with Hannah's code around line 403, multiply by the daily hazard)
+#mu_h_0 <- 0.628
+#mu_c_0 <- 0.628
+
+haz_h0
+
+mu_h <- mu+mu_h_0 #excess mort due to IVM humans
+mu_c <- mu+mu_c_0 #excess mort due to IVM cattle
+
+#if t is between ivm_h_on and 14 days from that then elev mort, else 0
+#might need to change ivm_h_mu_off, because of the dosing e.g. 3x300micrograms
+
+eff_len <- 14
+ivm_h_mu_off <- ivm_h_on+eff_len # days from ivm distribution that ivm-killing effects last for
+ivm_c_mu_off <- ivm_c_on + eff_len # days from ivm distribution that ivm-killing effects last for
+
+#mu_h <- if (ivm_h_on < t <= ivm_h_mu_off) mu_h_0+mu else mu
+#mu_c <- if (ivm_c_on < t <= ivm_c_mu_off) mu_c_0+mu else mu
+
 
 #new model parameters####
-gamma_h <- user() #prop of human pop treated with IVM (eligible pop)
-gamma_c <- user() #prop cattle pop treated with IVM (eligible pop)
+gamma_h_min_age <- user() #min age for treatment
+gamma_c_min_age <- user() #min age for treatment
+gamma_h_0 <- user() #prop of human pop treated with IVM (eligible pop)
+gamma_c_0 <- user() #prop cattle pop treated with IVM (eligible pop)
+
+#if during the ivm-killing times, ivermectin coverage is what defined by the user and forcing mosq into ivm compartments, else it is 0
+#this way, if a mosquito feeds during the ivm-killing times, then it will experience the higher mort for rest of it's life, even if the second feed is when blood concentrations are v low
+gamma_h <- if(ivm_h_on < t <= ivm_h_mu_off) gamma_h_0*(exp(-ivm_min_age/21)) else 0
+gamma_c <- if(ivm_c_on < t <= ivm_c_mu_off) gamma_c_0*(exp(-ivm_min_age/21)) else 0
+
 
 ivm_human_eff_cov <- fv*Q * gamma_h
 ivm_cow_eff_cov <-fv*(1-Q)*gamma_c

@@ -327,12 +327,14 @@ incv <- delay(lag_incv, delayMos)
 #incv <- lag_incv
 
 # Number of mosquitoes that become infected at each time point in human IVM compartments
+surv_ih <- exp(-mu_h*delayMos)
 ince_ih <- FOIv*Svih
-lag_incv_ih <- ince_ih*surv
+lag_incv_ih <- ince_ih*surv_ih
 incv_ih <- delay(lag_incv_ih, delayMos)
 #incv_ih <- lag_incv_ih
 
 #Number of mosquitoes that become infected at each time point in cattle IVm compartments
+surv_ic <- exp(-mu_c*delayMos)
 ince_ic <- FOIv*Svic
 lag_incv_ic <- ince_ic*surv
 incv_ic <- delay(lag_incv_ic, delayMos)
@@ -349,11 +351,20 @@ ivm_h_on <- user()
 ivm_c_on <- user()
 
 #additional ivm mort (may change with Hannah's code around line 403, multiply by the daily hazard)
-#mu_h_0 <- 0.628
-#mu_c_0 <- 0.628
+mu_h_0 <- user() #default = 0.628
+mu_c_0 <- user()
 
-haz_h0
+###something like this if going to let the mort in IVM compartments change over time, i.e. not just one fixed value for 14 days###
+#haz_h0[] <- user()
+#haz_c0[] <- user()
+#dim(haz) = eff_len
 
+#dim(mu_h) = eff_len
+#dim(mu_c) = eff_len
+
+#mu_h_0[1:eff_len] = haz_h0[i]*mu
+#mu_c_0[1:eff_len] = haz_c0[i]*mu
+########################################################################
 mu_h <- mu+mu_h_0 #excess mort due to IVM humans
 mu_c <- mu+mu_c_0 #excess mort due to IVM cattle
 
@@ -376,8 +387,8 @@ gamma_c_0 <- user() #prop cattle pop treated with IVM (eligible pop)
 
 #if during the ivm-killing times, ivermectin coverage is what defined by the user and forcing mosq into ivm compartments, else it is 0
 #this way, if a mosquito feeds during the ivm-killing times, then it will experience the higher mort for rest of it's life, even if the second feed is when blood concentrations are v low
-gamma_h <- if(ivm_h_on < t <= ivm_h_mu_off) gamma_h_0*(exp(-ivm_min_age/21)) else 0
-gamma_c <- if(ivm_c_on < t <= ivm_c_mu_off) gamma_c_0*(exp(-ivm_min_age/21)) else 0
+gamma_h <- if(t > ivm_h_on && t <= ivm_h_mu_off) gamma_h_0*(exp(-gamma_h_min_age/21)) else 0
+gamma_c <- if(t > ivm_c_on && t <= ivm_c_mu_off) gamma_c_0*(exp(-gamma_c_min_age/21)) else 0
 
 
 ivm_human_eff_cov <- fv*Q * gamma_h

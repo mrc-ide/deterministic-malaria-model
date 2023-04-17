@@ -336,7 +336,7 @@ incv_ih <- delay(lag_incv_ih, delayMos)
 #Number of mosquitoes that become infected at each time point in cattle IVm compartments
 surv_ic <- exp(-mu_c*delayMos)
 ince_ic <- FOIv*Svic
-lag_incv_ic <- ince_ic*surv
+lag_incv_ic <- ince_ic*surv_ic
 incv_ic <- delay(lag_incv_ic, delayMos)
 #incv_ic <- lag_incv_ic
 

@@ -362,6 +362,7 @@ K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dL
 # Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
 KL <- K0*theta2
 fv <- 1/( tau1/(1-zbar) + tau2 ) # mosquito feeding rate (zbar from intervention param.)
+#mu <- -fv*log(p1*p2) # mosquito death rate
 mu_2 <- -fv*log(p1*p2) # mosquito death rate
 
 mort_on <- user() #time we start excess mort

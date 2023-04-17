@@ -12,12 +12,12 @@ out_1 <- run_model(model = "mosquito_ivermectin_model",
                    ivm_c_on = 731,
                    ivm_h_on = 20, #time turn on
                    mu_c_0 = 0,
-                   mu_h_0 = 0)
+                   mu_h_0 = 0.628)
 
 out_1_df <- as.data.frame(out_1) %>%
-  select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic) %>%
+  select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic, mv) %>%
   rowwise() %>%
-  mutate(total_mosq = sum(Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic))
+  mutate(total_mosq = mv)
 
 out_1_df_prop <- out_1_df %>%
   rowwise() %>%
@@ -56,25 +56,38 @@ out_1_plot <- ggplot(out_1_df_long, aes(x = t, y = prop_mosq, col = as.factor(st
   theme_minimal()+
   geom_hline(yintercept = 0.940, lty = "dashed")
 
-ggplot(out_1_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
+##looking at the number of mosquitoes
+out_1_df_long_num <- gather(out_1_df, state_var, num_mosq, Sv:mv, factor_key=TRUE)
+out_1_df_long_num <- out_1_df_long_num %>%
+  mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
+                                 state_var %in% e_comp ~ "Exposed",
+                                 state_var %in% i_comp ~ "Infectious",
+                                 TRUE ~ "Total Mosq"),
+         ivm_categ = case_when(grepl("ih", state_var) ~ "IVM from humans",
+                               grepl("ic", state_var) ~ "IVM from cattle",
+                               TRUE ~ "No IVM"))
+
+ggplot(out_1_df_long_num, aes(x = t, y = num_mosq, col = as.factor(state_categ)))+
   geom_line()+
   facet_wrap(~fct_relevel(ivm_categ,"No IVM", "IVM from humans","IVM from cattle"))+
-  ylim(0.9, 0.95)+
+  #ylim(0, 1)+
   #xlim(0,100)+
   ggtitle("No ivermectin treatment")+
-  labs(col = "Mosquito infection state", y = "Proportion of mosquitoes \n in compartment")+
+  labs(col = "Mosquito infection state", y = "Number of mosquitoes \n in compartment")+
   theme_minimal()+
-  geom_hline(yintercept = 0.940, lty = "dashed")
+  geom_hline(yintercept = 39.1, lty = "dashed")
+
+
 
 #testing output in model without ivermectin, just a change in the mortality rate
 out_2 <- run_model(model = "odin_model_mort",
-                   init_EIR = 100,
+                   init_EIR = 200,
                    #increasing this EIR gets rid of the dde error
                    time = 730,
                    mort_on = 20,
-                   mort_off = 40)
+                   mort_off = 30)
 out_2_df <- as.data.frame(out_2) %>%
-  select(t, Sv, Ev, Iv) %>%
+  select(t, Sv, Ev, Iv, mv) %>%
   rowwise() %>%
   mutate(total_mosq = sum(Sv, Ev, Iv))
 
@@ -94,4 +107,47 @@ out_2_plot <- ggplot(out_2_df_long, aes(x = t, y = prop_mosq, col = as.factor(st
   theme_minimal()+
   geom_hline(yintercept = 0.940, lty = "dashed")+
   geom_vline(xintercept = 20, lty = "dashed")+
-  geom_vline(xintercept = 40, lty = "dashed")
+  geom_vline(xintercept = 150, lty = "dashed")
+
+out_2_df_num <- out_2_df
+
+out_2_df_long_num <- gather(out_2_df_num, state_var, num_mosq, Sv:mv, factor_key=TRUE)
+
+ggplot(out_2_df_long_num, aes(x = t, y = num_mosq, col = as.factor(state_var)))+
+  geom_line()+
+  #ylim(0, 1)+
+  #xlim(0,100)+
+  theme_minimal()+
+  geom_hline(yintercept = 82.6, lty = "dashed")+
+  geom_vline(xintercept = 20, lty = "dashed")+
+  geom_vline(xintercept = 30, lty = "dashed")
+
+
+out_3 <- run_model("odin_model",
+                   init_EIR = 100,
+                   time = 365*4,
+                   num_int = 2,
+                   itn_cov = 1,
+                   ITN_IRS_on = 1)
+out_3_df <- as.data.frame(out_3) %>%
+  select(t, Sv, Ev, Iv) %>%
+  rowwise() %>%
+  mutate(total_mosq = sum(Sv, Ev, Iv))
+
+out_3_df_prop <- out_3_df %>%
+  rowwise() %>%
+  mutate(Sv = Sv/total_mosq,
+         Ev = Ev/total_mosq,
+         Iv = Iv/total_mosq)
+
+out_3_df_long <- gather(out_3_df_prop, state_var, prop_mosq, Sv:Iv, factor_key=TRUE)
+
+
+out_3_plot <- ggplot(out_3_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_var)))+
+  geom_line()+
+  ylim(0, 1)+
+  #xlim(0,100)+
+  theme_minimal()+
+  geom_hline(yintercept = 0.940, lty = "dashed")+
+  geom_vline(xintercept = 1, lty = "dashed")+
+  geom_vline(xintercept = 365*3, lty = "dashed")

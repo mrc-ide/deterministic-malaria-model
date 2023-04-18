@@ -82,8 +82,15 @@ ggplot(out_1_df_long_num, aes(x = t, y = num_mosq, col = as.factor(state_categ))
   geom_hline(yintercept = 39.1, lty = "dashed")
 
 #2: allow excess mortality to change over time (using a daily hazard)
+#plot hazards over time from IVERMAL
 
+#need to check where the 400s come from and that this is definitely hazards from Meno's paper
+hazards <- read.table("C:/Users/nc1115/Documents/github/ivRmectin/IVM_derivation/ivermectin_hazards.txt", header = TRUE)
 
+hazards_long <- gather(hazards, dose, hazard, d400:d300, factor_key = TRUE)
+ggplot(hazards_long, aes(x = day, y = hazard, col = as.factor(dose)))+
+  geom_point()+
+  theme_minimal()
 
 
 

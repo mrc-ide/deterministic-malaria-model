@@ -26,9 +26,21 @@ extern void odin_model_hrp2_rhs_dde(void *);
 extern void odin_model_hrp2_rhs_desolve(void *);
 extern void odin_model_initmod_desolve(void *);
 extern void odin_model_IVM_SMChet_initmod_desolve(void *);
+extern void odin_model_IVM_SMChet_nilani_initmod_desolve(void *);
+extern void odin_model_IVM_SMChet_nilani_output_dde(void *);
+extern void odin_model_IVM_SMChet_nilani_rhs_dde(void *);
+extern void odin_model_IVM_SMChet_nilani_rhs_desolve(void *);
 extern void odin_model_IVM_SMChet_output_dde(void *);
 extern void odin_model_IVM_SMChet_rhs_dde(void *);
 extern void odin_model_IVM_SMChet_rhs_desolve(void *);
+extern void odin_model_mort_bad_betaa_initmod_desolve(void *);
+extern void odin_model_mort_bad_betaa_output_dde(void *);
+extern void odin_model_mort_bad_betaa_rhs_dde(void *);
+extern void odin_model_mort_bad_betaa_rhs_desolve(void *);
+extern void odin_model_mort_initmod_desolve(void *);
+extern void odin_model_mort_output_dde(void *);
+extern void odin_model_mort_rhs_dde(void *);
+extern void odin_model_mort_rhs_desolve(void *);
 extern void odin_model_no_delay_initmod_desolve(void *);
 extern void odin_model_no_delay_output_dde(void *);
 extern void odin_model_no_delay_rhs_dde(void *);
@@ -77,10 +89,31 @@ extern SEXP odin_model_IVM_SMChet_contents(SEXP);
 extern SEXP odin_model_IVM_SMChet_create(SEXP);
 extern SEXP odin_model_IVM_SMChet_initial_conditions(SEXP, SEXP);
 extern SEXP odin_model_IVM_SMChet_metadata(SEXP);
+extern SEXP odin_model_IVM_SMChet_nilani_contents(SEXP);
+extern SEXP odin_model_IVM_SMChet_nilani_create(SEXP);
+extern SEXP odin_model_IVM_SMChet_nilani_initial_conditions(SEXP, SEXP);
+extern SEXP odin_model_IVM_SMChet_nilani_metadata(SEXP);
+extern SEXP odin_model_IVM_SMChet_nilani_rhs_r(SEXP, SEXP, SEXP);
+extern SEXP odin_model_IVM_SMChet_nilani_set_initial(SEXP, SEXP, SEXP, SEXP);
+extern SEXP odin_model_IVM_SMChet_nilani_set_user(SEXP, SEXP);
 extern SEXP odin_model_IVM_SMChet_rhs_r(SEXP, SEXP, SEXP);
 extern SEXP odin_model_IVM_SMChet_set_initial(SEXP, SEXP, SEXP, SEXP);
 extern SEXP odin_model_IVM_SMChet_set_user(SEXP, SEXP);
 extern SEXP odin_model_metadata(SEXP);
+extern SEXP odin_model_mort_bad_betaa_contents(SEXP);
+extern SEXP odin_model_mort_bad_betaa_create(SEXP);
+extern SEXP odin_model_mort_bad_betaa_initial_conditions(SEXP, SEXP);
+extern SEXP odin_model_mort_bad_betaa_metadata(SEXP);
+extern SEXP odin_model_mort_bad_betaa_rhs_r(SEXP, SEXP, SEXP);
+extern SEXP odin_model_mort_bad_betaa_set_initial(SEXP, SEXP, SEXP, SEXP);
+extern SEXP odin_model_mort_bad_betaa_set_user(SEXP, SEXP);
+extern SEXP odin_model_mort_contents(SEXP);
+extern SEXP odin_model_mort_create(SEXP);
+extern SEXP odin_model_mort_initial_conditions(SEXP, SEXP);
+extern SEXP odin_model_mort_metadata(SEXP);
+extern SEXP odin_model_mort_rhs_r(SEXP, SEXP, SEXP);
+extern SEXP odin_model_mort_set_initial(SEXP, SEXP, SEXP, SEXP);
+extern SEXP odin_model_mort_set_user(SEXP, SEXP);
 extern SEXP odin_model_no_delay_contents(SEXP);
 extern SEXP odin_model_no_delay_create(SEXP);
 extern SEXP odin_model_no_delay_initial_conditions(SEXP, SEXP);
@@ -118,9 +151,21 @@ static const R_CMethodDef CEntries[] = {
     {"odin_model_hrp2_rhs_desolve",                        (DL_FUNC) &odin_model_hrp2_rhs_desolve,                        1},
     {"odin_model_initmod_desolve",                         (DL_FUNC) &odin_model_initmod_desolve,                         1},
     {"odin_model_IVM_SMChet_initmod_desolve",              (DL_FUNC) &odin_model_IVM_SMChet_initmod_desolve,              1},
+    {"odin_model_IVM_SMChet_nilani_initmod_desolve",       (DL_FUNC) &odin_model_IVM_SMChet_nilani_initmod_desolve,       1},
+    {"odin_model_IVM_SMChet_nilani_output_dde",            (DL_FUNC) &odin_model_IVM_SMChet_nilani_output_dde,            1},
+    {"odin_model_IVM_SMChet_nilani_rhs_dde",               (DL_FUNC) &odin_model_IVM_SMChet_nilani_rhs_dde,               1},
+    {"odin_model_IVM_SMChet_nilani_rhs_desolve",           (DL_FUNC) &odin_model_IVM_SMChet_nilani_rhs_desolve,           1},
     {"odin_model_IVM_SMChet_output_dde",                   (DL_FUNC) &odin_model_IVM_SMChet_output_dde,                   1},
     {"odin_model_IVM_SMChet_rhs_dde",                      (DL_FUNC) &odin_model_IVM_SMChet_rhs_dde,                      1},
     {"odin_model_IVM_SMChet_rhs_desolve",                  (DL_FUNC) &odin_model_IVM_SMChet_rhs_desolve,                  1},
+    {"odin_model_mort_bad_betaa_initmod_desolve",          (DL_FUNC) &odin_model_mort_bad_betaa_initmod_desolve,          1},
+    {"odin_model_mort_bad_betaa_output_dde",               (DL_FUNC) &odin_model_mort_bad_betaa_output_dde,               1},
+    {"odin_model_mort_bad_betaa_rhs_dde",                  (DL_FUNC) &odin_model_mort_bad_betaa_rhs_dde,                  1},
+    {"odin_model_mort_bad_betaa_rhs_desolve",              (DL_FUNC) &odin_model_mort_bad_betaa_rhs_desolve,              1},
+    {"odin_model_mort_initmod_desolve",                    (DL_FUNC) &odin_model_mort_initmod_desolve,                    1},
+    {"odin_model_mort_output_dde",                         (DL_FUNC) &odin_model_mort_output_dde,                         1},
+    {"odin_model_mort_rhs_dde",                            (DL_FUNC) &odin_model_mort_rhs_dde,                            1},
+    {"odin_model_mort_rhs_desolve",                        (DL_FUNC) &odin_model_mort_rhs_desolve,                        1},
     {"odin_model_no_delay_initmod_desolve",                (DL_FUNC) &odin_model_no_delay_initmod_desolve,                1},
     {"odin_model_no_delay_output_dde",                     (DL_FUNC) &odin_model_no_delay_output_dde,                     1},
     {"odin_model_no_delay_rhs_dde",                        (DL_FUNC) &odin_model_no_delay_rhs_dde,                        1},
@@ -171,10 +216,31 @@ static const R_CallMethodDef CallEntries[] = {
     {"odin_model_IVM_SMChet_create",                          (DL_FUNC) &odin_model_IVM_SMChet_create,                          1},
     {"odin_model_IVM_SMChet_initial_conditions",              (DL_FUNC) &odin_model_IVM_SMChet_initial_conditions,              2},
     {"odin_model_IVM_SMChet_metadata",                        (DL_FUNC) &odin_model_IVM_SMChet_metadata,                        1},
+    {"odin_model_IVM_SMChet_nilani_contents",                 (DL_FUNC) &odin_model_IVM_SMChet_nilani_contents,                 1},
+    {"odin_model_IVM_SMChet_nilani_create",                   (DL_FUNC) &odin_model_IVM_SMChet_nilani_create,                   1},
+    {"odin_model_IVM_SMChet_nilani_initial_conditions",       (DL_FUNC) &odin_model_IVM_SMChet_nilani_initial_conditions,       2},
+    {"odin_model_IVM_SMChet_nilani_metadata",                 (DL_FUNC) &odin_model_IVM_SMChet_nilani_metadata,                 1},
+    {"odin_model_IVM_SMChet_nilani_rhs_r",                    (DL_FUNC) &odin_model_IVM_SMChet_nilani_rhs_r,                    3},
+    {"odin_model_IVM_SMChet_nilani_set_initial",              (DL_FUNC) &odin_model_IVM_SMChet_nilani_set_initial,              4},
+    {"odin_model_IVM_SMChet_nilani_set_user",                 (DL_FUNC) &odin_model_IVM_SMChet_nilani_set_user,                 2},
     {"odin_model_IVM_SMChet_rhs_r",                           (DL_FUNC) &odin_model_IVM_SMChet_rhs_r,                           3},
     {"odin_model_IVM_SMChet_set_initial",                     (DL_FUNC) &odin_model_IVM_SMChet_set_initial,                     4},
     {"odin_model_IVM_SMChet_set_user",                        (DL_FUNC) &odin_model_IVM_SMChet_set_user,                        2},
     {"odin_model_metadata",                                   (DL_FUNC) &odin_model_metadata,                                   1},
+    {"odin_model_mort_bad_betaa_contents",                    (DL_FUNC) &odin_model_mort_bad_betaa_contents,                    1},
+    {"odin_model_mort_bad_betaa_create",                      (DL_FUNC) &odin_model_mort_bad_betaa_create,                      1},
+    {"odin_model_mort_bad_betaa_initial_conditions",          (DL_FUNC) &odin_model_mort_bad_betaa_initial_conditions,          2},
+    {"odin_model_mort_bad_betaa_metadata",                    (DL_FUNC) &odin_model_mort_bad_betaa_metadata,                    1},
+    {"odin_model_mort_bad_betaa_rhs_r",                       (DL_FUNC) &odin_model_mort_bad_betaa_rhs_r,                       3},
+    {"odin_model_mort_bad_betaa_set_initial",                 (DL_FUNC) &odin_model_mort_bad_betaa_set_initial,                 4},
+    {"odin_model_mort_bad_betaa_set_user",                    (DL_FUNC) &odin_model_mort_bad_betaa_set_user,                    2},
+    {"odin_model_mort_contents",                              (DL_FUNC) &odin_model_mort_contents,                              1},
+    {"odin_model_mort_create",                                (DL_FUNC) &odin_model_mort_create,                                1},
+    {"odin_model_mort_initial_conditions",                    (DL_FUNC) &odin_model_mort_initial_conditions,                    2},
+    {"odin_model_mort_metadata",                              (DL_FUNC) &odin_model_mort_metadata,                              1},
+    {"odin_model_mort_rhs_r",                                 (DL_FUNC) &odin_model_mort_rhs_r,                                 3},
+    {"odin_model_mort_set_initial",                           (DL_FUNC) &odin_model_mort_set_initial,                           4},
+    {"odin_model_mort_set_user",                              (DL_FUNC) &odin_model_mort_set_user,                              2},
     {"odin_model_no_delay_contents",                          (DL_FUNC) &odin_model_no_delay_contents,                          1},
     {"odin_model_no_delay_create",                            (DL_FUNC) &odin_model_no_delay_create,                            1},
     {"odin_model_no_delay_initial_conditions",                (DL_FUNC) &odin_model_no_delay_initial_conditions,                2},

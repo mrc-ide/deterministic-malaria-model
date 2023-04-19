@@ -92,9 +92,21 @@ ggplot(hazards_long, aes(x = day, y = hazard, col = as.factor(dose)))+
   geom_point()+
   theme_minimal()
 
+###some code to test how the if statements work
+mu <- 0
 
+mu_h_0 <- c(4,5,6,7,8)
 
-
+ivm_on <- 1
+ivm_off <- 3
+t <- 2
+if (t > ivm_on && t <= ivm_off) {
+  mu_h <- mu_h_0[t]
+  mu_h
+} else {
+  mu
+}
+######
 #compare 1 and 2 in terms of prevalence. Is there a way to simplify incorporation of excess mort?
 
 

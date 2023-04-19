@@ -428,7 +428,10 @@ deriv(Ivic[1:eff_len]) <- incv_ic + (ivm_cow_eff_cov*Iv) - (mu_c[i]*Ivic[i])
 
 # Total mosquito population
 #mv = Sv+Ev+Iv
-mv = Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic
+Ivtot = Iv + sum(Ivih) + sum(Ivic)
+Evtot = Ev + sum(Evih) + sum(Evic)
+Ivtot = Iv + sum(Ivih) + sum(Ivic)
+mv = Svtot + Evtot + Ivtot
 # model options if don't want to use a delayed delay
 #deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
 #deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]

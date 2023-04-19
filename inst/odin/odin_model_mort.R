@@ -308,6 +308,7 @@ incv <- delay(lag_incv, delayMos)
 betaa <- 0.5*PL/dPL
 #betaa <- mv0 * mu0 * theta2
 
+
 deriv(Sv) <- -ince - mu*Sv + betaa
 deriv(Ev) <- ince - incv - mu*Ev
 deriv(Iv) <- incv - mu*Iv
@@ -544,3 +545,4 @@ output(r_IRS) <- r_IRS
 output(s_IRS) <- s_IRS
 output(cov[]) <- TRUE
 output(K0) <- K0
+output(betaa) <- betaa

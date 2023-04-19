@@ -34,7 +34,7 @@ out_0_df_long <- out_0_df_long %>%
                                  state_var %in% i_comp ~ "Infectious"))
 
 
-ggplot(out_0_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
+out_0_plot <- ggplot(out_0_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
   geom_line()+
   ylim(0, 1)
 
@@ -42,8 +42,12 @@ ggplot(out_0_df_long, aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
 out_1 <- run_model(model = "mosquito_ivermectin_model",
                  init_EIR = 100,
                  #increasing this EIR gets rid of the dde error
-                 gamma_c = 0,
-                 gamma_h = 0, time = 730) #need to run a bit longer to get to equilibrium
+                 gamma_c_0 = 0,
+                 gamma_h_0 = 0, time = 730,
+                 gamma_c_min_age = 5,
+                 gamma_h_min_age = 5,
+                 ivm_c_on = 731,
+                 ivm_h_on = 731) #need to run a bit longer to get to equilibrium
 
 out_1_df <- as.data.frame(out_1) %>%
   select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic) %>%
@@ -84,6 +88,14 @@ out_1_plot <- ggplot(out_1_df_long, aes(x = t, y = prop_mosq, col = as.factor(st
   ggtitle("No ivermectin treatment")+
   labs(col = "Mosquito infection state", y = "Proportion of mosquitoes \n in compartment")+
   theme_minimal()
+
+out_1_no_ivm <- out_1_df_long %>%
+  filter(ivm_categ == "No IVM")
+  ggplot(aes(x = t, y = prop_mosq, col = as.factor(state_categ)))+
+  geom_line()+
+  ylim(0, 1)
+
+plot_grid(out_0_plot, out_1_no_ivm)
 
 #colour-code this so coloured if no ivm, cattle or human
 

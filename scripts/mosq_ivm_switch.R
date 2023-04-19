@@ -1,4 +1,7 @@
 #no ivermectin####
+
+#exploring how the switch works in the IVM model and also how larval emergence works in the odin model
+
 require(ICDMM)
 require(tidyverse)
 

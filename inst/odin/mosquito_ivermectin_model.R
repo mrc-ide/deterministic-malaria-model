@@ -650,3 +650,4 @@ output(r_IRS) <- r_IRS
 output(s_IRS) <- s_IRS
 output(cov[]) <- TRUE
 output(K0) <- K0
+output(betaa) <- betaa

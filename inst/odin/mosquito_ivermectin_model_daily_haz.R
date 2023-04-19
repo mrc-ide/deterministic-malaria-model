@@ -289,6 +289,10 @@ initial(Evih[]) <- init_Evih*mv0
 #dim(Evih) <- 10
 initial(Ivih[]) <- init_Ivih*mv0
 
+dim(Svih) = eff_len
+dim(Evih) = eff_len
+dim(Ivih) = eff_len
+
 #IVM on cattle. MAY NEED TO ADD mv0 terms
 init_Svic <- 0
 init_Evic <- 0
@@ -298,6 +302,10 @@ initial(Evic[]) <- init_Evic*mv0
 #initial(Evic[1:10]) <- init_Evic/10 * mv0 # Options if not using a delayed delay
 #dim(Evic) <- 10
 initial(Ivic[]) <- init_Ivic*mv0
+
+dim(Svic) = eff_len
+dim(Evic) = eff_len
+dim(Ivic) = eff_len
 
 # cA is the infectiousness to mosquitoes of humans in the asmyptomatic compartment broken down
 # by age/het/int category, infectiousness depends on p_det which depends on detection immunity
@@ -327,15 +335,15 @@ incv <- delay(lag_incv, delayMos)
 #incv <- lag_incv
 
 # Number of mosquitoes that become infected at each time point in human IVM compartments
-surv_ih <- exp(-mu_h*delayMos)
-ince_ih <- FOIv*Svih
+surv_ih <- exp(-mu_h[i]*delayMos)
+ince_ih <- FOIv*Svih[i]
 lag_incv_ih <- ince_ih*surv_ih
 incv_ih <- delay(lag_incv_ih, delayMos)
 #incv_ih <- lag_incv_ih
 
 #Number of mosquitoes that become infected at each time point in cattle IVm compartments
-surv_ic <- exp(-mu_c*delayMos)
-ince_ic <- FOIv*Svic
+surv_ic <- exp(-mu_c[i]*delayMos)
+ince_ic <- FOIv*Svic[i]
 lag_incv_ic <- ince_ic*surv_ic
 incv_ic <- delay(lag_incv_ic, delayMos)
 #incv_ic <- lag_incv_ic
@@ -364,6 +372,8 @@ dim(haz_c0) = eff_len
 
 dim(mu_h) = eff_len
 dim(mu_c) = eff_len
+dim(mu_h_0) = eff_len
+dim(mu_c_0) = eff_len
 
 mu_h_0[1:eff_len] = haz_h0[i]*mu
 mu_c_0[1:eff_len] = haz_c0[i]*mu

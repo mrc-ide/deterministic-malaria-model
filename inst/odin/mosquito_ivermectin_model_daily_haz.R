@@ -426,14 +426,14 @@ deriv(Iv) <- incv - (ivm_human_eff_cov*Iv) - (ivm_cow_eff_cov*Iv) -mu*Iv
 #deriv(Iv) <- incv - mu*Iv
 
 #IVM on humans####
-deriv(Svih[1:eff_len]) <- -ince_ih[i] + (ivm_human_eff_cov*Sv) - (mu_h[i]*Svih[i])
-deriv(Evih[1:eff_len]) <- ince_ih[i] - incv_ih[i] + (ivm_human_eff_cov*Ev) - (mu_h[i]*Evih[i])
-deriv(Ivih[1:eff_len]) <- incv_ih[i] + (ivm_human_eff_cov*Iv) - (mu_h[i]*Ivih[i])
+deriv(Svih[]) <- -ince_ih[i] + (ivm_human_eff_cov*Sv) - (mu_h[i]*Svih[i])
+deriv(Evih[]) <- ince_ih[i] - incv_ih[i] + (ivm_human_eff_cov*Ev) - (mu_h[i]*Evih[i])
+deriv(Ivih[]) <- incv_ih[i] + (ivm_human_eff_cov*Iv) - (mu_h[i]*Ivih[i])
 
 #IVM on cattle
-deriv(Svic[1:eff_len]) <- - ince_ic[i] + (ivm_cow_eff_cov*Sv) - (mu_c[i]*Svic[i])
-deriv(Evic[1:eff_len]) <- ince_ic[i] - incv_ic[i] + (ivm_cow_eff_cov*Ev) - (mu_c[i]*Evic[i])
-deriv(Ivic[1:eff_len]) <- incv_ic[i] + (ivm_cow_eff_cov*Iv) - (mu_c[i]*Ivic[i])
+deriv(Svic[]) <- - ince_ic[i] + (ivm_cow_eff_cov*Sv) - (mu_c[i]*Svic[i])
+deriv(Evic[]) <- ince_ic[i] - incv_ic[i] + (ivm_cow_eff_cov*Ev) - (mu_c[i]*Evic[i])
+deriv(Ivic[]) <- incv_ic[i] + (ivm_cow_eff_cov*Iv) - (mu_c[i]*Ivic[i])
 
 # Total mosquito population
 #mv = Sv+Ev+Iv

@@ -139,6 +139,146 @@ mosquito_ivermectin_model <- function(..., user = list(...), use_dde = FALSE,
 }
 class(mosquito_ivermectin_model) <- "odin_generator"
 attr(mosquito_ivermectin_model, "generator") <- mosquito_ivermectin_model_
+mosquito_ivermectin_model_daily_haz_ <- R6::R6Class(
+  "odin_model",
+  cloneable = FALSE,
+
+  private = list(
+    ptr = NULL,
+    use_dde = NULL,
+
+    odin = NULL,
+    variable_order = NULL,
+    output_order = NULL,
+    n_out = NULL,
+    ynames = NULL,
+    interpolate_t = NULL,
+    cfuns = list(
+      rhs_dde = "mosquito_ivermectin_model_daily_haz_rhs_dde",
+      rhs_desolve = "mosquito_ivermectin_model_daily_haz_rhs_desolve",
+      initmod_desolve = "mosquito_ivermectin_model_daily_haz_initmod_desolve",
+      output_dde = "mosquito_ivermectin_model_daily_haz_output_dde"),
+    dll = "ICDMM",
+    user = c("aD", "age", "age_20_factor", "age_rate", "age05", "age20l",
+             "age20u", "age59", "b0", "b1", "betaL", "bites_Bed",
+             "bites_Indoors", "cD", "chi", "cT", "cU", "d_IRS0", "d_ITN0",
+             "d1", "dB", "dCA", "dCM", "dE", "dEL", "delayGam", "delayMos",
+             "den", "dID", "dLL", "dPL", "eff_len", "eta", "fD0", "foi_age",
+             "ft", "gamma_c_0", "gamma_c_min_age", "gamma_h_0",
+             "gamma_h_min_age", "gamma1", "gammaD", "gammaL", "haz_c0",
+             "haz_h0", "het_wt", "IB0", "IC0", "ID0", "init_A", "init_D",
+             "init_EL", "init_Ev", "init_IB", "init_ICA", "init_ICM",
+             "init_ID", "init_Iv", "init_LL", "init_P", "init_PL", "init_S",
+             "init_Sv", "init_T", "init_U", "irs_cov", "IRS_interval",
+             "irs_loss", "itn_cov", "ITN_interval", "ITN_IRS_on", "itn_loss",
+             "ivm_c_on", "ivm_h_on", "kB", "kC", "kD", "mu0", "muEL", "muLL",
+             "muPL", "mv0", "na", "nh", "num_int", "omega", "p10", "p2",
+             "phi0", "phi1", "pi", "PM", "Q0", "r_IRS0", "r_ITN0", "r_ITN1",
+             "rA", "rD", "rel_foi", "rP", "rT", "rU", "ssa0", "ssa1", "ssa2",
+             "ssa3", "ssb1", "ssb2", "ssb3", "tau1", "tau2", "theta_c", "uB",
+             "uCA", "uD", "x_I"),
+
+    ## This is never called, but is used to ensure that R finds our
+    ## symbols that we will use from the package; without this they
+    ## cannot be found by dynamic lookup now that we use the package
+    ## FFI registration system.
+    registration = function() {
+      if (FALSE) {
+        .C("mosquito_ivermectin_model_daily_haz_rhs_dde", package = "ICDMM")
+        .C("mosquito_ivermectin_model_daily_haz_rhs_desolve", package = "ICDMM")
+        .C("mosquito_ivermectin_model_daily_haz_initmod_desolve", package = "ICDMM")
+        .C("mosquito_ivermectin_model_daily_haz_output_dde", package = "ICDMM")
+      }
+    },
+
+    ## This only does something in delay models
+    set_initial = function(t, y, use_dde) {
+      .Call("mosquito_ivermectin_model_daily_haz_set_initial", private$ptr, t, y, use_dde,
+            PACKAGE= "ICDMM")
+    },
+
+    update_metadata = function() {
+      meta <- .Call("mosquito_ivermectin_model_daily_haz_metadata", private$ptr,
+                    PACKAGE = "ICDMM")
+      private$variable_order <- meta$variable_order
+      private$output_order <- meta$output_order
+      private$n_out <- meta$n_out
+      private$ynames <- private$odin$make_names(
+        private$variable_order, private$output_order, FALSE)
+      private$interpolate_t <- meta$interpolate_t
+    }
+  ),
+
+  public = list(
+    initialize = function(..., user = list(...), use_dde = FALSE,
+                          unused_user_action = NULL) {
+      private$odin <- asNamespace("odin")
+      private$ptr <- .Call("mosquito_ivermectin_model_daily_haz_create", user, PACKAGE = "ICDMM")
+      self$set_user(user = user, unused_user_action = unused_user_action)
+      private$use_dde <- use_dde
+      private$update_metadata()
+    },
+
+    ir = function() {
+      path_ir <- system.file("odin/mosquito_ivermectin_model_daily_haz.json", mustWork = TRUE,
+                             package = "ICDMM")
+      json <- readLines(path_ir)
+      class(json) <- "json"
+      json
+    },
+
+    ## Do we need to have the user-settable args here? It would be
+    ## nice, but that's not super straightforward to do.
+    set_user = function(..., user = list(...), unused_user_action = NULL) {
+      private$odin$support_check_user(user, private$user, unused_user_action)
+      .Call("mosquito_ivermectin_model_daily_haz_set_user", private$ptr, user, PACKAGE = "ICDMM")
+      private$update_metadata()
+    },
+
+    ## This might be time sensitive and, so we can avoid computing
+    ## it. I wonder if that's an optimisation we should drop for now
+    ## as it does not seem generally useful. This would bring us
+    ## closer to the js version which requires that we always pass the
+    ## time in.
+    initial = function(t) {
+      .Call("mosquito_ivermectin_model_daily_haz_initial_conditions", private$ptr, t, PACKAGE = "ICDMM")
+    },
+
+    rhs = function(t, y) {
+      .Call("mosquito_ivermectin_model_daily_haz_rhs_r", private$ptr, t, y, PACKAGE = "ICDMM")
+    },
+
+    deriv = function(t, y) {
+      self$rhs(t, y)
+    },
+
+    contents = function() {
+      .Call("mosquito_ivermectin_model_daily_haz_contents", private$ptr, PACKAGE = "ICDMM")
+    },
+
+    transform_variables = function(y) {
+      private$odin$support_transform_variables(y, private)
+    },
+
+    engine = function() {
+      "c"
+    },
+
+    run = function(t, y = NULL, ..., use_names = TRUE) {
+      private$odin$wrapper_run_delay(
+        self, private, t, y, ..., use_names = use_names)
+    }
+  ))
+
+
+mosquito_ivermectin_model_daily_haz <- function(..., user = list(...), use_dde = FALSE,
+                     unused_user_action = NULL) {
+  asNamespace("odin")$deprecated_constructor_call("mosquito_ivermectin_model_daily_haz")
+  mosquito_ivermectin_model_daily_haz_$new(user = user, use_dde = use_dde,
+                unused_user_action = unused_user_action)
+}
+class(mosquito_ivermectin_model_daily_haz) <- "odin_generator"
+attr(mosquito_ivermectin_model_daily_haz, "generator") <- mosquito_ivermectin_model_daily_haz_
 mosquito_ivermectin_model_no_delay_ <- R6::R6Class(
   "odin_model",
   cloneable = FALSE,

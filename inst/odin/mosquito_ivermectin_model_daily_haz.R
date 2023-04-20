@@ -394,11 +394,11 @@ mu_c_0[1:eff_len] = haz_c0[i]*mu
 #might need to change ivm_h_mu_off, because of the dosing e.g. 3x300micrograms
 
 
-ivm_h_off <- ivm_h_on # last day of IVM distrib in humans
-ivm_c_off <- ivm_c_on # last day of IVM distrib in cattle
+ivm_h_mu_off <- ivm_h_on+eff_len # days from ivm distribution that ivm-killing effects last for
+ivm_c_mu_off <- ivm_c_on + eff_len # days from ivm distribution that ivm-killing effects last for
 
-mu_h[] <- if (t > ivm_h_on && t <= ivm_h_off) mu_h_0[t] else mu
-mu_c[] <- if (t > ivm_c_on && t <= ivm_c_off) mu_c_0[t] else mu
+mu_h[] <- if (t > ivm_h_on && t <= ivm_h_mu_off) mu_h_0[t] else mu
+mu_c[] <- if (t > ivm_c_on && t <= ivm_c_mu_off) mu_c_0[t] else mu
 
 
 #new model parameters####

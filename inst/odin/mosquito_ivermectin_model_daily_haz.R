@@ -430,7 +430,7 @@ deriv(Ivic[1:eff_len]) <- incv_ic + (ivm_cow_eff_cov*Iv) - (mu_c[i]*Ivic[i])
 #mv = Sv+Ev+Iv
 Ivtot = Iv + sum(Ivih) + sum(Ivic)
 Evtot = Ev + sum(Evih) + sum(Evic)
-Svtot = Sv + sum(Svih) + sum(Ivic)
+Svtot = Sv + sum(Svih) + sum(Svic)
 mv = Svtot + Evtot + Ivtot
 # model options if don't want to use a delayed delay
 #deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
@@ -637,9 +637,9 @@ output(inc) <- sum(clin_inc[,,])
 
 #ento outputs
 sporo_rate_no_ivm <- Iv/(Sv+Ev+Iv)
-sporo_rate_ivm_human <- Ivih/(Svih+Evih+Ivih)
-sporo_rate_ivm_cattle <- Ivic/(Svic+Evic+Ivic)
-sporo_rate_total <- (Iv+Ivih+Ivic)/(Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic)
+sporo_rate_ivm_human <- sum(Ivih)/(sum(Svih)+sum(Evih)+sum(Ivih))
+sporo_rate_ivm_cattle <- sum(Ivic)/(sum(Svic)+sum(Evic)+sum(Ivic))
+sporo_rate_total <- Iv+sum(Ivih)+sum(Ivic)/mv
 
 # Param checking outputs
 output(mu) <- mu

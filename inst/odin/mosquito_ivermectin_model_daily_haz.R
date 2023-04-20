@@ -430,7 +430,7 @@ deriv(Ivic[1:eff_len]) <- incv_ic + (ivm_cow_eff_cov*Iv) - (mu_c[i]*Ivic[i])
 #mv = Sv+Ev+Iv
 Ivtot = Iv + sum(Ivih) + sum(Ivic)
 Evtot = Ev + sum(Evih) + sum(Evic)
-Ivtot = Iv + sum(Ivih) + sum(Ivic)
+Svtot = Sv + sum(Svih) + sum(Ivic)
 mv = Svtot + Evtot + Ivtot
 # model options if don't want to use a delayed delay
 #deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]

@@ -18,6 +18,9 @@ out_1 <- run_model(model = "mosquito_ivermectin_model",
                    mu_c_0 = 0,
                    mu_h_0 = 0.628)
 
+as.data.frame(out_1) %>%
+  select(t, mv)
+
 out_1_df <- as.data.frame(out_1) %>%
   select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic, mv) %>%
   rowwise() %>%
@@ -86,27 +89,35 @@ ggplot(out_1_df_long_num, aes(x = t, y = num_mosq, col = as.factor(state_categ))
 
 #need to check where the 400s come from and that this is definitely hazards from Meno's paper
 hazards <- read.table("C:/Users/nc1115/Documents/github/ivRmectin/IVM_derivation/ivermectin_hazards.txt", header = TRUE)
-
+hazards$d300
 hazards_long <- gather(hazards, dose, hazard, d400:d300, factor_key = TRUE)
 ggplot(hazards_long, aes(x = day, y = hazard, col = as.factor(dose)))+
   geom_point()+
   theme_minimal()
 
-###some code to test how the if statements work
-mu <- 0
+out_2 <- run_model(model = "mosquito_ivermectin_model_daily_haz",
+                   init_EIR = 100,
+                   #increasing this EIR gets rid of the dde error
+                   gamma_c_0 = 0,
+                   gamma_h_0 = 1, time = 730,
+                   gamma_c_min_age = 5,
+                   gamma_h_min_age = 5,
+                   ivm_c_on = 731,
+                   ivm_h_on = 10, #time turn on
+                   haz_c0 = rep(0, 23),
+                   haz_h0 = hazards$d300[1:23],
+                   eff_len = 23)
+out_2$mv #total number of mosquitoes should not be increasing!
+out_2$mu_h_0
+#each column of this matrix gives you the mortality rate (mu*daily_haz) on each day of IVM distrib
 
-mu_h_0 <- c(4,5,6,7,8)
+#have tried running
 
-ivm_on <- 1
-ivm_off <- 3
-t <- 2
-if (t > ivm_on && t <= ivm_off) {
-  mu_h <- mu_h_0[t]
-  mu_h
-} else {
-  mu
-}
-######
+
+out_2$Svih
+out_2_df <- as.data.frame(out_2) %>%
+  select(t, mv)
+
 #compare 1 and 2 in terms of prevalence. Is there a way to simplify incorporation of excess mort?
 
 

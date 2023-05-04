@@ -389,7 +389,7 @@ mu_c_0[1:eff_len] = haz_c0[i]*mu
 ########################################################################
 #mu_h <- mu+mu_h_0 #excess mort due to IVM humans
 #mu_c <- mu+mu_c_0 #excess mort
-due to IVM cattle
+#due to IVM cattle
 
 #if t is between ivm_h_on and 14 days from that then elev mort, else 0
 #might need to change ivm_h_mu_off, because of the dosing e.g. 3x300micrograms

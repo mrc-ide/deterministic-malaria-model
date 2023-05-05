@@ -37,8 +37,8 @@ fitMe <- function(params) {
   a <- params[1]
   c <- params[2]
   d <- params[3]
-  #n <- params[4]
-  n <- 0.5 #square root test
+  n <- params[4]
+  #n <- 0.5 #square root test
   t <- 1:28
   hazard_out <- d*(t^n)*exp(-c*t)+a
   error <- sum((hazards_data$d300 - hazard_out)^2)
@@ -47,7 +47,7 @@ fitMe <- function(params) {
 
 #fitMe(params = c(1.5, 1, 13))
 
-o <- optim(c(a = 1.5 , c = 1, d = 13, n = 2), fitMe)
+o <- optim(c(a = 1.5 , c = 1, d = 13, n = 1), fitMe)
 o$par
 
 f_haz2 <- function(x, d, c, a, n)d*(x^n)*exp(-c*x) + a
@@ -59,31 +59,37 @@ ori_plot <- hazards_long %>%
   geom_function(fun = f_haz2, args = list(a = o$par[1], c = o$par[2], d= o$par[3], n = o$par[4]), colour = "red")
 #try recreating like Isaac has said.
 t <- seq(1:28)
-a <- rep(o$par[1] + 0.5, 28) #changing it slightly with +0.5
-c <- rep(o$par[2] + 0.5, 28) #http://127.0.0.1:29903/graphics/a02c4310-2703-4f21-8a82-6254dc923956.http://127.0.0.1:29903/graphics/a02c4310-2703-4f21-8a82-6254dc923956.pngpng
-d <- rep(o$par[3] + 0.5, 28)
-fake_df <- data.frame(t, a, c, d)
+a <- rep(o$par[1], 28) #changing it slightly with +0.5
+c <- rep(o$par[2], 28) #http://127.0.0.1:29903/graphics/a02c4310-2703-4f21-8a82-6254dc923956.http://127.0.0.1:29903/graphics/a02c4310-2703-4f21-8a82-6254dc923956.pngpng
+d <- rep(o$par[3], 28)
+n <- rep(o$par[4], 28)
+fake_df <- data.frame(t, a, c, d, n)
 fake_df <- fake_df %>%
-  mutate(daily_haz = d*t^2*exp(-c*t) + a)
-
-#can get the curve back when use the parameters, as expected
-new_plot <- ggplot(fake_df, aes(x = t, y = daily_haz))+
-  geom_point()+
-  xlim(1, 28)+
-  ylim(0, 10)+
-  #geom_function(fun = f_haz2, args = list(a = p$par[1], c = p$par[2], d= p$par[3]), colour = "red")
-  geom_function(fun = f_haz2, args = list(a = o$par[1], c = o$par[2], d= o$par[3]), colour = "red")
+  mutate(daily_haz = d*(t^n)*exp(-c*t) + a)
 
 #then
 fitMe_again <- function(params) {
   a <- params[1]
   c <- params[2]
   d <- params[3]
+  n <- params[4]
   t <- 1:28
-  hazard_out <- d*t^2*exp(-c*t)+a
+  hazard_out <- d*(t^n)*exp(-c*t)+a
   error <- sum((fake_df$daily_haz - hazard_out)^2)
   return(error)
 }
-p <- optim(c(a = 1.5 , c = 1, d = 13), fitMe_again)
+
+p <- optim(c(a = 1.5 , c = 1, d = 13, n = 1), fitMe_again)
 p$par
 o$par
+
+#can get the curve back when use the parameters, as expected
+new_plot <- ggplot(fake_df, aes(x = t, y = daily_haz))+
+  geom_point()+
+  xlim(1, 28)+
+  ylim(0, 10)+
+  geom_function(fun = f_haz2, args = list(a = p$par[1], c = p$par[2], d= p$par[3], n = p$par[4]), colour = "red")
+  #geom_function(fun = f_haz2, args = list(a = o$par[1], c = o$par[2], d= o$par[3]), colour = "red")
+
+
+

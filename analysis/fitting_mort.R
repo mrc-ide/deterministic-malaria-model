@@ -8,7 +8,6 @@ hazards$d300
 hazards$d400
 hazards_long <- gather(hazards, dose, hazard, d400:d300, factor_key = TRUE)
 
-
 hazards_data <- hazards %>%
   select(day, d300) %>%
   drop_na()
@@ -18,6 +17,15 @@ hazards_data <- hazards %>%
 
 
 #writing for two parameters
+f_haz <- function(x, d, c, a)d*x^2*exp(-c*x) + a
+
+hazards_long %>%
+  filter(dose == "d300") %>%
+  ggplot(aes(x = day, y = hazard))+
+  geom_point()+
+  ylim(0, 15)+
+  geom_function(fun = f_haz, args = list(a = 1.5, c = 1 , d= 13 ), colour = "red")
+
 hazards_long %>%
   filter(dose == "d300") %>%
   ggplot(aes(x = day, y = hazard))+
@@ -29,17 +37,24 @@ fitMe <- function(params) {
   a <- params[1]
   c <- params[2]
   d <- params[3]
-  t <- 0:28
+  t <- 1:28
   hazard_out <- d*t^2*exp(-c*t)+a
   error <- sum((hazards_data$d300 - hazard_out)^2)
-  return(error)
+  #return(hazard_out)
 }
-o <- optim(c(a = 0.5 , c = 0.0001, d = 0.1), fitMe)
+
+#fitMe(params = c(1.5, 1, 13))
+
+o <- optim(c(a = 1.5 , c = 1, d = 13), fitMe)
 o$par
 
 f_haz2 <- function(x, d, c, a)d*x^2*exp(-c*x) + a
 hazards_long %>%
   filter(dose == "d300") %>%
   ggplot(aes(x = day, y = hazard))+
+  xlim(1, 28)+
   geom_point()+
   geom_function(fun = f_haz2, args = list(a = o$par[1], c = o$par[2], d= o$par[3]), colour = "red")
+
+#try recreating like Isaac has said.
+fake_df <- o$par

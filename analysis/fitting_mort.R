@@ -37,7 +37,8 @@ fitMe <- function(params) {
   a <- params[1]
   c <- params[2]
   d <- params[3]
-  n <- params[4]
+  #n <- params[4]
+  n <- 0.5 #square root test
   t <- 1:28
   hazard_out <- d*(t^n)*exp(-c*t)+a
   error <- sum((hazards_data$d300 - hazard_out)^2)

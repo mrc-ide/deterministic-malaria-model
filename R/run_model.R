@@ -52,8 +52,8 @@ run_model <- function(model = "odin_model",
     "mosquito_ivermectin_model" = mosquito_ivermectin_model,
     "odin_model_mort" = odin_model_mort,
     "odin_model_mort_bad_betaa" = odin_model_mort_bad_betaa,
-    "mosquito_ivermectin_model_daily_haz" = mosquito_ivermectin_model_daily_haz, #model with daily hazard
-    "ivm_model_fit_mort" = ivm_model_fit_mort,
+    "mosquito_ivermectin_model_daily_haz" = mosquito_ivermectin_model_daily_haz, #model with daily hazard (similar to Hannah's, leads to multi compartments)
+    "ivm_model_fit_mort" = ivm_model_fit_mort, #the model with hazard fits
     #"mosquito_ivermectin_model_no_delay" = mosquito_ivermectin_model_no_delay,
     #"odin_model_no_delay" = odin_model_no_delay,
     stop(sprintf("Unknown model '%s'", model)))

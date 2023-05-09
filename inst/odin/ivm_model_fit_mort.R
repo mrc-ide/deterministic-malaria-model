@@ -358,9 +358,8 @@ ivm_c_on <- user()
 
 #additional ivm mort (may change with Hannah's code around line 403, multiply by the daily hazard)
 #mu_h_0 <- user() #default = 0.628
-#mu_c_0 <- user()
+#mu_c_0 <- user()http://127.0.0.1:42853/graphics/plot_zoom_png?width=1200&height=900
 
-eff_len <- user() #length IVM kills mosquito. Setting to 23 to use the full range of hazards
 ###something like this if going to let the mort in IVM compartments change over time, i.e. not just one fixed value for 14 days###
 #hazards of ivermectin
 haz_h0 <- d*(t_imp^0.5)*exp(-c*t_imp)+a
@@ -370,7 +369,7 @@ haz_c0 <- user() #don't have cows in properly atm
 d <- 9.251
 c <- 0.274
 a <- 1.22
-t_imp <- ivm_h_on - t #time point of ivm implementation relative to the time point in the model we are at
+t_imp <- t - ivm_h_on #time point of ivm implementation relative to the time point in the model we are at
 
 mu_h_0 = haz_h0*mu
 mu_c_0 = haz_c0*mu
@@ -425,11 +424,11 @@ deriv(Evic) <- ince_ic - incv_ic + (ivm_cow_eff_cov*Ev) - (mu_c*Evic)
 deriv(Ivic) <- incv_ic + (ivm_cow_eff_cov*Iv) - (mu_c*Ivic)
 
 # Total mosquito population
-mv = Sv+Ev+Iv
-#Ivtot = Iv + sum(Ivih) + sum(Ivic)
-#Evtot = Ev + sum(Evih) + sum(Evic)
-#Svtot = Sv + sum(Svih) + sum(Svic)
-#mv = Svtot + Evtot + Ivtot
+#mv = Sv+Ev+Iv
+Ivtot = Iv + Ivih + Ivic
+Evtot = Ev + Evih + Evic
+Svtot = Sv + Svih + Svic
+mv = Svtot + Evtot + Ivtot
 # model options if don't want to use a delayed delay
 #deriv(Ev[1]) <- ince - Ev[1] - mu*Ev[1]
 #deriv(Ev[2:10]) <- Ev[i-1] - Ev[i] - mu*Ev[i]
@@ -635,9 +634,9 @@ output(inc) <- sum(clin_inc[,,])
 
 #ento outputs
 sporo_rate_no_ivm <- Iv/(Sv+Ev+Iv)
-sporo_rate_ivm_human <- sum(Ivih)/(sum(Svih)+sum(Evih)+sum(Ivih))
-sporo_rate_ivm_cattle <- sum(Ivic)/(sum(Svic)+sum(Evic)+sum(Ivic))
-sporo_rate_total <- Iv+sum(Ivih)+sum(Ivic)/mv
+sporo_rate_ivm_human <- Ivih/(Svih+Evih+Ivih)
+sporo_rate_ivm_cattle <- Ivic/(Svic+Evic+Ivic)
+sporo_rate_total <- Iv+Ivih+Ivic/mv
 
 # Param checking outputs
 output(mu) <- mu
@@ -665,4 +664,4 @@ output(s_IRS) <- s_IRS
 output(cov[]) <- TRUE
 output(K0) <- K0
 output(betaa) <- betaa
-output(mu_h_0[]) <- mu_h_0[i]
+output(mu_h_0) <- mu_h_0

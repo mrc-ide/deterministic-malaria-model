@@ -97,4 +97,6 @@ new_plot <- ggplot(fake_df, aes(x = t, y = daily_haz))+
   geom_function(fun = f_haz2, args = list(a = p$par[1], c = p$par[2], d= p$par[3], n = 0.5), colour = "red")
 
 
-#great, all works
+#great, all works.
+#final eq is: y = d*(t^n)*exp(-c*t)+a. Where n was 0.574 (we also solved for other values) and then we approximated n to be 0.5
+#then refit to give:

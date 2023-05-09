@@ -8,6 +8,10 @@
 */
 
 /* .C calls */
+extern void ivm_model_fit_mort_initmod_desolve(void *);
+extern void ivm_model_fit_mort_output_dde(void *);
+extern void ivm_model_fit_mort_rhs_dde(void *);
+extern void ivm_model_fit_mort_rhs_desolve(void *);
 extern void mosquito_ivermectin_model_daily_haz_initmod_desolve(void *);
 extern void mosquito_ivermectin_model_daily_haz_output_dde(void *);
 extern void mosquito_ivermectin_model_daily_haz_rhs_dde(void *);
@@ -58,6 +62,13 @@ extern void odin_model_TBV_rhs_dde(void *);
 extern void odin_model_TBV_rhs_desolve(void *);
 
 /* .Call calls */
+extern SEXP ivm_model_fit_mort_contents(SEXP);
+extern SEXP ivm_model_fit_mort_create(SEXP);
+extern SEXP ivm_model_fit_mort_initial_conditions(SEXP, SEXP);
+extern SEXP ivm_model_fit_mort_metadata(SEXP);
+extern SEXP ivm_model_fit_mort_rhs_r(SEXP, SEXP, SEXP);
+extern SEXP ivm_model_fit_mort_set_initial(SEXP, SEXP, SEXP, SEXP);
+extern SEXP ivm_model_fit_mort_set_user(SEXP, SEXP);
 extern SEXP mosquito_ivermectin_model_contents(SEXP);
 extern SEXP mosquito_ivermectin_model_create(SEXP);
 extern SEXP mosquito_ivermectin_model_daily_haz_contents(SEXP);
@@ -144,6 +155,10 @@ extern SEXP odin_model_TBV_set_initial(SEXP, SEXP, SEXP, SEXP);
 extern SEXP odin_model_TBV_set_user(SEXP, SEXP);
 
 static const R_CMethodDef CEntries[] = {
+    {"ivm_model_fit_mort_initmod_desolve",                  (DL_FUNC) &ivm_model_fit_mort_initmod_desolve,                  1},
+    {"ivm_model_fit_mort_output_dde",                       (DL_FUNC) &ivm_model_fit_mort_output_dde,                       1},
+    {"ivm_model_fit_mort_rhs_dde",                          (DL_FUNC) &ivm_model_fit_mort_rhs_dde,                          1},
+    {"ivm_model_fit_mort_rhs_desolve",                      (DL_FUNC) &ivm_model_fit_mort_rhs_desolve,                      1},
     {"mosquito_ivermectin_model_daily_haz_initmod_desolve", (DL_FUNC) &mosquito_ivermectin_model_daily_haz_initmod_desolve, 1},
     {"mosquito_ivermectin_model_daily_haz_output_dde",      (DL_FUNC) &mosquito_ivermectin_model_daily_haz_output_dde,      1},
     {"mosquito_ivermectin_model_daily_haz_rhs_dde",         (DL_FUNC) &mosquito_ivermectin_model_daily_haz_rhs_dde,         1},
@@ -196,6 +211,13 @@ static const R_CMethodDef CEntries[] = {
 };
 
 static const R_CallMethodDef CallEntries[] = {
+    {"ivm_model_fit_mort_contents",                            (DL_FUNC) &ivm_model_fit_mort_contents,                            1},
+    {"ivm_model_fit_mort_create",                              (DL_FUNC) &ivm_model_fit_mort_create,                              1},
+    {"ivm_model_fit_mort_initial_conditions",                  (DL_FUNC) &ivm_model_fit_mort_initial_conditions,                  2},
+    {"ivm_model_fit_mort_metadata",                            (DL_FUNC) &ivm_model_fit_mort_metadata,                            1},
+    {"ivm_model_fit_mort_rhs_r",                               (DL_FUNC) &ivm_model_fit_mort_rhs_r,                               3},
+    {"ivm_model_fit_mort_set_initial",                         (DL_FUNC) &ivm_model_fit_mort_set_initial,                         4},
+    {"ivm_model_fit_mort_set_user",                            (DL_FUNC) &ivm_model_fit_mort_set_user,                            2},
     {"mosquito_ivermectin_model_contents",                     (DL_FUNC) &mosquito_ivermectin_model_contents,                     1},
     {"mosquito_ivermectin_model_create",                       (DL_FUNC) &mosquito_ivermectin_model_create,                       1},
     {"mosquito_ivermectin_model_daily_haz_contents",           (DL_FUNC) &mosquito_ivermectin_model_daily_haz_contents,           1},

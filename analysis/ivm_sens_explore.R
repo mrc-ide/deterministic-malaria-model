@@ -96,19 +96,17 @@ ggplot(hazards_long, aes(x = day, y = hazard, col = as.factor(dose)))+
   geom_point()+
   theme_minimal()
 
-out_2 <- run_model(model = "mosquito_ivermectin_model_daily_haz",
+out_2 <- run_model(model = "ivm_model_fit_mort",
                    init_EIR = 100,
                    #increasing this EIR gets rid of the dde error
                    gamma_c_0 = 0,
                    gamma_h_0 = 1, time = 730,
                    gamma_c_min_age = 5,
                    gamma_h_min_age = 5,
-                   ivm_c_on = 731,
-                   ivm_h_on = 10, #time turn on
-                   haz_c0 = rep(0, 23),
-                   haz_h0 = hazards$d300[1:23],
-                   eff_len = 23)
-out_2$mv #total number of mosquitoes should not be increasing!
+                   ivm_c_on = 731, #no cattle IVM
+                   haz_c0 = 0,#no cattle IVM on
+                   ivm_h_on = 12 ) #time turn on)
+out_2$mv
 out_2$mu_h_0
 #each column of this matrix gives you the mortality rate (mu*daily_haz) on each day of IVM distrib
 
@@ -116,10 +114,41 @@ out_2$mu_h_0
 #getting the same output for out_2$mu_h_0 - this means it isn't working properly
 #need to modify it such that the we just have mu when no IVM, then mu*haz[day of IVM distrib], then back to mu
 
-
-out_2$Svih
 out_2_df <- as.data.frame(out_2) %>%
-  select(t, mv)
+  select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic, mv, mu, mu_h_0)
+
+ggplot(out_2_df, aes(x = t, y = mv))+
+  #geom_point()+
+  geom_line()+
+  geom_vline(xintercept = 12, linetype = "dashed", col = "red")
+out_2_df$mv
+ggplot(out_2_df, aes(x = t, y = mu_h_0))+
+  geom_point()+
+  geom_line()
+
+
+s_comp <- c("Sv", "Svic", "Svih")
+e_comp <- c("Ev", "Evic", "Evih")
+i_comp <- c("Iv", "Ivic", "Ivih")
+
+out_2_df_long <- gather(out_2_df, state_var, num_mosq, Sv:Ivic, factor_key=TRUE)
+
+out_2_df_long <- out_2_df_long %>%
+  mutate(state_categ = case_when(state_var %in% s_comp ~ "Susceptible",
+                                 state_var %in% e_comp ~ "Exposed",
+                                 state_var %in% i_comp ~ "Infectious"),
+         ivm_categ = case_when(grepl("ih", state_var) ~ "IVM from humans",
+                               grepl("ic", state_var) ~ "IVM from cattle",
+                               TRUE ~ "No IVM"))
+
+ggplot(out_2_df_long, aes(x = t, y = num_mosq, col = as.factor(state_categ)))+
+  geom_line()+
+  facet_wrap(~fct_relevel(ivm_categ,"No IVM", "IVM from humans","IVM from cattle"))+
+  #ylim(0, 1)+
+  #xlim(0,100)+
+  ggtitle("No ivermectin treatment")+
+  labs(col = "Mosquito infection state", y = "Number of mosquitoes \n in compartment")+
+  theme_minimal()
 
 #compare 1 and 2 in terms of prevalence. Is there a way to simplify incorporation of excess mort?
 

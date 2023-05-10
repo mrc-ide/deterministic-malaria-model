@@ -88,7 +88,7 @@ ggplot(out_1_df_long_num, aes(x = t, y = num_mosq, col = as.factor(state_categ))
 #plot hazards over time from IVERMAL
 
 #need to check where the 400s come from and that this is definitely hazards from Meno's paper
-hazards <- read.table("C:/Users/nc1115/Documents/github/ivRmectin/IVM_derivation/ivermectin_hazards.txt", header = TRUE)
+hazards <- read.table("data/ivermectin_hazards.txt", header = TRUE)
 hazards$d300
 hazards$d400
 hazards_long <- gather(hazards, dose, hazard, d400:d300, factor_key = TRUE)

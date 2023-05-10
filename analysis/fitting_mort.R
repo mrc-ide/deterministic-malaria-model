@@ -3,7 +3,7 @@
 require(tidyverse)
 require(optim)
 
-hazards <- read.table("C:/Users/nc1115/Documents/github/ivRmectin/IVM_derivation/ivermectin_hazards.txt", header = TRUE)
+hazards <- read.table("data/ivermectin_hazards.txt", header = TRUE)
 hazards$d300
 hazards$d400
 hazards_long <- gather(hazards, dose, hazard, d400:d300, factor_key = TRUE)

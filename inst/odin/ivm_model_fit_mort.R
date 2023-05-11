@@ -371,8 +371,8 @@ c <- 0.274
 a <- 1.22
 t_imp <- t - ivm_h_on #time point of ivm implementation relative to the time point in the model we are at
 
-#mu_h_0 = haz_h0*mu
-mu_h = haz_h0*mu
+mu_h_0 = haz_h0*mu
+#mu_h = haz_h0*mu
 mu_c_0 = haz_c0*mu
 #mu_c = haz_c0*mu
 ########################################################################

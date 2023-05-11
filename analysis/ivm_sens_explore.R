@@ -105,7 +105,7 @@ out_2 <- run_model(model = "ivm_model_fit_mort",
                    gamma_h_min_age = 5,
                    ivm_c_on = 731, #no cattle IVM
                    haz_c0 = 0,#no cattle IVM on
-                   ivm_h_on = 12 ) #time turn on)
+                   ivm_h_on = 0 ) #time turn on)
 out_2$mv
 out_2$mu_h_0
 #each column of this matrix gives you the mortality rate (mu*daily_haz) on each day of IVM distrib

@@ -371,10 +371,11 @@ c <- 0.274
 a <- 1.22
 t_imp <- t - ivm_h_on #time point of ivm implementation relative to the time point in the model we are at
 
-mu_h_0 = haz_h0*mu
-#mu_h = haz_h0*mu
-mu_c_0 = haz_c0*mu
-#mu_c = haz_c0*mu
+#mu_h_0 = haz_h0*mu
+#mu_c_0 = haz_c0*mu
+
+mu_h = haz_h0*mu
+mu_c = haz_c0*mu
 ########################################################################
 #mu_h <- mu+mu_h_0 #excess mort due to IVM humans
 #mu_c <- mu+mu_c_0 #excess mort
@@ -388,8 +389,8 @@ eff_len <- 23
 ivm_h_mu_off <- t_imp+eff_len # days from ivm distribution that ivm-killing effects last for
 ivm_c_mu_off <- t_imp + eff_len # days from ivm distribution that ivm-killing effects last for
 
-mu_h <- if (t > ivm_h_on && t <= ivm_h_mu_off) mu_h_0 else mu
-mu_c <- if (t > ivm_c_on && t <= ivm_c_mu_off) mu_c_0 else mu
+#mu_h <- if (t > ivm_h_on && t <= ivm_h_mu_off) mu_h_0 else mu
+#mu_c <- if (t > ivm_c_on && t <= ivm_c_mu_off) mu_c_0 else mu
 
 #new model parameters####
 gamma_h_min_age <- user() #min age for treatment

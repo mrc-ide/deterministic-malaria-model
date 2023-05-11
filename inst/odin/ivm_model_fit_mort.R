@@ -665,3 +665,4 @@ output(cov[]) <- TRUE
 output(K0) <- K0
 output(betaa) <- betaa
 output(mu_h_0) <- mu_h_0
+output(mu_h) <- mu_h

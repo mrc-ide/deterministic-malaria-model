@@ -17,7 +17,9 @@ out_1 <- run_model(model = "mosquito_ivermectin_model",
                    ivm_h_on = 20, #time turn on
                    mu_c_0 = 0,
                    mu_h_0 = 0.628)
-plot(out_1$t, out_1$mv)
+
+plot(out_1$t, out_1$mv, main = "Fixed elev mort switch")
+plot(out_1$t, out_1$prev)
 plot(out_1$t, out_1$mu_h)
 as.data.frame(out_1) %>%
   select(t, mv)
@@ -80,7 +82,7 @@ ggplot(out_1_df_long_num, aes(x = t, y = num_mosq, col = as.factor(state_categ))
   facet_wrap(~fct_relevel(ivm_categ,"No IVM", "IVM from humans","IVM from cattle"))+
   #ylim(0, 1)+
   #xlim(0,100)+
-  ggtitle("No ivermectin treatment")+
+  ggtitle("Simple switch")+
   labs(col = "Mosquito infection state", y = "Number of mosquitoes \n in compartment")+
   theme_minimal()+
   geom_hline(yintercept = 39.1, lty = "dashed")
@@ -91,6 +93,7 @@ ggplot(out_1_df_long_num, aes(x = t, y = num_mosq, col = as.factor(state_categ))
 #need to check where the 400s come from and that this is definitely hazards from Meno's paper
 hazards <- read.table("data/ivermectin_hazards.txt", header = TRUE)
 hazards$d300
+mean(hazards$d300[1:23])
 hazards$d400
 hazards_long <- gather(hazards, dose, hazard, d400:d300, factor_key = TRUE)
 ggplot(hazards_long, aes(x = day, y = hazard, col = as.factor(dose)))+
@@ -101,17 +104,18 @@ out_2 <- run_model(model = "ivm_model_fit_mort",
                    init_EIR = 100,
                    #increasing this EIR gets rid of the dde error
                    gamma_c_0 = 0,
-                   gamma_h_0 = 1, time = 730,
+                   gamma_h_0 = 1,
+                   time = 2000,
                    gamma_c_min_age = 5,
                    gamma_h_min_age = 5,
-                   ivm_c_on = 731, #no cattle IVM
+                   ivm_c_on = 5000, #no cattle IVM
                    haz_c0 = 0,#no cattle IVM on
                    ivm_h_on = 20 ) #time turn on)
 plot(out_2$t, out_2$mu_h)
-plot(out_2$t, out_2$mv)
+plot(out_2$t, out_2$mv, main = "Daily hazard function")
+plot(out_2$t, out_2$prev)
 
 out_2$mv
-out_2$mu_h_0
 #each column of this matrix gives you the mortality rate (mu*daily_haz) on each day of IVM distrib
 
 #have tried running the model with different start time for ivermectin
@@ -119,18 +123,13 @@ out_2$mu_h_0
 #need to modify it such that the we just have mu when no IVM, then mu*haz[day of IVM distrib], then back to mu
 
 out_2_df <- as.data.frame(out_2) %>%
-  select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic, mv, mu, mu_h_0)
+  select(t, Sv, Ev, Iv, Svih, Evih, Ivih, Svic, Evic, Ivic, mv, mu)
 
 ggplot(out_2_df, aes(x = t, y = mv))+
   #geom_point()+
   geom_line()+
   geom_vline(xintercept = 12, linetype = "dashed", col = "red")
 out_2_df$mv
-ggplot(out_2_df, aes(x = t, y = mu_h_0))+
-  geom_point()+
-  geom_line()
-
-
 s_comp <- c("Sv", "Svic", "Svih")
 e_comp <- c("Ev", "Evic", "Evih")
 i_comp <- c("Iv", "Ivic", "Ivih")
@@ -150,7 +149,7 @@ ggplot(out_2_df_long, aes(x = t, y = num_mosq, col = as.factor(state_categ)))+
   facet_wrap(~fct_relevel(ivm_categ,"No IVM", "IVM from humans","IVM from cattle"))+
   #ylim(0, 1)+
   #xlim(0,100)+
-  ggtitle("No ivermectin treatment")+
+  ggtitle("Daily hazard function")+
   labs(col = "Mosquito infection state", y = "Number of mosquitoes \n in compartment")+
   theme_minimal()
 

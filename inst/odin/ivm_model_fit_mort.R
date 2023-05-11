@@ -386,8 +386,8 @@ mu_c = haz_c0*mu
 
 eff_len <- 23
 
-ivm_h_mu_off <- t_imp+eff_len # days from ivm distribution that ivm-killing effects last for
-ivm_c_mu_off <- t_imp + eff_len # days from ivm distribution that ivm-killing effects last for
+ivm_h_mu_off <- ivm_h_on+eff_len # days from ivm distribution that ivm-killing effects last for
+ivm_c_mu_off <- ivm_h_on + eff_len # days from ivm distribution that ivm-killing effects last for
 
 #mu_h <- if (t > ivm_h_on && t <= ivm_h_mu_off) mu_h_0 else mu
 #mu_c <- if (t > ivm_c_on && t <= ivm_c_mu_off) mu_c_0 else mu
@@ -667,5 +667,7 @@ output(s_IRS) <- s_IRS
 output(cov[]) <- TRUE
 output(K0) <- K0
 output(betaa) <- betaa
+output(gamma_h_0) <- gamma_h_0
+output(ivm_h_mu_off) <- ivm_h_mu_off
 #output(mu_h_0) <- mu_h_0
-output(mu_h) <- mu_h
+#output(mu_h) <- mu_h

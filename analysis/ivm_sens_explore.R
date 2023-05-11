@@ -18,6 +18,7 @@ out_1 <- run_model(model = "mosquito_ivermectin_model",
                    mu_c_0 = 0,
                    mu_h_0 = 0.628)
 plot(out_1$t, out_1$mv)
+plot(out_1$t, out_1$mu_h)
 as.data.frame(out_1) %>%
   select(t, mv)
 
@@ -105,7 +106,8 @@ out_2 <- run_model(model = "ivm_model_fit_mort",
                    gamma_h_min_age = 5,
                    ivm_c_on = 731, #no cattle IVM
                    haz_c0 = 0,#no cattle IVM on
-                   ivm_h_on = 0 ) #time turn on)
+                   ivm_h_on = 20 ) #time turn on)
+plot(out_2$t, out_2$mu_h)
 plot(out_2$t, out_2$mv)
 
 out_2$mv

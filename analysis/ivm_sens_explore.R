@@ -5,11 +5,40 @@
 #1: excess mortality modelled purely with a switch
 require(ICDMM)
 require(tidyverse)
+require(cowplot)
+
+hazards <- read.table("data/ivermectin_hazards.txt", header = TRUE)
+hazards$d300
+haz <- mean(hazards$d300[1:23])
+hazards$d400
+
+cowvermectin <- read.csv("data/Lyimo_data.csv", header = TRUE)
+cowvermectin <- cowvermectin %>%
+  select(Days.post.treatment, Control.Cattle, Treated.Cattle, relative)
+
+p1 <- ggplot(cowvermectin, aes(x = Days.post.treatment, y = Control.Cattle))+
+  geom_point()+
+  geom_line()+
+  ggtitle("Control Cattle")
+
+p2 <- ggplot(cowvermectin, aes(x = Days.post.treatment, y = Treated.Cattle))+
+  geom_point()+
+  geom_line()+
+  ggtitle("IVM treated cattle")
+
+
+p3 <- ggplot(cowvermectin, aes(x = Days.post.treatment, y = relative))+
+  geom_point()+
+  geom_line()
+
+plot_grid(p1, p2, p3, ncol = 3)
 
 out_1 <- run_model(model = "mosquito_ivermectin_model",
                    init_EIR = 100,
                    #increasing this EIR gets rid of the dde error
                    gamma_c_0 = 0,
+                   haz_h_0 = haz,
+                   haz_c_0 = 0,
                    gamma_h_0 = 1, time = 730,
                    gamma_c_min_age = 5,
                    gamma_h_min_age = 5,
@@ -20,6 +49,7 @@ out_1 <- run_model(model = "mosquito_ivermectin_model",
 
 plot(out_1$t, out_1$mv, main = "Fixed elev mort switch")
 plot(out_1$t, out_1$prev)
+plot(out_1$t, out_1$sporo_rate_total)
 plot(out_1$t, out_1$mu_h)
 as.data.frame(out_1) %>%
   select(t, mv)
@@ -91,31 +121,40 @@ ggplot(out_1_df_long_num, aes(x = t, y = num_mosq, col = as.factor(state_categ))
 #plot hazards over time from IVERMAL
 
 #need to check where the 400s come from and that this is definitely hazards from Meno's paper
-hazards <- read.table("data/ivermectin_hazards.txt", header = TRUE)
-hazards$d300
-mean(hazards$d300[1:23])
-hazards$d400
+
 hazards_long <- gather(hazards, dose, hazard, d400:d300, factor_key = TRUE)
 ggplot(hazards_long, aes(x = day, y = hazard, col = as.factor(dose)))+
   geom_point()+
   theme_minimal()
+
 
 out_2 <- run_model(model = "ivm_model_fit_mort",
                    init_EIR = 100,
                    #increasing this EIR gets rid of the dde error
                    gamma_c_0 = 0,
                    gamma_h_0 = 1,
-                   time = 2000,
+                   time = 730,
                    gamma_c_min_age = 5,
                    gamma_h_min_age = 5,
                    ivm_c_on = 5000, #no cattle IVM
                    haz_c0 = 0,#no cattle IVM on
-                   ivm_h_on = 20 ) #time turn on)
+                   ivm_h_on = 20) #time turn on)
 plot(out_2$t, out_2$mu_h)
 plot(out_2$t, out_2$mv, main = "Daily hazard function")
-plot(out_2$t, out_2$prev)
+plot(out_2$t, out_2$prev, main = "ivm model")
+plot(out_2$t, out_2$sporo_rate_total)
 
-out_2$mv
+
+
+#check regular model and 0% cov IVM behave the same
+
+out_3 <- run_model(model = "odin_model",
+                   init_EIR = 100,
+                   time = 730,
+                   admin2 = "Thies")
+plot(out_3$t, out_2$prev, main = "odin model")
+plot(out_2$t, out_2$prev, main = "ivm model")
+
 #each column of this matrix gives you the mortality rate (mu*daily_haz) on each day of IVM distrib
 
 #have tried running the model with different start time for ivermectin
@@ -130,6 +169,8 @@ ggplot(out_2_df, aes(x = t, y = mv))+
   geom_line()+
   geom_vline(xintercept = 12, linetype = "dashed", col = "red")
 out_2_df$mv
+
+
 s_comp <- c("Sv", "Svic", "Svih")
 e_comp <- c("Ev", "Evic", "Evih")
 i_comp <- c("Iv", "Ivic", "Ivih")

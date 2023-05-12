@@ -389,8 +389,8 @@ eff_len <- 23
 ivm_h_mu_off <- ivm_h_on+eff_len # days from ivm distribution that ivm-killing effects last for
 ivm_c_mu_off <- ivm_h_on + eff_len # days from ivm distribution that ivm-killing effects last for
 
-mu_h <- if (t > ivm_h_on && t <= ivm_h_mu_off) mu_h_0 else 1
-mu_c <- if (t > ivm_c_on && t <= ivm_c_mu_off) mu_c_0 else 1
+mu_h <- if (t > ivm_h_on && t <= ivm_h_mu_off) mu_h_0 else mu
+mu_c <- if (t > ivm_c_on && t <= ivm_c_mu_off) mu_h_0 else mu
 
 #new model parameters####
 gamma_h_min_age <- user() #min age for treatment
@@ -639,7 +639,7 @@ output(inc) <- sum(clin_inc[,,])
 sporo_rate_no_ivm <- Iv/(Sv+Ev+Iv)
 sporo_rate_ivm_human <- Ivih/(Svih+Evih+Ivih)
 sporo_rate_ivm_cattle <- Ivic/(Svic+Evic+Ivic)
-sporo_rate_total <- Iv+Ivih+Ivic/mv
+sporo_rate_total <- (Iv+Ivih+Ivic)/mv
 
 # Param checking outputs
 output(mu) <- mu
@@ -670,4 +670,4 @@ output(betaa) <- betaa
 output(gamma_h_0) <- gamma_h_0
 output(ivm_h_mu_off) <- ivm_h_mu_off
 #output(mu_h_0) <- mu_h_0
-#output(mu_h) <- mu_h
+output(mu_h) <- mu_h

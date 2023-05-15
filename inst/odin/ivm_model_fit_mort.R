@@ -391,8 +391,8 @@ eff_len <- 23
 ivm_h_mu_off <- ivm_h_on+eff_len # days from ivm distribution that ivm-killing effects last for
 ivm_c_mu_off <- ivm_h_on + eff_len # days from ivm distribution that ivm-killing effects last for
 
-mu_h <- mu
-#mu_h <- if (t > ivm_h_on && t <= ivm_h_mu_off) mu_h else mu
+#mu_h <- mu
+mu_h <- if (t > ivm_h_on && t <= ivm_h_mu_off) mu_h else mu
 mu_c <- if (t > ivm_c_on && t <= ivm_c_mu_off) mu_h else mu
 
 #new model parameters####

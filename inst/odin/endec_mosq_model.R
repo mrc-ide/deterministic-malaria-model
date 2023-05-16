@@ -156,6 +156,28 @@ avhc_i[1:num_int] <- cov[i]*av_mosq[i]
 avhc <- sum(avhc_i)   # mean biting rate of mosquitoes on humans in the presence of vector control
 
 ##------------------------------------------------------------------------------
+##########################
+## SEASONALITY FUNCTION ##
+##########################
+##------------------------------------------------------------------------------
+
+# Seasonality is added into the model using a Fourier series that was fit to rainfall at every admin 1 level
+pi <- user() # weird quirk, need to pass pi
+
+# The parameters for the fourier series
+ssa0 <- user()
+ssa1 <- user()
+ssa2 <- user()
+ssa3 <- user()
+ssb1 <- user()
+ssb2 <- user()
+ssb3 <- user()
+theta_c <- user()
+# Recreation of the rainfall function
+theta2 <- if(ssa0 == 0 && ssa1  == 0 && ssa2  == 0 && ssb1  == 0 && ssb2  == 0 && ssb3  == 0 && theta_c  == 0)
+  1 else max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001)
+
+##------------------------------------------------------------------------------
 ###################
 ## LARVAL STATES ##
 ###################

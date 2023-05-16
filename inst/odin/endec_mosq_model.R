@@ -155,3 +155,126 @@ dim(avhc_i) <- num_int
 avhc_i[1:num_int] <- cov[i]*av_mosq[i]
 avhc <- sum(avhc_i)   # mean biting rate of mosquitoes on humans in the presence of vector control
 
+##------------------------------------------------------------------------------
+########################
+## INTERVENTION MODEL ##
+########################
+##------------------------------------------------------------------------------
+
+# See supplementary materials S2 from http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000324#s6
+
+# general parameters
+ITN_IRS_on <- user() # days after which interventions begin
+num_int <- user() # number of intervention categorys, ITN only, IRS only, neither, both
+itn_cov <- user() # proportion of population covered by ITN
+irs_cov <- user() # proportion of population covered by IRS
+
+# cov is a vector of coverages for each intervention category:
+dim(cov_) <- 4
+cov_[1] <- (1-itn_cov)*(1-irs_cov)  # {No intervention}
+cov_[2] <- itn_cov*(1-irs_cov) # 	   {ITN only}
+cov_[3] <- (1-itn_cov)*irs_cov	#      {IRS only}
+cov_[4] <- itn_cov*irs_cov #	   {Both ITN and IRS}
+cov[] <- cov_[i]
+dim(cov) <- num_int
+
+IRS_interval <- user() # how long IRS lasts
+ITN_interval <- user() # how long ITN lasts
+chi <- user() # proportion of vector endophily
+Q0 <- user() # proportion of anthropophagy
+bites_Bed <- user() # endophagy in bed
+bites_Indoors <- user() # endophagy indoors
+
+# General intervention model terminology:
+# r - probability of trying to repeat feed after hitting ITN/IRS
+# d - probability of dying after hitting ITN/IRS
+# s - probability of successful feed after hitting ITN/IRS
+
+# The maximum (and then minimum) r and d values for ITN/IRS on day 0 before they decay
+r_ITN0 <- user()
+d_ITN0 <- user()
+d_IRS0 <- user()
+r_IRS0 <- user()
+r_ITN1 <- user()
+irs_loss <- user()
+itn_loss <- user()
+
+# Calculates decay for ITN/IRS
+ITN_decay = if(t < ITN_IRS_on) 0 else exp(-((t-ITN_IRS_on)%%ITN_interval) * itn_loss)
+IRS_decay = if(t < ITN_IRS_on) 0 else exp(-((t-ITN_IRS_on)%%IRS_interval) * irs_loss)
+
+# The r,d and s values turn on after ITN_IRS_on and decay accordingly
+d_ITN <- if(t < ITN_IRS_on) 0 else d_ITN0*ITN_decay
+r_ITN <- if(t < ITN_IRS_on) 0 else r_ITN1 + (r_ITN0 - r_ITN1)*ITN_decay
+s_ITN <- if(t < ITN_IRS_on) 1 else 1 - d_ITN - r_ITN
+
+r_IRS <- if(t < ITN_IRS_on) 0 else r_IRS0*IRS_decay
+d_IRS <- if(t < ITN_IRS_on) 0 else chi*d_IRS0*IRS_decay
+s_IRS <- if(t < ITN_IRS_on) 1 else 1 - d_IRS
+
+# probability that mosquito bites and survives for each intervention category
+dim(w_) <- 4
+w_[1] <- 1
+w_[2] <- 1 - bites_Bed + bites_Bed*s_ITN
+w_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)*s_IRS
+w_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN*s_IRS + (bites_Indoors - bites_Bed)*(1-r_IRS)*s_IRS
+w[] <- w_[i]
+dim(w) <- num_int
+
+# probability that mosq feeds during a single attempt for each int. cat.
+dim(yy_) <- 4
+yy_[1] <- 1
+yy_[2] <- w_[2]
+yy_[3] <- 1 - bites_Indoors + bites_Indoors*(1-r_IRS)
+yy_[4] <- 1 - bites_Indoors + bites_Bed*(1-r_IRS)*s_ITN + (bites_Indoors - bites_Bed)*(1-r_IRS)
+yy[] <- yy_[i]
+dim(yy) <- num_int
+
+# probability that mosquito is repelled during a single attempt for each int. cat.
+dim(z_) <- 4
+z_[1] <- 0
+z_[2] <- bites_Bed*r_ITN
+z_[3] <- bites_Indoors*r_IRS
+z_[4] <- bites_Bed*(r_IRS+ (1-r_IRS)*r_ITN) + (bites_Indoors - bites_Bed)*r_IRS
+z[] <- z_[i]
+dim(z) <- num_int
+
+# Calculating Z (zbar) and W (wbar) - see Supplementary materials 2 for details
+dim(zhi) <- num_int
+dim(whi) <- num_int
+zhi[1:num_int] <- cov[i]*z[i]
+whi[1:num_int] <- cov[i]*w[i]
+zh <- if(t < ITN_IRS_on) 0 else sum(zhi)
+wh <- if(t < ITN_IRS_on) 1 else sum(whi)
+# Z (zbar) - average probability of mosquito trying again during single feeding attempt
+zbar <- Q0*zh
+# W (wbar) - average probability of mosquito successfully feeding during single attempt
+wbar <- 1 - Q0 + Q0*wh
+
+# p1 is the updated p10 given that interventions are now in place:
+p1 <- wbar*p10/(1-zbar*p10)
+Q <- 1-(1-Q0)/wbar # updated anthropophagy given interventions
+av <- fv*Q # biting rate on humans
+dim(av_mosq) <- num_int
+av_mosq[1:num_int] <- av*w[i]/wh # rate at which mosquitoes bite each int. cat.
+dim(av_human) <- num_int
+av_human[1:num_int] <- av*yy[i]/wh # biting rate on humans in each int. cat.
+
+# Param checking outputs
+output(mu) <- mu
+output(beta_larval) <- beta_larval
+output(KL) <- KL
+output(mv) <- mv
+output(Q) <- Q
+output(wh) <- wh
+output(d_ITN) <- d_ITN
+output(r_ITN) <- r_ITN
+output(s_ITN) <- s_ITN
+output(d_IRS) <- d_IRS
+output(r_IRS) <- r_IRS
+output(s_IRS) <- s_IRS
+output(cov[]) <- TRUE
+output(K0) <- K0
+output(avhc) <- avhc
+
+output(IVRM_sr) <- IVRM_sr

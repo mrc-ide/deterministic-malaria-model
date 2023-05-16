@@ -156,6 +156,63 @@ avhc_i[1:num_int] <- cov[i]*av_mosq[i]
 avhc <- sum(avhc_i)   # mean biting rate of mosquitoes on humans in the presence of vector control
 
 ##------------------------------------------------------------------------------
+###################
+## LARVAL STATES ##
+###################
+##------------------------------------------------------------------------------
+
+# Model by White et al.
+# (https://parasitesandvectors.biomedcentral.com/articles/10.1186/1756-3305-4-153)
+
+# EL - early larval instar stage
+# LL - late larval instar stage
+# PL - pupal stage
+
+# mean carrying capacity from initial mosquito density:
+dLL <- user() # development time of larvae
+dPL <- user() #development time of pupae
+dEL <- user() #development time of early stage
+muLL <- user() #daily density dep. mortality rate of larvae
+muPL <- user() #daily den. dep. mortality rate of pupae
+muEL <- user() #daily den. dep. mortality rate of early stage
+gammaL <- user() # eff. of den. dep. on late stage relative to early stage
+
+# fitted entomological parameters:
+mv0 <- user() # initial mosquito density
+mu0 <- user() # baseline mosquito death rate
+tau1 <- user() # duration of host-seeking behaviour
+tau2 <- user() # duration of resting behaviour
+p10 <- user() # prob of surviving 1 feeding cycle
+p2 <- user() #prob of surviving one resting cycle
+betaL <- user() # maximum number of eggs per oviposition per mosq
+
+# Entomological variables:
+eov <- betaL/mu*(exp(mu/fv)-1)
+beta_larval <- eov*mu*exp(-mu/fv)/(1-exp(-mu/fv)) # Number of eggs laid per day
+b_lambda <- (gammaL*muLL/muEL-dEL/dLL+(gammaL-1)*muLL*dEL)
+lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*muEL*mu0*dLL*(1+dPL*muPL)))
+K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
+
+# Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
+KL <- K0*theta2
+fv <- 1/( tau1/(1-zbar) + tau2 ) # mosquito feeding rate (zbar from intervention param.)
+mu <- -fv*log(p1*p2) # mosquito death rate
+
+# finding equilibrium and initial values for EL, LL & PL
+init_PL <- user()
+initial(PL) <- init_PL
+init_LL <- user()
+initial(LL) <- init_LL
+init_EL <- user()
+initial(EL) <- init_EL
+
+# (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
+deriv(EL) <- beta_larval*mv-muEL*(1+(EL+LL)/KL)*EL - EL/dEL
+# egg hatching - den. dep. mortality - maturing larvae
+deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL)*LL - LL/dLL
+# pupae - mortality - fully developed pupae
+deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
+##------------------------------------------------------------------------------
 ########################
 ## INTERVENTION MODEL ##
 ########################

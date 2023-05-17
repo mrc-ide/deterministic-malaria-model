@@ -351,8 +351,8 @@ ivm_h_on <- user()
 ivm_c_on <- user()
 
 #additional ivm mort (may change with Hannah's code around line 403, multiply by the daily hazard)
-mu_h_0 <- user() #default = 0.628
-mu_c_0 <- user()
+#mu_h_0 <- user() #default = 0.628
+#mu_c_0 <- user()
 
 ###something like this if going to let the mort in IVM compartments change over time, i.e. not just one fixed value for 14 days###
 #haz_h0[] <- user()
@@ -365,13 +365,15 @@ mu_c_0 <- user()
 #mu_h_0[1:eff_len] = haz_h0[i]*mu
 #mu_c_0[1:eff_len] = haz_c0[i]*mu
 ########################################################################
-mu_h <- mu+mu_h_0 #excess mort due to IVM humans
-mu_c <- mu+mu_c_0 #excess mort due to IVM cattle
+mu_h <- mu*haz_h_0 #excess mort due to IVM humans
+mu_c <- mu*haz_c_0 #excess mort due to IVM cattle
 
+haz_h_0 <- user()
+haz_c_0 <- user()
 #if t is between ivm_h_on and 14 days from that then elev mort, else 0
 #might need to change ivm_h_mu_off, because of the dosing e.g. 3x300micrograms
 
-eff_len <- 14
+eff_len <- 23
 ivm_h_mu_off <- ivm_h_on+eff_len # days from ivm distribution that ivm-killing effects last for
 ivm_c_mu_off <- ivm_c_on + eff_len # days from ivm distribution that ivm-killing effects last for
 
@@ -623,7 +625,7 @@ output(inc) <- sum(clin_inc[,,])
 sporo_rate_no_ivm <- Iv/(Sv+Ev+Iv)
 sporo_rate_ivm_human <- Ivih/(Svih+Evih+Ivih)
 sporo_rate_ivm_cattle <- Ivic/(Svic+Evic+Ivic)
-sporo_rate_total <- (Iv+Ivih+Ivic)/(Sv+Ev+Iv+Svih+Evih+Ivih+Svic+Evic+Ivic)
+sporo_rate_total <- (Iv+Ivih+Ivic)/mv
 
 # Param checking outputs
 output(mu) <- mu

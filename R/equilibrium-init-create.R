@@ -31,6 +31,8 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   # mpl is shorter :)
   mpl <- model_param_list
 
+
+
   ## Check Parameters
   if(!is.numeric(age_vector)) stop("age_vector provided is not numeric")
   if(!is.numeric(het_brackets)) stop("het_brackets provided is not numeric")
@@ -307,9 +309,60 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   admin_matches <- admin_match(admin_unit = admin_unit, country = country,
                           admin_units_seasonal = admin_units_seasonal)
 
-  if(admin_matches == 0){
+  ### initialise seasonal params in later years to 0
+  ssa0_2nd <- ssa1_2nd <- ssa2_2nd <- ssa3_2nd <- ssb1_2nd <- ssb2_2nd <- ssb3_2nd <- theta_c_2nd <- 0
+  ssa0_3rd <- ssa1_3rd <- ssa2_3rd <- ssa3_3rd <- ssb1_3rd <- ssb2_3rd <- ssb3_3rd <- theta_c_3rd <- 0
+  ssa0_4th <- ssa1_4th <- ssa2_4th <- ssa3_4th <- ssb1_4th <- ssb2_4th <- ssb3_4th <- theta_c_4th <- 0
+  ssa0_5th <- ssa1_5th <- ssa2_5th <- ssa3_5th <- ssb1_5th <- ssb2_5th <- ssb3_5th <- theta_c_5th <- 0
+  ssa0_6th <- ssa1_6th <- ssa2_6th <- ssa3_6th <- ssb1_6th <- ssb2_6th <- ssb3_6th <- theta_c_6th <- 0
+
+  sst2<-sst3<-sst4<-sst5<-sst6<-1000000  ## initialise times of seasonal change as v large.
+
+  if(admin_matches == 0 & length(mpl$css)==0){
     ssa0 <- ssa1 <- ssa2 <- ssa3 <- ssb1 <- ssb2 <- ssb3 <- theta_c <- 0
-  } else {
+
+  } else if(admin_matches == 0 & mpl$custom_seas) {
+
+    # user-entered seasonality for the first year (works also if it is only one year entered.)
+    ssa0 <- mpl$css[1,1]
+    ssa1 <- mpl$css[1,2]
+    ssb1 <- mpl$css[1,3]
+    ssa2 <- mpl$css[1,4]
+    ssb2 <- mpl$css[1,5]
+    ssa3 <- mpl$css[1,6]
+    ssb3 <- mpl$css[1,7]
+    theta_c <- mpl$css[1,8]
+
+
+    if(mpl$seas_multi_year) {
+
+      ssa0_2nd <- mpl$css[2,1]
+      ssa1_2nd <- mpl$css[2,2]
+      ssb1_2nd <- mpl$css[2,3]
+      ssa2_2nd <- mpl$css[2,4]
+      ssb2_2nd <- mpl$css[2,5]
+      ssa3_2nd <- mpl$css[2,6]
+      ssb3_2nd <- mpl$css[2,7]
+      theta_c_2nd <- mpl$css[2,8]
+
+      sst2 <-mpl$times_change_seas[1]
+
+      if(mpl$n_seasonal_periods>2) {
+        ssa0_3rd <- mpl$css[3,1]
+        ssa1_3rd <- mpl$css[3,2]
+        ssb1_3rd <- mpl$css[3,3]
+        ssa2_3rd <- mpl$css[3,4]
+        ssb2_3rd <- mpl$css[3,5]
+        ssa3_3rd <- mpl$css[3,6]
+        ssb3_3rd <- mpl$css[3,7]
+        theta_c_3rd <- mpl$css[3,8]
+
+        sst3 <-mpl$times_change_seas[2]
+
+      }
+    }
+
+  } else    {
     ssa0 <- admin_units_seasonal$a0[admin_matches]
     ssa1 <- admin_units_seasonal$a1[admin_matches]
     ssa2 <- admin_units_seasonal$a2[admin_matches]
@@ -346,7 +399,18 @@ equilibrium_init_create <- function(age_vector, het_brackets,
               FOI = FOI_eq, EIR_eq = EIR_eq, cA_eq = cA_eq,
               den = den, age59 = age59, age05 = age05, ssa0 = ssa0, ssa1 = ssa1,
               ssa2 = ssa2, ssa3 = ssa3, ssb1 = ssb1, ssb2 = ssb2, ssb3 = ssb3,
-              theta_c = theta_c, age = age_vector*mpl$DY, ft = ft, FOIv_eq = FOIv_eq,
+              theta_c = theta_c, sst2=sst2,  sst3=sst3,  sst4=sst4,  sst5=sst5,  sst6=sst6,
+              ssa0_2nd = ssa0_2nd, ssa1_2nd = ssa1_2nd, ssa2_2nd = ssa2_2nd, ssa3_2nd = ssa3_2nd,
+              ssb1_2nd = ssb1_2nd, ssb2_2nd = ssb2_2nd, ssb3_2nd = ssb3_2nd, theta_c_2nd = theta_c_2nd,
+              ssa0_3rd = ssa0_3rd, ssa1_3rd = ssa1_3rd, ssa2_3rd = ssa2_3rd, ssa3_3rd = ssa3_3rd,
+              ssb1_3rd = ssb1_3rd, ssb2_3rd = ssb2_3rd, ssb3_3rd = ssb3_3rd, theta_c_3rd = theta_c_3rd,
+              ssa0_4th = ssa0_4th, ssa1_4th = ssa1_4th, ssa2_4th = ssa2_4th, ssa3_4th = ssa3_4th,
+              ssb1_4th = ssb1_4th, ssb2_4th = ssb2_4th, ssb3_4th = ssb3_4th, theta_c_4th = theta_c_4th,
+              ssa0_5th = ssa0_5th, ssa1_5th = ssa1_5th, ssa2_5th = ssa2_5th, ssa3_5th = ssa3_5th,
+              ssb1_5th = ssb1_5th, ssb2_5th = ssb2_5th, ssb3_5th = ssb3_5th, theta_c_5th = theta_c_5th,
+              ssa0_6th = ssa0_6th, ssa1_6th = ssa1_6th, ssa2_6th = ssa2_6th, ssa3_6th = ssa3_6th,
+              ssb1_6th = ssb1_6th, ssb2_6th = ssb2_6th, ssb3_6th = ssb3_6th, theta_c_6th = theta_c_6th,
+              age = age_vector*mpl$DY, ft = ft, FOIv_eq = FOIv_eq,
               betaS = betaS, betaA = betaA, betaU = betaU, FOIvij_eq=FOIvij_eq,
               age_mid_point = age_mid_point, het_bounds = het_bounds, pi = pi,
               age20l = age20l, age20u = age20u, age_20_factor = age_20_factor)

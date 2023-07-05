@@ -36,22 +36,24 @@ run_model <- function(model = "odin_model",
   mpl <- model_param_list_create(...)
 
   # generate initial state variables from equilibrium solution
+  # a named list of all the parameters, initial states etc.
   state <- equilibrium_init_create(age_vector=age, EIR=init_EIR,ft=init_ft,
                                    model_param_list = mpl, het_brackets=het_brackets,
                                    country = country,
                                    admin_unit = admin2)
 
   # create odin generator
-  generator <- switch(model,
-    "odin_model" = odin_model,
-    "odin_model_emanators" = odin_model_emanators,
-    "odin_model_hrp2" = odin_model_hrp2,
-    "odin_model_IVM_SMChet" = odin_model_IVM_SMChet,
-    "odin_model_TBV" = odin_model_TBV,
-    "odin_model_mass_effect" = odin_model_mass_effect,
-    "odin_model_mass_effect_pp" = odin_model_mass_effect_pp,
-    stop(sprintf("Unknown model '%s'", model)))
+  # generator <- switch(model,
+  #   "odin_model" = odin_model,
+  #   "odin_model_emanators" = odin_model_emanators,
+  #   "odin_model_hrp2" = odin_model_hrp2,
+  #   "odin_model_IVM_SMChet" = odin_model_IVM_SMChet,
+  #   "odin_model_TBV" = odin_model_TBV,
+  #   "odin_model_mass_effect" = odin_model_mass_effect,
+  #   "odin_model_mass_effect_pp" = odin_model_mass_effect_pp,
+  #   stop(sprintf("Unknown model '%s'", model)))
 
+  generator<- odin("inst/odin/odin_model.R")
   # There are many parameters used that should not be passed through
   # to the model.
   state_use <- state[names(state) %in% coef(generator)$name]

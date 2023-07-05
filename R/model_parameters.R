@@ -168,6 +168,7 @@ model_param_list_create <- function(
   itn_half_life =   2.64 * DY,
   IRS_interval =   1 * DY,
   ITN_interval =   3 * DY,
+  custom_seas = F,
   ...
 
 ){
@@ -312,6 +313,7 @@ model_param_list_create <- function(
   mp_list$irs_loss <- log(2)/mp_list$irs_half_life
   mp_list$itn_loss <- log(2)/mp_list$itn_half_life
 
+  mp_list$custom_seas <- custom_seas
   # check that none of the spare parameters in the extra
   if(sum(!is.na(match(names(extra_param_list),names(mp_list))))!=0){
 

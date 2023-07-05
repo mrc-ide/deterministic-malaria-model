@@ -25,7 +25,7 @@
 
 equilibrium_init_create <- function(age_vector, het_brackets,
                                     country = NULL, admin_unit = NULL, ft,
-                                    EIR, model_param_list)
+                                    EIR, model_param_list, runTime)
 {
 
   # mpl is shorter :)
@@ -318,11 +318,12 @@ equilibrium_init_create <- function(age_vector, het_brackets,
 
   sst2<-sst3<-sst4<-sst5<-sst6<-1000000  ## initialise times of seasonal change as v large.
 
-  if(admin_matches == 0 & length(mpl$css)==0){
+  if(admin_matches == 0 & !mpl$custom_seas){
     ssa0 <- ssa1 <- ssa2 <- ssa3 <- ssb1 <- ssb2 <- ssb3 <- theta_c <- 0
 
   } else if(admin_matches == 0 & mpl$custom_seas) {
 
+    print(mpl$css[1,1])
     # user-entered seasonality for the first year (works also if it is only one year entered.)
     ssa0 <- mpl$css[1,1]
     ssa1 <- mpl$css[1,2]
@@ -431,6 +432,10 @@ equilibrium_init_create <- function(age_vector, het_brackets,
   het_bounds <- sort(zetas)[wt_cuts]
   het_bounds[length(het_bounds)] <- (mpl$max_age/365)+1
 
+  scaling_cc_t<-rep(1,runTime)
+  if(length(mpl$rel_cc)>0) scaling_cc_t<-mpl$rel_cc
+  rTime<-runTime
+
   ## collate init
   res <- list(init_S = S_eq, init_T = T_eq, init_D = D_eq, init_A = A_eq, init_U = U_eq,
               init_P = P_eq, init_Y = Y_eq, init_IB = IB_eq, init_ID = ID_eq, init_ICA = ICA_eq,
@@ -440,7 +445,9 @@ equilibrium_init_create <- function(age_vector, het_brackets,
               omega = omega, foi_age = foi_age, rel_foi = rel_foi,
               K0 = K0, mv0 = mv0, na = na, nh = nh, ni = num_int, x_I = x_I,
               FOI = FOI_eq, EIR_eq = EIR_eq, cA_eq = cA_eq,
-              den = den, age59 = age59, age05 = age05, ssa0 = ssa0, ssa1 = ssa1,
+              den = den, age59 = age59, age05 = age05, rTime=rTime,
+              scaling_cc_t=scaling_cc_t,
+              ssa0 = ssa0, ssa1 = ssa1,
               ssa2 = ssa2, ssa3 = ssa3, ssb1 = ssb1, ssb2 = ssb2, ssb3 = ssb3,
               theta_c = theta_c, sst2=sst2,  sst3=sst3,  sst4=sst4,  sst5=sst5,  sst6=sst6,
               ssa0_2nd = ssa0_2nd, ssa1_2nd = ssa1_2nd, ssa2_2nd = ssa2_2nd, ssa3_2nd = ssa3_2nd,

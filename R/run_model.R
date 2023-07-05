@@ -40,7 +40,8 @@ run_model <- function(model = "odin_model",
   state <- equilibrium_init_create(age_vector=age, EIR=init_EIR,ft=init_ft,
                                    model_param_list = mpl, het_brackets=het_brackets,
                                    country = country,
-                                   admin_unit = admin2)
+                                   admin_unit = admin2,
+                                   runTime=time)
 
   # create odin generator
   # generator <- switch(model,

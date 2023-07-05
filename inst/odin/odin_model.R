@@ -207,6 +207,10 @@ kD <- user()
 dim(age) <- na
 age[] <- user() # vector of age categories supplied by user
 
+rTime <- user()
+scaling_cc_t[] <- user()
+dim(scaling_cc_t) <- rTime
+
 dim(fd) <- na
 fd[1:na] <- 1-(1-fD0)/(1+(age[i]/aD)^gammaD)
 dim(p_det) <- c(na,nh,num_int)

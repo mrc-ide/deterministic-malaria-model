@@ -360,6 +360,49 @@ equilibrium_init_create <- function(age_vector, het_brackets,
         sst3 <-mpl$times_change_seas[2]
 
       }
+
+      if(mpl$n_seasonal_periods>3) {
+        ssa0_4th <- mpl$css[4,1]
+        ssa1_4th <- mpl$css[4,2]
+        ssb1_4th <- mpl$css[4,3]
+        ssa2_4th <- mpl$css[4,4]
+        ssb2_4th <- mpl$css[4,5]
+        ssa3_4th <- mpl$css[4,6]
+        ssb3_4th <- mpl$css[4,7]
+        theta_c_4th <- mpl$css[4,8]
+
+        sst4 <-mpl$times_change_seas[3]
+
+      }
+
+      if(mpl$n_seasonal_periods>4) {
+        ssa0_5th <- mpl$css[5,1]
+        ssa1_5th <- mpl$css[5,2]
+        ssb1_5th <- mpl$css[5,3]
+        ssa2_5th <- mpl$css[5,4]
+        ssb2_5th <- mpl$css[5,5]
+        ssa3_5th <- mpl$css[5,6]
+        ssb3_5th <- mpl$css[5,7]
+        theta_c_5th <- mpl$css[5,8]
+
+        sst5 <-mpl$times_change_seas[4]
+
+      }
+
+
+      if(mpl$n_seasonal_periods>5) {
+        ssa0_6th <- mpl$css[6,1]
+        ssa1_6th <- mpl$css[6,2]
+        ssb1_6th <- mpl$css[6,3]
+        ssa2_6th <- mpl$css[6,4]
+        ssb2_6th <- mpl$css[6,5]
+        ssa3_6th <- mpl$css[6,6]
+        ssb3_6th <- mpl$css[6,7]
+        theta_c_6th <- mpl$css[6,8]
+
+        sst6 <-mpl$times_change_seas[5]
+
+      }
     }
 
   } else    {

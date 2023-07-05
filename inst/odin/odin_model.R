@@ -328,7 +328,7 @@ theta2_5th <- if(ssa0_5th == 0 && ssa1_5th  == 0 && ssa2_5th  == 0 && ssb1_5th  
 theta2_6th <- if(ssa0_6th == 0 && ssa1_6th  == 0 && ssa2_6th  == 0 && ssb1_6th  == 0 && ssb2_6th  == 0 && ssb3_6th  == 0 && theta_c_6th  == 0)
   1 else max((ssa0_6th+ssa1_6th*cos(2*pi*t/365)+ssa2_6th*cos(2*2*pi*t/365)+ssa3_6th*cos(3*2*pi*t/365)+ssb1_6th*sin(2*pi*t/365)+ssb2_6th*sin(2*2*pi*t/365)+ ssb3_6th*sin(3*2*pi*t/365) ) /theta_c_6th,0.001)
 
-theta2 <- if(t<sst2) theta2_1st else if(t<sst3) theta2_2nd else if(t<sst4) theta2_3rd else if(t<sst4) theta2_4th else if(t<sst5) theta2_5th else theta2_6th
+theta2 <- if(t<sst2) theta2_1st else if(t<sst3) theta2_2nd else if(t<sst4) theta2_3rd else if(t<sst5) theta2_4th else if(t<sst6) theta2_5th else theta2_6th
 
 ##------------------------------------------------------------------------------
 #####################

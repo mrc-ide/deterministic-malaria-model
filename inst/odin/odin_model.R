@@ -207,9 +207,12 @@ kD <- user()
 dim(age) <- na
 age[] <- user() # vector of age categories supplied by user
 
-rTime <- user()
 scaling_cc_t[] <- user()
-dim(scaling_cc_t) <- rTime
+dim(scaling_cc_t) <- user()
+tt[] <- user()
+dim(tt) <- user()
+scaling_cc <- interpolate(tt, scaling_cc_t, "linear")
+#scaling_cc <-
 
 dim(fd) <- na
 fd[1:na] <- 1-(1-fD0)/(1+(age[i]/aD)^gammaD)
@@ -239,100 +242,13 @@ output(Ivout) <- Iv
 output(omega) <- omega
 ##------------------------------------------------------------------------------
 ##########################
-## SEASONALITY FUNCTION ##
+## SEASONALITY FUNCTION ## NOW REMOVED AND CREATED WITHIN 'equilibrium-init-create.R'
 ##########################
 ##------------------------------------------------------------------------------
 
 # Seasonality is added into the model using a Fourier series that was fit to rainfall at every admin 1 level
-pi <- user() # weird quirk, need to pass pi
+#pi <- user() # weird quirk, need to pass pi
 
-# The parameters for the fourier series
-### the first year if using multi annual cycles
-ssa0 <- user()
-ssa1 <- user()
-ssa2 <- user()
-ssa3 <- user()
-ssb1 <- user()
-ssb2 <- user()
-ssb3 <- user()
-theta_c <- user()
-
-ssa0_2nd <- user()
-ssa1_2nd <- user()
-ssa2_2nd <- user()
-ssa3_2nd <- user()
-ssb1_2nd <- user()
-ssb2_2nd <- user()
-ssb3_2nd <- user()
-theta_c_2nd <- user()
-
-sst2 <- user()
-
-
-ssa0_3rd <- user()
-ssa1_3rd <- user()
-ssa2_3rd <- user()
-ssa3_3rd <- user()
-ssb1_3rd <- user()
-ssb2_3rd <- user()
-ssb3_3rd <- user()
-theta_c_3rd <- user()
-
-sst3 <- user()
-
-ssa0_4th <- user()
-ssa1_4th <- user()
-ssa2_4th <- user()
-ssa3_4th <- user()
-ssb1_4th <- user()
-ssb2_4th <- user()
-ssb3_4th <- user()
-theta_c_4th <- user()
-
-sst4 <- user()
-
-ssa0_5th <- user()
-ssa1_5th <- user()
-ssa2_5th <- user()
-ssa3_5th <- user()
-ssb1_5th <- user()
-ssb2_5th <- user()
-ssb3_5th <- user()
-theta_c_5th <- user()
-
-sst5 <- user()
-
-ssa0_6th <- user()
-ssa1_6th <- user()
-ssa2_6th <- user()
-ssa3_6th <- user()
-ssb1_6th <- user()
-ssb2_6th <- user()
-ssb3_6th <- user()
-theta_c_6th <- user()
-
-sst6 <- user()
-
-# Recreation of the rainfall function
-theta2_1st <- if(ssa0 == 0 && ssa1  == 0 && ssa2  == 0 && ssb1  == 0 && ssb2  == 0 && ssb3  == 0 && theta_c  == 0)
-  1 else max((ssa0+ssa1*cos(2*pi*t/365)+ssa2*cos(2*2*pi*t/365)+ssa3*cos(3*2*pi*t/365)+ssb1*sin(2*pi*t/365)+ssb2*sin(2*2*pi*t/365)+ ssb3*sin(3*2*pi*t/365) ) /theta_c,0.001)
-
-theta2_2nd <- if(ssa0_2nd == 0 && ssa1_2nd  == 0 && ssa2_2nd  == 0 && ssb1_2nd  == 0 && ssb2_2nd  == 0 && ssb3_2nd  == 0 && theta_c_2nd  == 0)
-  1 else max((ssa0_2nd+ssa1_2nd*cos(2*pi*t/365)+ssa2_2nd*cos(2*2*pi*t/365)+ssa3_2nd*cos(3*2*pi*t/365)+ssb1_2nd*sin(2*pi*t/365)+ssb2_2nd*sin(2*2*pi*t/365)+ ssb3_2nd*sin(3*2*pi*t/365) ) /theta_c_2nd,0.001)
-
-theta2_3rd <- if(ssa0_3rd == 0 && ssa1_3rd  == 0 && ssa2_3rd  == 0 && ssb1_3rd  == 0 && ssb2_3rd  == 0 && ssb3_3rd  == 0 && theta_c_3rd  == 0)
-  1 else max((ssa0_3rd+ssa1_3rd*cos(2*pi*t/365)+ssa2_3rd*cos(2*2*pi*t/365)+ssa3_3rd*cos(3*2*pi*t/365)+ssb1_3rd*sin(2*pi*t/365)+ssb2_3rd*sin(2*2*pi*t/365)+ ssb3_3rd*sin(3*2*pi*t/365) ) /theta_c_3rd,0.001)
-
-theta2_4th <- if(ssa0_4th == 0 && ssa1_4th  == 0 && ssa2_4th  == 0 && ssb1_4th  == 0 && ssb2_4th  == 0 && ssb3_4th  == 0 && theta_c_4th  == 0)
-  1 else max((ssa0_4th+ssa1_4th*cos(2*pi*t/365)+ssa2_4th*cos(2*2*pi*t/365)+ssa3_4th*cos(3*2*pi*t/365)+ssb1_4th*sin(2*pi*t/365)+ssb2_4th*sin(2*2*pi*t/365)+ ssb3_4th*sin(3*2*pi*t/365) ) /theta_c_4th,0.001)
-
-theta2_5th <- if(ssa0_5th == 0 && ssa1_5th  == 0 && ssa2_5th  == 0 && ssb1_5th  == 0 && ssb2_5th  == 0 && ssb3_5th  == 0 && theta_c_5th  == 0)
-  1 else max((ssa0_5th+ssa1_5th*cos(2*pi*t/365)+ssa2_5th*cos(2*2*pi*t/365)+ssa3_5th*cos(3*2*pi*t/365)+ssb1_5th*sin(2*pi*t/365)+ssb2_5th*sin(2*2*pi*t/365)+ ssb3_5th*sin(3*2*pi*t/365) ) /theta_c_5th,0.001)
-
-theta2_6th <- if(ssa0_6th == 0 && ssa1_6th  == 0 && ssa2_6th  == 0 && ssb1_6th  == 0 && ssb2_6th  == 0 && ssb3_6th  == 0 && theta_c_6th  == 0)
-  1 else max((ssa0_6th+ssa1_6th*cos(2*pi*t/365)+ssa2_6th*cos(2*2*pi*t/365)+ssa3_6th*cos(3*2*pi*t/365)+ssb1_6th*sin(2*pi*t/365)+ssb2_6th*sin(2*2*pi*t/365)+ ssb3_6th*sin(3*2*pi*t/365) ) /theta_c_6th,0.001)
-
-theta2 <- if(t<sst2) theta2_1st else if(t<sst3) theta2_2nd else if(t<sst4) theta2_3rd else if(t<sst5) theta2_4th else if(t<sst6) theta2_5th else theta2_6th
 
 ##------------------------------------------------------------------------------
 #####################
@@ -439,7 +355,8 @@ lambda <- -0.5*b_lambda + sqrt(0.25*b_lambda^2 + gammaL*beta_larval*muLL*dEL/(2*
 K0 <- 2*mv0*dLL*mu0*(1+dPL*muPL)*gammaL*(lambda+1)/(lambda/(muLL*dEL)-1/(muLL*dLL)-1)
 
 # Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:
-KL <- K0*theta2 #*scaling_factor_year to change average carrying capacity. Stepwise to start with.
+KL <- K0*scaling_cc #*scaling_factor for each day to change average carrying capacity and input seasonality.
+
 fv <- 1/( tau1/(1-zbar) + tau2 ) # mosquito feeding rate (zbar from intervention param.)
 mu <- -fv*log(p1*p2) # mosquito death rate
 
@@ -611,4 +528,3 @@ output(r_IRS) <- r_IRS
 output(s_IRS) <- s_IRS
 output(cov[]) <- TRUE
 output(K0) <- K0
-output(theta2) <- theta2

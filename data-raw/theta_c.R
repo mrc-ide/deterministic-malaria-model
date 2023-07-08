@@ -1,6 +1,12 @@
 ## This code computes the theta_c parameter needed for the site seasonality parameterisation
 ## HJT Unwin
 
+#' \code{fourier} computes fourier series to be used later for seasonality in carrying capacity
+#' @param x Vector of times
+#' @param ss Vector of fourier parameters in this order a0, a1, b1, a2, b2, a3, b3
+#'
+#' @export
+#'
 ## Fourier series
 fourier <- function(x, ss) {
   two_pi <- 6.2831853071796

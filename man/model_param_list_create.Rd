@@ -77,6 +77,7 @@ model_param_list_create(
   itn_half_life = 2.64 * DY,
   IRS_interval = 1 * DY,
   ITN_interval = 3 * DY,
+  custom_seas = F,
   ...
 )
 }

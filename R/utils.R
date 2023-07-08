@@ -202,3 +202,50 @@ admin_match <- function(admin_unit = NULL, country = NULL,
 
   return(admin_matches)
 }
+
+#------------------------------------------------
+#' Generate Fourier
+#'
+#' \code{fourier} computes fourier series to be used later for seasonality in carrying capacity
+#' @param x Vector of times
+#' @param ss Vector of fourier parameters in this order a0, a1, b1, a2, b2, a3, b3
+#'
+#' @export
+#'
+#'
+fourier <- function(x, ss) {
+  two_pi <- 6.2831853071796
+  raw <- (ss[1] + ss[2]*cos(two_pi*x/365) + ss[4]*cos(2*two_pi*x/365) + ss[6]*cos(3*two_pi*x/365)
+          + ss[3]*sin(two_pi*x/365) + ss[5]*sin(2*two_pi*x/365) + ss[7]*sin(3*two_pi*x/365))
+
+  return (raw)
+}
+
+#------------------------------------------------
+#' Seasonality
+#'
+#' \code{seasonality} Generate seasonality scaling vector for one year, to be applied to carrying capacity.
+#' @param ss Vector of fourier parameters in this order a0, a1, b1, a2, b2, a3, b3
+#'
+#' @export
+#'
+#'
+seasonality <- function(ss){
+
+  # define vector of times spanning one year
+  tvec = 1:365
+
+  # calculate Fourier series curve
+  seasonality <- sapply(tvec, fourier, ss=ss)
+  theta_c <- sum(seasonality)/365
+  seasonality <- seasonality/theta_c
+
+  # ensure that scaling factor never goes below zero (this can happen in practice
+  # because we are only using the first few terms in an infinite series)
+  seasonality[seasonality<0.001] <- 0.001
+
+  seasonality_list <- list(seasonality, theta_c)
+
+  return (seasonality_list)
+
+}

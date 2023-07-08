@@ -11,7 +11,9 @@ equilibrium_init_create(
   admin_unit = NULL,
   ft,
   EIR,
-  model_param_list
+  model_param_list,
+  runTime,
+  custom_seas = FALSE
 )
 }
 \arguments{

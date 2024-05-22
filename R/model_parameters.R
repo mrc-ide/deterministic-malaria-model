@@ -4,7 +4,7 @@
 #' \code{model_param_list_create} creates list of model parameters to be used
 #' within \code{equilibrium_init_create}
 #'
-#' @param eta Death rate for expoential population distribtuion, i.e. 1/Mean Population Age. Default = 0.0001305
+#' @param eta Death rate for expoential population distribution, i.e. 1/Mean Population Age. Default = 0.0001305
 #' @param rho Age-dependent biting parameter. Default = 0.85
 #' @param a0 Age-dependent biting parameter. Default = 2920
 #' @param sigma2 Variance of the log heterogeneity in biting rates. Default = 1.67

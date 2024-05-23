@@ -49,6 +49,7 @@ run_model <- function(model = "odin_model",
     "odin_model_IVM_SMChet" = odin_model_IVM_SMChet,
     "odin_model_TBV" = odin_model_TBV,
     "odin_model_GSK_SB" = odin_model_GSK_SB,
+    "odin_model_GSK_SB_vertical" = odin_model_GSK_SB_vertical,
     "odin_model_mass_effect" = odin_model_mass_effect,
     "odin_model_mass_effect_pp" = odin_model_mass_effect_pp,
     stop(sprintf("Unknown model '%s'", model)))

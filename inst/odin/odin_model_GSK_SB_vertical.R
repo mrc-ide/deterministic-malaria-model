@@ -315,6 +315,8 @@ lag_incv <- ince * surv
 
 # Number of mosquitoes born (depends on PL, number of larvae), or is constant outside of seasonality
 betaa <- 0.5*PL/dPL
+betaa1 <- 0.5*PL1/dPL
+betaa2 <- 0.5*PL2/dPL
 #betaa <- mv0 * mu0 * theta2
 
 deriv(Sv) <- -ince - mu*Sv + betaa
@@ -368,7 +370,7 @@ lag_incv0 <- ince0 * surv
 #muS <- (1/4) #Females take sugar meal every 4 days. Update with Keith's paper!
 muS <- GSK_feed_rate
 
-deriv(Sv0) <- -ince0 - mu*Sv0 + betaa * (1- GSK_proportion) #- muS*Sv0*square
+deriv(Sv0) <- -ince0 - mu*Sv0 + betaa1 * (1- GSK_proportion) #- muS*Sv0*square
 #deriv(Ev0) <- ince0 - incv0 - mu*Ev0 #- muS*Ev0*square
 deriv(Iv0) <- Ev0[10] - mu*Iv0 #- muS*Iv0*square
 
@@ -388,7 +390,7 @@ lag_incv1 <- ince1 * surv
 #incv1 <- delay(lag_incv1, delayMos)
 
 #infection only blocked if sugar feed taken before blood meal!!! You may need to remove the delay, and use E 1-10
-deriv(Sv1) <- -ince1 - mu*Sv1 + betaa* GSK_proportion - muS*Sv1*square
+deriv(Sv1) <- -ince1 - mu*Sv1 + betaa1* GSK_proportion - muS*Sv1*square
 #deriv(Ev1) <- ince1 - incv1 - mu*Ev1 - muS*Ev1*square
 deriv(Iv1) <- Ev1[10] - mu*Iv1 #- muS*Iv1*square
 
@@ -407,7 +409,7 @@ ince2 <- FOIv * Sv2
 lag_incv2 <- ince2 * surv
 #incv2 <- delay(lag_incv2, delayMos)
 
-deriv(Sv2) <- -ince2 - mu*Sv2 + muS*Sv1*square
+deriv(Sv2) <- -ince2 - mu*Sv2 + muS*Sv1*square + betaa2
 #deriv(Ev2) <- ince2 - incv2 - mu*Ev2 + muS*Ev1*square
 deriv(Iv2) <- Ev2[10] - mu*Iv2 #+ muS*Iv1*square
 
@@ -487,18 +489,25 @@ initial(LL) <- init_LL
 init_EL <- user()
 initial(EL) <- init_EL
 
-init_PL1 <- user()
-initial(PL1) <- init_PL
-init_LL1 <- user()
-initial(LL1) <- init_LL
-init_EL1 <- user()
-initial(EL1) <- init_EL
+# init_PL0 <- user()
+# initial(PL0) <- init_PL
+# init_LL0 <- user()
+# initial(LL0) <- init_LL
+# init_EL0 <- user()
+# initial(EL0) <- init_EL
 
-init_PL2 <- user()
+init_PL1 <- 0#user()
+initial(PL1) <- init_PL1
+init_LL1 <- 0#user()
+initial(LL1) <- init_LL1
+init_EL1 <- 0#user()
+initial(EL1) <- init_EL1
+
+init_PL2 <- 0#user()
 initial(PL2) <- init_PL2
-init_LL2 <- user()
+init_LL2 <- 0#user()
 initial(LL2) <- init_LL2
-init_EL2 <- user()
+init_EL2 <- 0#user()
 initial(EL2) <- init_EL2
 
 # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
@@ -509,16 +518,16 @@ deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL)*LL - LL/dLL
 deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 
 # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
-deriv(EL1) <- beta_larval*mv1-muEL*(1+(EL1+LL1)/KL)*EL1 - EL1/dEL
+deriv(EL1) <- beta_larval*(mv1+mv00)-muEL*(1+(EL1 + LL1 + EL2 + LL2)/KL)*EL1 - EL1/dEL
 # egg hatching - den. dep. mortality - maturing larvae
-deriv(LL1) <- EL1/dEL - muLL*(1+gammaL*(EL1 + LL1)/KL)*LL1 - LL1/dLL
+deriv(LL1) <- EL1/dEL - muLL*(1+gammaL*(EL1 + LL1 + EL2 + LL2)/KL)*LL1 - LL1/dLL
 # pupae - mortality - fully developed pupae
 deriv(PL1) <- LL1/dLL - muPL*PL1 - PL1/dPL
 
 # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
-deriv(EL2) <- beta_larval*mv2-muEL*(1+(EL2+LL2)/KL)*EL2 - EL2/dEL
+deriv(EL2) <- beta_larval*mv2-muEL*(1+(EL1 + LL1 + EL2 + LL2)/KL)*EL2 - EL2/dEL
 # egg hatching - den. dep. mortality - maturing larvae
-deriv(LL2) <- EL2/dEL - muLL*(1+gammaL*(EL2 + LL2)/KL)*LL2 - LL2/dLL
+deriv(LL2) <- EL2/dEL - muLL*(1+gammaL*(EL1 + LL1 + EL2 + LL2)/KL)*LL2 - LL2/dLL
 # pupae - mortality - fully developed pupae
 deriv(PL2) <- LL2/dLL - muPL*PL2 - PL2/dPL
 
@@ -674,35 +683,39 @@ output(inc) <- sum(clin_inc[,,])
 # Param checking outputs
 output(mu) <- mu
 output(beta_larval) <- beta_larval
-output(betaa) <- betaa
+output(betaa) <- betaa # and other ones too?
 #output(KL) <- KL
 
 #output(Q) <- Q
 #output(wh) <- wh
-output(d_ITN) <- d_ITN
-output(r_ITN) <- r_ITN
-output(s_ITN) <- s_ITN
-output(d_IRS) <- d_IRS
-output(r_IRS) <- r_IRS
-output(s_IRS) <- s_IRS
-output(cov[]) <- TRUE
-output(K0) <- K0
+# output(d_ITN) <- d_ITN
+# output(r_ITN) <- r_ITN
+# output(s_ITN) <- s_ITN
+# output(d_IRS) <- d_IRS
+# output(r_IRS) <- r_IRS
+# output(s_IRS) <- s_IRS
+# output(cov[]) <- TRUE
+# output(K0) <- K0
 
 output(square) <- square
 
 #mosq pops
-output(Svout) <- Sv
-output(Evout) <- sum(Ev)
-output(Ivout) <- Iv
-output(Sv0out) <- Sv0
-output(Ev0out) <- sum(Ev0)
-output(Iv0out) <- Iv0
-output(Sv1out) <- Sv1
-output(Ev1out) <- sum(Ev1)
-output(Iv1out) <- Iv1
-output(Sv2out) <- Sv2
-output(Ev2out) <- sum(Ev2)
-output(Iv2out) <- Iv2
+# output(Svout) <- Sv
+# output(Evout) <- sum(Ev)
+# output(Ivout) <- Iv
+# output(Sv0out) <- Sv0
+# output(Ev0out) <- sum(Ev0)
+# output(Iv0out) <- Iv0
+# output(Sv1out) <- Sv1
+# output(Ev1out) <- sum(Ev1)
+# output(Iv1out) <- Iv1
+# output(Sv2out) <- Sv2
+# output(Ev2out) <- sum(Ev2)
+# output(Iv2out) <- Iv2
+#
+# output(PL) <- PL
+# output(PL1) <- PL1
+# output(PL2) <- PL2
 
 output(mv) <- mv
 output(mv00) <- mv00

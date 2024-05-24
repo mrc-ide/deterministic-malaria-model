@@ -431,7 +431,7 @@ mv2 = Sv2+sum(Ev2)+Iv2
 GSK_start <- user() #? May want a lag....
 GSK_duration <- user() # no idea
 GSK_freq <- user() # go again every (e.g.) 3 months
-GSK_proportion <- user() #? #prop of breeding sites reached multiplied by intervention efficacy
+GSK_proportion <- user() #? #prop of mosquitoes able to access ASBs.. Is this needed?
 GSK_feed_rate <- user()
 
 #Square wave for intervention. ON/OFF

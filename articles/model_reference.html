@@ -6,20 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Model Reference • ICDMM</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Model Reference">
-<meta property="og:description" content="ICDMM">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -42,7 +41,7 @@
 <li>
   <a href="../index">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -51,7 +50,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -85,7 +84,7 @@
 <li>
   <a href="https://github.com/mrc-ide/deterministic-malaria-model" class="external-link">
     <span class="fa fa-github"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -96,7 +95,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -105,9 +104,9 @@
                         <h4 data-toc-skip class="author">Joel
 Hellewell</h4>
             
-            <h4 data-toc-skip class="date">2023-01-24</h4>
+            <h4 data-toc-skip class="date">2024-07-10</h4>
       
-      
+
       <div class="hidden name"><code>model_reference.Rmd</code></div>
 
     </div>
@@ -132,19 +131,18 @@ being born into them.</p>
 <span>  <span class="va">cov</span><span class="op">[</span><span class="va">k</span><span class="op">]</span><span class="op">*</span><span class="va">eta</span><span class="op">*</span><span class="va">H</span><span class="op">*</span><span class="va">het_wt</span><span class="op">[</span><span class="va">j</span><span class="op">]</span> <span class="op">-</span> <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">S</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">S</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">*</span><span class="va">S</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">+</span> <span class="va">rP</span><span class="op">*</span><span class="va">P</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">+</span> <span class="va">rU</span><span class="op">*</span><span class="va">U</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span></span>
 <span>  <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">S</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">+</span> <span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="va">S</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span></code></pre></div>
-<p><span class="math inline">\(\Lambda \mapsto\)</span>
-<code>FOI</code></p>
-<p><span class="math inline">\(r_P \mapsto\)</span> <code>rP</code></p>
-<p><span class="math inline">\(r_U \mapsto\)</span> <code>rU</code></p>
-<p><span class="math inline">\(\zeta \mapsto\)</span>
-<code>het_wt</code> are the weights from the biting heterogeneity
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Λ</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">\Lambda \mapsto</annotation></semantics></math><code>FOI</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>P</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_P \mapsto</annotation></semantics></math><code>rP</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>U</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_U \mapsto</annotation></semantics></math><code>rU</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ζ</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">\zeta \mapsto</annotation></semantics></math><code>het_wt</code> are the weights from the biting heterogeneity
 groups, see Section 1.1.2 of <a href="https://doi.org/10.1371/journal.pmed.1000324.s005" class="external-link">Protocol
 S1</a>.</p>
-<p>The parameter <code>eta</code> (<span class="math inline">\(\eta\)</span>) is the constant background death
-rate, <code>cov</code> is a vector of the proportion of the population
-in each intervention category (see interventions section later in this
-reference), <code>age_rate</code> is equal to the inverse of the size of
-the age group (see <a href="https://github.com/mrc-ide/dide-deterministic-malaria-model/blob/82069175e66a9ba199aca5fd97172d7b09a4ff1f/R/equilibrium-init-create.R#L61" class="external-link">equilibrium
+<p>The parameter <code>eta</code>
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math>)
+is the constant background death rate, <code>cov</code> is a vector of
+the proportion of the population in each intervention category (see
+interventions section later in this reference), <code>age_rate</code> is
+equal to the inverse of the size of the age group (see <a href="https://github.com/mrc-ide/dide-deterministic-malaria-model/blob/82069175e66a9ba199aca5fd97172d7b09a4ff1f/R/equilibrium-init-create.R#L61" class="external-link">equilibrium
 solution</a>), and <code>H</code> is the sum of all human
 compartments.</p>
 </div>
@@ -156,9 +154,8 @@ compartments.</p>
 <span>  <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="cn">T</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="cn">T</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">ft</span><span class="op">*</span><span class="va">clin_inc</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="va">rT</span><span class="op">*</span><span class="cn">T</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span></span>
 <span>  <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="cn">T</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">+</span> <span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="cn">T</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span></code></pre></div>
-<p><span class="math inline">\(f_T \mapsto\)</span> <code>ft</code>
-(proportion of clinical disease that is treated)</p>
-<p><span class="math inline">\(r_T \mapsto\)</span> <code>rt</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>T</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">f_T \mapsto</annotation></semantics></math><code>ft</code> (proportion of clinical disease that is treated)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>T</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_T \mapsto</annotation></semantics></math><code>rt</code></p>
 <p>For <code>clin_inc</code> see section 1.7 of this guide.</p>
 </div>
 <div class="section level3">
@@ -169,7 +166,7 @@ compartments.</p>
 <span>  <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">D</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">D</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">ft</span><span class="op">)</span><span class="op">*</span><span class="va">clin_inc</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="va">rD</span><span class="op">*</span><span class="va">D</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span></span>
 <span>  <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">D</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">+</span> <span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="va">D</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span></code></pre></div>
-<p><span class="math inline">\(r_D \mapsto\)</span> <code>rD</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>D</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_D \mapsto</annotation></semantics></math><code>rD</code></p>
 </div>
 <div class="section level3">
 <h3 id="asymptomatic-disease">Asymptomatic Disease<a class="anchor" aria-label="anchor" href="#asymptomatic-disease"></a>
@@ -179,7 +176,7 @@ compartments.</p>
 <span>  <span class="va">rD</span><span class="op">*</span><span class="va">D</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="va">rA</span><span class="op">*</span><span class="va">A</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">A</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">A</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">phi</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">*</span><span class="va">Y</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">*</span><span class="va">A</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">+</span></span>
 <span>  <span class="va">rD</span><span class="op">*</span><span class="va">D</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="va">rA</span><span class="op">*</span><span class="va">A</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">A</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">+</span> <span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="va">A</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span></code></pre></div>
-<p><span class="math inline">\(r_A \mapsto\)</span> <code>rA</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>A</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_A \mapsto</annotation></semantics></math><code>rA</code></p>
 <p>The parameter <code>FOI</code> is explained in Section 2.10</p>
 </div>
 <div class="section level3">
@@ -190,7 +187,7 @@ compartments.</p>
 <span>  <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">U</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">U</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">rA</span><span class="op">*</span><span class="va">A</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">*</span><span class="va">U</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="va">rU</span><span class="op">*</span><span class="va">U</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span></span>
 <span>  <span class="op">(</span><span class="va">eta</span><span class="op">+</span><span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="va">U</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">+</span> <span class="va">age_rate</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="va">U</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span></span></code></pre></div>
-<p><span class="math inline">\(r_U \mapsto\)</span> <code>rU</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>U</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_U \mapsto</annotation></semantics></math><code>rU</code></p>
 </div>
 <div class="section level3">
 <h3 id="prophylaxis">Prophylaxis<a class="anchor" aria-label="anchor" href="#prophylaxis"></a>
@@ -214,9 +211,9 @@ compartments.</p>
 <p>An intermediate step used in the differential equations for the T, D,
 and A compartments. The parameter <code>Y</code> is just a sum of the S,
 A, and U compartments for each biting and age combination.</p>
-<p><span class="math inline">\(\phi \Lambda(S(t) + A(t) + U(t))
-\mapsto\)</span> <code>clin_inc</code></p>
-<p>The parameter <span class="math inline">\(\phi\)</span>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mi>Λ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>A</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>U</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>↦</mo></mrow><annotation encoding="application/x-tex">\phi \Lambda(S(t) + A(t) + U(t)) \mapsto</annotation></semantics></math><code>clin_inc</code></p>
+<p>The parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
 (<code>phi</code>) is the probability of clinical disease upon receiving
 an infectious bite and is explained in Section 2.5.</p>
 </div>
@@ -229,21 +226,21 @@ are described in section 1.1.3 of <a href="https://doi.org/10.1371/journal.pmed.
 of the original Griffin paper.</p>
 <p>There are several different types of immunity. In the original
 Griffin 2010 paper:</p>
-<p><span class="math inline">\(I_B \mapsto\)</span> <code>IB</code>
-(immunity that prevents any infection after bite)</p>
-<p><span class="math inline">\(I_C \mapsto\)</span> <code>IC</code>
-(immunity that reduces chance of clinical disease upon infection)</p>
-<p><span class="math inline">\(I_CA \mapsto\)</span> <code>ICA</code>
-(clinical immunity due to exposure)</p>
-<p><span class="math inline">\(I_CM \mapsto\)</span> <code>ICM</code>
-(clinical immunity due to maternal protection)</p>
-<p><span class="math inline">\(I_A\)</span> (immunity that reduces
-length of patent infection, no longer in model)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>B</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">I_B \mapsto</annotation></semantics></math><code>IB</code> (immunity that prevents any infection after bite)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>C</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">I_C \mapsto</annotation></semantics></math><code>IC</code> (immunity that reduces chance of clinical disease upon
+infection)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>C</mi></msub><mi>A</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">I_CA \mapsto</annotation></semantics></math><code>ICA</code> (clinical immunity due to exposure)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>C</mi></msub><mi>M</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">I_CM \mapsto</annotation></semantics></math><code>ICM</code> (clinical immunity due to maternal protection)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mi>A</mi></msub><annotation encoding="application/x-tex">I_A</annotation></semantics></math>
+(immunity that reduces length of patent infection, no longer in
+model)</p>
 <p>In the <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms4136/MediaObjects/41467_2014_BFncomms4136_MOESM428_ESM.pdf" class="external-link">supplementary
-materials for Griffin Nat Comms 2014</a>, <span class="math inline">\(I_A\)</span> is replaced with “detection
-immunity”, <span class="math inline">\(I_D\)</span>, that reduces the
-probability of case detection and reduced infectiousness to mosquitoes
-(because of reduced parasite density).</p>
+materials for Griffin Nat Comms 2014</a>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mi>A</mi></msub><annotation encoding="application/x-tex">I_A</annotation></semantics></math>
+is replaced with “detection immunity”,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mi>D</mi></msub><annotation encoding="application/x-tex">I_D</annotation></semantics></math>,
+that reduces the probability of case detection and reduced
+infectiousness to mosquitoes (because of reduced parasite density).</p>
 <div class="section level3">
 <h3 id="x_i">x_I<a class="anchor" aria-label="anchor" href="#x_i"></a>
 </h3>
@@ -284,11 +281,10 @@ developed by Giovanni and Bob.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">ICM</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="va">dCM</span><span class="op">*</span><span class="va">ICM</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">+</span> <span class="op">(</span><span class="va">init_ICM_pre</span><span class="op">[</span><span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">-</span><span class="va">ICM</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="va">x_I</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">ICM</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="va">dCM</span><span class="op">*</span><span class="va">ICM</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="op">(</span><span class="va">ICM</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">-</span><span class="va">ICM</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="va">x_I</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span></code></pre></div>
 <p>The level of maternal immunity is assumed at birth to be a proportion
-(<span class="math inline">\(P_{CM} \mapsto\)</span> <code>PM</code>) of
-the clinical immunity of a 20 year old (<span class="math inline">\(I_{C}(20, t) \mapsto\)</span>
-<code>ICA[age20l, i, j]</code>). Maternal immunity decays at a constant
-rate (<span class="math inline">\(d_M \mapsto\)</span>
-<code>dCM</code>)</p>
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>C</mi><mi>M</mi></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">P_{CM} \mapsto</annotation></semantics></math><code>PM</code>) of the clinical immunity of a 20 year old
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>C</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mn>20</mn><mo>,</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>↦</mo></mrow><annotation encoding="application/x-tex">I_{C}(20, t) \mapsto</annotation></semantics></math><code>ICA[age20l, i, j]</code>). Maternal immunity decays at a constant
+rate
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>M</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_M \mapsto</annotation></semantics></math><code>dCM</code>)</p>
 </div>
 <div class="section level3">
 <h3 id="exposure-driven-immunity">Exposure-driven Immunity<a class="anchor" aria-label="anchor" href="#exposure-driven-immunity"></a>
@@ -297,15 +293,16 @@ rate (<span class="math inline">\(d_M \mapsto\)</span>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">ICA</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="op">(</span><span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">*</span> <span class="va">uCA</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">/</span><span class="va">dCA</span><span class="op">*</span><span class="va">ICA</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span><span class="va">ICA</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">x_I</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">ICA</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="op">(</span><span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">*</span> <span class="va">uCA</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">/</span><span class="va">dCA</span><span class="op">*</span><span class="va">ICA</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span> <span class="op">-</span> <span class="op">(</span><span class="va">ICA</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">-</span><span class="va">ICA</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="va">x_I</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span></code></pre></div>
 <p>In the original Griffin paper they consider four different immunity
-profile functions (<span class="math inline">\(h(X)\)</span>). The odin
-model uses “Model 3” as described in Section 1.1.3 of <a href="https://doi.org/10.1371/journal.pmed.1000324.s005" class="external-link">Protocol S1</a>
+profile functions
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>X</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">h(X)</annotation></semantics></math>).
+The odin model uses “Model 3” as described in Section 1.1.3 of <a href="https://doi.org/10.1371/journal.pmed.1000324.s005" class="external-link">Protocol S1</a>
 for exposure-driven immunity (take note that different immunity profiles
 are used for other types of immunity in the model!).</p>
 <p>Therefore:</p>
-<p><span class="math inline">\(h(\Lambda) = \frac{\Lambda}{\gamma\Lambda
-+ 1} \mapsto\)</span> <code>FOI[i,j,k]/(FOI[i,j,k] * uCA + 1)</code></p>
-<p>where the value of <span class="math inline">\(\gamma\)</span> is
-<code>uCA</code> and controls the delay between infection and
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Λ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>Λ</mi><mrow><mi>γ</mi><mi>Λ</mi><mo>+</mo><mn>1</mn></mrow></mfrac><mo>↦</mo></mrow><annotation encoding="application/x-tex">h(\Lambda) = \frac{\Lambda}{\gamma\Lambda + 1} \mapsto</annotation></semantics></math><code>FOI[i,j,k]/(FOI[i,j,k] * uCA + 1)</code></p>
+<p>where the value of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+is <code>uCA</code> and controls the delay between infection and
 exposure-driven immunity increasing.</p>
 </div>
 <div class="section level3">
@@ -319,18 +316,16 @@ exposure-driven immunity increasing.</p>
 <h3 id="phi">Phi<a class="anchor" aria-label="anchor" href="#phi"></a>
 </h3>
 <p>Phi controls the probability of developing clinical disease for a
-given level of clinical immunity. The latest equation for <span class="math inline">\(\phi\)</span> is equation 7 in the <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms4136/MediaObjects/41467_2014_BFncomms4136_MOESM428_ESM.pdf" class="external-link">supplementary
+given level of clinical immunity. The latest equation for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
+is equation 7 in the <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms4136/MediaObjects/41467_2014_BFncomms4136_MOESM428_ESM.pdf" class="external-link">supplementary
 materials for Griffin Nat Comms 2014</a>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phi</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">na</span>,<span class="fl">1</span><span class="op">:</span><span class="va">nh</span>,<span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">phi0</span><span class="op">*</span><span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">phi1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="op">(</span><span class="va">IC</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">IC0</span><span class="op">)</span><span class="op">^</span><span class="va">kC</span><span class="op">)</span> <span class="op">+</span> <span class="va">phi1</span><span class="op">)</span></span></code></pre></div>
-<p><span class="math inline">\(\phi_0 \mapsto\)</span>
-<code>phi0</code></p>
-<p><span class="math inline">\(\phi_1 \mapsto\)</span>
-<code>phi1</code></p>
-<p><span class="math inline">\(I_{C0} \mapsto\)</span>
-<code>IC0</code></p>
-<p><span class="math inline">\(\kappa_C \mapsto\)</span>
-<code>kC</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mn>0</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\phi_0 \mapsto</annotation></semantics></math><code>phi0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mn>1</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\phi_1 \mapsto</annotation></semantics></math><code>phi1</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mrow><mi>C</mi><mn>0</mn></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">I_{C0} \mapsto</annotation></semantics></math><code>IC0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mi>C</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\kappa_C \mapsto</annotation></semantics></math><code>kC</code></p>
 </div>
 <div class="section level3">
 <h3 id="infection-blocking-immunity">Infection-blocking Immunity<a class="anchor" aria-label="anchor" href="#infection-blocking-immunity"></a>
@@ -338,13 +333,16 @@ materials for Griffin Nat Comms 2014</a>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">IB</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">EIR</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="op">(</span><span class="va">EIR</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">*</span> <span class="va">uB</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="va">IB</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">dB</span> <span class="op">-</span> <span class="va">IB</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">x_I</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">IB</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">EIR</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="op">(</span><span class="va">EIR</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">*</span> <span class="va">uB</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="va">IB</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">dB</span> <span class="op">-</span> <span class="op">(</span><span class="va">IB</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">-</span><span class="va">IB</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="va">x_I</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span></code></pre></div>
-<p>The <code>EIR</code> at a given time for a given age group (<span class="math inline">\(\epsilon(a, t)\)</span>) is in section 2.11.</p>
+<p>The <code>EIR</code> at a given time for a given age group
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>,</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\epsilon(a, t)</annotation></semantics></math>)
+is in section 2.11.</p>
 <p>Similar to exposure-driven immunity (Section 2.3) the increase in
-immunity uses a hill function: <span class="math inline">\(h(\epsilon) =
-\frac{\epsilon}{\gamma\epsilon + 1}\)</span></p>
-<p>where here <span class="math inline">\(\gamma\)</span> is
-<code>uB</code>.</p>
-<p><span class="math inline">\(d_B \mapsto\)</span> <code>dB</code></p>
+immunity uses a hill function:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>ϵ</mi><mrow><mi>γ</mi><mi>ϵ</mi><mo>+</mo><mn>1</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">h(\epsilon) = \frac{\epsilon}{\gamma\epsilon + 1}</annotation></semantics></math></p>
+<p>where here
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+is <code>uB</code>.</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>B</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_B \mapsto</annotation></semantics></math><code>dB</code></p>
 </div>
 <div class="section level3">
 <h3 id="b">b<a class="anchor" aria-label="anchor" href="#b"></a>
@@ -356,14 +354,10 @@ for <code>b</code> is equation 6 in the <a href="https://static-content.springer
 materials for Griffin Nat Comms 2014</a>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">b1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="op">(</span><span class="va">IB</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">IB0</span><span class="op">)</span><span class="op">^</span><span class="va">kB</span><span class="op">)</span><span class="op">+</span><span class="va">b1</span><span class="op">)</span></span></code></pre></div>
-<p><span class="math inline">\(b_{0} \mapsto\)</span>
-<code>b0</code></p>
-<p><span class="math inline">\(b_{1} \mapsto\)</span>
-<code>b1</code></p>
-<p><span class="math inline">\(I_{B0} \mapsto\)</span>
-<code>IB0</code></p>
-<p><span class="math inline">\(\kappa_B \mapsto\)</span>
-<code>kB</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>0</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">b_{0} \mapsto</annotation></semantics></math><code>b0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>1</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">b_{1} \mapsto</annotation></semantics></math><code>b1</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mrow><mi>B</mi><mn>0</mn></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">I_{B0} \mapsto</annotation></semantics></math><code>IB0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mi>B</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\kappa_B \mapsto</annotation></semantics></math><code>kB</code></p>
 </div>
 <div class="section level3">
 <h3 id="detection-immunity">Detection Immunity<a class="anchor" aria-label="anchor" href="#detection-immunity"></a>
@@ -373,9 +367,10 @@ materials for Griffin Nat Comms 2014</a>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">ID</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="op">(</span><span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">*</span><span class="va">uD</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="va">ID</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">dID</span> <span class="op">-</span> <span class="va">ID</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">x_I</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/deriv.html" class="external-link">deriv</a></span><span class="op">(</span><span class="va">ID</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="va">na</span>, <span class="fl">1</span><span class="op">:</span><span class="va">nh</span>, <span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="op">(</span><span class="va">FOI</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">*</span><span class="va">uD</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="va">ID</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">dID</span> <span class="op">-</span> <span class="op">(</span><span class="va">ID</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">-</span><span class="va">ID</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="va">x_I</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span></code></pre></div>
-<p>Again a hill function is used (see Section 2.3) with <span class="math inline">\(\gamma\)</span> as <code>uD</code>.</p>
-<p><span class="math inline">\(d_{ID} \mapsto\)</span>
-<code>dID</code></p>
+<p>Again a hill function is used (see Section 2.3) with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+as <code>uD</code>.</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mrow><mi>I</mi><mi>D</mi></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_{ID} \mapsto</annotation></semantics></math><code>dID</code></p>
 </div>
 <div class="section level3">
 <h3 id="probability-of-detection">Probability of Detection<a class="anchor" aria-label="anchor" href="#probability-of-detection"></a>
@@ -385,21 +380,17 @@ materials for Griffin Nat Comms 2014</a>.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">p_det</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">na</span>,<span class="va">nh</span>,<span class="va">num_int</span><span class="op">)</span></span>
 <span><span class="va">p_det</span><span class="op">[</span>,,<span class="op">]</span> <span class="op">&lt;-</span> <span class="va">d1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">d1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">fd</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">*</span><span class="op">(</span><span class="va">ID</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">/</span><span class="va">ID0</span><span class="op">)</span><span class="op">^</span><span class="va">kD</span><span class="op">)</span></span></code></pre></div>
 <p>The probability that an asymptomatic infection is detected by
-microscopy is <span class="math inline">\(q \mapsto\)</span>
-<code>p_det</code> (equation 8 in <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms4136/MediaObjects/41467_2014_BFncomms4136_MOESM428_ESM.pdf" class="external-link">supplementary
+microscopy is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">q \mapsto</annotation></semantics></math><code>p_det</code> (equation 8 in <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms4136/MediaObjects/41467_2014_BFncomms4136_MOESM428_ESM.pdf" class="external-link">supplementary
 materials for Griffin Nat Comms 2014</a>).</p>
-<p>The function <span class="math inline">\(f_{D} \mapsto\)</span>
-<code>fD</code> is defined just below it.</p>
-<p><span class="math inline">\(f_{D0} \mapsto\)</span>
-<code>fD0</code></p>
-<p><span class="math inline">\(a_D \mapsto\)</span> <code>aD</code></p>
-<p><span class="math inline">\(\gamma_D \mapsto\)</span>
-<code>gammaD</code></p>
-<p><span class="math inline">\(d_1 \mapsto\)</span> <code>d1</code></p>
-<p><span class="math inline">\(I_{D0} \mapsto\)</span>
-<code>ID0</code></p>
-<p><span class="math inline">\(\kappa_D \mapsto\)</span>
-<code>kD</code></p>
+<p>The function
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>D</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">f_{D} \mapsto</annotation></semantics></math><code>fD</code> is defined just below it.</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mrow><mi>D</mi><mn>0</mn></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">f_{D0} \mapsto</annotation></semantics></math><code>fD0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>D</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">a_D \mapsto</annotation></semantics></math><code>aD</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>γ</mi><mi>D</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\gamma_D \mapsto</annotation></semantics></math><code>gammaD</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mn>1</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_1 \mapsto</annotation></semantics></math><code>d1</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mrow><mi>D</mi><mn>0</mn></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">I_{D0} \mapsto</annotation></semantics></math><code>ID0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mi>D</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\kappa_D \mapsto</annotation></semantics></math><code>kD</code></p>
 </div>
 <div class="section level3">
 <h3 id="force-of-infection">Force of Infection<a class="anchor" aria-label="anchor" href="#force-of-infection"></a>
@@ -415,8 +406,8 @@ materials for Griffin Nat Comms 2014</a>).</p>
 <span><span class="va">FOI</span><span class="op">[</span>,,<span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">delay</span><span class="op">(</span><span class="va">FOI_lag</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span>,<span class="va">dE</span><span class="op">)</span></span></code></pre></div>
 <p><code>EIR</code> is defined in Section 2.11</p>
 <p><code>EIR * b</code> is the definition for the force of infection
-(<span class="math inline">\(\Lambda(a, t)\)</span>) given in equation 2
-of <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms4136/MediaObjects/41467_2014_BFncomms4136_MOESM428_ESM.pdf" class="external-link">supplementary
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Λ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>,</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\Lambda(a, t)</annotation></semantics></math>)
+given in equation 2 of <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms4136/MediaObjects/41467_2014_BFncomms4136_MOESM428_ESM.pdf" class="external-link">supplementary
 materials for Griffin Nat Comms 2014</a>. The model lags the value of
 <code>FOI_lag</code> by the value <code>dE</code> (human latent period)
 and stores it in <code>FOI</code>.</p>
@@ -428,21 +419,16 @@ and stores it in <code>FOI</code>.</p>
 <code class="sourceCode R"><span><span class="va">EIR</span><span class="op">[</span>,,<span class="op">]</span> <span class="op">&lt;-</span> <span class="va">av_human</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">*</span> <span class="va">rel_foi</span><span class="op">[</span><span class="va">j</span><span class="op">]</span> <span class="op">*</span> <span class="va">foi_age</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">*</span> <span class="va">Iv</span><span class="op">/</span><span class="va">omega</span></span></code></pre></div>
 <p>Biting and age FOI heterogeneity: (Section 1.1.2 of <a href="https://doi.org/10.1371/journal.pmed.1000324.s005" class="external-link">Protocol
 S1</a>)</p>
-<p><span class="math inline">\(\zeta \mapsto\)</span>
-<code>rel_foi</code></p>
-<p><span class="math inline">\(\psi(a) \mapsto\)</span>
-<code>foi_age</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ζ</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">\zeta \mapsto</annotation></semantics></math><code>rel_foi</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ψ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>↦</mo></mrow><annotation encoding="application/x-tex">\psi(a) \mapsto</annotation></semantics></math><code>foi_age</code></p>
 <p>Mosquito model parameters: (Section 1.1.4 of <a href="https://doi.org/10.1371/journal.pmed.1000324.s005" class="external-link">Protocol
 S1</a>)</p>
-<p><span class="math inline">\(I^{v}_{M} \mapsto\)</span>
-<code>Iv</code> (infectious mosquito population, see Section 4.4)</p>
-<p><span class="math inline">\(\alpha^{v} \mapsto\)</span>
-<code>av_human</code> (see Section 6.3)</p>
-<p><span class="math inline">\(\omega \mapsto\)</span>
-<code>omega</code></p>
-<p>where <span class="math inline">\(\omega = \int_{0}^{\infty}
-\eta(a)\psi(a) da\)</span> is a normalising constant calculated in the
-<a href="https://github.com/mrc-ide/dide-deterministic-malaria-model/blob/82069175e66a9ba199aca5fd97172d7b09a4ff1f/R/equilibrium-init-create.R#L84" class="external-link">equilibrium
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>I</mi><mi>M</mi><mi>v</mi></msubsup><mo>↦</mo></mrow><annotation encoding="application/x-tex">I^{v}_{M} \mapsto</annotation></semantics></math><code>Iv</code> (infectious mosquito population, see Section 4.4)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>α</mi><mi>v</mi></msup><mo>↦</mo></mrow><annotation encoding="application/x-tex">\alpha^{v} \mapsto</annotation></semantics></math><code>av_human</code> (see Section 6.3)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">\omega \mapsto</annotation></semantics></math><code>omega</code></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mi>∞</mi></msubsup><mi>η</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>ψ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>d</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">\omega = \int_{0}^{\infty} \eta(a)\psi(a) da</annotation></semantics></math>
+is a normalising constant calculated in the <a href="https://github.com/mrc-ide/dide-deterministic-malaria-model/blob/82069175e66a9ba199aca5fd97172d7b09a4ff1f/R/equilibrium-init-create.R#L84" class="external-link">equilibrium
 solution</a>.</p>
 </div>
 </div>
@@ -470,17 +456,21 @@ material</a> of White 2011 vector model (equation 7).</p>
 <h3 id="human-infectiousness">Human infectiousness<a class="anchor" aria-label="anchor" href="#human-infectiousness"></a>
 </h3>
 <p>How infectious humans with asymptomatic infections are to biting
-mosquitoes (<span class="math inline">\(c_A\)</span>) can vary, whereas
-the same values for those with clinical (<span class="math inline">\(c_D\)</span>) or sub-patent (<span class="math inline">\(c_U\)</span>) infections are constant. Equations
-are in the section “Infectiouness to Mosquitoes” <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms4136/MediaObjects/41467_2014_BFncomms4136_MOESM428_ESM.pdf" class="external-link">supplementary
+mosquitoes
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>c</mi><mi>A</mi></msub><annotation encoding="application/x-tex">c_A</annotation></semantics></math>)
+can vary, whereas the same values for those with clinical
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>c</mi><mi>D</mi></msub><annotation encoding="application/x-tex">c_D</annotation></semantics></math>)
+or sub-patent
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>c</mi><mi>U</mi></msub><annotation encoding="application/x-tex">c_U</annotation></semantics></math>)
+infections are constant. Equations are in the section “Infectiouness to
+Mosquitoes” <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms4136/MediaObjects/41467_2014_BFncomms4136_MOESM428_ESM.pdf" class="external-link">supplementary
 materials for Griffin Nat Comms 2014</a>.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cA</span><span class="op">[</span>,,<span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cU</span> <span class="op">+</span> <span class="op">(</span><span class="va">cD</span><span class="op">-</span><span class="va">cU</span><span class="op">)</span><span class="op">*</span><span class="va">p_det</span><span class="op">[</span><span class="va">i</span>,<span class="va">j</span>,<span class="va">k</span><span class="op">]</span><span class="op">^</span><span class="va">gamma1</span></span></code></pre></div>
-<p><span class="math inline">\(c_U \mapsto\)</span> <code>cU</code></p>
-<p><span class="math inline">\(c_D \mapsto\)</span> <code>cD</code></p>
-<p><span class="math inline">\(q \mapsto\)</span> <code>p_det</code></p>
-<p><span class="math inline">\(\gamma_I \mapsto\)</span>
-<code>gamma1</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>U</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">c_U \mapsto</annotation></semantics></math><code>cU</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>D</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">c_D \mapsto</annotation></semantics></math><code>cD</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">q \mapsto</annotation></semantics></math><code>p_det</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>γ</mi><mi>I</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\gamma_I \mapsto</annotation></semantics></math><code>gamma1</code></p>
 </div>
 <div class="section level3">
 <h3 id="mosquito-force-of-infection">Mosquito Force of Infection<a class="anchor" aria-label="anchor" href="#mosquito-force-of-infection"></a>
@@ -490,19 +480,19 @@ materials for Griffin Nat Comms 2014</a>.</p>
 <span><span class="va">lag_FOIv</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">FOIvijk</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">FOIv</span> <span class="op">&lt;-</span> <span class="fu">delay</span><span class="op">(</span><span class="va">lag_FOIv</span>, <span class="va">delayGam</span><span class="op">)</span></span></code></pre></div>
-<p><span class="math inline">\(\Lambda^{v}_{M} \mapsto\)</span>
-<code>FOIvijk</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>Λ</mi><mi>M</mi><mi>v</mi></msubsup><mo>↦</mo></mrow><annotation encoding="application/x-tex">\Lambda^{v}_{M} \mapsto</annotation></semantics></math><code>FOIvijk</code></p>
 <p>An equation for mosqutio FOI is given in Section 1.1.4 of <a href="https://doi.org/10.1371/journal.pmed.1000324.s005" class="external-link">Protocol
 S1</a>. However, at the end of Section 2.1 in <a href="https://doi.org/10.1371/journal.pmed.1000324.s006" class="external-link">Protocol S2 -
 Intervention model</a> of the original Griffin 2010 paper there is a
 discussion about how using IRS changes the probability that a mosquito
 will bite a human to be different from the probability that a mosquito
 will bite and survive (since it may now land on a wall and die after
-feeding). This means that we calculate the human EIR using <span class="math inline">\(\alpha^v \mapsto\)</span> <code>av_human</code>
-(because all infectious bites on humans are relevant even if the
-mosquito dies) and the mosquito FOI using <span class="math inline">\(\alpha^v \mapsto\)</span> <code>av_mosq</code>
-(because we only care about mosquitoes that bite, become infected, and
-don’t die for FOI from the mosquito perspective).</p>
+feeding). This means that we calculate the human EIR using
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>α</mi><mi>v</mi></msup><mo>↦</mo></mrow><annotation encoding="application/x-tex">\alpha^v \mapsto</annotation></semantics></math><code>av_human</code> (because all infectious bites on humans are
+relevant even if the mosquito dies) and the mosquito FOI using
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>α</mi><mi>v</mi></msup><mo>↦</mo></mrow><annotation encoding="application/x-tex">\alpha^v \mapsto</annotation></semantics></math><code>av_mosq</code> (because we only care about mosquitoes that bite,
+become infected, and don’t die for FOI from the mosquito
+perspective).</p>
 <p>See Section 6.3 for the code for <code>av_mosq</code> and
 <code>av_human</code>.</p>
 <p>The FOI is lagged to account for the extrinsic incubation period of
@@ -514,13 +504,12 @@ the parasite in the mosquito. tel ## Mosquito incidence</p>
 <span><span class="va">incv</span> <span class="op">&lt;-</span> <span class="fu">delay</span><span class="op">(</span><span class="va">lag_incv</span>, <span class="va">delayMos</span><span class="op">)</span></span></code></pre></div>
 <p>The probability that a mosquito survives from acquiring infection
 until sporozoite emergence is given in Section 1.1.4 of <a href="https://doi.org/10.1371/journal.pmed.1000324.s005" class="external-link">Protocol S1</a>
-as <span class="math inline">\(P^{v}_{M} = exp(-\mu\tau_M)\)</span>
+as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>P</mi><mi>M</mi><mi>v</mi></msubsup><mo>=</mo><mi>e</mi><mi>x</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>μ</mi><msub><mi>τ</mi><mi>M</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">P^{v}_{M} = exp(-\mu\tau_M)</annotation></semantics></math>
 where:</p>
-<p><span class="math inline">\(P^{v}_{M} \mapsto\)</span>
-<code>surv</code></p>
-<p><span class="math inline">\(\mu \mapsto\)</span> <code>mu</code></p>
-<p><span class="math inline">\(\tau_M \mapsto\)</span>
-<code>delayMos</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>P</mi><mi>M</mi><mi>v</mi></msubsup><mo>↦</mo></mrow><annotation encoding="application/x-tex">P^{v}_{M} \mapsto</annotation></semantics></math><code>surv</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">\mu \mapsto</annotation></semantics></math><code>mu</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>M</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\tau_M \mapsto</annotation></semantics></math><code>delayMos</code></p>
 <p>In the odin model the parameter <code>incv</code> calculates the
 incidence of infection in susceptible mosquitoes after accounting for
 the latent period and mosquito mortality during this time.</p>
@@ -558,44 +547,39 @@ the transmission model so the names are different in the odin code.</p>
 <span><span class="va">beta_larval</span> <span class="op">&lt;-</span> <span class="va">eov</span><span class="op">*</span><span class="va">mu</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">mu</span><span class="op">/</span><span class="va">fv</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">mu</span><span class="op">/</span><span class="va">fv</span><span class="op">)</span><span class="op">)</span> <span class="co"># Number of eggs laid per day</span></span>
 <span><span class="va">b_lambda</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">gammaL</span><span class="op">*</span><span class="va">muLL</span><span class="op">/</span><span class="va">muEL</span><span class="op">-</span><span class="va">dEL</span><span class="op">/</span><span class="va">dLL</span><span class="op">+</span><span class="op">(</span><span class="va">gammaL</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">*</span><span class="va">muLL</span><span class="op">*</span><span class="va">dEL</span><span class="op">)</span></span>
 <span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.5</span><span class="op">*</span><span class="va">b_lambda</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">*</span><span class="va">b_lambda</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">gammaL</span><span class="op">*</span><span class="va">beta_larval</span><span class="op">*</span><span class="va">muLL</span><span class="op">*</span><span class="va">dEL</span><span class="op">/</span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">muEL</span><span class="op">*</span><span class="va">mu0</span><span class="op">*</span><span class="va">dLL</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="va">dPL</span><span class="op">*</span><span class="va">muPL</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><span class="math inline">\(\omega \mapsto\)</span>
-<code>lambda</code></p>
-<p>(<span class="math inline">\(\omega\)</span> is in equation 6 of
-section 3 of the <a href="https://static-content.springer.com/esm/art%3A10.1186%2F1756-3305-4-153/MediaObjects/13071_2011_387_MOESM1_ESM.DOC" class="external-link">supplementary
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">\omega \mapsto</annotation></semantics></math><code>lambda</code></p>
+<p>(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math>
+is in equation 6 of section 3 of the <a href="https://static-content.springer.com/esm/art%3A10.1186%2F1756-3305-4-153/MediaObjects/13071_2011_387_MOESM1_ESM.DOC" class="external-link">supplementary
 material for White P&amp;V 2011</a>)</p>
-<p><code>b_lambda</code> is a smaller section of equation 6 for <span class="math inline">\(\omega\)</span> equal to</p>
-<p><span class="math inline">\(-\frac{1}{2}(\gamma\frac{\mu^{0}_L}{\mu^{0}_E} -
-\frac{d_E}{d_L} + (\gamma - 1)\mu^{0}_L d_E)\)</span></p>
-<p><span class="math inline">\(\gamma \mapsto\)</span>
-<code>gammaL</code></p>
-<p><span class="math inline">\(\mu^{0}_L \mapsto\)</span>
-<code>muLL</code></p>
-<p><span class="math inline">\(d_L \mapsto\)</span> <code>dLL</code></p>
-<p><span class="math inline">\(d_E \mapsto\)</span> <code>dEL</code></p>
-<p><span class="math inline">\(\mu^{0}_E \mapsto\)</span>
-<code>muEL</code></p>
-<p><span class="math inline">\(\beta \mapsto\)</span>
-<code>beta_larval</code> (average eggs laid per day, determines new
+<p><code>b_lambda</code> is a smaller section of equation 6 for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math>
+equal to</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mi>γ</mi><mfrac><msubsup><mi>μ</mi><mi>L</mi><mn>0</mn></msubsup><msubsup><mi>μ</mi><mi>E</mi><mn>0</mn></msubsup></mfrac><mo>−</mo><mfrac><msub><mi>d</mi><mi>E</mi></msub><msub><mi>d</mi><mi>L</mi></msub></mfrac><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>γ</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><msubsup><mi>μ</mi><mi>L</mi><mn>0</mn></msubsup><msub><mi>d</mi><mi>E</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">-\frac{1}{2}(\gamma\frac{\mu^{0}_L}{\mu^{0}_E} - \frac{d_E}{d_L} + (\gamma - 1)\mu^{0}_L d_E)</annotation></semantics></math></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">\gamma \mapsto</annotation></semantics></math><code>gammaL</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>μ</mi><mi>L</mi><mn>0</mn></msubsup><mo>↦</mo></mrow><annotation encoding="application/x-tex">\mu^{0}_L \mapsto</annotation></semantics></math><code>muLL</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>L</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_L \mapsto</annotation></semantics></math><code>dLL</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>E</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_E \mapsto</annotation></semantics></math><code>dEL</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>μ</mi><mi>E</mi><mn>0</mn></msubsup><mo>↦</mo></mrow><annotation encoding="application/x-tex">\mu^{0}_E \mapsto</annotation></semantics></math><code>muEL</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">\beta \mapsto</annotation></semantics></math><code>beta_larval</code> (average eggs laid per day, determines new
 larvae production)</p>
 <p>The parameter called <code>eov</code> requires some reverse
 engineering:</p>
-<p><span class="math inline">\(eov = \frac{\beta_{L}(exp(\delta\mu_{M})
-- 1)}{\mu_{M}}\)</span></p>
-<p>where <span class="math inline">\(\mu_M\)</span> is the mosquito
-mortality rate (<code>mu</code>) and <span class="math inline">\(\delta
-= \frac{1}{f_v}\)</span> is the days between oviposition
-(<code>fv</code> is the feeding rate in the model so <code>1/fv</code>
-gives time between feeds and therefore oviposition after feeding).</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mi>o</mi><mi>v</mi><mo>=</mo><mfrac><mrow><msub><mi>β</mi><mi>L</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>e</mi><mi>x</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><msub><mi>μ</mi><mi>M</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>μ</mi><mi>M</mi></msub></mfrac></mrow><annotation encoding="application/x-tex">eov = \frac{\beta_{L}(exp(\delta\mu_{M}) - 1)}{\mu_{M}}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>μ</mi><mi>M</mi></msub><annotation encoding="application/x-tex">\mu_M</annotation></semantics></math>
+is the mosquito mortality rate (<code>mu</code>) and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mfrac><mn>1</mn><msub><mi>f</mi><mi>v</mi></msub></mfrac></mrow><annotation encoding="application/x-tex">\delta = \frac{1}{f_v}</annotation></semantics></math>
+is the days between oviposition (<code>fv</code> is the feeding rate in
+the model so <code>1/fv</code> gives time between feeds and therefore
+oviposition after feeding).</p>
 <p>From equation 3 in the methods section of <a href="https://parasitesandvectors.biomedcentral.com/articles/10.1186/1756-3305-4-153" class="external-link">White
 P&amp;V 2011</a> we know that:</p>
-<p><span class="math inline">\(\beta_{max} =
-\frac{\epsilon_{max}\mu_M}{exp(\delta\mu_M - 1)}\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>ϵ</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><msub><mi>μ</mi><mi>M</mi></msub></mrow><mrow><mi>e</mi><mi>x</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><msub><mi>μ</mi><mi>M</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">\beta_{max} = \frac{\epsilon_{max}\mu_M}{exp(\delta\mu_M - 1)}</annotation></semantics></math></p>
 <p>which can be re-arranged to give</p>
-<p><span class="math inline">\(\epsilon_{max} = \frac{\beta_{max}
-exp(\delta\mu_M - 1)}{\mu_M}\)</span></p>
-<p>Therefore we can work out that <span class="math inline">\(\epsilon_{max} \mapsto\)</span> <code>eov</code>
-and <span class="math inline">\(\beta_{max} \mapsto\)</span>
-<code>betaL</code>.</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϵ</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>β</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mi>e</mi><mi>x</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><msub><mi>μ</mi><mi>M</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>μ</mi><mi>M</mi></msub></mfrac></mrow><annotation encoding="application/x-tex">\epsilon_{max} = \frac{\beta_{max} exp(\delta\mu_M - 1)}{\mu_M}</annotation></semantics></math></p>
+<p>Therefore we can work out that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϵ</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\epsilon_{max} \mapsto</annotation></semantics></math><code>eov</code> and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\beta_{max} \mapsto</annotation></semantics></math><code>betaL</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="carrying-capacity">Carrying capacity<a class="anchor" aria-label="anchor" href="#carrying-capacity"></a>
@@ -605,8 +589,8 @@ and <span class="math inline">\(\beta_{max} \mapsto\)</span>
 <span></span>
 <span><span class="co"># Seasonal carrying capacity KL = base carrying capacity K0 * effect for time of year theta:</span></span>
 <span><span class="va">KL</span> <span class="op">&lt;-</span> <span class="va">K0</span><span class="op">*</span><span class="va">theta2</span></span></code></pre></div>
-<p>The equation <span class="math inline">\(K \mapsto\)</span>
-<code>K0</code> is equation 7 in section 3 of the <a href="https://static-content.springer.com/esm/art%3A10.1186%2F1756-3305-4-153/MediaObjects/13071_2011_387_MOESM1_ESM.DOC" class="external-link">supplementary
+<p>The equation
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">K \mapsto</annotation></semantics></math><code>K0</code> is equation 7 in section 3 of the <a href="https://static-content.springer.com/esm/art%3A10.1186%2F1756-3305-4-153/MediaObjects/13071_2011_387_MOESM1_ESM.DOC" class="external-link">supplementary
 material for White P&amp;V 2011</a>.</p>
 <p><code>KL</code> is the larval carrying capacity which is scaled up
 according to seasonality by <code>theta2</code> (see Section 3
@@ -620,23 +604,19 @@ above)</p>
 <span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">fv</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">p1</span><span class="op">*</span><span class="va">p2</span><span class="op">)</span> <span class="co"># mosquito death rate</span></span></code></pre></div>
 <p>See Section 4 of the <a href="https://static-content.springer.com/esm/art%3A10.1186%2F1756-3305-4-153/MediaObjects/13071_2011_387_MOESM1_ESM.DOC" class="external-link">supplementary
 material for White P&amp;V 2011</a>.</p>
-<p><span class="math inline">\(f \mapsto\)</span> <code>fv</code></p>
-<p><span class="math inline">\(\mu_{M} \mapsto\)</span>
-<code>mu</code></p>
-<p><span class="math inline">\(\tau_1 \mapsto\)</span> <code>tau1</code>
-(Time spent seeking blood meal during gonotrophic cycle)</p>
-<p><span class="math inline">\(\tau_2 \mapsto\)</span> <code>tau2</code>
-(Time spent resting during gonotrophic cycle)</p>
-<p><span class="math inline">\(p_1 \mapsto\)</span> <code>p10</code>
-Probability of surviving blood meal with no net coverage (the parameter
-<code>p1</code> in the model is the probability of surviving a blood
-meal for a given intervention coverage - see Section 6.3)</p>
-<p><span class="math inline">\(p_2 \mapsto\)</span> <code>p2</code>
-Probability of surviving one resting cycle (does not change with
-intervention coverage)</p>
-<p><span class="math inline">\(z \mapsto\)</span> <code>zbar</code>
-average probability of trying again after unsuccessful feeding attempt
-(see equation 11 in section 4 of the <a href="https://static-content.springer.com/esm/art%3A10.1186%2F1756-3305-4-153/MediaObjects/13071_2011_387_MOESM1_ESM.DOC" class="external-link">supplementary
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">f \mapsto</annotation></semantics></math><code>fv</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>M</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\mu_{M} \mapsto</annotation></semantics></math><code>mu</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mn>1</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\tau_1 \mapsto</annotation></semantics></math><code>tau1</code> (Time spent seeking blood meal during gonotrophic
+cycle)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mn>2</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\tau_2 \mapsto</annotation></semantics></math><code>tau2</code> (Time spent resting during gonotrophic cycle)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>1</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">p_1 \mapsto</annotation></semantics></math><code>p10</code> Probability of surviving blood meal with no net
+coverage (the parameter <code>p1</code> in the model is the probability
+of surviving a blood meal for a given intervention coverage - see
+Section 6.3)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>2</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">p_2 \mapsto</annotation></semantics></math><code>p2</code> Probability of surviving one resting cycle (does not
+change with intervention coverage)</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">z \mapsto</annotation></semantics></math><code>zbar</code> average probability of trying again after unsuccessful
+feeding attempt (see equation 11 in section 4 of the <a href="https://static-content.springer.com/esm/art%3A10.1186%2F1756-3305-4-153/MediaObjects/13071_2011_387_MOESM1_ESM.DOC" class="external-link">supplementary
 material for White P&amp;V 2011</a>).</p>
 </div>
 <div class="section level3">
@@ -679,34 +659,20 @@ in the effectiveness of ITNs and IRS in terms of mortality and repelling
 ability.</p>
 <p>See Section 2.1.1.1 (pgs 8 &amp; 9) in <a href="https://doi.org/10.1371/journal.pmed.1000324.s006" class="external-link">Protocol S2</a>
 for the equations for the parameters below:</p>
-<p><span class="math inline">\(\gamma_N \mapsto\)</span>
-<code>itn_loss</code></p>
-<p><span class="math inline">\(r_{N0} \mapsto\)</span>
-<code>r_ITN0</code></p>
-<p><span class="math inline">\(r_{NM} \mapsto\)</span>
-<code>r_ITN1</code></p>
-<p><span class="math inline">\(r_N \mapsto\)</span>
-<code>r_ITN</code></p>
-<p><span class="math inline">\(d_{N0} \mapsto\)</span>
-<code>d_ITN0</code></p>
-<p><span class="math inline">\(d_N \mapsto\)</span>
-<code>d_ITN</code></p>
-<p><span class="math inline">\(s_N \mapsto\)</span>
-<code>s_ITN</code></p>
-<p><span class="math inline">\(r_{S0} \mapsto\)</span>
-<code>r_IRS0</code></p>
-<p><span class="math inline">\(\gamma_S \mapsto\)</span>
-<code>irs_loss</code></p>
-<p><span class="math inline">\(r_S \mapsto\)</span>
-<code>r_IRS</code></p>
-<p><span class="math inline">\(\chi \mapsto\)</span>
-<code>chi</code></p>
-<p><span class="math inline">\(d_{S0} \mapsto\)</span>
-<code>d_IRS0</code></p>
-<p><span class="math inline">\(d_S \mapsto\)</span>
-<code>d_IRS</code></p>
-<p><span class="math inline">\(s_S \mapsto\)</span>
-<code>s_IRS</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>γ</mi><mi>N</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\gamma_N \mapsto</annotation></semantics></math><code>itn_loss</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mrow><mi>N</mi><mn>0</mn></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_{N0} \mapsto</annotation></semantics></math><code>r_ITN0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mrow><mi>N</mi><mi>M</mi></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_{NM} \mapsto</annotation></semantics></math><code>r_ITN1</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>N</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_N \mapsto</annotation></semantics></math><code>r_ITN</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mrow><mi>N</mi><mn>0</mn></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_{N0} \mapsto</annotation></semantics></math><code>d_ITN0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>N</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_N \mapsto</annotation></semantics></math><code>d_ITN</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>N</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">s_N \mapsto</annotation></semantics></math><code>s_ITN</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mrow><mi>S</mi><mn>0</mn></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_{S0} \mapsto</annotation></semantics></math><code>r_IRS0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>γ</mi><mi>S</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\gamma_S \mapsto</annotation></semantics></math><code>irs_loss</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>S</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">r_S \mapsto</annotation></semantics></math><code>r_IRS</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>χ</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">\chi \mapsto</annotation></semantics></math><code>chi</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mrow><mi>S</mi><mn>0</mn></mrow></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_{S0} \mapsto</annotation></semantics></math><code>d_IRS0</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>S</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">d_S \mapsto</annotation></semantics></math><code>d_IRS</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>S</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">s_S \mapsto</annotation></semantics></math><code>s_IRS</code></p>
 </div>
 <div class="section level3">
 <h3 id="probabilities-of-biting-and-survival">Probabilities of biting and survival<a class="anchor" aria-label="anchor" href="#probabilities-of-biting-and-survival"></a>
@@ -740,10 +706,8 @@ of the original Griffin 2010 paper.</p>
 <span><span class="va">z_</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">bites_Bed</span><span class="op">*</span><span class="op">(</span><span class="va">r_IRS</span><span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">r_IRS</span><span class="op">)</span><span class="op">*</span><span class="va">r_ITN</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">bites_Indoors</span> <span class="op">-</span> <span class="va">bites_Bed</span><span class="op">)</span><span class="op">*</span><span class="va">r_IRS</span></span>
 <span><span class="va">z</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">z_</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">num_int</span></span></code></pre></div>
-<p><span class="math inline">\(\Phi_I \mapsto\)</span>
-<code>bites_Indoors</code></p>
-<p><span class="math inline">\(\Phi_B \mapsto\)</span>
-<code>bites_Bed</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Φ</mi><mi>I</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\Phi_I \mapsto</annotation></semantics></math><code>bites_Indoors</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Φ</mi><mi>B</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\Phi_B \mapsto</annotation></semantics></math><code>bites_Bed</code></p>
 </div>
 <div class="section level3">
 <h3 id="average-biting-rates">Average biting rates<a class="anchor" aria-label="anchor" href="#average-biting-rates"></a>
@@ -771,26 +735,24 @@ of the original Griffin 2010 paper.</p>
 <span><span class="va">av_mosq</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">av</span><span class="op">*</span><span class="va">w</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">/</span><span class="va">wh</span> <span class="co"># rate at which mosquitoes bite each int. cat.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">av_human</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">num_int</span></span>
 <span><span class="va">av_human</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">num_int</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">av</span><span class="op">*</span><span class="va">yy</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">/</span><span class="va">wh</span> <span class="co"># biting rate on humans in each int. cat.</span></span></code></pre></div>
-<p><span class="math inline">\(Z \mapsto\)</span> <code>zbar</code></p>
-<p><span class="math inline">\(W \mapsto\)</span> <code>wbar</code></p>
-<p><span class="math inline">\(Q^v \mapsto\)</span> <code>Q</code></p>
-<p><span class="math inline">\(p_1 \mapsto\)</span> <code>p1</code></p>
-<p>The average biting rate (<span class="math inline">\(\alpha_v
-\mapsto\)</span> <code>av_mosq</code> or <code>av_human</code>) is
-calculated using <code>w</code> or <code>yy</code> depending on whether
-it matters that the mosquito may die after feeding. For the FOI on
-mosquitoes, we only want to count infections in mosquitoes that don’t
-then die due to IRS. For the EIR for humans, infectious bites count even
-if mosquitoes die due to IRS afterwards.</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">Z \mapsto</annotation></semantics></math><code>zbar</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo>↦</mo></mrow><annotation encoding="application/x-tex">W \mapsto</annotation></semantics></math><code>wbar</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mi>v</mi></msup><mo>↦</mo></mrow><annotation encoding="application/x-tex">Q^v \mapsto</annotation></semantics></math><code>Q</code></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>1</mn></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">p_1 \mapsto</annotation></semantics></math><code>p1</code></p>
+<p>The average biting rate
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>v</mi></msub><mo>↦</mo></mrow><annotation encoding="application/x-tex">\alpha_v \mapsto</annotation></semantics></math><code>av_mosq</code> or <code>av_human</code>) is calculated using
+<code>w</code> or <code>yy</code> depending on whether it matters that
+the mosquito may die after feeding. For the FOI on mosquitoes, we only
+want to count infections in mosquitoes that don’t then die due to IRS.
+For the EIR for humans, infectious bites count even if mosquitoes die
+due to IRS afterwards.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -803,16 +765,16 @@ if mosquitoes die due to IRS afterwards.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

@@ -356,33 +356,33 @@ mv = Sv+sum(Ev)+Iv
 # deriv(Iv2) <- incv2 - mu*Iv2
 
 ########## Fake mosq. populations (sugar baits)
-initial(Sv0) <- init_Sv * mv0 * (1- GSK_proportion) #Normal lasses, who can't access our sugar sources
-#initial(Ev0) <- init_Ev * mv0 * (1- GSK_proportion)
-initial(Iv0) <- init_Iv * mv0 * (1- GSK_proportion)
+#initial(Sv0) <- init_Sv * mv0 * (1- GSK_proportion) #Normal lasses, who can't access our sugar sources
+##initial(Ev0) <- init_Ev * mv0 * (1- GSK_proportion)
+#initial(Iv0) <- init_Iv * mv0 * (1- GSK_proportion)
 
-initial(Ev0[1:10]) <- init_Ev * mv0 * (1- GSK_proportion) / 10# Options if not using a delayed delay
-dim(Ev0) <- 10
+#initial(Ev0[1:10]) <- init_Ev * mv0 * (1- GSK_proportion) / 10# Options if not using a delayed delay
+#dim(Ev0) <- 10
 
-ince0 <- FOIv * Sv0
-lag_incv0 <- ince0 * surv
+#ince0 <- FOIv * Sv0
+#lag_incv0 <- ince0 * surv
 #incv0 <- delay(lag_incv0, delayMos)
 
 #muS <- (1/4) #Females take sugar meal every 4 days. Update with Keith's paper!
 muS <- GSK_feed_rate
 
-deriv(Sv0) <- -ince0 - mu*Sv0 + betaa1 * (1- GSK_proportion) #- muS*Sv0*square
+#deriv(Sv0) <- -ince0 - mu*Sv0 + betaa1 * (1- GSK_proportion) #- muS*Sv0*square
 #deriv(Ev0) <- ince0 - incv0 - mu*Ev0 #- muS*Ev0*square
-deriv(Iv0) <- Ev0[10] - mu*Iv0 #- muS*Iv0*square
+#deriv(Iv0) <- Ev0[10] - mu*Iv0 #- muS*Iv0*square
 
-deriv(Ev0[1]) <- ince0 - Ev0[1] - mu*Ev0[1]
-deriv(Ev0[2:10]) <- Ev0[i-1] - Ev0[i] - mu*Ev0[i]
-mv00 = Sv0+sum(Ev0)+Iv0
+#deriv(Ev0[1]) <- ince0 - Ev0[1] - mu*Ev0[1]
+#deriv(Ev0[2:10]) <- Ev0[i-1] - Ev0[i] - mu*Ev0[i]
+#mv00 = Sv0+sum(Ev0)+Iv0
 
-initial(Sv1) <- init_Sv * mv0* GSK_proportion #Normal lasses, who can access our sugar sources
+initial(Sv1) <- init_Sv * mv0#* GSK_proportion #Normal lasses, who can access our sugar sources
 #initial(Ev1) <- init_Ev * mv0* GSK_proportion
-initial(Iv1) <- init_Iv * mv0* GSK_proportion
+initial(Iv1) <- init_Iv * mv0#* GSK_proportion
 
-initial(Ev1[1:10]) <- init_Ev * mv0 * GSK_proportion / 10 # Options if not using a delayed delay
+initial(Ev1[1:10]) <- init_Ev * mv0/10 #* GSK_proportion / 10 # Options if not using a delayed delay
 dim(Ev1) <- 10
 
 ince1 <- FOIv * Sv1
@@ -390,7 +390,7 @@ lag_incv1 <- ince1 * surv
 #incv1 <- delay(lag_incv1, delayMos)
 
 #infection only blocked if sugar feed taken before blood meal!!! You may need to remove the delay, and use E 1-10
-deriv(Sv1) <- -ince1 - mu*Sv1 + betaa1* GSK_proportion - muS*Sv1*square
+deriv(Sv1) <- -ince1 - mu*Sv1 + betaa1 - muS*Sv1*square # -ince1 - mu*Sv1 + betaa1* GSK_proportion - muS*Sv1*square
 #deriv(Ev1) <- ince1 - incv1 - mu*Ev1 - muS*Ev1*square
 deriv(Iv1) <- Ev1[10] - mu*Iv1 #- muS*Iv1*square
 
@@ -431,7 +431,7 @@ mv2 = Sv2+sum(Ev2)+Iv2
 GSK_start <- user() #? May want a lag....
 GSK_duration <- user() # no idea
 GSK_freq <- user() # go again every (e.g.) 3 months
-GSK_proportion <- user() #? #prop of mosquitoes able to access ASBs.. Is this needed?
+#GSK_proportion <- 1#user() #? #prop of mosquitoes able to access ASBs.. Is this needed?
 GSK_feed_rate <- user()
 
 #Square wave for intervention. ON/OFF
@@ -489,6 +489,8 @@ initial(LL) <- init_LL
 init_EL <- user()
 initial(EL) <- init_EL
 
+GSK_VT <- user() # Proportion of TC1-infected females that pass TC1 on to next gen
+
 # init_PL0 <- user()
 # initial(PL0) <- init_PL
 # init_LL0 <- user()
@@ -518,14 +520,14 @@ deriv(LL) <- EL/dEL - muLL*(1+gammaL*(EL + LL)/KL)*LL - LL/dLL
 deriv(PL) <- LL/dLL - muPL*PL - PL/dPL
 
 # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
-deriv(EL1) <- beta_larval*(mv1+mv00)-muEL*(1+(EL1 + LL1 + EL2 + LL2)/KL)*EL1 - EL1/dEL
+deriv(EL1) <- beta_larval*(mv1) + beta_larval*mv2*(1 - GSK_VT) - muEL*(1+(EL1 + LL1 + EL2 + LL2)/KL)*EL1 - EL1/dEL #beta_larval*(mv1+mv00)-muEL*(1+(EL1 + LL1 + EL2 + LL2)/KL)*EL1 - EL1/dEL
 # egg hatching - den. dep. mortality - maturing larvae
 deriv(LL1) <- EL1/dEL - muLL*(1+gammaL*(EL1 + LL1 + EL2 + LL2)/KL)*LL1 - LL1/dLL
 # pupae - mortality - fully developed pupae
 deriv(PL1) <- LL1/dLL - muPL*PL1 - PL1/dPL
 
 # (beta_larval (egg rate) * total mosquito) - den. dep. egg mortality - egg hatching
-deriv(EL2) <- beta_larval*mv2-muEL*(1+(EL1 + LL1 + EL2 + LL2)/KL)*EL2 - EL2/dEL
+deriv(EL2) <- beta_larval*mv2*GSK_VT - muEL*(1+(EL1 + LL1 + EL2 + LL2)/KL)*EL2 - EL2/dEL
 # egg hatching - den. dep. mortality - maturing larvae
 deriv(LL2) <- EL2/dEL - muLL*(1+gammaL*(EL1 + LL1 + EL2 + LL2)/KL)*LL2 - LL2/dLL
 # pupae - mortality - fully developed pupae
@@ -700,25 +702,25 @@ output(betaa) <- betaa # and other ones too?
 output(square) <- square
 
 #mosq pops
-# output(Svout) <- Sv
-# output(Evout) <- sum(Ev)
-# output(Ivout) <- Iv
+output(Svout) <- Sv
+output(Evout) <- sum(Ev)
+output(Ivout) <- Iv
 # output(Sv0out) <- Sv0
 # output(Ev0out) <- sum(Ev0)
 # output(Iv0out) <- Iv0
-# output(Sv1out) <- Sv1
-# output(Ev1out) <- sum(Ev1)
-# output(Iv1out) <- Iv1
-# output(Sv2out) <- Sv2
-# output(Ev2out) <- sum(Ev2)
-# output(Iv2out) <- Iv2
+output(Sv1out) <- Sv1
+output(Ev1out) <- sum(Ev1)
+output(Iv1out) <- Iv1
+output(Sv2out) <- Sv2
+output(Ev2out) <- sum(Ev2)
+output(Iv2out) <- Iv2
 #
 # output(PL) <- PL
 # output(PL1) <- PL1
 # output(PL2) <- PL2
 
 output(mv) <- mv
-output(mv00) <- mv00
+#output(mv00) <- mv00
 output(mv1) <- mv1
 output(mv2) <- mv2
 

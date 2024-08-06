@@ -390,7 +390,7 @@ lag_incv1 <- ince1 * surv
 #incv1 <- delay(lag_incv1, delayMos)
 
 #infection only blocked if sugar feed taken before blood meal!!! You may need to remove the delay, and use E 1-10
-deriv(Sv1) <- -ince1 - mu*Sv1 + betaa1 - muS*Sv1*square # -ince1 - mu*Sv1 + betaa1* GSK_proportion - muS*Sv1*square
+deriv(Sv1) <- -ince1 - mu*Sv1 + betaa1 - muS*Sv1*square + GSK_persistence*Sv2 # -ince1 - mu*Sv1 + betaa1* GSK_proportion - muS*Sv1*square
 #deriv(Ev1) <- ince1 - incv1 - mu*Ev1 - muS*Ev1*square
 deriv(Iv1) <- Ev1[10] - mu*Iv1 #- muS*Iv1*square
 
@@ -409,7 +409,7 @@ ince2 <- FOIv * Sv2
 lag_incv2 <- ince2 * surv
 #incv2 <- delay(lag_incv2, delayMos)
 
-deriv(Sv2) <- -ince2 - mu*Sv2 + muS*Sv1*square + betaa2
+deriv(Sv2) <- -ince2 - mu*Sv2 + muS*Sv1*square + betaa2 - GSK_persistence*Sv2
 #deriv(Ev2) <- ince2 - incv2 - mu*Ev2 + muS*Ev1*square
 deriv(Iv2) <- Ev2[10] - mu*Iv2 #+ muS*Iv1*square
 
@@ -433,6 +433,7 @@ GSK_duration <- user() # no idea
 GSK_freq <- user() # go again every (e.g.) 3 months
 #GSK_proportion <- 1#user() #? #prop of mosquitoes able to access ASBs.. Is this needed?
 GSK_feed_rate <- user()
+GSK_persistence <- user() # duration of a TC1 infection, once established
 
 #Square wave for intervention. ON/OFF
 square <- if(t >= GSK_start && (t - GSK_start)%% GSK_freq < GSK_duration ) 1  else 0
@@ -724,3 +725,4 @@ output(mv) <- mv
 output(mv1) <- mv1
 output(mv2) <- mv2
 
+output(theta2) <- theta2

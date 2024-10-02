@@ -26,15 +26,29 @@ prop_treated <- 0
 ITN_IRS_on <- 365
 
 #from SeyoumB: study furthest away from the straight line
-phi_b_seg_max_resid <-  round(0.7207882,2)
-phi_b_hourly_max_resid <- round(0.7906375,2)
+seyoumB <- read.csv("C:/Users/nc1115/OneDrive - Imperial College London/PhD/PhD_malaria/field work/fieldwork-data/cleaned/phi_calc/SeyoumB.csv")
 
-phi_i_seg_max_resid <-  round(0.7665488,2)
-phi_i_hourly_max_resid <- round(0.8524887,2)
+#phiBs
+phi_B_seg <-  round(seyoumB$new_PHI_B_seg,2)
+phi_B_seg_L <- round(seyoumB$new_PHI_B_seg_L, 2)
+phi_B_seg_U <- round(seyoumB$new_PHI_B_seg_U, 2)
+
+phi_B_hourly <- round(seyoumB$new_PHI_B,2)
+phi_B_hourly_L <- round(seyoumB$new_PHI_B_L, 2)
+phi_B_hourly_U <- round(seyoumB$new_PHI_B_U, 2)
+
+#phiIs
+phi_I_seg <-  round(seyoumB$new_PHI_I_seg,2)
+phi_I_seg_L <- round(seyoumB$new_PHI_I_seg_L,2)
+phi_I_seg_U <- round(seyoumB$new_PHI_I_seg_U,2)
+
+phi_I_hourly <- round(seyoumB$new_PHI_I,2)
+phi_I_hourly_L <- round(seyoumB$new_PHI_I_L,2)
+phi_I_hourly_U <- round(seyoumB$new_PHI_I_U,2)
 
 
-bites_in_vec <- c(phi_i_seg_max_resid, phi_i_hourly_max_resid)
-bites_bed_vec <- c(phi_b_seg_max_resid, phi_b_hourly_max_resid)
+bites_in_vec <- c(phi_I_seg, phi_I_seg_L, phi_I_seg_U, phi_I_hourly, phi_I_hourly_L, phi_I_hourly_U)
+bites_bed_vec <- c(phi_B_seg, phi_B_seg_L, phi_B_seg_U, phi_B_hourly, phi_B_hourly_L, phi_B_hourly_U)
 itn_cov_vec <- c(0.2, 0.8)
 
 #get net efficacies
@@ -66,7 +80,11 @@ ento_df_pyr <- ento_df_pyr %>%
 
 ento_df_pyr <- ento_df_pyr %>%
   mutate(bites_Indoors = case_when(bites_Bed == bites_bed_vec[1] ~ bites_in_vec[1],
-                                   bites_Bed == bites_bed_vec[2] ~ bites_in_vec[2]))
+                                   bites_Bed == bites_bed_vec[2] ~ bites_in_vec[2],
+                                   bites_Bed == bites_bed_vec[3] ~ bites_in_vec[3],
+                                   bites_Bed == bites_bed_vec[4] ~ bites_in_vec[4],
+                                   bites_Bed == bites_bed_vec[5] ~ bites_in_vec[5],
+                                   bites_Bed == bites_bed_vec[6] ~ bites_in_vec[6]))
 
 
 ento_param_list_pyr <- list()
@@ -126,13 +144,18 @@ my_sim_nets_pyr <- function(){
 
 }
 
-ento_nets_pyr <- my_sim_nets_pyr() #this has been run
+ento_nets_pyr <- my_sim_nets_pyr()
 
 
 
 ento_nets_pyr <- ento_nets_pyr %>%
-  mutate(segments = case_when(bites_Indoors == bites_in_vec[1] & bites_Bed == bites_bed_vec[1] ~ "segments",
-                              TRUE ~ "hourly"))
+  mutate(segments = case_when(bites_Indoors == bites_in_vec[1] & bites_Bed == bites_bed_vec[1] ~ "segment_M",
+                              bites_Indoors == bites_in_vec[2] & bites_Bed == bites_bed_vec[2] ~ "segment_L",
+                              bites_Indoors == bites_in_vec[3] & bites_Bed == bites_bed_vec[3] ~ "segment_U",
+                              bites_Bed == bites_in_vec[4] & bites_Bed == bites_bed_vec[4] ~ "hourly_M",
+                              bites_Bed == bites_in_vec[5] & bites_Bed == bites_bed_vec[5] ~ "hourly_L",
+                              bites_Bed == bites_in_vec[6] & bites_Bed == bites_bed_vec[6] ~ "hourly_L",
+                              TRUE ~ NA_character_))
 
 ento_nets_pyr <- ento_nets_pyr %>%
   mutate(net_eff = case_when(d_ITN0 == dn0_vec_pyr[1] & r_ITN0 == rn0_vec_pyr[1] ~ "estim_lower",
@@ -227,8 +250,13 @@ ento_nets_pbo <- my_sim_nets_pbo() #this has been run
 
 
 ento_nets_pbo <- ento_nets_pbo %>%
-  mutate(segments = case_when(bites_Indoors == bites_in_vec[1] & bites_Bed == bites_bed_vec[1] ~ "segments",
-                              TRUE ~ "hourly"))
+  mutate(segments = case_when(bites_Indoors == bites_in_vec[1] & bites_Bed == bites_bed_vec[1] ~ "segment_M",
+                              bites_Indoors == bites_in_vec[2] & bites_Bed == bites_bed_vec[2] ~ "segment_L",
+                              bites_Indoors == bites_in_vec[3] & bites_Bed == bites_bed_vec[3] ~ "segment_U",
+                              bites_Bed == bites_in_vec[4] & bites_Bed == bites_bed_vec[4] ~ "hourly_M",
+                              bites_Bed == bites_in_vec[5] & bites_Bed == bites_bed_vec[5] ~ "hourly_L",
+                              bites_Bed == bites_in_vec[6] & bites_Bed == bites_bed_vec[6] ~ "hourly_L",
+                              TRUE ~ NA_character_))
 
 ento_nets_pbo <- ento_nets_pbo %>%
   mutate(net_eff = case_when(d_ITN0 == dn0_vec_pbo[1] & r_ITN0 == rn0_vec_pbo[1] ~ "estim_lower",
@@ -324,8 +352,13 @@ ento_nets_IG2 <- my_sim_nets_IG2() #this has been run
 
 
 ento_nets_IG2 <- ento_nets_IG2 %>%
-  mutate(segments = case_when(bites_Indoors == bites_in_vec[1] & bites_Bed == bites_bed_vec[1] ~ "segments",
-                              TRUE ~ "hourly"))
+  mutate(segments = case_when(bites_Indoors == bites_in_vec[1] & bites_Bed == bites_bed_vec[1] ~ "segment_M",
+                              bites_Indoors == bites_in_vec[2] & bites_Bed == bites_bed_vec[2] ~ "segment_L",
+                              bites_Indoors == bites_in_vec[3] & bites_Bed == bites_bed_vec[3] ~ "segment_U",
+                              bites_Bed == bites_in_vec[4] & bites_Bed == bites_bed_vec[4] ~ "hourly_M",
+                              bites_Bed == bites_in_vec[5] & bites_Bed == bites_bed_vec[5] ~ "hourly_L",
+                              bites_Bed == bites_in_vec[6] & bites_Bed == bites_bed_vec[6] ~ "hourly_L",
+                              TRUE ~ NA_character_))
 
 ento_nets_IG2 <- ento_nets_IG2 %>%
   mutate(net_eff = case_when(d_ITN0 == dn0_vec_IG2[1] & r_ITN0 == rn0_vec_IG2[1] ~ "estim_lower",
@@ -415,12 +448,12 @@ ento_nets_data2 %>%
 #show that the cases averted by the different types of bednet are more different than the estimate from each sampling collection method
 
 cases_baseline <- ento_baseline %>%
-  filter(between(t, 365, 365*10) %>%
+  filter(between(t, 365, 365*10)) %>%
   reframe(tot_cases = sum(inc05))
 
 cases_IG2 <- ento_nets_IG2 %>%
   group_by(segments, net_eff) %>%
-  filter(between(t, 365, 365*10) &
+  filter(between(t, 365, 365*10),
          net_eff == "estim_med") %>%
   summarise(tot_cases = sum(inc05)) %>%
   mutate(total_case_baseline = cases_baseline$tot_cases,
@@ -430,7 +463,7 @@ cases_IG2 <- ento_nets_IG2 %>%
 
 cases_pbo <- ento_nets_pbo %>%
   group_by(segments, net_eff) %>%
-  filter(between(t, 365, 365*10)) %>%
+  filter(between(t, 365, 365*10),
          net_eff == "estim_med") %>%
   summarise(tot_cases = sum(inc05))%>%
   mutate(total_case_baseline = cases_baseline$tot_cases,
@@ -440,7 +473,7 @@ cases_pbo <- ento_nets_pbo %>%
 
 cases_pyr <- ento_nets_pyr %>%
   group_by(segments, net_eff) %>%
-  filter(between(t, 365, 365*10)) %>%
+  filter(between(t, 365, 365*10),
          net_eff == "estim_med") %>% #just taking the median point for efficacy
   summarise(tot_cases = sum(inc05))%>%
   mutate(total_case_baseline = cases_baseline$tot_cases,
@@ -454,11 +487,17 @@ case_summary <- do.call("rbind", case_summary_list)
 ggplot(case_summary, aes(x = net_type, y = cases_averted_percent, fill = as.factor(segments)))+
   geom_bar(stat = "identity", position = position_dodge())+
   ylim(0, 1)+
-  ylab("Cases averted due to LLINs compared to baseline scenario with no intervention (%)")
+  ylab("Relative difference cases averted due to LLINs \n compared to baseline scenario with no intervention (%)")+
+  theme_bw()+
+  xlab("Net type")+
+  labs(fill = "Mosquito sampling method")+
+  theme(legend.position = c(0.8, 0.92))
+
+write.csv(case_summary, file = "C:/Users/nc1115/OneDrive - Imperial College London/PhD/PhD_malaria/field work/fieldwork-data/cleaned/phi_calc/cases_averted_summary.csv")
 
 ggplot(case_summary, aes(x = net_type, y = cases_averted, fill = as.factor(segments)))+
   geom_bar(stat = "identity", position = position_dodge())+
-  ylab("Cases averted due to LLINs compared to baseline scenario with no intervention")
+  ylab("Absolute cases averted due to LLINs compared to baseline scenario with no intervention")
 
 #differences in the cases averted by the different net types
 

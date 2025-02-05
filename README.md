@@ -10,9 +10,11 @@ This model has been developed over a number of years, and has been described in 
 * [Griffin et al. Lancet, 2016](https://doi.org/10.1016/S1473-3099(15)00423-5) explores the impact of multiple intervention scenarios upon case incidence and malaria mortality rates.
 
 ## Installing the model
-Install the [Odin](https://github.com/mrc-ide/odin) package from Github (we need a newer version than the one available on CRAN):
+Install the [Odin](https://github.com/mrc-ide/odin) package here:
 ```
-devtools::install_github("mrc-ide/odin")
+install.packages(
+  "odin",
+  repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
 ```
 Then install the ICDMM package from github:
 ```

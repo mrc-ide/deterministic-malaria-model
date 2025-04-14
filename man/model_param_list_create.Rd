@@ -81,7 +81,7 @@ model_param_list_create(
 )
 }
 \arguments{
-\item{eta}{Death rate for expoential population distribtuion, i.e. 1/Mean Population Age. Default = 0.0001305}
+\item{eta}{Death rate for expoential population distribution, i.e. 1/Mean Population Age. Default = 0.0001305}
 
 \item{rho}{Age-dependent biting parameter. Default = 0.85}
 

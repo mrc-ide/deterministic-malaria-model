@@ -29,7 +29,7 @@ Imports:
     statmod,
     stringi,
     rlang,
-    odin (>= 1.1.5),
+    odin (>= 1.5.11),
     RecordLinkage
 Remotes:
     richfitz/odin,
@@ -38,7 +38,7 @@ Depends:
     R (>= 2.10)
 Encoding: UTF-8
 LazyData: TRUE
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
 Additional_repositories: https://mrc-ide.github.io/drat
 Suggests: 
     knitr,
